@@ -15,10 +15,9 @@
       <!--Body content-->
 
       <ul class="phones">
-        <li ng-repeat="phone in phones | filter:query | orderBy:orderProp" class="thumbnail">
-          <a href="#/phones/{{phone.id}}" class="thumb"><img ng-src="{{phone.imageUrl}}"></a>
-          <a href="#/phones/{{phone.id}}">{{phone.name}}</a>
-          <p>{{phone.snippet}}</p>
+        <li ng-repeat="article in articles | filter:query | orderBy:orderProp" class="thumbnail">
+          <a href="#/article/{{article.id}}">{{article.name}}</a>
+          <p>{{article.snippet}}</p>
         </li>
       </ul>
 
