@@ -15,3 +15,7 @@
 li.control-comp {
     list-style-type: none; //delete list mark
 }
+
+.word {
+    display: inline-block;
+}

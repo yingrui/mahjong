@@ -1,7 +1,9 @@
 <div>
     <div ng-repeat="sentence in article.segmentResult">
         <p>
-            <span ng-repeat="word in sentence">{{ word.name + ' | ' }}</span>
+            <span ng-repeat="word in sentence">
+                <word ng-model="word"/>
+            </span>
         </p>
     </div>
 </div>
