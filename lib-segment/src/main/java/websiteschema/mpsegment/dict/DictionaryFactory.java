@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.dict;
 
 import org.apache.log4j.Logger;
+import websiteschema.mpsegment.concept.ConceptRepository;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.core.MPSegment;
 import websiteschema.mpsegment.dict.domain.DomainDictFactory;
@@ -37,6 +38,7 @@ public class DictionaryFactory {
             Arrays.sort(array);
 
             StringWordConverter converter = new StringWordConverter();
+            converter.setConceptRepository(ConceptRepository.getInstance());
             for (String wordStr : array) {
                 IWord word = converter.convert(wordStr);
                 if (word != null) {

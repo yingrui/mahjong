@@ -55,8 +55,12 @@ public class StringWordConverter {
             Concept[] concepts = new Concept[conceptStrList.size()];
             for (int i = 0; i < conceptStrList.size(); i++) {
                 String conceptName = conceptStrList.get(i);
-                Concept concept = conceptRepository.getConceptByName(conceptName);
-                concepts[i] = concept;
+                try {
+                    Concept concept = conceptRepository.getConceptByName(conceptName);
+                    concepts[i] = concept;
+                }catch (Exception ex) {
+                    System.out.println(conceptName);
+                }
             }
             word.setConcepts(concepts);
         }

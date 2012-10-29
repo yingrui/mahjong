@@ -9,6 +9,7 @@ public class Concept {
 
     private long id;
     private String name;
+    private String description;
     private List<Concept> children;
     private Concept parent;
 
@@ -45,5 +46,13 @@ public class Concept {
 
     public long getId() {
         return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

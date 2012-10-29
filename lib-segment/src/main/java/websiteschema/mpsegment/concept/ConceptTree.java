@@ -8,6 +8,7 @@ public class ConceptTree {
     Concept rootConcept;
     Map<Long, Concept> mapIntConcept = new HashMap<Long, Concept>();
     Map<String, Concept> mapStringConcept = new HashMap<String, Concept>();
+    Map<String, Concept> mapDescriptionConcept = new HashMap<String, Concept>();
     public Concept getRootConcept() {
         return rootConcept;
     }
@@ -18,6 +19,10 @@ public class ConceptTree {
 
     public Concept getConceptByName(String name) {
         return mapStringConcept.get(name);
+    }
+
+    public Concept getConceptByDescription(String name) {
+        return mapDescriptionConcept.get(name);
     }
 
     public void addConcept(Concept concept) throws DuplicateConceptException {
@@ -49,5 +54,6 @@ public class ConceptTree {
     private void buildIndex(Concept concept) {
         mapIntConcept.put(concept.getId(), concept);
         mapStringConcept.put(concept.getName(), concept);
+        mapDescriptionConcept.put(concept.getDescription(), concept);
     }
 }

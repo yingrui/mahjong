@@ -33,7 +33,7 @@ public class HashDictionaryTest {
             System.out.println("词：" + word.getWordName() + "\n" + word.getPOSArray());
         }
 
-        Assert.assertEquals(5943, hashDictionary.getCapacity());
+        Assert.assertEquals(5991, hashDictionary.getCapacity());
         Iterator<IWord> iterator = hashDictionary.iterator();
         int count = 0;
         while(iterator.hasNext()) {
@@ -41,11 +41,11 @@ public class HashDictionaryTest {
             iterator.next();
         }
         System.out.println(count);
-        Assert.assertEquals(78681, count);
+        Assert.assertEquals(87537, count);
     }
 
     @Test
-    public void should_contains_word_() {
+    public void should_contains_specify_words() {
         IWord[] words = hashDictionary.getWords("丘吉尔");
         for (IWord word : words) {
             System.out.println("词：" + word.getWordName() + "\n" + word.getPOSArray());

@@ -1,5 +1,6 @@
 package websiteschema.mpsegment.tools;
 
+import websiteschema.mpsegment.concept.Concept;
 import websiteschema.mpsegment.dict.IWord;
 import websiteschema.mpsegment.dict.POSUtil;
 
@@ -15,15 +16,19 @@ public class WordStringConverter {
 
     public String convertToString() {
         buildHead();
-        buildBody(getDomainType(), getPOSTable());
+        buildBody();
         return stringBuilder.toString();
     }
 
-    private void buildBody(String domainType, String posTable) {
+    private void buildBody() {
         stringBuilder.append("{");
-        stringBuilder.append(domainType).append(",");
-        if(!posTable.isEmpty()) stringBuilder.append(posTable).append(",");
-        if(endWith(',')) {
+        stringBuilder.append(buildDomainType()).append(",");
+        String posTable = buildPOSTable();
+        if (!posTable.isEmpty()) {
+            stringBuilder.append(posTable).append(",");
+        }
+        stringBuilder.append(buildConcepts());
+        if (endWith(',')) {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         }
         stringBuilder.append("}");
@@ -33,7 +38,7 @@ public class WordStringConverter {
         return stringBuilder.charAt(stringBuilder.length() - 1) == ch;
     }
 
-    private String getPOSTable() {
+    private String buildPOSTable() {
         StringBuilder stringBuilder = new StringBuilder();
         int[][] POSTable = word.getWordPOSTable();
         if (null != POSTable && POSTable.length > 0) {
@@ -49,8 +54,26 @@ public class WordStringConverter {
         return stringBuilder.toString();
     }
 
-    private String getDomainType() {
+    private String buildDomainType() {
         return "domainType:" + word.getDomainType();
+    }
+
+    private String buildConcepts() {
+        return buildConceptArray(word.getConcepts());
+    }
+
+    private String buildConceptArray(Concept[] concepts) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (null != concepts && concepts.length > 0 && concepts[0] != Concept.UNKNOWN) {
+            stringBuilder.append("concepts:");
+            stringBuilder.append("[");
+            for (Concept concept : concepts) {
+                stringBuilder.append(concept.getName()).append(",");
+            }
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            stringBuilder.append("]");
+        }
+        return stringBuilder.toString();
     }
 
     private void buildHead() {

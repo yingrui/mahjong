@@ -4,6 +4,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Test;
+import websiteschema.mpsegment.concept.Concept;
 import websiteschema.mpsegment.dict.IWord;
 import websiteschema.mpsegment.dict.POSUtil;
 
@@ -12,6 +13,7 @@ public class WordToStringTest {
     Mockery mockFactory = new Mockery();
     int[][] posAndFreq = new int[2][2];
     int[][] singlePosAndFreq = new int[1][2];
+    Concept[] concepts = null;
 
 
     public WordToStringTest() {
@@ -22,6 +24,20 @@ public class WordToStringTest {
 
         singlePosAndFreq[0][0] = POSUtil.POS_N;
         singlePosAndFreq[0][1] = 100;
+
+        concepts = new Concept[]{
+                new Concept(10, "noun"), new Concept(10, "verb")
+        };
+    }
+
+    @Test
+    public void should_convert_word_to_string_with_concept() {
+        final IWord word = createWord("测试", singlePosAndFreq, concepts);
+        WordStringConverter converter = new WordStringConverter(word);
+        String actual = converter.convertToString();
+        System.out.println(actual);
+        Assert.assertTrue(actual.startsWith("\"测试\" = {") && actual.endsWith("}"));
+        Assert.assertTrue(actual.contains("concepts:[noun,verb]"));
     }
 
     @Test
@@ -91,6 +107,10 @@ public class WordToStringTest {
     }
 
     private IWord createWord(final String wordName, final int[][] ret) {
+        return createWord(wordName, ret, null);
+    }
+
+    private IWord createWord(final String wordName, final int[][] ret, final Concept[] concepts) {
         final IWord word = mockFactory.mock(IWord.class);
         mockFactory.checking(new Expectations() {
             {
@@ -106,6 +126,11 @@ public class WordToStringTest {
             {
                 atLeast(1).of(word).getWordPOSTable();
                 will(returnValue(ret));
+            }
+
+            {
+                atLeast(1).of(word).getConcepts();
+                will(returnValue(concepts));
             }
         });
         return word;

@@ -44,8 +44,10 @@ public class ConceptLoader {
         if (null == elements || elements.length != 3)
             return;
         long id = parseId(elements[0]);
+        String description = elements[1];
         String name = elements[2];
         Concept concept = new Concept(id, name);
+        concept.setDescription(description);
         long parentId = parseParentId(elements[0]);
         Concept parent = conceptTree.getConceptById(parentId);
         if (null != parent) {

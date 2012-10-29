@@ -30,13 +30,14 @@ public class AccuracyTest {
         System.out.println("Those " + segmentAccuracy.getWordsWithContainDisambiguate().size() + " words maybe could delete from dictionary: ");
 //        System.out.println(segmentAccuracy.getWordsWithContainDisambiguate());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93812);
-        Assert.assertTrue(segmentAccuracy.getErrorNewWord() <= 24458);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NR() <= 4185);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NS() <= 3284);
-        Assert.assertTrue(segmentAccuracy.getErrorContain() <= 34069);
-        Assert.assertTrue(segmentAccuracy.getErrorOther() <= 3426);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93671);
+        Assert.assertTrue(segmentAccuracy.getErrorNewWord() <= 24024);
+        Assert.assertTrue(segmentAccuracy.getErrorNER_NR() <= 4156);
+        Assert.assertTrue(segmentAccuracy.getErrorNER_NS() <= 3282);
+        Assert.assertTrue(segmentAccuracy.getErrorContain() <= 35909);
+        Assert.assertTrue(segmentAccuracy.getErrorOther() <= 3601);
     }
+
     @Test
     public void should_be_higher_accuracy_rate_than_0_dot_93() throws IOException {
         SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt");
@@ -55,11 +56,11 @@ public class AccuracyTest {
         System.out.println("Those " + segmentAccuracy.getWordsWithContainDisambiguate().size() + " words maybe could delete from dictionary: ");
 //        System.out.println(segmentAccuracy.getWordsWithContainDisambiguate());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93784);
-        Assert.assertTrue(segmentAccuracy.getErrorNewWord() <= 24063);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NR() <= 4184);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NS() <= 3057);
-        Assert.assertTrue(segmentAccuracy.getErrorContain() <= 34952);
-        Assert.assertTrue(segmentAccuracy.getErrorOther() <= 3427);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93664);
+        Assert.assertTrue(segmentAccuracy.getErrorNewWord() <= 23457);
+        Assert.assertTrue(segmentAccuracy.getErrorNER_NR() <= 4155);
+        Assert.assertTrue(segmentAccuracy.getErrorNER_NS() <= 3036);
+        Assert.assertTrue(segmentAccuracy.getErrorContain() <= 36794);
+        Assert.assertTrue(segmentAccuracy.getErrorOther() <= 3603);
     }
 }

@@ -4,15 +4,15 @@
  */
 package websiteschema.mpsegment.pos;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import websiteschema.mpsegment.core.POSRecognizer;
 import websiteschema.mpsegment.core.SegmentEngine;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.util.SerializeHandler;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author ray
@@ -42,7 +42,7 @@ public class PartOfSpeechRecognitionTest {
         testInput = "此外，她还创作了193首诗，被认为是英国一位天才型的女作家。";
         result = SegmentEngine.getInstance().getSegmentWorker().segment(testInput);
         System.out.println(result.toString());
-        expected = "此外/C ，/W 她/R 还/D 创作/V 了/Y 193首/M 诗/N ，/W 被/P 认为/V 是/V 英国/NS 一/M 位/Q 天才/N 型/K 的/U 女/B 作家/N 。/W";
+        expected = "此外/C ，/W 她/R 还/D 创作/V 了/Y 193首/M 诗/N ，/W 被/P 认为/V 是/V 英国/NS 一/M 位/Q 天才/N 型/K 的/U 女作家/N 。/W";
         Assert.assertEquals(expected, result.toString().trim());
 
         testInput = "《大卫·科波菲尔》通过主人公大卫一生的悲欢离合，多层次地揭示了当时社会的真实面貌，突出地表现了金钱对婚姻、家庭和社会的腐蚀作用。";
