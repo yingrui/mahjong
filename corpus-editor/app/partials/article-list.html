@@ -1,5 +1,5 @@
-<ul class="phones">
-    <li ng-repeat="article in articles | filter:query | orderBy:orderProp:sortReverse()" class="thumbnail">
+<ul>
+    <li ng-repeat="article in articles | filter:query | orderBy:orderProp:sortReverse()">
         <a href="#/article/{{article.id}}">{{article.name}}</a>  <span>{{article.date}}</span>
         <p>{{article.snippet}}</p>
     </li>

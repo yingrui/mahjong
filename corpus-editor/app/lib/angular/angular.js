@@ -6893,7 +6893,6 @@ function $RouteProvider(){
    */
   this.when = function(path, route) {
     routes[path] = extend({reloadOnSearch: true}, route);
-
     // create redirection for trailing slashes
     if (path) {
       var redirectPath = (path[path.length-1] == '/')

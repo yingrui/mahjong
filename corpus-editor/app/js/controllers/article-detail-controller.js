@@ -1,9 +1,12 @@
 'use strict';
 
 function ArticleDetailCtrl($scope, $routeParams, ArticleRepository) {
-  $scope.article = ArticleRepository.get({articleId: $routeParams.articleId}, function(phone) {
-    // do nothing
-  });
+
+    $scope.mainTemplateUrl = 'partials/article-detail.html';
+    $scope.sidebarTemplateUrl = 'partials/sidebar-index.html';
+    $scope.article = ArticleRepository.get({articleId:$routeParams.articleId}, function (phone) {
+        // do nothing
+    });
 
 }
 

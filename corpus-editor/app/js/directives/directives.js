@@ -1,7 +1,9 @@
 'use strict';
 
 /* Directives */
-angular.module('corpusEditorDirectives', []).directive('word', function () {
+var corpusEditorDirectives = angular.module('corpusEditorDirectives', []);
+
+corpusEditorDirectives.directive('word', function () {
     function bindKeyPressEvent(eleInput) {
         eleInput.bind('keypress', function (event) {
             if (event.keyCode == 13) {
@@ -18,6 +20,7 @@ angular.module('corpusEditorDirectives', []).directive('word', function () {
         scope:false,
         link:function (scope, iElement, iAttrs) {
             var word = scope[iAttrs.ngModel];
+            console.log(word);
             var eleInput = $(iElement.find('input'));
 
             bindKeyPressEvent(eleInput);

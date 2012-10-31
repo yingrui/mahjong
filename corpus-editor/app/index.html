@@ -15,27 +15,10 @@
     <script src="js/services/article-repository.js"></script>
     <script src="js/filters/filters.js"></script>
     <script src="js/directives/directives.js"></script>
+    <script src="js/directives/myInclude.js"></script>
     <script src="lib/angular/angular-resource.js"></script>
 </head>
 <body>
-<div>
-    <div class="sidebar">
-        <div class="control">
-            <!--Sidebar content-->
-            <ul>
-                <li class="control-comp">Search: <input ng-model="query"></li>
-                <li class="control-comp">Sort by:
-                    <select ng-model="orderProp">
-                        <option value="name">Alphabetical</option>
-                        <option value="date">Newest</option>
-                    </select>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="main" ng-view></div>
-</div>
-
-
+<ng-view/>
 </body>
 </html>
