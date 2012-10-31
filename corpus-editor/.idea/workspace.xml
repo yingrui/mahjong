@@ -67,19 +67,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="directives.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="directives.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/js/directives/directives.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="22" selection-start="130" selection-end="130" vertical-scroll-proportion="0.0">
+            <state line="22" column="28" selection-start="655" selection-end="655" vertical-scroll-proportion="0.45081967">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="myInclude.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="myInclude.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/js/directives/myInclude.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="39" selection-start="643" selection-end="643" vertical-scroll-proportion="0.32786885">
+            <state line="40" column="38" selection-start="1433" selection-end="1433" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -134,10 +134,10 @@
         <option value="$PROJECT_DIR$/app/js/controllers/article-list-controller.js" />
         <option value="$PROJECT_DIR$/app/js/controllers/article-detail-controller.js" />
         <option value="$PROJECT_DIR$/app/index.html" />
-        <option value="$PROJECT_DIR$/app/js/directives/directives.js" />
         <option value="$PROJECT_DIR$/app/layout.html" />
         <option value="$PROJECT_DIR$/app/partials/article-list.html" />
         <option value="$PROJECT_DIR$/app/js/directives/myInclude.js" />
+        <option value="$PROJECT_DIR$/app/js/directives/directives.js" />
       </list>
     </option>
   </component>
@@ -618,13 +618,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/directives/directives.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="22" selection-start="130" selection-end="130" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/layout.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="11" selection-start="43" selection-end="43" vertical-scroll-proportion="-1.25">
@@ -648,7 +641,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/directives/myInclude.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="39" selection-start="643" selection-end="643" vertical-scroll-proportion="0.32786885">
+        <state line="40" column="38" selection-start="1433" selection-end="1433" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/directives/directives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="28" selection-start="655" selection-end="655" vertical-scroll-proportion="0.45081967">
           <folding />
         </state>
       </provider>

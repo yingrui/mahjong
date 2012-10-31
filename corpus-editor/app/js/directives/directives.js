@@ -20,7 +20,6 @@ corpusEditorDirectives.directive('word', function () {
         scope:false,
         link:function (scope, iElement, iAttrs) {
             var word = scope[iAttrs.ngModel];
-            console.log(word);
             var eleInput = $(iElement.find('input'));
 
             bindKeyPressEvent(eleInput);
