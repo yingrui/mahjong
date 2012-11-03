@@ -21,7 +21,7 @@ public class ExtendPOSInDomainDictionaryTest extends TestCase {
             SegmentWorker worker = SegmentEngine.getInstance().getSegmentWorker();
             SegmentResult words = worker.segment(str);
             for (int i = 0; i < words.length(); i++) {
-                System.out.println(words.getWord(i) + " - " + POSUtil.getPOSString(words.getPOS(i)) + " - " + words.getConcept(i));
+                System.out.println(words.getWord(i) + " - " + POSUtil.getPOSString(words.getPOS(i)) + " - " + words.getDomainType(i));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

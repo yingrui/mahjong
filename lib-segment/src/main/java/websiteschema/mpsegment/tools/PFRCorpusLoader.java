@@ -60,7 +60,7 @@ public class PFRCorpusLoader {
         SegmentResult result = new SegmentResult(words.size());
         result.setWords(words.toArray(new String[0]));
         result.setPOSArray(posArray);
-        result.setConcepts(concepts);
+        result.setDomainTypes(concepts);
         return result;
     }
 

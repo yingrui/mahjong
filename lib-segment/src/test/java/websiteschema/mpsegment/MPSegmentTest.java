@@ -172,6 +172,21 @@ public class MPSegmentTest {
         MPSegmentConfiguration.getINSTANCE().setSegmentMin(segmentMin);
         System.out.println(words);
         Assert.assertEquals(words.getWord(0), "习惯成自然");
+        Assert.assertEquals(words.getPOS(0), POSUtil.POS_I);
+    }
+
+    @Test
+    public void should_return_concept_info_when_segment() {
+        String str = "麦片是一种食物。";
+        SegmentEngine engine = SegmentEngine.getInstance();
+        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentResult words = worker.segment(str);
+        System.out.println(words);
+        Assert.assertEquals(words.getConcept(0), "n-food");
+        Assert.assertEquals(words.getConcept(1), "N/A");
+        Assert.assertEquals(words.getConcept(2), "N/A");
+        Assert.assertEquals(words.getConcept(3), "N/A");
+        Assert.assertEquals(words.getConcept(4), "N/A");
     }
 
     @Test

@@ -27,9 +27,15 @@ public class SegmentResult {
         }
     }
 
-    public void setConcepts(int marks[]) {
+    public void setDomainTypes(int marks[]) {
         for(int i = 0; i < marks.length; i++) {
-            wordAtoms[i].concept = marks[i];
+            wordAtoms[i].domainType = marks[i];
+        }
+    }
+
+    public void setConcepts(String[] concepts) {
+        for(int i = 0; i < concepts.length; i++) {
+            wordAtoms[i].concept = concepts[i];
         }
     }
 
@@ -49,8 +55,12 @@ public class SegmentResult {
         return wordAtoms[i].pos;
     }
 
-    public int getConcept(int i) {
+    public String getConcept(int i) {
         return wordAtoms[i].concept;
+    }
+
+    public int getDomainType(int i) {
+        return wordAtoms[i].domainType;
     }
 
     public int length() {
@@ -105,7 +115,7 @@ public class SegmentResult {
     public void setWord(int index, String word, int tag) {
         wordAtoms[index].word = word;
         wordAtoms[index].pos = tag;
-        wordAtoms[index].concept = 0;
+        wordAtoms[index].domainType = 0;
     }
 
     public void setPOS(int index, int pos) {
@@ -115,7 +125,7 @@ public class SegmentResult {
     public void letWord1EqualWord2(int wordIndex1, int wordIndex2) {
         wordAtoms[wordIndex1].word = wordAtoms[wordIndex2].word;
         wordAtoms[wordIndex1].pos = wordAtoms[wordIndex2].pos;
-        wordAtoms[wordIndex1].concept = wordAtoms[wordIndex2].concept;
+        wordAtoms[wordIndex1].domainType = wordAtoms[wordIndex2].domainType;
     }
 
     public void cutTail(final int end) {
@@ -141,4 +151,5 @@ public class SegmentResult {
     }
 
     private WordAtom[] wordAtoms;
+
 }

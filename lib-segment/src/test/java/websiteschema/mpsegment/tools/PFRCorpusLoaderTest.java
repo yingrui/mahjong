@@ -7,7 +7,6 @@ package websiteschema.mpsegment.tools;
 import org.junit.Assert;
 import org.junit.Test;
 import websiteschema.mpsegment.core.SegmentResult;
-import websiteschema.mpsegment.dict.ChNameDictionary;
 import websiteschema.mpsegment.dict.POSUtil;
 
 import java.io.*;
@@ -30,8 +29,8 @@ public class PFRCorpusLoaderTest {
         Assert.assertEquals(
                 "由人民出版社、新华文摘社、青岛双星集团联合主办的『新华文摘双星文学奖』评选活动经过近两年读者广泛推荐和专家无记名投票，近日揭晓，梁晓声、毕淑敏双获『新华文摘双星文学奖』。",
                 result.toOriginalString());
-        Assert.assertEquals(result.getConcept(1), POSUtil.getPOSIndex("NT"));
-        Assert.assertEquals(result.getConcept(2), POSUtil.getPOSIndex("NT"));
+        Assert.assertEquals(result.getDomainType(1), POSUtil.getPOSIndex("NT"));
+        Assert.assertEquals(result.getDomainType(2), POSUtil.getPOSIndex("NT"));
         Assert.assertEquals(result.getPOS(1),POSUtil.getPOSIndex("N"));
         Assert.assertEquals(result.getPOS(2),POSUtil.getPOSIndex("N"));
     }

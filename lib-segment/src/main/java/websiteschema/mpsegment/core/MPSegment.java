@@ -1,7 +1,9 @@
 package websiteschema.mpsegment.core;
 
+import websiteschema.mpsegment.concept.Concept;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.dict.IWord;
+import websiteschema.mpsegment.dict.POSUtil;
 import websiteschema.mpsegment.graph.*;
 
 public class MPSegment {
@@ -74,29 +76,29 @@ public class MPSegment {
         return sectionedSentence;
     }
 
-    private SegmentResult setPathMarks(Path path) {
+    private SegmentResult buildSegmentResult(Path path) {
         int length = path.getLength();
         String wordNames[] = new String[length];
-        int log2Freqs[] = new int[length];
+        int domainTypes[] = new int[length];
         if (length < 1) {
             return null;
         }
         SegmentResult segmentResult = new SegmentResult(length);
-        for (int j2 = 0; j2 < length; j2++) {
-            int edgeWeight = graph.getEdgeWeight(path.iget(j2), path.iget(j2 + 1));
+        for (int index = 0; index < length; index++) {
+            int edgeWeight = graph.getEdgeWeight(path.iget(index), path.iget(index + 1));
             if (edgeWeight == 0) {
-                IWord iworditem = graph.getEdgeObject(path.iget(j2), path.iget(j2 + 1));
-                wordNames[j2] = iworditem.getWordName();
-                log2Freqs[j2] = iworditem.getDomainType();
+                IWord word = graph.getEdgeObject(path.iget(index), path.iget(index + 1));
+                wordNames[index] = word.getWordName();
+                domainTypes[index] = word.getDomainType();
             } else {
-                IWord iworditem1 = graph.getEdgeObject(path.iget(j2), path.iget(j2 + 1));
-                wordNames[j2] = iworditem1.getWordName();
-                log2Freqs[j2] = iworditem1.getDomainType();
+                IWord word = graph.getEdgeObject(path.iget(index), path.iget(index + 1));
+                wordNames[index] = word.getWordName();
+                domainTypes[index] = word.getDomainType();
             }
         }
 
         segmentResult.setWords(wordNames);
-        segmentResult.setConcepts(log2Freqs);
+        segmentResult.setDomainTypes(domainTypes);
         return segmentResult;
     }
 
@@ -159,13 +161,41 @@ public class MPSegment {
     }
 
     private SegmentResult segment(String sentence, boolean withPOS, boolean sectionSegment) {
-        Path p = getShortestPathToStopVertex(sentence, sectionSegment);
-        SegmentResult result = setPathMarks(p);
+        Path path = getShortestPathToStopVertex(sentence, sectionSegment);
+        SegmentResult result = buildSegmentResult(path);
         if (withPOS) {
-            result.setPOSArray(posTagging.findPOS(p, graph));
+            result.setPOSArray(posTagging.findPOS(path, graph));
+            getConcepts(result, path);
         }
         graph.clear();
         return result;
+    }
+
+    private void getConcepts(SegmentResult result, Path path) {
+        int length = path.getLength();
+        String concepts[] = new String[length];
+        if (length == 0) {
+            return;
+        }
+        for (int index = 0; index < length; index++) {
+            IWord word = graph.getEdgeObject(path.iget(index), path.iget(index + 1));
+            concepts[index] = getConcept(word, result.getPOS(index));
+        }
+
+        result.setConcepts(concepts);
+    }
+
+    private String getConcept(IWord word, int pos) {
+        Concept[] concepts = word.getConcepts();
+        if (null != concepts) {
+            String primaryPOS = POSUtil.getPOSString(pos).substring(0, 1).toLowerCase();
+            for (int i = 0; i < concepts.length; i++) {
+                if (concepts[i].getName().startsWith(primaryPOS)) {
+                    return concepts[i].getName();
+                }
+            }
+        }
+        return Concept.UNKNOWN.getName();
     }
 
     private int maxWordLength;
