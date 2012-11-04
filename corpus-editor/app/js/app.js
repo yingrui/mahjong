@@ -8,12 +8,12 @@ angular.module('corpusEditor', ['corpusEditorFilters', 'corpusEditorServices', '
         when('/article', {
             templateUrl: 'layout.html',
             mainTemplateUrl: 'partials/article-list.html',
-            sidebarTemplateUrl: 'partials/sidebar-index.html',
+            sidebarTemplateUrl: 'partials/article-list-side.html',
             controller:ArticleListCtrl}).
         when('/article/:articleId', {
             templateUrl: 'layout.html',
             mainTemplateUrl: 'partials/article-detail.html',
             sidebarTemplateUrl: 'partials/sidebar-index.html',
             controller:ArticleDetailCtrl}).
-        otherwise({redirectTo:'/phones'});
+        otherwise({redirectTo:'/article'});
 }]);

@@ -3,12 +3,12 @@
         "id": "article2",
         "date": "2012-10-27",
         "name": "The Second Article",
-        "snippet": "The Next, Next Generation\n\nExperience the future with MOTOROLA XOOM, the world's first tablet powered by Android 3.0 (Honeycomb)."
+        "snippet": "the second article"
     },
     {
         "id": "article1",
         "date": "2012-10-25",
         "name": "First Article",
-        "snippet": "The Next, Next Generation\r\n\r\nExperience the future with Motorola XOOM with Wi-Fi, the world's first tablet powered by Android 3.0 (Honeycomb)."
+        "snippet": "the first article"
     }
 ]
