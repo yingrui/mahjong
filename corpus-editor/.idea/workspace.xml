@@ -19,40 +19,55 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/index.html">
+      <file leaf-file-name="scenarios.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/e2e/scenarios.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="8" selection-start="932" selection-end="932" vertical-scroll-proportion="0.0">
+            <state line="18" column="39" selection-start="511" selection-end="511" vertical-scroll-proportion="0.36885247">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="layout.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/layout.html">
+      <file leaf-file-name="word-directive-spec.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/unit/word-directive-spec.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="11" selection-start="43" selection-end="43" vertical-scroll-proportion="-1.25">
+            <state line="14" column="28" selection-start="332" selection-end="332" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="angular.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/lib/angular/angular.js">
+      <file leaf-file-name="directives.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/js/directives/directives.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13747" column="51" selection-start="451584" selection-end="451688" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1351608877000" expanded="true" signature="476175:476190" placeholder="{...}" />
-                <marker date="1351608877000" expanded="true" signature="476199:476215" placeholder="{...}" />
-              </folding>
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="article-list-controller.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/js/controllers/article-list-controller.js">
+      <file leaf-file-name="article-detail.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/partials/article-detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="45" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0">
+            <state line="1" column="71" selection-start="77" selection-end="77" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="directive-word.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/partials/directive-word.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1" column="31" selection-start="50" selection-end="50" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="articles.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/corpus/articles.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="30" selection-start="228" selection-end="241" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -61,52 +76,16 @@
       <file leaf-file-name="article-detail-controller.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/js/controllers/article-detail-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="53" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0">
+            <state line="5" column="7" selection-start="214" selection-end="214" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="directives.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/js/directives/directives.js">
+      <file leaf-file-name="article-repository.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/js/services/article-repository.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="28" selection-start="655" selection-end="655" vertical-scroll-proportion="0.45081967">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="myInclude.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/js/directives/myInclude.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="38" selection-start="1433" selection-end="1433" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sidebar-index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/partials/sidebar-index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="58" selection-start="116" selection-end="116" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="article-list.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/partials/article-list.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="34" selection-start="224" selection-end="224" vertical-scroll-proportion="-1.875">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/js/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="53" selection-start="580" selection-end="580" vertical-scroll-proportion="0.0">
+            <state line="9" column="50" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -122,22 +101,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/css/corpusEditor.css" />
-        <option value="$PROJECT_DIR$/app/partials/article-detail.html" />
-        <option value="$PROJECT_DIR$/app/css/app.css" />
-        <option value="$PROJECT_DIR$/app/lib/underscore-1.4.2.js" />
-        <option value="$PROJECT_DIR$/app/lib/jquery-1.8.2.js" />
-        <option value="$PROJECT_DIR$/app/partials/directive-word.html" />
-        <option value="$PROJECT_DIR$/app/lib/jquery-extends.js" />
-        <option value="$PROJECT_DIR$/app/lib/angular/angular.js" />
+        <option value="$PROJECT_DIR$/test/unit/controllers.js" />
         <option value="$PROJECT_DIR$/app/js/app.js" />
+        <option value="$PROJECT_DIR$/app/lib/jquery-extends.js" />
+        <option value="$PROJECT_DIR$/test/unit/article-list-controller-spec.js" />
         <option value="$PROJECT_DIR$/app/js/controllers/article-list-controller.js" />
+        <option value="$PROJECT_DIR$/test/unit/runner.html" />
         <option value="$PROJECT_DIR$/app/js/controllers/article-detail-controller.js" />
-        <option value="$PROJECT_DIR$/app/index.html" />
-        <option value="$PROJECT_DIR$/app/layout.html" />
+        <option value="$PROJECT_DIR$/app/js/services/article-repository.js" />
+        <option value="$PROJECT_DIR$/test/unit/article-detail-controller-spec.js" />
+        <option value="$PROJECT_DIR$/test/unit/article-repository-spec.js" />
+        <option value="$PROJECT_DIR$/app/corpus/articles.json" />
         <option value="$PROJECT_DIR$/app/partials/article-list.html" />
-        <option value="$PROJECT_DIR$/app/js/directives/myInclude.js" />
-        <option value="$PROJECT_DIR$/app/js/directives/directives.js" />
+        <option value="$PROJECT_DIR$/app/partials/article-detail.html" />
+        <option value="$PROJECT_DIR$/test/e2e/runner.html" />
+        <option value="$PROJECT_DIR$/test/e2e/scenarios.js" />
+        <option value="$PROJECT_DIR$/test/unit/word-directive-spec.js" />
       </list>
     </option>
   </component>
@@ -172,12 +151,63 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="corpus-editor" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="e2e" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -209,6 +239,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="partials" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -270,28 +318,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="filters" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="corpus-editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="corpus-editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="directives" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -332,31 +358,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="img" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="corpus-editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="corpus-editor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="corpus" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -370,11 +377,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test/unit" />
+      <recent name="$PROJECT_DIR$/app/partials" />
       <recent name="$PROJECT_DIR$/app/css" />
       <recent name="$PROJECT_DIR$/app/js/controllers" />
       <recent name="$PROJECT_DIR$/app/js/filters" />
-      <recent name="$PROJECT_DIR$/app/js/directives" />
-      <recent name="$PROJECT_DIR$/app/js/services" />
     </key>
   </component>
   <component name="RunManager">
@@ -482,7 +489,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2769784" sideWeight="0.6709347" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24532375" sideWeight="0.6709347" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -550,105 +557,160 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/lib/jquery-1.8.2.js">
+    <entry file="file://$PROJECT_DIR$/app/layout.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9440" column="0" selection-start="367052" selection-end="367052" vertical-scroll-proportion="0.9350649" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/css/app.css">
+    <entry file="file://$PROJECT_DIR$/app/partials/article-list-side.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="26" selection-start="230" selection-end="230" vertical-scroll-proportion="0.0" />
+        <state line="8" column="27" selection-start="346" selection-end="346" vertical-scroll-proportion="0.2660754" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/filters/filters.js">
+    <entry file="file://$PROJECT_DIR$/app/partials/article-list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="40" selection-start="131" selection-end="131" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/partials/article-detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="39" selection-start="161" selection-end="161" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/partials/directive-word.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="39" selection-start="131" selection-end="131" vertical-scroll-proportion="-1.25" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/lib/jquery-extends.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="1" selection-start="744" selection-end="744" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/partials/sidebar-index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="58" selection-start="116" selection-end="116" vertical-scroll-proportion="0.0">
+        <state line="1" column="104" selection-start="110" selection-end="126" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/app.js">
+    <entry file="file://$PROJECT_DIR$/app/corpus/articles.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="53" selection-start="580" selection-end="580" vertical-scroll-proportion="0.0">
+        <state line="10" column="30" selection-start="228" selection-end="241" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/controllers/article-detail-controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="53" selection-start="139" selection-end="139" vertical-scroll-proportion="0.0">
+        <state line="5" column="7" selection-start="214" selection-end="214" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
+    <entry file="file://$PROJECT_DIR$/app/js/services/article-repository.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="8" selection-start="932" selection-end="932" vertical-scroll-proportion="0.0">
+        <state line="9" column="50" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/lib/angular/angular.js">
+    <entry file="file://$PROJECT_DIR$/app/partials/article-detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13747" column="51" selection-start="451584" selection-end="451688" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1351608877000" expanded="true" signature="476175:476190" placeholder="{...}" />
-            <marker date="1351608877000" expanded="true" signature="476199:476215" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="11" selection-start="43" selection-end="43" vertical-scroll-proportion="-1.25">
+        <state line="1" column="71" selection-start="77" selection-end="77" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/controllers/article-list-controller.js">
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavascriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DHTML.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="45" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0">
+        <state line="712" column="20" selection-start="10447" selection-end="10447" vertical-scroll-proportion="0.33333334" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/partials/directive-word.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="31" selection-start="50" selection-end="50" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/partials/article-list.html">
+    <entry file="file://$PROJECT_DIR$/test/unit/runner.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="34" selection-start="224" selection-end="224" vertical-scroll-proportion="-1.875">
+        <state line="6" column="4" selection-start="183" selection-end="249" vertical-scroll-proportion="-1.125">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/directives/myInclude.js">
+    <entry file="file://$PROJECT_DIR$/test/e2e/runner.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="38" selection-start="1433" selection-end="1433" vertical-scroll-proportion="0.0">
+        <state line="4" column="70" selection-start="149" selection-end="149" vertical-scroll-proportion="0.084745765">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/lib/jquery-extends.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="4" selection-start="287" selection-end="287" vertical-scroll-proportion="0.16393442">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/js/directives/directives.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="28" selection-start="655" selection-end="655" vertical-scroll-proportion="0.45081967">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/word-directive-spec.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="28" selection-start="332" selection-end="332" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/lib/angular/angular-scenario.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25489" column="20" selection-start="776432" selection-end="776432" vertical-scroll-proportion="5.4853964">
+          <folding>
+            <marker date="1346455572000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1346455572000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1346455572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/e2e/scenarios.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="39" selection-start="511" selection-end="511" vertical-scroll-proportion="0.36885247">
           <folding />
         </state>
       </provider>

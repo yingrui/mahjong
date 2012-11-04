@@ -8,9 +8,8 @@ corpusEditorDirectives.directive('myInclude',
             restrict:'E',
             terminal:true,
             compile:function (element, attr) {
-                var srcExp = attr.ngInclude || attr.src,
-                    onloadExp = attr.onload || '',
-                    autoScrollExp = attr.autoscroll;
+                var srcExp = attr.src,
+                    onloadExp = attr.onload || '';
 
                 return function (scope, element) {
                     var clearContent = function () {
