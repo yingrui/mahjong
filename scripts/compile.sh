@@ -2,3 +2,4 @@
 
 cd ./lib-segment
 mvn compile
+cd -
