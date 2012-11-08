@@ -40,7 +40,7 @@ describe('Http Backend Mock', function() {
             expect(response).toEqual([]);
             $httpBackend.flush();
             expect(response).toEqualData(
-                [{name: 'word'}, {name: 'word2'}]);
+                [{name: 'word1'}, {name: 'word2'}]);
         });
 
         it('should return array via $resource', function() {
