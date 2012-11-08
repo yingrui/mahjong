@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export DISPLAY=:0
+
 SeleniumServer=$1
 SeleniumPort=$2
 Browser=$3
