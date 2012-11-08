@@ -24,7 +24,6 @@ describe('Article Repository Service', function() {
         }));
 
         it('should return "article" with 1 word fetched via article repository', function() {
-            console.log("repository", repository);
             var response = repository.get({articleId:'article1'});
             $httpBackend.flush();
             expect(response).toEqualData({segmentResult:[[{name: 'word1'}]]});
