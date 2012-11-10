@@ -67,13 +67,12 @@ public class HashDictionary<Word extends IWord> implements IDictionary {
     @Override
     public Word getWord(String wordStr) {
         HeadIndexer<Word> headIndexer = lookupHeadIndexer(getHead(wordStr));
-        if (headIndexer != null) {
-            Word word = headIndexer.findWord(wordStr);
-            if (word != null) {
-                return word;
-            }
-        }
-        return null;
+        return headIndexer != null ? headIndexer.findWord(wordStr) : null;
+    }
+
+    public Word lookupWord(String wordStr) {
+        HeadIndexer<Word> headIndexer = lookupHeadIndexer(getHead(wordStr));
+        return headIndexer != null ? headIndexer.get(wordStr) : null;
     }
 
     @Override
@@ -97,15 +96,6 @@ public class HashDictionary<Word extends IWord> implements IDictionary {
             wordList.addAll(Arrays.asList(wordArray.getWordItems()));
         }
         return (Iterator)wordList.iterator();
-    }
-
-    public Word lookupWord(String wordStr) {
-        Word word = null;
-        HeadIndexer<Word> headindexer = lookupHeadIndexer(getHead(wordStr));
-        if (headindexer != null) {
-            word = headindexer.get(wordStr);
-        }
-        return word;
     }
 
     protected String getHead(String wordStr) {

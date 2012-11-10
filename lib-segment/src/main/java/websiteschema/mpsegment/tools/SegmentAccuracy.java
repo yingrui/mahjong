@@ -17,9 +17,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author ray
- */
 public class SegmentAccuracy {
 
     private PFRCorpusLoader loader;

@@ -7,10 +7,6 @@ package websiteschema.mpsegment.util;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.dict.POSUtil;
 
-/**
- *
- * @author ray
- */
 public class WordUtil {
 
     public static int isNumerical(String wordString) {

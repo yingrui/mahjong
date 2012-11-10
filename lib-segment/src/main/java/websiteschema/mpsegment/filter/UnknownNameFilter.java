@@ -10,10 +10,6 @@ import websiteschema.mpsegment.util.WordUtil;
 import websiteschema.mpsegment.dict.ChNameDictionary;
 import static websiteschema.mpsegment.util.WordUtil.*;
 
-/**
- *
- * @author ray
- */
 public class UnknownNameFilter extends AbstractSegmentFilter {
 
     private static ChNameDictionary chNameDict = null;
@@ -176,7 +172,7 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
                         if (d5 > 1.1339999999999999D || d5 > 0.90000000000000002D && d4 > 1.6000000000000001D && d4 / d1 > 2D) {
                             numOfNameWordItem = 3;
                         }
-                    } else if (processSpecialMingChar(begin + 1)) {
+                    } else if (wouldNotBeMingWithSpecialChar(begin + 1)) {
                         numOfNameWordItem = -1;
                     }
                 } else if (d1 > d4 && d1 > factor2) {
@@ -249,25 +245,25 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
         return WordUtil.isSpecialMingChar(word);
     }
 
-    private boolean processSpecialMingChar(int i1) {
-        String s1 = segmentResult.getWord(i1);
-        if (s1.equals("以") || s1.equals("从")) {
-            double d1 = chNameDict.computeLgMing23(segmentResult.getWord(i1), segmentResult.getWord(i1 + 1));
+    private boolean wouldNotBeMingWithSpecialChar(int index) {
+        String word = segmentResult.getWord(index);
+        if (word.equals("以") || word.equals("从")) {
+            double d1 = chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1));
             if (d1 < 0.92000000000000004D) {
                 return true;
             }
-        } else if (s1.equals("得") || s1.equals("为") || s1.equals("向") || s1.equals("自")) {
-            double d2 = chNameDict.computeLgMing23(segmentResult.getWord(i1), segmentResult.getWord(i1 + 1));
+        } else if (word.equals("得") || word.equals("为") || word.equals("向") || word.equals("自")) {
+            double d2 = chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1));
             if (d2 <= 0.93000000000000005D) {
                 return true;
             }
-        } else if (s1.equals("则")) {
-            double d3 = chNameDict.computeLgMing23(segmentResult.getWord(i1), segmentResult.getWord(i1 + 1));
+        } else if (word.equals("则")) {
+            double d3 = chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1));
             if (d3 <= 0.80000000000000004D) {
                 return true;
             }
-        } else if (s1.equals("如")) {
-            double d4 = chNameDict.computeLgMing23(segmentResult.getWord(i1), segmentResult.getWord(i1 + 1));
+        } else if (word.equals("如")) {
+            double d4 = chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1));
             if (d4 <= 1.0D) {
                 return true;
             }

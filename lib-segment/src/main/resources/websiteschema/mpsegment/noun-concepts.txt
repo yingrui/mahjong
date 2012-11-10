@@ -9,7 +9,7 @@
 1.1.1.1.1.1.3 身份 n-identity
 1.1.1.1.1.1.4 关系 n-relationship
 1.1.1.1.1.2 团体 n-group
-1.1.1.1.1.2.1 机构 n-orgnization
+1.1.1.1.1.2.1 机构 n-organization
 1.1.1.1.1.2.2 人群 n-crowd
 1.1.1.1.2 动物 n-animal
 1.1.1.1.2.1 兽 n-beast
