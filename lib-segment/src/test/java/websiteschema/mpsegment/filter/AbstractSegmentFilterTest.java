@@ -41,7 +41,6 @@ public class AbstractSegmentFilterTest {
     }
 
     class Filter extends AbstractSegmentFilter {
-
         @Override
         public void doFilter() {
         }

@@ -9,7 +9,7 @@ import java.util.Properties;
 public final class MPSegmentConfiguration {
 
     private static Logger l = Logger.getLogger("segment");
-    private static final MPSegmentConfiguration INSTANCE = new MPSegmentConfiguration();
+    private static final MPSegmentConfiguration instance = new MPSegmentConfiguration();
     private static int SECTION_SIZE = 1024;
     private Properties properties;
 
@@ -21,27 +21,27 @@ public final class MPSegmentConfiguration {
 
     private void loadFromConfiguration() {
         try {
-            l.debug("load maxprob-default.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob-default.cfg"));
+            l.info("load maxprob-default.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob-default.cfg"));
             properties.load(MPSegmentConfiguration.class.getClassLoader().getResourceAsStream("maxprob-default.cfg"));
             if (null != MPSegmentConfiguration.class.getClassLoader().getResource("maxprob.cfg")) {
-                l.debug("load maxprob.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob.cfg"));
+                l.info("load maxprob.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob.cfg"));
                 properties.load(MPSegmentConfiguration.class.getClassLoader().getResourceAsStream("maxprob.cfg"));
             }
         } catch (IOException ex) {
-            l.error("error when loading Chinese NLP INSTANCE files", ex);
+            l.error("error when loading Chinese NLP instance files", ex);
         }
     }
 
     public MPSegmentConfiguration(Map<String, String> config) {
-        properties = new Properties(INSTANCE.properties);
+        properties = new Properties(instance.properties);
         for(String key : config.keySet()) {
             properties.put(key, config.get(key));
         }
         initialize();
     }
 
-    public static MPSegmentConfiguration getINSTANCE() {
-        return INSTANCE;
+    public static MPSegmentConfiguration getInstance() {
+        return instance;
     }
 
     private String getHomePath() {
@@ -133,13 +133,11 @@ public final class MPSegmentConfiguration {
     }
 
     public String getGlueChar() {
-        String gluechar = properties.getProperty("segment.gluechar", "*?~/_[]:");
-        return gluechar;
+        return properties.getProperty("segment.gluechar", "*?~/_[]:");
     }
 
     public int getMaxQueryLength() {
-        int maxquerylength = Integer.parseInt(properties.getProperty("segment.maxquerylength", "512").trim());
-        return maxquerylength;
+        return Integer.parseInt(properties.getProperty("segment.maxquerylength", "512").trim());
     }
 
     public boolean isFilterStopWord() {
@@ -171,13 +169,11 @@ public final class MPSegmentConfiguration {
     }
 
     public int getMaxWordLength() {
-        int maxwordlength = Integer.parseInt(properties.getProperty("segment.maxwordlength", "8").trim());
-        return maxwordlength;
+        return Integer.parseInt(properties.getProperty("segment.maxwordlength", "8").trim());
     }
 
     public String getDomainDictLoader() {
-        String domaindictloader = properties.getProperty("domain.dictloader", "");
-        return domaindictloader;
+        return properties.getProperty("domain.dictloader", "");
     }
 
     public boolean isExtendPOSInDomainDictionary() {

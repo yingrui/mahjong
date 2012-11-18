@@ -32,14 +32,15 @@ public class SegmentAccuracy {
 
     private Set<String> possibleNewWords = new HashSet<String>();
     private Set<String> wordsWithContainDisambiguate = new HashSet<String>();
+    private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
 
     public SegmentAccuracy(String testCorpus) throws IOException {
         loader = new PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus));
     }
 
     public void checkSegmentAccuracy() {
-        boolean xingMingSeparate = MPSegmentConfiguration.getINSTANCE().isXingMingSeparate();
-        MPSegmentConfiguration.getINSTANCE().setXingmingSeparate(true);
+        boolean xingMingSeparate = config.isXingMingSeparate();
+        config.setXingmingSeparate(true);
         SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker();
         boolean isUseContextFreq = segmentWorker.isUseContextFreqSegment();
         segmentWorker.setUseContextFreqSegment(true);
@@ -57,7 +58,7 @@ public class SegmentAccuracy {
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
-            MPSegmentConfiguration.getINSTANCE().setXingmingSeparate(xingMingSeparate);
+            config.setXingmingSeparate(xingMingSeparate);
             segmentWorker.setUseContextFreqSegment(isUseContextFreq);
         }
         assert (correct > 0 && totalWords > 0);

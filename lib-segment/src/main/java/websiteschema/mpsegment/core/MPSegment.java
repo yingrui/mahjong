@@ -6,7 +6,8 @@ import websiteschema.mpsegment.graph.*;
 
 public class MPSegment {
 
-    public MPSegment() {
+    public MPSegment(MPSegmentConfiguration config) {
+        this.config = config;
         maxWordLength = 18;
         lastSection = false;
         lastSectionStr = "";
@@ -103,7 +104,7 @@ public class MPSegment {
 
     private void initialize() {
         initializeGraph();
-        maxWordLength = MPSegmentConfiguration.getINSTANCE().isSegmentMin() ? 4 : MPSegmentConfiguration.getINSTANCE().getMaxWordLength();
+        maxWordLength = config.isSegmentMin() ? 4 : config.getMaxWordLength();
         initializePOSTagging();
     }
 
@@ -117,7 +118,7 @@ public class MPSegment {
     }
 
     private void buildGraph(final String sen, final int startPos) {
-        GraphBuilder builder = new GraphBuilder(graph, useDomainDictionary);
+        GraphBuilder builder = new GraphBuilder(graph, useDomainDictionary, config);
         builder.setUseContextFreqSegment(useContextFreqSegment);
         builder.buildGraph(sen, startPos);
     }
@@ -195,4 +196,5 @@ public class MPSegment {
     private String lastSectionStr;
     private boolean useDomainDictionary;
     private boolean useContextFreqSegment = false;
+    private MPSegmentConfiguration config;
 }

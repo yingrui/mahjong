@@ -1,5 +1,6 @@
 package websiteschema.mpsegment.core;
 
+import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.filter.SegmentResultFilter;
 
 public class SegmentWorker {
@@ -11,11 +12,11 @@ public class SegmentWorker {
 
     //TODO: should has own MPSegmentConfiguration object for thread safe.
 
-    public SegmentWorker() {
+    public SegmentWorker(MPSegmentConfiguration config) {
         unKnownFilter = null;
         maxSegStrLength = 400000;
-        mpSegment = new MPSegment();
-        unKnownFilter = new SegmentResultFilter();
+        mpSegment = new MPSegment(config);
+        unKnownFilter = new SegmentResultFilter(config);
     }
 
     public void setUseDomainDictionary(boolean flag) {

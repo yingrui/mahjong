@@ -91,5 +91,6 @@ public class WordUtil {
         return ch.equals("向") || ch.equals("自") || ch.equals("乃") || ch.equals("以") || ch.equals("从") || ch.equals("和") || ch.equals("得") || ch.equals("为") || ch.equals("则") || ch.equals("如");
     }
     private static String glueChars = "*?~/_[]:";
-    private static String glueChar = MPSegmentConfiguration.getINSTANCE().getGlueChar();//"~_:";
+    private static final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
+    private static String glueChar = config.getGlueChar();//"~_:";
 }

@@ -21,10 +21,11 @@ public class DictionaryFactory {
         return ins;
     }
 
+    private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
     private HashDictionary coreDict;
     private DomainDictFactory domainFactory;
-    private boolean loadDomainDictionary = MPSegmentConfiguration.getINSTANCE().isLoadDomainDictionary();
-    private boolean loadUserDictionary = MPSegmentConfiguration.getINSTANCE().isLoadUserDictionary();
+    private boolean loadDomainDictionary = config.isLoadDomainDictionary();
+    private boolean loadUserDictionary = config.isLoadUserDictionary();
 
     public HashDictionary getCoreDictionary() {
         return coreDict;
@@ -85,12 +86,12 @@ public class DictionaryFactory {
     public void loadUserDictionary() {
         if (loadUserDictionary) {
             long l1 = System.currentTimeMillis();
-            String userDictFile = MPSegmentConfiguration.getINSTANCE().getUserDictionaryFile();
+            String userDictFile = config.getUserDictionaryFile();
             DomainDictionary domainDictionary = DomainDictFactory.getInstance().getDomainDictionary();
             UserDictionaryLoader userDictionaryLoader = new UserDictionaryLoader(domainDictionary, coreDict);
             try {
                 userDictionaryLoader.loadUserDictionary(userDictFile);
-                userDictionaryLoader.buildDisambiguationRule(new MPSegment());
+                userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration.getInstance()));
             } catch (DictionaryException e) {
                 l.error(e);
             }

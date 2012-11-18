@@ -8,13 +8,15 @@ public class DomainDictFactory {
     private final static DomainDictFactory ins = new DomainDictFactory();
     private final static Logger l = Logger.getLogger("segment");
     private volatile DomainDictionary domainDict;
+    private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
+    private final boolean loadDomainDictionary = config.isLoadDomainDictionary();
 
     public static DomainDictFactory getInstance() {
         return ins;
     }
 
     public final void buildDictionary() {
-        if (MPSegmentConfiguration.getINSTANCE().isLoadDomainDictionary()) {
+        if (loadDomainDictionary) {
             DomainDictionary dict = new DomainDictionary();
             initializeDictionaryLoaderThenLoad(dict);
             domainDict = dict;
@@ -36,7 +38,7 @@ public class DomainDictFactory {
     }
 
     private void initializeAndLoad(DomainDictionary dict) {
-        String classNames[] = MPSegmentConfiguration.getINSTANCE().getDomainDictLoader().split("[,; ]+");
+        String classNames[] = config.getDomainDictLoader().split("[,; ]+");
         for (String className : classNames) {
             DomainDictLoader loader = createDictLoader(className);
             if (null != loader) {

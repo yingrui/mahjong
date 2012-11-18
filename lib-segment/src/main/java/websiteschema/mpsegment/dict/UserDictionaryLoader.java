@@ -185,13 +185,12 @@ public class UserDictionaryLoader {
 
     public ArrayList loadSynonymMap(String s) {
         File file = new File(s);
-        String s1 = MPSegmentConfiguration.getINSTANCE().getDefaultFileEncoding();
         ArrayList arraylist = new ArrayList();
         if (file.isFile() && file.exists()) {
             try {
                 int i = 0;
 
-                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(new FileInputStream(file), s1));
+                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
                 String s2;
                 while ((s2 = bufferedreader.readLine()) != null) {
                     i++;
@@ -214,12 +213,11 @@ public class UserDictionaryLoader {
 
     public ArrayList loadStopWord(String s) {
         File file = new File(s);
-        String s1 = MPSegmentConfiguration.getINSTANCE().getDefaultFileEncoding();
         ArrayList arrayList = new ArrayList();
         if (file.isFile() && file.exists()) {
             try {
                 int i = 0;
-                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(new FileInputStream(file), s1));
+                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
                 String s2;
                 while ((s2 = bufferedreader.readLine()) != null) {
                     i++;
@@ -264,6 +262,7 @@ public class UserDictionaryLoader {
         return (int) MPSegmentConfiguration.LOG_CORPUS;
     }
 
+    private final String encoding = MPSegmentConfiguration.getInstance().getDefaultFileEncoding();
     private DomainDictionary domainDict = DomainDictFactory.getInstance().getDomainDictionary();
     private HashDictionary hashDictionary;
     private int defaultFreq;

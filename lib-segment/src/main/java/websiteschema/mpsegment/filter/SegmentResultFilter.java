@@ -4,6 +4,7 @@
  */
 package websiteschema.mpsegment.filter;
 
+import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.core.SegmentResult;
 
 /**
@@ -12,10 +13,17 @@ import websiteschema.mpsegment.core.SegmentResult;
  */
 public class SegmentResultFilter {
 
-    private QuerySyntaxFilter filter = new QuerySyntaxFilter();
-    private UnknownPlaceFilter placeFilter = new UnknownPlaceFilter();
-    private NumberAndTimeFilter numberAndTimeFilter = new NumberAndTimeFilter();
-    private UnknownNameFilter nameFilter = new UnknownNameFilter();
+    private QuerySyntaxFilter filter;
+    private UnknownPlaceFilter placeFilter;
+    private NumberAndTimeFilter numberAndTimeFilter;
+    private UnknownNameFilter nameFilter;
+
+    public SegmentResultFilter(MPSegmentConfiguration config) {
+        filter = new QuerySyntaxFilter(config);
+        nameFilter = new UnknownNameFilter(config);
+        placeFilter = new UnknownPlaceFilter();
+        numberAndTimeFilter = new NumberAndTimeFilter();
+    }
 
     public void filter(SegmentResult segmentResult) {
         placeFilter.setSegmentResult(segmentResult);

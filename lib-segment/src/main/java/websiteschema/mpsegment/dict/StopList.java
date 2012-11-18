@@ -12,7 +12,7 @@ public class StopList {
     }
 
     public void loadStopList(String s) {
-        String encoding = MPSegmentConfiguration.getINSTANCE().getDefaultFileEncoding();
+        String encoding = MPSegmentConfiguration.getInstance().getDefaultFileEncoding();
         try {
             int i = 0;
 
@@ -37,7 +37,7 @@ public class StopList {
             System.out.println((new StringBuilder()).append("[StopWord] exception:").append(exception.getMessage()).toString());
         }
 
-        String posStopList = MPSegmentConfiguration.getINSTANCE().getStopPosList();
+        String posStopList = MPSegmentConfiguration.getInstance().getStopPosList();
         posStopList = posStopList.trim();
         if (posStopList.length() > 0) {
             String as[] = posStopList.split(",");

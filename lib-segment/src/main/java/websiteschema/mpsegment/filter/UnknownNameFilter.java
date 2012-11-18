@@ -5,11 +5,13 @@
 package websiteschema.mpsegment.filter;
 
 import websiteschema.mpsegment.concept.Concept;
-import websiteschema.mpsegment.dict.POSUtil;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
-import websiteschema.mpsegment.util.WordUtil;
 import websiteschema.mpsegment.dict.ChNameDictionary;
-import static websiteschema.mpsegment.util.WordUtil.*;
+import websiteschema.mpsegment.dict.POSUtil;
+import websiteschema.mpsegment.util.WordUtil;
+
+import static websiteschema.mpsegment.util.WordUtil.isChineseJieCi;
+import static websiteschema.mpsegment.util.WordUtil.isPos_P_C_U_W_UN;
 
 public class UnknownNameFilter extends AbstractSegmentFilter {
 
@@ -27,8 +29,10 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
     private boolean hasPossibleFoundName = false;
     private int wordIndex = 0;
     private int numOfNameWordItem = -1;
+    private MPSegmentConfiguration config;
 
-    public UnknownNameFilter() {
+    public UnknownNameFilter(MPSegmentConfiguration config) {
+        this.config = config;
         initialize();
     }
 
@@ -36,7 +40,7 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
         if (useChNameDict) {
             if (chNameDict == null) {
                 chNameDict = new ChNameDictionary();
-                chNameDict.loadNameDict(MPSegmentConfiguration.getINSTANCE().getChNameDict());
+                chNameDict.loadNameDict(config.getChNameDict());
             }
             if (useForeignNameDict && foreignName == null) {
                 foreignName = new ForeignName();
@@ -67,7 +71,7 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
 
     @Override
     public void doFilter() {
-        if (useChNameDict && MPSegmentConfiguration.getINSTANCE().isChineseNameIdentify()) {
+        if (useChNameDict && config.isChineseNameIdentify()) {
             segmentResultLength = segmentResult.length();
             markPositionImpossibleToBeName();
 
@@ -131,7 +135,7 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
             numOfNameWordItem = 0;
         }
         if (numOfNameWordItem > 0) {
-            if (MPSegmentConfiguration.getINSTANCE().isXingMingSeparate()) {
+            if (config.isXingMingSeparate()) {
                 if (numOfNameWordItem >= 3) {
                     int numOfMingWord = numOfNameWordItem - 1;
                     mergeWordsWithPOS(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR);

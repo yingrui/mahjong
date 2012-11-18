@@ -8,9 +8,13 @@ import static websiteschema.mpsegment.util.WordUtil.*;
 public final class QuerySyntaxFilter
         extends AbstractSegmentFilter {
 
+    public QuerySyntaxFilter(MPSegmentConfiguration config) {
+        this.config = config;
+    }
+
     @Override
     public void doFilter() {
-        if (supportQuerySyntax && segmentResult.length() <= maxQueryLength) {
+        if (config.isSupportQuerySyntax() && segmentResult.length() <= config.getMaxQueryLength()) {
             int length = segmentResult.length();
             int wordI = 0;
 
@@ -118,6 +122,5 @@ public final class QuerySyntaxFilter
     private static String underScore = "_";
     private static String slash = "/";
     private static String colon = ":";
-    private boolean supportQuerySyntax = MPSegmentConfiguration.getINSTANCE().isSupportQuerySyntax();
-    private int maxQueryLength = MPSegmentConfiguration.getINSTANCE().getMaxQueryLength();
+    private MPSegmentConfiguration config;
 }

@@ -10,13 +10,6 @@ import websiteschema.mpsegment.util.SerializeHandler;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-/**
- * Created with IntelliJ IDEA.
- * User: twer
- * Date: 9/17/12
- * Time: 8:31 PM
- * To change this template use File | Settings | File Templates.
- */
 public class POSResources {
 
     private static POSResources instance = new POSResources();
@@ -30,7 +23,7 @@ public class POSResources {
         return instance;
     }
 
-    POSResources() {
+    private POSResources() {
         initialize();
     }
 
@@ -39,7 +32,7 @@ public class POSResources {
         pi = new Pi();
         stateBank = new NodeRepository();
 
-        String resource = MPSegmentConfiguration.getINSTANCE().getPOSMatrix();
+        String resource = MPSegmentConfiguration.getInstance().getPOSMatrix();
         try {
             SerializeHandler readHandler = new SerializeHandler(
                     new DataInputStream(FileUtil.getResourceAsStream(resource)));
