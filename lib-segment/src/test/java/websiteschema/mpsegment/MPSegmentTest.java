@@ -12,9 +12,6 @@ import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.core.SegmentWorker;
 import websiteschema.mpsegment.dict.POSUtil;
 
-/**
- * @author ray
- */
 public class MPSegmentTest {
 
     @Test
@@ -56,6 +53,18 @@ public class MPSegmentTest {
 
         str = "张丰收的生活";
         words = worker.segment(str);
+        System.out.println(words);
+    }
+
+    @Test
+    public void should_seperate_Chinese_Name_into_xing_and_ming() {
+        String str = "张三丰创造了太极拳。";
+        boolean xingMingSeparate = MPSegmentConfiguration.getINSTANCE().isXingMingSeparate();
+        MPSegmentConfiguration.getINSTANCE().setXingmingSeparate(true);
+        SegmentEngine engine = SegmentEngine.getInstance();
+        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentResult words = worker.segment(str);
+        MPSegmentConfiguration.getINSTANCE().setXingmingSeparate(xingMingSeparate);
         System.out.println(words);
     }
 

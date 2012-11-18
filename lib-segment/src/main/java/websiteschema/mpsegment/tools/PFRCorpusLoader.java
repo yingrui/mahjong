@@ -9,12 +9,15 @@ import websiteschema.mpsegment.dict.POSUtil;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PFRCorpusLoader {
 
     private BufferedReader reader;
-    HashDictionary dictionary;
+    private HashDictionary dictionary;
+    private Set<Integer> eliminatedDomainTypes;
 
     public PFRCorpusLoader(InputStream inputStream) throws UnsupportedEncodingException {
         this(inputStream, "utf-8");
@@ -23,10 +26,15 @@ public class PFRCorpusLoader {
     public PFRCorpusLoader(InputStream inputStream, String encoding) throws UnsupportedEncodingException {
         reader = new BufferedReader(new InputStreamReader(inputStream, encoding));
         dictionary = DictionaryFactory.getInstance().getCoreDictionary();
-        if(dictionary == null) {
+        if (dictionary == null) {
             DictionaryFactory.getInstance().loadDictionary();
             dictionary = DictionaryFactory.getInstance().getCoreDictionary();
         }
+        eliminatedDomainTypes = new HashSet<Integer>(5);
+    }
+
+    public void eliminateDomainType(int domainType) {
+        eliminatedDomainTypes.add(domainType);
     }
 
     public SegmentResult readLine() throws IOException {
@@ -57,14 +65,15 @@ public class PFRCorpusLoader {
                 String[] conceptInfo = ele.split("]");
                 ele = conceptInfo[0];
                 int domainType = POSUtil.getPOSIndex(conceptInfo[1].toUpperCase());
-                for (int j = firstIndex; j <= i; j++) {
-                    domainTypes[j] = domainType;
-                }
+                setDomainType(domainTypes, firstIndex, i, domainType);
                 firstIndex = -1;
             }
             String[] info = ele.split("/");
             String wordStr = info[0];
             String posStr = info[1].toUpperCase();
+            if (posStr.equalsIgnoreCase(POSUtil.getPOSString(POSUtil.POS_NR))) {
+                setDomainType(domainTypes, i, POSUtil.POS_NR);
+            }
             concepts[i] = getConcept(wordStr, posStr);
             words.add(wordStr);
             posArray[i] = POSUtil.getPOSIndex(posStr);
@@ -78,13 +87,25 @@ public class PFRCorpusLoader {
         return result;
     }
 
+    private void setDomainType(int[] domainTypes, int index, int domainType) {
+        setDomainType(domainTypes, index, index, domainType);
+    }
+
+    private void setDomainType(int[] domainTypes, int startIndex, int endIndex, int domainType) {
+        if (!eliminatedDomainTypes.contains(domainType)) {
+            for (int j = startIndex; j <= endIndex; j++) {
+                domainTypes[j] = domainType;
+            }
+        }
+    }
+
     public String getConcept(String wordStr, String posStr) {
         IWord word = dictionary.lookupWord(wordStr);
         if (null != word) {
             for (Concept concept : word.getConcepts()) {
                 if (concept.getName().startsWith(posStr.substring(0, 1).toLowerCase())) {
                     return concept.getName();
-                } else if(POSUtil.getPOSIndex(posStr) == POSUtil.POS_J && concept.getName().startsWith("n")) {
+                } else if (POSUtil.getPOSIndex(posStr) == POSUtil.POS_J && concept.getName().startsWith("n")) {
                     return concept.getName();
                 }
             }

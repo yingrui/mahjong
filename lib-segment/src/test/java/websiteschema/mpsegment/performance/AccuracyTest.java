@@ -13,9 +13,12 @@ public class AccuracyTest {
     public void should_be_higher_accuracy_rate_than_0_dot_93_with_segment_minimum() throws IOException {
         SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt");
         boolean segmentMin = MPSegmentConfiguration.getINSTANCE().isSegmentMin();
+        boolean xingMingSeparate = MPSegmentConfiguration.getINSTANCE().isXingMingSeparate();
         MPSegmentConfiguration.getINSTANCE().setSegmentMin(true);
+        MPSegmentConfiguration.getINSTANCE().setXingmingSeparate(true);
         segmentAccuracy.checkSegmentAccuracy();
         MPSegmentConfiguration.getINSTANCE().setSegmentMin(segmentMin);
+        MPSegmentConfiguration.getINSTANCE().setXingmingSeparate(xingMingSeparate);
         System.out.println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate());
         System.out.println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.");
 

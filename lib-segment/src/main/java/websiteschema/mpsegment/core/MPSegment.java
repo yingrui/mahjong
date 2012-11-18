@@ -1,9 +1,7 @@
 package websiteschema.mpsegment.core;
 
-import websiteschema.mpsegment.concept.Concept;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.dict.IWord;
-import websiteschema.mpsegment.dict.POSUtil;
 import websiteschema.mpsegment.graph.*;
 
 public class MPSegment {
@@ -165,43 +163,34 @@ public class MPSegment {
         SegmentResult result = buildSegmentResult(path);
         if (withPOS) {
             result.setPOSArray(posTagging.findPOS(path, graph));
-            getConcepts(result, path);
+            setConcepts(result, path);
         }
         graph.clear();
         return result;
     }
 
-    private void getConcepts(SegmentResult result, Path path) {
-        int length = path.getLength();
-        String concepts[] = new String[length];
+    private void setConcepts(SegmentResult result, Path path) {
+        final int length = path.getLength();
         if (length == 0) {
             return;
         }
+        IWord[] words = new IWord[length];
+        int[] posArray = new int[length];
         for (int index = 0; index < length; index++) {
-            IWord word = graph.getEdgeObject(path.iget(index), path.iget(index + 1));
-            concepts[index] = getConcept(word, result.getPOS(index));
+            words[index] = graph.getEdgeObject(path.iget(index), path.iget(index + 1));
+            posArray[index] = result.getPOS(index);
         }
-
-        result.setConcepts(concepts);
-    }
-
-    private String getConcept(IWord word, int pos) {
-        Concept[] concepts = word.getConcepts();
-        if (null != concepts) {
-            String primaryPOS = POSUtil.getPOSString(pos).substring(0, 1).toLowerCase();
-            for (int i = 0; i < concepts.length; i++) {
-                if (concepts[i].getName().startsWith(primaryPOS)) {
-                    return concepts[i].getName();
-                }
-            }
-        }
-        return Concept.UNKNOWN.getName();
+        conceptRecognizer.reset();
+        conceptRecognizer.setPosArray(posArray);
+        conceptRecognizer.setWordArray(words);
+        result.setConcepts(conceptRecognizer.getConcepts());
     }
 
     private int maxWordLength;
     private IShortestPath dijk;
     private IGraph graph;
     private IPOSRecognizer posTagging;
+    private IConceptRecognizer conceptRecognizer = new SimpleConceptRecognizer();
     private boolean lastSection;
     private String lastSectionStr;
     private boolean useDomainDictionary;

@@ -4,6 +4,7 @@
  */
 package websiteschema.mpsegment.filter;
 
+import websiteschema.mpsegment.concept.Concept;
 import websiteschema.mpsegment.dict.POSUtil;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.util.WordUtil;
@@ -16,8 +17,6 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
     private static double factor1 = 1.1180000000000001D;
     private static double factor2 = 0.65000000000000002D;
     private static double factor3 = 1.6299999999999999D;
-    private static int posNR = POSUtil.POS_NR;
-    private static int posM = POSUtil.POS_M;
     private static ForeignName foreignName = null;
     private boolean useChNameDict = true;
     private boolean useForeignNameDict = false;
@@ -128,16 +127,21 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
 
     private int recognizeNameWord() {
         recognizeNameWordBetween(nameStartIndex, nameEndIndex);
-        if (numOfNameWordItem > 0 && nameStartIndex > 0 && segmentResult.getPOS(nameStartIndex - 1) == posM) {
+        if (numOfNameWordItem > 0 && nameStartIndex > 0 && segmentResult.getPOS(nameStartIndex - 1) == POSUtil.POS_M) {
             numOfNameWordItem = 0;
         }
         if (numOfNameWordItem > 0) {
             if (MPSegmentConfiguration.getINSTANCE().isXingMingSeparate()) {
                 if (numOfNameWordItem >= 3) {
-                    mergeWordsWithPOS(nameStartIndex + 1, nameStartIndex + 2, posNR);
+                    int numOfMingWord = numOfNameWordItem - 1;
+                    mergeWordsWithPOS(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR);
                 }
+                segmentResult.setPOS(nameStartIndex, POSUtil.POS_NR);
+                segmentResult.setConcept(nameStartIndex, Concept.UNKNOWN.getName());
+                segmentResult.setConcept(nameStartIndex + 1, Concept.UNKNOWN.getName());
             } else if (numOfNameWordItem >= 2) {
-                mergeWordsWithPOS(nameStartIndex, (nameStartIndex + numOfNameWordItem) - 1, posNR);
+                mergeWordsWithPOS(nameStartIndex, (nameStartIndex + numOfNameWordItem) - 1, POSUtil.POS_NR);
+                segmentResult.setConcept(nameStartIndex, Concept.UNKNOWN.getName());
             }
         } else if (useForeignNameDict) {
             numOfNameWordItem = processForeignName(nameStartIndex, nameEndIndex);

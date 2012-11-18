@@ -27,59 +27,58 @@ public abstract class AbstractSegmentFilter implements ISegmentFilter {
         wordPosIndexes = new int[segmentResult.length()];
     }
 
-    void mergeWordsWithPOS(int firstWordIndex, int secondWordIndex, int POS) {
+    void mergeWordsWithPOS(int startWordIndex, int endWordIndex, int POS) {
         int length = segmentResult.length();
         int posIndex = POS;
-        if (firstWordIndex < 0 || secondWordIndex >= length || firstWordIndex >= secondWordIndex) {
+        if (startWordIndex < 0 || endWordIndex >= length || startWordIndex >= endWordIndex) {
             return;
         }
-        if (wordPosIndexes[firstWordIndex] > 0) {
-            int posI1 = wordPosIndexes[firstWordIndex];
+        if (wordPosIndexes[startWordIndex] > 0) {
+            int posI1 = wordPosIndexes[startWordIndex];
             do {
-                firstWordIndex--;
-            } while (firstWordIndex >= 0 && wordPosIndexes[firstWordIndex] == posI1);
+                startWordIndex--;
+            } while (startWordIndex >= 0 && wordPosIndexes[startWordIndex] == posI1);
 
-            firstWordIndex++;
+            startWordIndex++;
         }
-        if (firstWordIndex >= 1 && wordPosIndexes[firstWordIndex - 1] > 0 && wordPosIndexes[firstWordIndex - 1] < 200) {
+        if (startWordIndex >= 1 && wordPosIndexes[startWordIndex - 1] > 0 && wordPosIndexes[startWordIndex - 1] < 200) {
             posIndex += 200;
         }
-        for (int i = firstWordIndex; i <= secondWordIndex; i++) {
+        for (int i = startWordIndex; i <= endWordIndex; i++) {
             wordPosIndexes[i] = posIndex;
         }
     }
 
     void compactSegmentResult() {
         int length = segmentResult.length();
-        int i1 = 0;
-        int j1 = 0;
+        int index = 0;
+        int endIndex = 0;
 
-        while (i1 < length) {
-            if (wordPosIndexes[i1] == 0) {
-                if (i1 != j1) {
-                    segmentResult.letWord1EqualWord2(j1, i1);
+        while (index < length) {
+            if (wordPosIndexes[index] == 0) {
+                if (index != endIndex) {
+                    segmentResult.letWord1EqualWord2(endIndex, index);
                 }
-                i1++;
-                j1++;
+                index++;
             } else {
-                int k1 = wordPosIndexes[i1];
-                final int numBegin = i1;
-                String s1 = segmentResult.getWord(numBegin);
-                for (i1++; i1 < length && wordPosIndexes[i1] == k1; i1++) {
-                    s1 = (new StringBuilder(String.valueOf(s1))).append(segmentResult.getWord(i1)).toString();
+                int pos = wordPosIndexes[index];
+                final int numBegin = index;
+                String wordStr = segmentResult.getWord(numBegin);
+                for (index++; index < length && wordPosIndexes[index] == pos; index++) {
+                    wordStr = (new StringBuilder(String.valueOf(wordStr))).append(segmentResult.getWord(index)).toString();
                 }
 
-                if (k1 >= 200) {
-                    k1 -= 200;
+                if (pos >= 200) {
+                    pos -= 200;
                 }
-                segmentResult.setWord(j1, s1, k1);
-                j1++;
+                segmentResult.setWord(endIndex, wordStr, pos);
             }
+            endIndex++;
         }
-        for (int i2 = j1; i2 < length; i2++) {
-            segmentResult.setWord(i2, "", POSUtil.POS_UNKOWN);
+        for (int i = endIndex; i < length; i++) {
+            segmentResult.setWord(i, "", POSUtil.POS_UNKOWN);
         }
-        segmentResult.cutTail(j1);
+        segmentResult.cutTail(endIndex);
     }
 
     public SegmentResult getSegmentResult() {

@@ -122,6 +122,10 @@ public class SegmentResult {
         wordAtoms[index].pos = pos;
     }
 
+    public void setConcept(int index, String concept) {
+        wordAtoms[index].concept = concept;
+    }
+
     public void letWord1EqualWord2(int wordIndex1, int wordIndex2) {
         wordAtoms[wordIndex1].word = wordAtoms[wordIndex2].word;
         wordAtoms[wordIndex1].pos = wordAtoms[wordIndex2].pos;
