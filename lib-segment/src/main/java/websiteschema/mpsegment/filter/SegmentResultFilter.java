@@ -8,34 +8,25 @@ import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.core.SegmentResult;
 
 /**
- *
  * @author ray
  */
 public class SegmentResultFilter {
 
-    private QuerySyntaxFilter filter;
-    private UnknownPlaceFilter placeFilter;
-    private NumberAndTimeFilter numberAndTimeFilter;
-    private UnknownNameFilter nameFilter;
+    private final ISegmentFilter[] filters;
 
     public SegmentResultFilter(MPSegmentConfiguration config) {
-        filter = new QuerySyntaxFilter(config);
-        nameFilter = new UnknownNameFilter(config);
-        placeFilter = new UnknownPlaceFilter();
-        numberAndTimeFilter = new NumberAndTimeFilter();
+        filters = new ISegmentFilter[]{
+                new UnknownPlaceFilter(),
+                new NumberAndTimeFilter(),
+                new UnknownNameFilter(config),
+                new QuerySyntaxFilter(config)
+        };
     }
 
     public void filter(SegmentResult segmentResult) {
-        placeFilter.setSegmentResult(segmentResult);
-        placeFilter.filtering();
-
-        numberAndTimeFilter.setSegmentResult(segmentResult);
-        numberAndTimeFilter.filtering();
-
-        nameFilter.setSegmentResult(segmentResult);
-        nameFilter.filtering();
-
-        filter.setSegmentResult(segmentResult);
-        filter.filtering();
+        for (ISegmentFilter filter : filters) {
+            filter.setSegmentResult(segmentResult);
+            filter.filtering();
+        }
     }
 }
