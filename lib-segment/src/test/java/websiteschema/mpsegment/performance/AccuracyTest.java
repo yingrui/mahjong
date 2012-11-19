@@ -2,25 +2,23 @@ package websiteschema.mpsegment.performance;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import websiteschema.mpsegment.conf.MPSegmentConfiguration;
+import websiteschema.mpsegment.core.SegmentEngine;
+import websiteschema.mpsegment.core.SegmentWorker;
 import websiteschema.mpsegment.tools.SegmentAccuracy;
 
 import java.io.IOException;
 
 public class AccuracyTest {
 
-    private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
-
     @Test
     public void should_be_higher_accuracy_rate_than_0_dot_93_with_segment_minimum() throws IOException {
-        SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt");
-        boolean segmentMin = config.isSegmentMin();
-        boolean xingMingSeparate = config.isXingMingSeparate();
-        config.setSegmentMin(true);
-        config.setXingmingSeparate(true);
+        SegmentWorker segmentWorker =
+                SegmentEngine.getInstance().getSegmentWorker(
+                        "segment.xingmingseparate -> true",
+                        "segment.min -> true"
+                );
+        SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker);
         segmentAccuracy.checkSegmentAccuracy();
-        config.setSegmentMin(segmentMin);
-        config.setXingmingSeparate(xingMingSeparate);
         System.out.println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate());
         System.out.println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.");
 
@@ -45,7 +43,8 @@ public class AccuracyTest {
 
     @Test
     public void should_be_higher_accuracy_rate_than_0_dot_93() throws IOException {
-        SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt");
+        SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker("segment.xingmingseparate -> true");
+        SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker);
         segmentAccuracy.checkSegmentAccuracy();
         System.out.println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate());
         System.out.println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.");

@@ -3,6 +3,7 @@ package websiteschema.mpsegment.core;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.dict.DictionaryFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class SegmentEngine {
@@ -41,5 +42,19 @@ public class SegmentEngine {
 
     public SegmentWorker getSegmentWorker(Map<String,String> config) {
         return new SegmentWorker(new MPSegmentConfiguration(config));
+    }
+
+    public SegmentWorker getSegmentWorker(String ... props) {
+        Map<String, String> map = null;
+        if(null != props) {
+            map = new HashMap<String, String>(props.length);
+            for(String p : props) {
+                String[] keyAndValue = p.split("(=|->)");
+                if(null != keyAndValue && keyAndValue.length == 2) {
+                    map.put(keyAndValue[0].trim(), keyAndValue[1].trim());
+                }
+            }
+        }
+        return getSegmentWorker(map);
     }
 }

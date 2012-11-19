@@ -34,8 +34,10 @@ public final class MPSegmentConfiguration {
 
     public MPSegmentConfiguration(Map<String, String> config) {
         properties = new Properties(instance.properties);
-        for(String key : config.keySet()) {
-            properties.put(key, config.get(key));
+        if (null != config) {
+            for (String key : config.keySet()) {
+                properties.put(key, config.get(key));
+            }
         }
         initialize();
     }

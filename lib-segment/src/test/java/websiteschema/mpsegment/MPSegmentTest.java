@@ -6,15 +6,12 @@ package websiteschema.mpsegment;
 
 import org.junit.Assert;
 import org.junit.Test;
-import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.core.SegmentEngine;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.core.SegmentWorker;
 import websiteschema.mpsegment.dict.POSUtil;
 
 public class MPSegmentTest {
-
-    private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
 
     @Test
     public void should_Know_How_to_Break_ChinaGreatWall() {
@@ -61,20 +58,21 @@ public class MPSegmentTest {
     @Test
     public void should_seperate_Chinese_Name_into_xing_and_ming() {
         String str = "张三丰创造了太极拳。";
-        boolean xingMingSeparate = config.isXingMingSeparate();
-        config.setXingmingSeparate(true);
         SegmentEngine engine = SegmentEngine.getInstance();
-        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentWorker worker = engine.getSegmentWorker("segment.xingmingseparate -> true");
         SegmentResult words = worker.segment(str);
-        config.setXingmingSeparate(xingMingSeparate);
         System.out.println(words);
+        Assert.assertEquals("张", words.getWord(0));
+        Assert.assertEquals("三丰", words.getWord(1));
+        Assert.assertEquals(POSUtil.POS_NR, words.getPOS(0));
+        Assert.assertEquals(POSUtil.POS_NR,words.getPOS(1));
     }
 
     @Test
     public void should_Support_Query_Syntax() {
         String str = "中国~[250]";
         SegmentEngine engine = SegmentEngine.getInstance();
-        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentWorker worker = engine.getSegmentWorker("segment.querysyntax -> true");
         SegmentResult words = worker.segment(str);
         System.out.print(words + " ");
         Assert.assertEquals(words.getWord(0), "中国~[250]");
@@ -84,7 +82,7 @@ public class MPSegmentTest {
         System.out.print(words + " ");
         Assert.assertEquals(words.getWord(0), "中国*");
 
-        str = "中国:title";
+        str = "中国:title社会";
         words = worker.segment(str);
         System.out.print(words + " ");
         Assert.assertEquals(words.getWord(0), "中国:TITLE");
@@ -161,11 +159,8 @@ public class MPSegmentTest {
     public void should_segment_big_word_to_litter_words() {
         String str = "中华人民共和国在1949年10月1日正式宣布成立。";
         SegmentEngine engine = SegmentEngine.getInstance();
-        boolean segmentMin = config.isSegmentMin();
-        config.setSegmentMin(true);
-        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentWorker worker = engine.getSegmentWorker("segment.min -> true");
         SegmentResult words = worker.segment(str);
-        config.setSegmentMin(segmentMin);
         System.out.println(words);
         Assert.assertEquals(words.getWord(0), "中华");
         Assert.assertEquals(words.getWord(1), "人民");
@@ -176,11 +171,8 @@ public class MPSegmentTest {
     public void should_segment_big_word_to_litter_words_except_POS_I_L() {
         String str = "习惯成自然是一句俗语。";
         SegmentEngine engine = SegmentEngine.getInstance();
-        boolean segmentMin = config.isSegmentMin();
-        config.setSegmentMin(true);
-        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentWorker worker = engine.getSegmentWorker("segment.min = true");
         SegmentResult words = worker.segment(str);
-        config.setSegmentMin(segmentMin);
         System.out.println(words);
         Assert.assertEquals(words.getWord(0), "习惯成自然");
         Assert.assertEquals(words.getPOS(0), POSUtil.POS_I);

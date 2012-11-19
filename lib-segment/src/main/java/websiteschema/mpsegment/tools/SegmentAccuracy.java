@@ -4,8 +4,6 @@
  */
 package websiteschema.mpsegment.tools;
 
-import websiteschema.mpsegment.conf.MPSegmentConfiguration;
-import websiteschema.mpsegment.core.SegmentEngine;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.core.SegmentWorker;
 import websiteschema.mpsegment.core.WordAtom;
@@ -32,16 +30,14 @@ public class SegmentAccuracy {
 
     private Set<String> possibleNewWords = new HashSet<String>();
     private Set<String> wordsWithContainDisambiguate = new HashSet<String>();
-    private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
+    private SegmentWorker segmentWorker;
 
-    public SegmentAccuracy(String testCorpus) throws IOException {
+    public SegmentAccuracy(String testCorpus, SegmentWorker segmentWorker) throws IOException {
+        this.segmentWorker = segmentWorker;
         loader = new PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus));
     }
 
     public void checkSegmentAccuracy() {
-        boolean xingMingSeparate = config.isXingMingSeparate();
-        config.setXingmingSeparate(true);
-        SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker();
         boolean isUseContextFreq = segmentWorker.isUseContextFreqSegment();
         segmentWorker.setUseContextFreqSegment(true);
         try {
@@ -58,7 +54,6 @@ public class SegmentAccuracy {
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
-            config.setXingmingSeparate(xingMingSeparate);
             segmentWorker.setUseContextFreqSegment(isUseContextFreq);
         }
         assert (correct > 0 && totalWords > 0);
