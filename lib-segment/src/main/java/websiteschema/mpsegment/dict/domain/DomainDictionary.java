@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.dict.domain;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.*;
 import websiteschema.mpsegment.dict.*;
 
 import java.util.ArrayList;
@@ -145,5 +145,5 @@ public class DomainDictionary implements IDictionary {
     private HashMap<Integer, Integer> synonymIndexHashMap;
     private HashMap<Integer, List<Integer>> synonymHashMap;
     private int maxWordLength = 0;
-    private final static Logger l = Logger.getLogger("segment");
+    private final static Log l = LogFactory.getLog("segment");
 }

@@ -1,12 +1,12 @@
 package websiteschema.mpsegment.dict.domain;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.*;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 
 public class DomainDictFactory {
 
     private final static DomainDictFactory ins = new DomainDictFactory();
-    private final static Logger l = Logger.getLogger("segment");
+    private final static Log l = LogFactory.getLog("segment");
     private volatile DomainDictionary domainDict;
     private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
     private final boolean loadDomainDictionary = config.isLoadDomainDictionary();

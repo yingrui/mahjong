@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.dict;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.*;
 import websiteschema.mpsegment.concept.ConceptRepository;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.core.MPSegment;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class DictionaryFactory {
 
-    private final static Logger l = Logger.getLogger("segment");
+    private final static Log l = LogFactory.getLog("segment");
     private final static DictionaryFactory ins = new DictionaryFactory();
 
     public static DictionaryFactory getInstance() {
@@ -97,7 +97,7 @@ public class DictionaryFactory {
             }
             userDictionaryLoader.clear();
             l1 = System.currentTimeMillis() - l1;
-            l.debug((new StringBuilder()).append("[Segment] ").append("loading user dictionary time used(ms): ").append(l1).toString());
+            l.debug((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString());
         }
     }
 }

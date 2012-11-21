@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.dict;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.*;
 import websiteschema.mpsegment.util.BufReader;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 public class POSArray
         implements Serializable {
 
-    private static final Logger l = Logger.getLogger("segment");
+    private static final Log l = LogFactory.getLog("segment");
 
     public POSArray(RandomAccessFile randomaccessfile)
             throws IOException {

@@ -1,14 +1,17 @@
 package websiteschema.mpsegment.dict;
 
-import java.io.*;
-import java.util.Map;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import websiteschema.mpsegment.util.FileUtil;
 import websiteschema.mpsegment.util.SerializeHandler;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.util.Map;
+
 public class ChNameDictionary {
 
-    private static Logger l = Logger.getLogger("segment");
+    private static Log l = LogFactory.getLog("segment");
 
     public ChNameDictionary() {
         factor = 0.88400000000000001D;
@@ -228,8 +231,8 @@ public class ChNameDictionary {
             rightBoundaryProbs = readHandler.deserializeArrayDouble();
             objectinputstream.close();
         } catch (Exception exception) {
-            System.out.println((new StringBuilder()).append("[Segment] ").append(dictFile).append("没找到！").append(exception.getMessage()).toString());
-            l.debug((new StringBuilder()).append("[Segment] ").append(dictFile).append("没找到！").append(exception.getMessage()).toString());
+            System.out.println((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString());
+            l.debug((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString());
         }
     }
     private double factor;

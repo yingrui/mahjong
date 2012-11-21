@@ -4,7 +4,7 @@
  */
 package websiteschema.mpsegment.core;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.*;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.dict.*;
 import websiteschema.mpsegment.dict.domain.DomainDictFactory;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class GraphBuilder {
 
-    private static Logger logger = Logger.getLogger(GraphBuilder.class);
+    private static Log logger = LogFactory.getLog(GraphBuilder.class);
     private final IGraph graph;
     private final double logCorpus = MPSegmentConfiguration.LOG_CORPUS;
     private final HashDictionary hashDictionary = DictionaryFactory.getInstance().getCoreDictionary();

@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.conf;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public final class MPSegmentConfiguration {
 
-    private static Logger l = Logger.getLogger("segment");
+    private static Log l = LogFactory.getLog("segment");
     private static final MPSegmentConfiguration instance = new MPSegmentConfiguration();
     private static int SECTION_SIZE = 1024;
     private Properties properties;

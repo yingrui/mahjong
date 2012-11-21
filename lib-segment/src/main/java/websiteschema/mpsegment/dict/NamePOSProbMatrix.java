@@ -1,7 +1,13 @@
 package websiteschema.mpsegment.dict;
 
-import websiteschema.mpsegment.util.*;
-import java.io.*;
+import org.apache.commons.logging.*;
+import websiteschema.mpsegment.util.BufReader;
+import websiteschema.mpsegment.util.ByteArrayReader;
+import websiteschema.mpsegment.util.FileUtil;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class NamePOSProbMatrix {
 
@@ -142,7 +148,7 @@ public class NamePOSProbMatrix {
             }
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            l.error(ex);
         }
     }
 
@@ -221,7 +227,7 @@ public class NamePOSProbMatrix {
             bytearrayreader.close();
             bytearrayreader = null;
         } catch (IOException ex) {
-            System.out.println((new StringBuilder()).append("[Segment] ").append(s).append("\u6CA1\u627E\u5230\uFF01").toString());
+            l.error(ex);
         }
     }
 
@@ -247,7 +253,7 @@ public class NamePOSProbMatrix {
             }
 
         } catch (IOException ioexception) {
-            ioexception.printStackTrace();
+            l.error(ioexception);
         }
     }
 
@@ -262,7 +268,7 @@ public class NamePOSProbMatrix {
             randomaccessfile.close();
             randomaccessfile = null;
         } catch (IOException ioexception) {
-            System.out.println((new StringBuilder("NamePOSProbMatrix.saveToFile() error:")).append(ioexception.getMessage()).toString());
+            l.error("NamePOSProbMatrix.saveToFile() error:", ioexception);
         }
     }
     private int numPOS;
@@ -271,4 +277,5 @@ public class NamePOSProbMatrix {
     private int posBigram3[][];
     private int corpusSize;
     private int sortedBigram[][];
+    private static final Log l = LogFactory.getLog("segment");
 }
