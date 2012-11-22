@@ -14,7 +14,7 @@ import java.util.Properties;
 public class Flag {
 
     private final static Flag flag = new Flag();
-    public final int n = 3;
+    private final int n = 3;
     private final Properties p = new Properties();
     private double[] labda;
     private int ngramMinimumShowTimes;

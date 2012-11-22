@@ -4,12 +4,13 @@
  */
 package websiteschema.mpsegment.hmm;
 
+import websiteschema.mpsegment.util.ISerialize;
+import websiteschema.mpsegment.util.SerializeHandler;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import websiteschema.mpsegment.util.ISerialize;
-import websiteschema.mpsegment.util.SerializeHandler;
 
 /**
  *
@@ -37,7 +38,7 @@ public final class Emission implements ISerialize {
 
             for (Integer o : observes) {
                 double prob = (double) mapO.get(o) / (double) sum;
-                setProb(o, state, prob);
+                setProb(state, o, prob);
             }
             total += sum;
         }
