@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.pinyin;
 
+import websiteschema.mpsegment.conf.MPSegmentConfiguration;
+
 import java.io.IOException;
 
 public class WordToPinyinClassfierFactory {
@@ -10,7 +12,7 @@ public class WordToPinyinClassfierFactory {
     private WordToPinyinClassfierFactory() {
         try {
             WordToPinyinModel model = new WordToPinyinModel();
-            model.load("wtp.m");
+            model.load(MPSegmentConfiguration.getInstance().getPinyinModel());
             classifier.setModel(model);
         } catch (IOException ex) {
             ex.printStackTrace();

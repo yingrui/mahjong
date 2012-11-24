@@ -46,7 +46,7 @@ public class WordToPinyinModelBuilder {
                 }
             }
             builder.build();
-            builder.save("wtp.m");
+            builder.save("websiteschema/mpsegment/wtp.m");
         }
     }
 

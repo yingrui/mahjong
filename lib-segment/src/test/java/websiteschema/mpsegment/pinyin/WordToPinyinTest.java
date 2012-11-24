@@ -13,7 +13,7 @@ public class WordToPinyinTest {
 
     public WordToPinyinTest() throws IOException {
         WordToPinyinModel model = new WordToPinyinModel();
-        model.load("wtp.m");
+        model.load("websiteschema/mpsegment/wtp.m");
         classifier.setModel(model);
     }
 

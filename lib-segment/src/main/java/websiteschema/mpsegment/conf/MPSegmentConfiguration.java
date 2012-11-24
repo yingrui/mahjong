@@ -179,6 +179,10 @@ public final class MPSegmentConfiguration {
         return withPinyin;
     }
 
+    public String getPinyinModel() {
+        return properties.getProperty("segment.pinyinmodel", "wtp.m");
+    }
+
     public boolean isExtendPOSInDomainDictionary() {
         return ExtendPOSInDomainDictionary;
     }

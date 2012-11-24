@@ -23,7 +23,7 @@ public class WordToPinyinModel {
         File file = new File(filename);
         InputStream is = null;
         if (!file.exists()) {
-            is = this.getClass().getClassLoader().getResourceAsStream("wtp.m");
+            is = this.getClass().getClassLoader().getResourceAsStream("websiteschema/mpsegment/wtp.m");
             load(is);
         } else {
             is = new FileInputStream(file);
