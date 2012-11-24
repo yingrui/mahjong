@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class WordToPinyinModelBuilder {
 
-    private final int ngramLength = 3;
+    private int ngramLength = 2;
     private Map<Integer, Integer> pii = new HashMap<Integer, Integer>();
     private Map<Integer, Map<Integer, Integer>> emisMatrix = new HashMap<Integer, Map<Integer, Integer>>();
     private WordToPinyinModel model = new WordToPinyinModel();
@@ -27,13 +27,16 @@ public class WordToPinyinModelBuilder {
 
     public static void main(String[] args) throws IOException {
         String folder = "corpus/LCMC";
+        WordToPinyinModelBuilder builder = new WordToPinyinModelBuilder();
         if (args.length > 0) {
             folder = args[0];
+            if(args.length > 1) {
+                builder.ngramLength = Integer.parseInt(args[1]);
+            }
         } else {
             System.out.println("prepare to train a model with corpus in folder: corpus/LCMC.");
         }
 
-        WordToPinyinModelBuilder builder = new WordToPinyinModelBuilder();
         File dir = new File(folder);
         if (dir.isDirectory() && dir.exists()) {
             for (File f : dir.listFiles()) {

@@ -138,7 +138,7 @@ public class PerformanceTest {
         long memorySize = (totalMemory - freeMemory) / 1024 / 1024;
         System.out.println("should_spend_memory_within_30_MB");
         System.out.println("    Current application has taken " + memorySize + "MB memory size.");
-        Assert.assertTrue(memorySize < 21);
+        Assert.assertTrue(memorySize < 25);
     }
 
     public static void main(String[] args) throws IOException {

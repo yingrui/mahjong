@@ -8,10 +8,6 @@ import java.util.Properties;
 
 public final class MPSegmentConfiguration {
 
-    private static Log l = LogFactory.getLog("segment");
-    private static final MPSegmentConfiguration instance = new MPSegmentConfiguration();
-    private static int SECTION_SIZE = 1024;
-    private Properties properties;
 
     private MPSegmentConfiguration() {
         properties = new Properties();
@@ -76,6 +72,7 @@ public final class MPSegmentConfiguration {
         halfshapeall = Boolean.valueOf(properties.getProperty("segment.halfshapeall", "false")).booleanValue();
         uppercaseall = Boolean.valueOf(properties.getProperty("segment.uppercaseall", "false")).booleanValue();
         ExtendPOSInDomainDictionary = Boolean.valueOf(properties.getProperty("domain.extendposindomaindictionary", "false")).booleanValue();
+        withPinyin = Boolean.valueOf(properties.getProperty("segment.pinyin", "false")).booleanValue();
     }
 
     public String getDefaultFileEncoding() {
@@ -178,12 +175,21 @@ public final class MPSegmentConfiguration {
         return properties.getProperty("domain.dictloader", "");
     }
 
+    public boolean isWithPinyin() {
+        return withPinyin;
+    }
+
     public boolean isExtendPOSInDomainDictionary() {
         return ExtendPOSInDomainDictionary;
     }
 
+    private static Log l = LogFactory.getLog("segment");
+    private static final MPSegmentConfiguration instance = new MPSegmentConfiguration();
+    private static int SECTION_SIZE = 1024;
+    private Properties properties;
     private String homePath = "";
     private String defaultFileEncoding = "gbk";
+    private boolean withPinyin = false;
     private boolean loaddomaindictionary = false;
     private boolean loaduserdictionary = false;
     private boolean segment_min = false;

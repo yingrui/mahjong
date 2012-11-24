@@ -3,6 +3,7 @@ package websiteschema.mpsegment.core;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 import websiteschema.mpsegment.dict.IWord;
 import websiteschema.mpsegment.graph.*;
+import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory;
 
 public class MPSegment {
 
@@ -105,6 +106,7 @@ public class MPSegment {
     private void initialize() {
         initializeGraph();
         maxWordLength = config.isSegmentMin() ? 4 : config.getMaxWordLength();
+        withPinyin = config.isWithPinyin();
         initializePOSTagging();
     }
 
@@ -162,6 +164,9 @@ public class MPSegment {
     private SegmentResult segment(String sentence, boolean withPOS, boolean sectionSegment) {
         Path path = getShortestPathToStopVertex(sentence, sectionSegment);
         SegmentResult result = buildSegmentResult(path);
+        if (withPinyin) {
+            WordToPinyinClassfierFactory.getInstance().getClassifier().classify(result);
+        }
         if (withPOS) {
             result.setPOSArray(posTagging.findPOS(path, graph));
             setConcepts(result, path);
@@ -191,6 +196,7 @@ public class MPSegment {
     private IShortestPath dijk;
     private IGraph graph;
     private IPOSRecognizer posTagging;
+    private boolean withPinyin;
     private IConceptRecognizer conceptRecognizer = new SimpleConceptRecognizer();
     private boolean lastSection;
     private String lastSectionStr;

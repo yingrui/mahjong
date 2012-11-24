@@ -51,6 +51,10 @@ public class SegmentResult {
         return wordIndexInOriginalString;
     }
 
+    public String getPinyin(int i) {
+        return wordAtoms[i].pinyin;
+    }
+
     public int getPOS(int i) {
         return wordAtoms[i].pos;
     }
@@ -126,6 +130,10 @@ public class SegmentResult {
         wordAtoms[index].concept = concept;
     }
 
+    public void setPinyin(int index, String pinyin) {
+        wordAtoms[index].pinyin = pinyin;
+    }
+
     public void letWord1EqualWord2(int wordIndex1, int wordIndex2) {
         wordAtoms[wordIndex1].word = wordAtoms[wordIndex2].word;
         wordAtoms[wordIndex1].pos = wordAtoms[wordIndex2].pos;
@@ -155,5 +163,4 @@ public class SegmentResult {
     }
 
     private WordAtom[] wordAtoms;
-
 }
