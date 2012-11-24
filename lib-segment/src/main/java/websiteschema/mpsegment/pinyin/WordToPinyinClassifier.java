@@ -20,11 +20,12 @@ public class WordToPinyinClassifier {
 
     public void classify(SegmentResult result) {
         try {
-            List<String> pinyinList = classify(result.toOriginalString());
+            String originalStr = result.toOriginalString();
+            List<String> pinyinList = classify(originalStr);
             int pos = 0;
-            for(int i = 0; i < result.length(); i++) {
+            for (int i = 0; i < result.length(); i++) {
                 int wordLength = result.getWord(i).length();
-                String pinyin = join(pinyinList.subList(pos, pos += wordLength),"'");
+                String pinyin = join(pinyinList.subList(pos, pos += wordLength), "'");
                 result.setPinyin(i, pinyin);
             }
         } catch (ObserveListException ex) {
@@ -34,10 +35,10 @@ public class WordToPinyinClassifier {
 
     private String join(List<String> list, String sep) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             String str = list.get(i);
             stringBuilder.append(str);
-            if(null != sep && i < list.size() - 1) {
+            if (null != sep && i < list.size() - 1) {
                 stringBuilder.append(sep);
             }
         }
@@ -106,7 +107,7 @@ public class WordToPinyinClassifier {
         String unknownChar;
 
         Section(List<String> o, int start, int end) {
-            if (end - 1 > start) {
+            if (end > start) {
                 characters = new ArrayList<String>();
                 for (int i = 0; i < end - start; i++) {
                     characters.add(o.get(i + start));

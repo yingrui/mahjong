@@ -2,6 +2,7 @@ package websiteschema.mpsegment.tools;
 
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.dict.POSUtil;
+import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory;
 
 import java.io.*;
 
@@ -20,6 +21,7 @@ public class PFRCorpusPrinter {
     }
 
     private static void print(SegmentResult result, PrintStream out) {
+        WordToPinyinClassfierFactory.getInstance().getClassifier().classify(result);
         boolean containsDomainWord = false;
         for (int i = 0; i < result.length(); i++) {
             if (result.getDomainType(i) != 0) {
@@ -31,9 +33,10 @@ public class PFRCorpusPrinter {
             for (int i = 0; i < result.length(); i++) {
                 int domainType = result.getDomainType(i);
                 out.println(result.getWord(i) + "\t" +
+                        result.getPinyin(i) + "\t" +
                         POSUtil.getPOSString(result.getPOS(i)) + "\t" +
                         result.getConcept(i) + "\t" +
-                        (domainType != 0 ? POSUtil.getPOSString(domainType) : "UN"));
+                        (domainType != 0 ? POSUtil.getPOSString(domainType) : "O"));
             }
             out.println();
         }

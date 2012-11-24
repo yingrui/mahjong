@@ -9,7 +9,10 @@ import org.junit.Test;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.dict.POSUtil;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 public class PFRCorpusLoaderTest {
 

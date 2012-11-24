@@ -29,7 +29,7 @@ public class WordToPinyinTest {
 
     @Test
     public void should_keep_punctuation_in_result() throws ObserveListException {
-        List<String> result = classifier.classify("天涯啊！海角。");
+        List<String> result = classifier.classify("天涯啊！海角。哈！");
         Assert.assertEquals("tian", result.get(0));
         Assert.assertEquals("ya", result.get(1));
         Assert.assertEquals("a", result.get(2));
@@ -37,6 +37,8 @@ public class WordToPinyinTest {
         Assert.assertEquals("hai", result.get(4));
         Assert.assertEquals("jiao", result.get(5));
         Assert.assertEquals("。", result.get(6));
+        Assert.assertEquals("ha", result.get(7));
+        Assert.assertEquals("！", result.get(8));
     }
 
     @Test
