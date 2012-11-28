@@ -110,13 +110,14 @@ public class DomainDictionary implements IDictionary {
         return hashDictionary.getWord(wordName);
     }
 
-    public IWord getWordItem(String wordName, int minLength) {
+    public IWord getWordItem(String wordName) {
         int l1 = maxWordLength;
+        int minLength2 = 1;
         if (wordName.length() < l1) {
             l1 = wordName.length();
         }
         DomainWordItem word = null;
-        for (int i2 = l1; i2 >= minLength; i2--) {
+        for (int i2 = l1; i2 >= minLength2; i2--) {
             String s2 = wordName.substring(0, i2);
             int wordIndex = getWordIndex(s2);
             if (wordIndex <= 0) {
