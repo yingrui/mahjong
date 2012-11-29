@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package websiteschema.mpsegment.concept;
 
 import org.junit.Assert;
@@ -19,9 +15,9 @@ public class ConceptTest {
     }
 
     @Test
-    public void should_concept_have_children() {
+    public void should_have_children() {
         List<Concept> children = rootNounConcept.getChildren();
-        Assert.assertEquals(4, children.size());
+        Assert.assertEquals(4, children.size()); //多余
         Assert.assertEquals("object", children.get(0).getName());
         Assert.assertEquals(100001, children.get(0).getId());
         Assert.assertEquals(rootNounConcept, children.get(0).getParent());
@@ -36,13 +32,13 @@ public class ConceptTest {
     }
 
     @Test
-    public void should_concept_have_parent() {
+    public void should_have_parent() {
         List<Concept> children = rootNounConcept.getChildren();
         Assert.assertEquals(rootNounConcept, children.get(0).getParent());
     }
 
     @Test
-    public void should_concept_have_siblings() {
+    public void should_have_siblings() {
         List<Concept> children = rootNounConcept.getChildren();
         Assert.assertEquals(children, children.get(0).getSiblings());
     }
