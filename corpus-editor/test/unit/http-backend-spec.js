@@ -43,7 +43,7 @@ describe('Http Backend Mock', function() {
                 [{name: 'word1'}, {name: 'word2'}]);
         });
 
-        it('should return array via $resource', function() {
+        it('should return string via $resource', function() {
             $httpBackend.expectGET('string/value').
                 respond("string");
 

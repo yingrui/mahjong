@@ -1,8 +1,18 @@
-<div>
-    <div class="sidebar">
-        <my-include src="sidebarTemplateUrl"/>
+<div class="sidebar">
+    <div style="text-align: center;">
+        <img src="img/neural.jpg" style="width: 100px;"/>
     </div>
-    <div class="main">
-        <my-include src="mainTemplateUrl"/>
+
+    <!--Sidebar content-->
+    <div class="article-list-menu horizontal-separator">
+        <ng-include src="'partials/navigation.html'"/>
     </div>
+
+    <my-include src="sidebarTemplateUrl"/>
 </div>
+<div class="main">
+    <div class="message-frame"></div>
+    <my-include src="mainTemplateUrl"/>
+</div>
+<div class="sidebar-background"></div>
+<div class="main-background"></div>

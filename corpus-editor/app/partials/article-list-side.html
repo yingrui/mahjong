@@ -1,9 +1,8 @@
 <div class="control">
-    <!--Sidebar content-->
     <ul>
-        <li class="control-comp">Search: <input ng-model="query"></li>
-        <li class="control-comp">Sort by:
-            <select ng-model="orderProp">
+        <li class="control-comp"><span>Search: </span><input class="sidebar-text-field" ng-model="query"></li>
+        <li class="control-comp"><span>Sort by:</span>
+            <select class="sidebar-select" ng-model="orderProp">
                 <option value="name">Alphabetical</option>
                 <option value="date">Newest</option>
             </select>
