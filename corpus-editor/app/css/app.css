@@ -4,7 +4,7 @@ html {
 }
 
 body {
-    background: #eeeeee;
+    background: #585858;
     font-family: sans-serif;
     height: 100%;
     margin: 0;
@@ -14,7 +14,7 @@ body {
     width: 200px;
     height: 100%;
     float: left;
-    margin: 5px;
+    margin-left: 5px;
 }
 
 .sidebar-background {
@@ -31,12 +31,26 @@ body {
     position: fixed;
     top: 0;
     left: 15%;
+    width: 85%;
+    height: 100%;
+    z-index: -2;
+}
+
+.main-frame {
+    background: #FFFFFF;
+    position: fixed;
+    top: 60px;
+    left: 15%;
+    margin-left: 5px;
+    width: 100%;
     height: 100%;
     z-index: -1;
 }
 
 .main {
-    margin-left: 220px;
+    position: absolute;
+    left: 15%;
+    width: 85%;
 }
 
 .sidebar .control ul {
@@ -59,7 +73,14 @@ li.control-comp {
 }
 
 .message-frame {
-    height: 100px;
+    height: 60px;
+}
+
+.actions-frame {
+    height: 40px;
+    line-height: 40px;
+    margin-left: 5px;
+    background-color: #808080;
 }
 
 .horizontal-separator {
@@ -75,20 +96,54 @@ li.control-comp {
     text-align: center;
     margin-left: -30px;
     margin-right: 15px;
+    margin-bottom: 1px;
     line-height: 40px;
     cursor: pointer;
 }
 
-#nav-chinese-breaking {
-    background: #778899;
+.nav-decorate {
+    position: absolute;
+    height: 40px;
+    width: 5px;
+}
+
+.nav-chinese-breaking {
+    background: #EEEEEE;
     color: #FFFFFF;
 }
+
+.nav-chinese-breaking .nav-decorate {
+    background: #606060;
+}
+
+.nav-chinese-breaking.selected {
+    color: #606060;
+}
+
+.nav-chinese-dictionary {
+    background: #EEEEEE;
+    color: #FFFFFF;
+}
+
+.nav-chinese-dictionary .nav-decorate {
+    background: #30608F;
+}
+
+.nav-chinese-dictionary.selected {
+    color: #30608F;
+}
+
+/* Components */
 
 /* Article List Page */
 .article-list-menu {
     height: 250px
 }
 
+/* Article Detail Page */
+.article-detail {
+    margin-left: 10px;
+}
 
 /* Directives */
 .word {

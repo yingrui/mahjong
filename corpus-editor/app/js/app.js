@@ -15,5 +15,10 @@ angular.module('corpusEditor', ['corpusEditorFilters', 'corpusEditorServices', '
             mainTemplateUrl: 'partials/article-detail.html',
             sidebarTemplateUrl: 'partials/sidebar-index.html',
             controller: ArticleDetailCtrl}).
+        when('/dictionary', {
+            templateUrl: 'layout.html',
+            mainTemplateUrl: 'partials/dictionary/main.html',
+            sidebarTemplateUrl: 'partials/sidebar-index.html',
+            controller: DictionaryCtrl}).
         otherwise({redirectTo:'/article'});
 }]);
