@@ -19,6 +19,47 @@ public class ChNameDictionary {
         mingTop = 1;
     }
 
+    public boolean isXing(String familyName) {
+        return xingHashMap.containsKey(familyName);
+    }
+
+    public double computeLgLP3(String familyName, String fisrtNameWord, String secondNameWord) {
+        double d2 = getXingProb(familyName);
+        double d3 = getMingFreq0(fisrtNameWord);
+        double d4 = getMingFreq1(secondNameWord);
+        return getNameWordProb(d2, d3, d4);
+    }
+
+    public double computeLgLP3_2(String s, String s1) {
+        double d2 = getXingProb(s.substring(0, 1));
+        double d3 = getMingFreq0(s.substring(1));
+        double d4 = getMingFreq1(s1);
+        return getNameWordProb(d2, d3, d4);
+    }
+
+    public double computeLgLP2(String s, String s1) {
+        double d2 = getXingProb(s);
+        double d3 = getMingFreq2(s1);
+        return getNameWordProb(d2, d3);
+    }
+
+    public double computeLgMing23(String s, String s1) {
+        double d1 = getMingFreq0(s);
+        double d2 = getMingFreq1(s1);
+        d1 += d2;
+        d1 /= 1000D;
+        return d1;
+    }
+
+    public double getRightBoundaryWordLP(String s) {
+        int index = get(rightBoundaryHashMap, s);
+        double d1 = 0.0D;
+        if (index > 0) {
+            d1 = (rightBoundaryProbs[index] - 0.10000000000000001D) / 3D;
+        }
+        return d1;
+    }
+
     public void outSummary() {
         System.out.println((new StringBuilder("xingTop=")).append(xingTop).toString());
         System.out.println((new StringBuilder("mingTop=")).append(mingTop).toString());
@@ -75,17 +116,6 @@ public class ChNameDictionary {
         return index;
     }
 
-    public boolean isXing(String familyName) {
-        return xingHashMap.containsKey(familyName);
-    }
-
-    public double computeLgLP3(String familyName, String fisrtNameWord, String secondNameWord) {
-        double d2 = getXingProb(familyName);
-        double d3 = getMingFreq0(fisrtNameWord);
-        double d4 = getMingFreq1(secondNameWord);
-        return getNameWordProb(d2, d3, d4);
-    }
-
     private double getNameWordProb(double d2, double d3, double d4) {
         d2 = d2 * factor * ((d3 + d4) / 1000000D);
         if (d4 <= 0.0D && d2 > 1.0D) {
@@ -94,39 +124,9 @@ public class ChNameDictionary {
         return d2;
     }
 
-    public double computeLgLP3_2(String s, String s1) {
-        double d2 = getXingProb(s.substring(0, 1));
-        double d3 = getMingFreq0(s.substring(1));
-        double d4 = getMingFreq1(s1);
-        return getNameWordProb(d2, d3, d4);
-    }
-
-    public double computeLgLP2(String s, String s1) {
-        double d2 = getXingProb(s);
-        double d3 = getMingFreq2(s1);
-        return getNameWordProb(d2, d3);
-    }
-
     private double getNameWordProb(double d2, double d3) {
         d2 *= d3 / 1000000D;
         return d2;
-    }
-
-    public double computeLgMing23(String s, String s1) {
-        double d1 = getMingFreq0(s);
-        double d2 = getMingFreq1(s1);
-        d1 += d2;
-        d1 /= 1000D;
-        return d1;
-    }
-
-    public double getRightBoundaryWordLP(String s) {
-        int index = get(rightBoundaryHashMap, s);
-        double d1 = 0.0D;
-        if (index > 0) {
-            d1 = (rightBoundaryProbs[index] - 0.10000000000000001D) / 3D;
-        }
-        return d1;
     }
 
     public String toText() {
