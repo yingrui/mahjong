@@ -10,8 +10,6 @@ public class SegmentWorker {
     private MPSegment mpSegment;
     private boolean recognizePOS = true;
 
-    //TODO: should has own MPSegmentConfiguration object for thread safe.
-
     public SegmentWorker(MPSegmentConfiguration config) {
         unKnownFilter = null;
         maxSegStrLength = 400000;

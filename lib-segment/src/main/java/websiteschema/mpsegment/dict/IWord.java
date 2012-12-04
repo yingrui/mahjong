@@ -2,7 +2,6 @@ package websiteschema.mpsegment.dict;
 
 import websiteschema.mpsegment.concept.Concept;
 
-//TODO: add concept info here
 public interface IWord {
 
     public int getLog2Freq();
