@@ -2,6 +2,7 @@
 
 function ArticleDetailCtrl($scope, $routeParams, ArticleRepository) {
     $scope.article = getArticleById($routeParams.articleId);
+    $scope.color = true;
     $scope.refresh = function() {
         this.article = getArticleById($routeParams.articleId);
     }

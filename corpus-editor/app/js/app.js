@@ -13,7 +13,7 @@ angular.module('corpusEditor', ['corpusEditorFilters', 'corpusEditorServices', '
         when('/article/:articleId', {
             templateUrl: 'layout.html',
             mainTemplateUrl: 'partials/article-detail.html',
-            sidebarTemplateUrl: 'partials/sidebar-index.html',
+            sidebarTemplateUrl: 'partials/article-detail-side.html',
             controller: ArticleDetailCtrl}).
         when('/dictionary', {
             templateUrl: 'layout.html',

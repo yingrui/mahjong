@@ -69,10 +69,20 @@ describe('Corpus Editor App', function () {
         });
 
         it('should reset all input fields when click refresh button', function () {
+            input('word.name').enter('abc');
+            expect(element('.word span:first').text()).toBe('abc');
+            expect(element('.word span:eq(1)').text()).toBe('abc');
+            expect(element('.word span:eq(2)').text()).toBe('abc');
             element('.btn').click();
             expect(element('.word span:first').text()).toBe('自然');
             expect(element('.word span:eq(1)').text()).toBe('语言');
             expect(element('.word span:eq(2)').text()).toBe('处理');
+        });
+
+        it('should control word display when click color checkbox', function () {
+            expect(element('.word span:first').attr('class')).toMatch(/word-pos-n/);
+            element('#article-color').click();
+            expect(element('.word span:first').attr('class')).toBe('ng-binding')
         });
     });
 });

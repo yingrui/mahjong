@@ -31,5 +31,10 @@ describe('Article Detail Controller', function() {
 
             expect(scope.article).toEqualData(  {segmentResult:[[{name: 'word1'}]]});
         });
+
+
+        it('should set true as default color displaying', function() {
+            expect(scope.color).toEqual(true);
+        });
     });
 });

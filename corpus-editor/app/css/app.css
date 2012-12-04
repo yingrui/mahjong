@@ -152,10 +152,3 @@ li.control-comp {
 }
 
 /* Directives */
-.word {
-    display: inline-block;
-}
-
-.word input {
-    width: 50px;
-}
