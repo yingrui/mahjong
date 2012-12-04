@@ -67,5 +67,12 @@ describe('Corpus Editor App', function () {
             expect(element('.word span:first').text()).toBe('abc');
             expect(element('.word span:eq(2)').text()).toBe('abc');
         });
+
+        it('should reset all input fields when click refresh button', function () {
+            element('.btn').click();
+            expect(element('.word span:first').text()).toBe('自然');
+            expect(element('.word span:eq(1)').text()).toBe('语言');
+            expect(element('.word span:eq(2)').text()).toBe('处理');
+        });
     });
 });
