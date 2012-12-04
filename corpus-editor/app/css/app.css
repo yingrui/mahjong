@@ -134,6 +134,12 @@ li.control-comp {
 }
 
 /* Components */
+.btn {
+    border: outset 0px;
+    height: 30px;
+    cursor: pointer;
+    margin: 2px;
+}
 
 /* Article List Page */
 .article-list-menu {
