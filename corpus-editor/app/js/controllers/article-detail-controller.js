@@ -7,6 +7,14 @@ function ArticleDetailCtrl($scope, $routeParams, ArticleRepository) {
         this.article = getArticleById($routeParams.articleId);
     }
 
+    $scope.enableColor = function() {
+        if(this.color) {
+            $(".article-detail").addClass("with-color");
+        } else {
+            $(".article-detail").removeClass("with-color");
+        }
+    }
+
     function getArticleById(articleId) {
         return ArticleRepository.get({articleId:articleId}, function (article) {
             // do nothing

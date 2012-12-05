@@ -22,10 +22,8 @@ corpusEditorDirectives.directive('word', function () {
             var word = scope[iAttrs.ngModel];
             var eleInput = $(iElement.find('input'));
 
-            if (scope.color) {
-                var eleText = $(iElement.find('span'));
-                eleText.addClass("word-pos-" + word.pos.toLowerCase());
-            }
+            var eleText = $(iElement.find('span'));
+            eleText.addClass("word-pos-" + word.pos.toLowerCase());
 
             bindKeyPressEvent(eleInput);
 

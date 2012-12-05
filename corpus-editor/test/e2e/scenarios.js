@@ -80,9 +80,9 @@ describe('Corpus Editor App', function () {
         });
 
         it('should control word display when click color checkbox', function () {
-            expect(element('.word span:first').attr('class')).toMatch(/word-pos-n/);
+            expect(element('div.article-detail').attr('class')).toMatch(/with-color/);
             element('#article-color').click();
-            expect(element('.word span:first').attr('class')).toBe('ng-binding')
+            expect(element('div.article-detail').attr('class')).toBe('article-detail ng-scope')
         });
     });
 });
