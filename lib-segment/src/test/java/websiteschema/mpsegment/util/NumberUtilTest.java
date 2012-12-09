@@ -2,17 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package websiteschema.mpsegment;
+package websiteschema.mpsegment.util;
 
 import org.junit.Assert;
 import org.junit.Test;
-import websiteschema.mpsegment.util.NumberUtil;
 
 
 /**
  * @author ray
  */
-public class ChineseNumberTest {
+public class NumberUtilTest {
 
     @Test
     public void should_know_how_to_convert_Chinese_number_to_English() {

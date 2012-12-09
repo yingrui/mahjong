@@ -107,6 +107,19 @@ public class MPSegmentTest {
     }
 
     @Test
+    public void should_merge_adjacent_numbers() {
+        String str = "一个几十万人口的社区";
+        SegmentEngine engine = SegmentEngine.getInstance();
+        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentResult words = worker.segment(str);
+        System.out.println(words);
+        Assert.assertEquals("一个", words.getWord(0));
+        Assert.assertEquals("几十万", words.getWord(1));
+        Assert.assertEquals(POSUtil.POS_M, words.getPOS(0));
+        Assert.assertEquals(POSUtil.POS_M, words.getPOS(1));
+    }
+
+    @Test
     public void should_Know_How_to_Do_UpperCase_And_HalfShape() {
         String str = "Ａ计划和b计划";
         SegmentEngine engine = SegmentEngine.getInstance();

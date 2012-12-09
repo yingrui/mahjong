@@ -130,28 +130,28 @@ public class ChNameDictionary {
     }
 
     public String toText() {
-        String ls = System.getProperty("line.separator");
+        String lineSeparator = System.getProperty("line.separator");
         String space = " ";
         StringBuilder sb = new StringBuilder();
-        sb.append("//ChName.dict").append(ls);
-        sb.append("[xingHashMap] //").append(xingHashMap.size()).append(ls);
+        sb.append("//ChName.dict").append(lineSeparator);
+        sb.append("[xingHashMap] //").append(xingHashMap.size()).append(lineSeparator);
         for (String key : xingHashMap.keySet()) {
             sb.append(key).append(space).append(xingHashMap.get(key)).append(space);
         }
-        sb.append(ls);
-        sb.append("[xingFreq] //").append(xingFreq.length).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[xingFreq] //").append(xingFreq.length).append(lineSeparator);
         for (int i = 0; i < xingFreq.length; i++) {
             sb.append(xingFreq[i]).append(space);
         }
 
-        sb.append(ls);
-        sb.append("[mingHashMap] //").append(mingHashMap.size()).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[mingHashMap] //").append(mingHashMap.size()).append(lineSeparator);
 
         for (String key : mingHashMap.keySet()) {
             sb.append(key).append(space).append(mingHashMap.get(key)).append(space);
         }
-        sb.append(ls);
-        sb.append("[mingFreqs] //").append(mingFreqs.length).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[mingFreqs] //").append(mingFreqs.length).append(lineSeparator);
         for (int i = 0; i < mingFreqs.length; i++) {
             for (int j = 0; j < 3; j++) {
                 sb.append(mingFreqs[i][j]).append(space);
@@ -159,33 +159,33 @@ public class ChNameDictionary {
             sb.append("\t");
         }
 
-        sb.append(ls);
-        sb.append("[totalMingProb] //").append(totalMingProb.length).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[totalMingProb] //").append(totalMingProb.length).append(lineSeparator);
         for (int i = 0; i < totalMingProb.length; i++) {
             sb.append(totalMingProb[i]).append(space);
         }
 
-        sb.append(ls);
-        sb.append("[fuXing] //").append(fuXing.size()).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[fuXing] //").append(fuXing.size()).append(lineSeparator);
         for (String key : fuXing.keySet()) {
             sb.append(key).append(space).append(fuXing.get(key)).append(space);
         }
-        sb.append(ls);
-        sb.append("[xingProb] //").append(xingProb.length).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[xingProb] //").append(xingProb.length).append(lineSeparator);
         for (int i = 0; i < xingProb.length; i++) {
             sb.append(xingProb[i]).append(space);
         }
-        sb.append(ls);
-        sb.append("[rightBoundaryHashMap] //").append(rightBoundaryHashMap.size()).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[rightBoundaryHashMap] //").append(rightBoundaryHashMap.size()).append(lineSeparator);
         for (String key : rightBoundaryHashMap.keySet()) {
             sb.append(key).append(space).append(rightBoundaryHashMap.get(key)).append(space);
         }
-        sb.append(ls);
-        sb.append("[rightBoundaryProbs] //").append(rightBoundaryProbs.length).append(ls);
+        sb.append(lineSeparator);
+        sb.append("[rightBoundaryProbs] //").append(rightBoundaryProbs.length).append(lineSeparator);
         for (int i = 0; i < rightBoundaryProbs.length; i++) {
             sb.append(rightBoundaryProbs[i]).append(space);
         }
-        sb.append(ls);
+        sb.append(lineSeparator);
         return sb.toString();
     }
 

@@ -1,17 +1,27 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package websiteschema.mpsegment.filter;
 
 import websiteschema.mpsegment.core.SegmentResult;
-import websiteschema.mpsegment.dict.POSUtil;
 
-/**
- *
- * @author ray
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class AbstractSegmentFilter implements ISegmentFilter {
+
+    class MergeSetting {
+        int start;
+        int end;
+        int pos;
+
+        MergeSetting(int start, int end, int pos) {
+            this.start = start;
+            this.end = end;
+            this.pos = pos;
+        }
+    }
+
+    protected SegmentResult segmentResult;
+    private int wordPosIndexes[];
+    private List<MergeSetting> mergeSettings = new ArrayList<MergeSetting>();
 
     public abstract void doFilter();
 
@@ -27,67 +37,32 @@ public abstract class AbstractSegmentFilter implements ISegmentFilter {
         wordPosIndexes = new int[segmentResult.length()];
     }
 
-    void mergeWordsWithPOS(int startWordIndex, int endWordIndex, int POS) {
-        int length = segmentResult.length();
-        int posIndex = POS;
-        if (startWordIndex < 0 || endWordIndex >= length || startWordIndex >= endWordIndex) {
-            return;
-        }
-        if (wordPosIndexes[startWordIndex] > 0) {
-            int posI1 = wordPosIndexes[startWordIndex];
-            do {
-                startWordIndex--;
-            } while (startWordIndex >= 0 && wordPosIndexes[startWordIndex] == posI1);
-
-            startWordIndex++;
-        }
-        if (startWordIndex >= 1 && wordPosIndexes[startWordIndex - 1] > 0 && wordPosIndexes[startWordIndex - 1] < 200) {
-            posIndex += 200;
-        }
-        for (int i = startWordIndex; i <= endWordIndex; i++) {
-            wordPosIndexes[i] = posIndex;
-        }
+    protected void setWordIndexesAndPOSForMerge(int startWordIndex, int endWordIndex, int POS) {
+        mergeSettings.add(new MergeSetting(startWordIndex, endWordIndex, POS));
+        markWordsHasBeenRecognized(startWordIndex, endWordIndex, POS);
     }
 
-    void compactSegmentResult() {
-        int length = segmentResult.length();
-        int index = 0;
-        int endIndex = 0;
-
-        while (index < length) {
-            if (wordPosIndexes[index] == 0) {
-                if (index != endIndex) {
-                    segmentResult.letWord1EqualWord2(endIndex, index);
-                }
-                index++;
-            } else {
-                int pos = wordPosIndexes[index];
-                final int numBegin = index;
-                String wordStr = segmentResult.getWord(numBegin);
-                for (index++; index < length && wordPosIndexes[index] == pos; index++) {
-                    wordStr = (new StringBuilder(String.valueOf(wordStr))).append(segmentResult.getWord(index)).toString();
-                }
-
-                if (pos >= 200) {
-                    pos -= 200;
-                }
-                segmentResult.setWord(endIndex, wordStr, pos);
+    protected void compactSegmentResult() {
+        if (mergeSettings.size() > 0) {
+            for (MergeSetting mergeSetting : mergeSettings) {
+                segmentResult.merge(mergeSetting.start, mergeSetting.end, mergeSetting.pos);
             }
-            endIndex++;
+            segmentResult.compact();
+            mergeSettings.clear();
         }
-        for (int i = endIndex; i < length; i++) {
-            segmentResult.setWord(i, "", POSUtil.POS_UNKOWN);
-        }
-        segmentResult.cutTail(endIndex);
     }
 
-    public SegmentResult getSegmentResult() {
-        return segmentResult;
+    protected boolean isWordConfirmed(int wordIndex) {
+        return wordPosIndexes[wordIndex] > 0;
     }
 
-    public int[] getWordPosIndexes() {
-        return wordPosIndexes;
+    protected boolean isNotMarked(int index) {
+        return wordPosIndexes[index] <= 0;
     }
-    int wordPosIndexes[];
-    SegmentResult segmentResult;
+
+    private void markWordsHasBeenRecognized(int startWordIndex, int endWordIndex, int POS) {
+        for (int i = startWordIndex; i <= endWordIndex; i++) {
+            wordPosIndexes[i] = POS;
+        }
+    }
 }

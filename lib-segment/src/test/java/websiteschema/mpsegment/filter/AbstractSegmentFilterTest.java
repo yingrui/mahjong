@@ -12,7 +12,7 @@ public class AbstractSegmentFilterTest {
         Filter filter = new Filter();
         SegmentResult result = getSegmentResult();
         filter.setSegmentResult(result);
-        filter.mergeWordsWithPOS(1, 2, POSUtil.POS_NR);
+        filter.setWordIndexesAndPOSForMerge(1, 2, POSUtil.POS_NR);
         filter.compactSegmentResult();
         Assert.assertEquals("三丰", result.getWord(1));
         Assert.assertEquals(POSUtil.POS_NR, result.getPOS(1));
@@ -24,7 +24,7 @@ public class AbstractSegmentFilterTest {
         Filter filter = new Filter();
         SegmentResult result = getSegmentResult();
         filter.setSegmentResult(result);
-        filter.mergeWordsWithPOS(1, 3, POSUtil.POS_NR);
+        filter.setWordIndexesAndPOSForMerge(1, 3, POSUtil.POS_NR);
         filter.filtering();
         Assert.assertEquals("三丰南", result.getWord(1));
         Assert.assertEquals(POSUtil.POS_NR, result.getPOS(1));

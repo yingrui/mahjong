@@ -19,6 +19,7 @@ public class SegmentResultFilter {
                 new UnknownPlaceFilter(),
                 new NumberAndTimeFilter(),
                 new UnknownNameFilter(config),
+                new ReduplicatingFilter(),
                 new QuerySyntaxFilter(config)
         };
     }

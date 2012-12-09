@@ -4,7 +4,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 import websiteschema.mpsegment.core.SegmentEngine;
 import websiteschema.mpsegment.core.SegmentWorker;
-import websiteschema.mpsegment.tools.SegmentAccuracy;
+import websiteschema.mpsegment.tools.accurary.SegmentAccuracy;
+import websiteschema.mpsegment.tools.accurary.SegmentErrorType;
 
 import java.io.IOException;
 
@@ -22,23 +23,23 @@ public class AccuracyTest {
         System.out.println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate());
         System.out.println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.");
 
-        System.out.println("There are " + segmentAccuracy.getErrorNewWord() + " errors because of new word.");
-        System.out.println("There are " + segmentAccuracy.getErrorNER_NR() + " errors because of name recognition.");
-        System.out.println("There are " + segmentAccuracy.getErrorNER_NS() + " errors because of place name recognition.");
-        System.out.println("There are " + segmentAccuracy.getErrorContain() + " errors because of contain disambiguate.");
-        System.out.println("There are " + segmentAccuracy.getErrorOther() + " other errors");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() + " errors because of new word.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() + " errors because of name recognition.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() + " errors because of place name recognition.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() + " other errors");
 
-        System.out.println("Possible " + segmentAccuracy.getPossibleNewWords().size() + " new words, they are:");
-//        System.out.println(segmentAccuracy.getPossibleNewWords());
-        System.out.println("Those " + segmentAccuracy.getWordsWithContainDisambiguate().size() + " words maybe could delete from dictionary: ");
-//        System.out.println(segmentAccuracy.getWordsWithContainDisambiguate());
+        System.out.println("Possible " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords().size() + " new words, they are:");
+        System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords());
+        System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
+        System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93671);
-        Assert.assertTrue(segmentAccuracy.getErrorNewWord() <= 24024);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NR() <= 4156);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NS() <= 3282);
-        Assert.assertTrue(segmentAccuracy.getErrorContain() <= 35909);
-        Assert.assertTrue(segmentAccuracy.getErrorOther() <= 3601);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93680);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 24033);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() <= 4156);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3282);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 35896);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3603);
     }
 
     @Test
@@ -49,22 +50,22 @@ public class AccuracyTest {
         System.out.println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate());
         System.out.println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.");
 
-        System.out.println("There are " + segmentAccuracy.getErrorNewWord() + " errors because of new word.");
-        System.out.println("There are " + segmentAccuracy.getErrorNER_NR() + " errors because of name recognition.");
-        System.out.println("There are " + segmentAccuracy.getErrorNER_NS() + " errors because of place name recognition.");
-        System.out.println("There are " + segmentAccuracy.getErrorContain() + " errors because of contain disambiguate.");
-        System.out.println("There are " + segmentAccuracy.getErrorOther() + " other errors");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() + " errors because of new word.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() + " errors because of name recognition.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() + " errors because of place name recognition.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.");
+        System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() + " other errors");
 
-        System.out.println("Possible " + segmentAccuracy.getPossibleNewWords().size() + " new words, they are:");
-//        System.out.println(segmentAccuracy.getPossibleNewWords());
-        System.out.println("Those " + segmentAccuracy.getWordsWithContainDisambiguate().size() + " words maybe could delete from dictionary: ");
-//        System.out.println(segmentAccuracy.getWordsWithContainDisambiguate());
+        System.out.println("Possible " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords().size() + " new words, they are:");
+        System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords());
+        System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
+        System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93664);
-        Assert.assertTrue(segmentAccuracy.getErrorNewWord() <= 23457);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NR() <= 4155);
-        Assert.assertTrue(segmentAccuracy.getErrorNER_NS() <= 3036);
-        Assert.assertTrue(segmentAccuracy.getErrorContain() <= 36794);
-        Assert.assertTrue(segmentAccuracy.getErrorOther() <= 3603);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93673);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 23466);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() <= 4155);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3036);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 36781);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3605);
     }
 }

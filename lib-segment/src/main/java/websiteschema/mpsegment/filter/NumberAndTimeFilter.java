@@ -11,6 +11,96 @@ public class NumberAndTimeFilter extends AbstractSegmentFilter {
     public void doFilter() {
         int length = segmentResult.length();
 
+        recognizeChineseNumber(length);
+
+        searchAndMarkNumberWords(length);
+    }
+
+    private void searchAndMarkNumberWords(int length) {
+        int numBegin = -1;
+        int numEnd = -1;
+        boolean isLastWordChineseNum = false;
+        for (int index = 0; index < length; index++) {
+            if (isNotMarked(index)) {
+                if (segmentResult.getPOS(index) == posUN) {
+                    if (segmentResult.getWord(index).equals("-") || segmentResult.getWord(index).equals("－")) {
+                        segmentResult.setPOS(index, posM);
+                    } else {
+                        int l1 = isNumerical(segmentResult.getWord(index));
+                        if (l1 == 1) {
+                            segmentResult.setPOS(index, posM);
+                        }
+                    }
+                }
+
+                boolean isCurrentWordChineseNumber = isChineseNumber(index);
+                if (isCurrentWordChineseNumber) {
+                    if (isEndOfNumber(index)) {
+                        if (numBegin > 0) {
+                            setWordIndexesAsNumberForMerge(numBegin, numEnd);
+                        }
+                    } else if (numBegin < 0) {
+                        numBegin = index;
+                        isLastWordChineseNum = true;
+                    } else {
+                        numEnd = index;
+                    }
+                }
+
+                if (!isCurrentWordChineseNumber && isLastWordChineseNum) {
+                    if (!isNumberSeparator(index)) {
+                        isLastWordChineseNum = false;
+                        setWordIndexesAsNumberForMerge(numBegin, numEnd);
+                        numBegin = -1;
+                        numEnd = -1;
+                    } else {
+                        numEnd = index;
+                        if (index + 1 == length) {
+                            setWordIndexesAsNumberForMerge(numBegin, numEnd);
+                        }
+                    }
+                }
+                recognizeTime(index);
+            }
+        }
+
+        if (numEnd > 0 && numEnd == length - 1 && numBegin >= 0 && numEnd - numBegin >= 1) {
+            setWordIndexesAndPOSForMerge(numBegin, numEnd, posM);
+        }
+    }
+
+    private void setWordIndexesAsNumberForMerge(int numBegin, int numEnd) {
+        if (numEnd - numBegin >= 1) {
+            setWordIndexesAndPOSForMerge(numBegin, numEnd, posM);
+        }
+    }
+
+    private void recognizeTime(int index) {
+        if (recognizeTime && segmentResult.getWord(index).length() == 1 && index > 0 && isTimeSuffix(index)) {
+            if (segmentResult.getWord(index).equals("年")) {
+                if (segmentResult.getPOS(index - 1) == posM && (segmentResult.getWord(index - 1).length() > 2 || isWordConfirmed(index - 1)) && (isNotMarked(index - 1) || segmentResult.getWord(index - 1).length() != 1 || index - 3 > 0 && (index - 3 < 0 || isWordConfirmed(index - 3)))) {
+                    setWordIndexesAndPOSForMerge(index - 1, index, posT);
+                }
+            } else if (segmentResult.getPOS(index - 1) == posM) {
+                setWordIndexesAndPOSForMerge(index - 1, index, posT);
+            }
+        }
+    }
+
+    private boolean isEndOfNumber(int index) {
+        return segmentResult.getWord(index).endsWith("个");
+    }
+
+    private boolean isTimeSuffix(int index) {
+        return segmentResult.getWord(index).equals("年")
+                || segmentResult.getWord(index).equals("月")
+                || segmentResult.getWord(index).equals("日")
+                || segmentResult.getWord(index).equals("时")
+                || segmentResult.getWord(index).equals("分")
+                || segmentResult.getWord(index).equals("秒");
+    }
+
+    private void recognizeChineseNumber(int length) {
         for (int wordI = 0; wordI < length; wordI++) {
             if (segmentResult.getPOS(wordI) == posUN) {
                 int j1 = isNumerical(segmentResult.getWord(wordI));
@@ -29,59 +119,6 @@ public class NumberAndTimeFilter extends AbstractSegmentFilter {
                     segmentResult.setPOS(wordI, posM);
                 }
             }
-        }
-
-        int numBegin = -1;
-        int numEnd = -1;
-        boolean isChineseNum = false;
-        for (int k2 = 0; k2 < length; k2++) {
-            if (wordPosIndexes[k2] <= 0) {
-                if (segmentResult.getPOS(k2) == posUN) {
-                    if (segmentResult.getWord(k2).equals("-") || segmentResult.getWord(k2).equals("－")) {
-                        segmentResult.setPOS(k2, posM);
-                    } else {
-                        int l1 = isNumerical(segmentResult.getWord(k2));
-                        if (l1 == 1) {
-                            segmentResult.setPOS(k2, posM);
-                        }
-                    }
-                }
-                if (isChineseNumber(k2)) {
-                    if (numBegin < 0) {
-                        numBegin = k2;
-                        isChineseNum = true;
-                    } else {
-                        numEnd = k2;
-                    }
-                } else if (isChineseNum) {
-                    if (!isNumberSeparator(k2)) {
-                        isChineseNum = false;
-                        if (numEnd - numBegin >= 1) {
-                            mergeWordsWithPOS(numBegin, numEnd, posM);
-                        }
-                        numBegin = -1;
-                        numEnd = -1;
-                    } else {
-                        numEnd = k2;
-                        if (k2 + 1 == length && numEnd - numBegin >= 1) {
-                            mergeWordsWithPOS(numBegin, numEnd, posM);
-                        }
-                    }
-                }
-                if (recognizeTime && segmentResult.getWord(k2).length() == 1 && k2 > 0 && (segmentResult.getWord(k2).equals("年") || segmentResult.getWord(k2).equals("月") || segmentResult.getWord(k2).equals("日") || segmentResult.getWord(k2).equals("时") || segmentResult.getWord(k2).equals("分") || segmentResult.getWord(k2).equals("秒"))) {
-                    if (segmentResult.getWord(k2).equals("年")) {
-                        if (segmentResult.getPOS(k2 - 1) == posM && (segmentResult.getWord(k2 - 1).length() > 2 || wordPosIndexes[k2 - 1] > 0) && (wordPosIndexes[k2 - 1] <= 0 || segmentResult.getWord(k2 - 1).length() != 1 || k2 - 3 > 0 && (k2 - 3 < 0 || wordPosIndexes[k2 - 3] > 0))) {
-                            mergeWordsWithPOS(k2 - 1, k2, posT);
-                        }
-                    } else if (segmentResult.getPOS(k2 - 1) == posM) {
-                        mergeWordsWithPOS(k2 - 1, k2, posT);
-                    }
-                }
-            }
-        }
-
-        if (numEnd > 0 && numEnd == length - 1 && numBegin >= 0 && numEnd - numBegin >= 1) {
-            mergeWordsWithPOS(numBegin, numEnd, posM);
         }
     }
 
@@ -106,29 +143,30 @@ public class NumberAndTimeFilter extends AbstractSegmentFilter {
     private boolean isNumberSeparator(int wordIndex) {
         boolean flag = false;
         int length = segmentResult.length();
-        String s1 = segmentResult.getWord(wordIndex);
-        if (s1.length() == 1) {
-            if (s1.equals(".") || s1.equals("．")) {
+        String wordStr = segmentResult.getWord(wordIndex);
+        if (wordStr.length() == 1) {
+            if (wordStr.equals(".") || wordStr.equals("．")) {
                 if (wordIndex + 1 < length && (segmentResult.getPOS(wordIndex + 1) == posM || segmentResult.getPOS(wordIndex + 1) == posUN) && isNumerical(segmentResult.getWord(wordIndex + 1)) == 1) {
                     flag = true;
                 }
-            } else if (s1.equals("点") || s1.equals("/") || s1.equals("／")) {
+            } else if (wordStr.equals("点") || wordStr.equals("/") || wordStr.equals("／")) {
                 if (wordIndex + 1 < length && (segmentResult.getPOS(wordIndex + 1) == posM || segmentResult.getPOS(wordIndex + 1) == posUN)) {
                     flag = true;
                 }
             } else if (wordIndex + 1 < length) {
-                if (s1.equals("%") || s1.equals("％") || s1.equals("‰")) {
+                if (wordStr.equals("%") || wordStr.equals("％") || wordStr.equals("‰")) {
                     flag = true;
                 }
             } else {
                 flag = false;
-                if (s1.equals("%") || s1.equals("％")) {
+                if (wordStr.equals("%") || wordStr.equals("％")) {
                     flag = true;
                 }
             }
         }
         return flag;
     }
+
     private static int posM = POSUtil.POS_M;
     private static int posUN = POSUtil.POS_UNKOWN;
     private static int posT = POSUtil.POS_T;

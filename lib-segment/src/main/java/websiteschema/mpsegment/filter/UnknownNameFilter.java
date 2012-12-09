@@ -49,10 +49,6 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
         }
     }
 
-    private boolean isWordConfirmed(int wordIndex) {
-        return wordPosIndexes[wordIndex] > 0;
-    }
-
     private boolean reachTheEnd(int wordIndex) {
         return wordIndex + 1 >= segmentResultLength;
     }
@@ -138,13 +134,13 @@ public class UnknownNameFilter extends AbstractSegmentFilter {
             if (config.isXingMingSeparate()) {
                 if (numOfNameWordItem >= 3) {
                     int numOfMingWord = numOfNameWordItem - 1;
-                    mergeWordsWithPOS(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR);
+                    setWordIndexesAndPOSForMerge(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR);
                 }
                 segmentResult.setPOS(nameStartIndex, POSUtil.POS_NR);
                 segmentResult.setConcept(nameStartIndex, Concept.UNKNOWN.getName());
                 segmentResult.setConcept(nameStartIndex + 1, Concept.UNKNOWN.getName());
             } else if (numOfNameWordItem >= 2) {
-                mergeWordsWithPOS(nameStartIndex, (nameStartIndex + numOfNameWordItem) - 1, POSUtil.POS_NR);
+                setWordIndexesAndPOSForMerge(nameStartIndex, (nameStartIndex + numOfNameWordItem) - 1, POSUtil.POS_NR);
                 segmentResult.setConcept(nameStartIndex, Concept.UNKNOWN.getName());
             }
         } else if (useForeignNameDict) {
