@@ -27,7 +27,7 @@ class ContainErrorAnalyzer extends AbstractErrorAnalyzer {
 
     @Override
     public void postAnalysis(Map<String, Integer> allWordsAndFreqInCorpus) {
-        for(String word : getWords()) {
+        for(String word : getWords().keySet()) {
             if(allWordsAndFreqInCorpus.containsKey(word)) {
                 removeErrorWord(word);
             }

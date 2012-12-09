@@ -107,6 +107,16 @@ public class MPSegmentTest {
     }
 
     @Test
+    public void should_recognize_reduplicating_word() {
+        String str = "谱写下了一曲曲惊天地泣鬼神的英雄壮歌。";
+        SegmentEngine engine = SegmentEngine.getInstance();
+        SegmentWorker worker = engine.getSegmentWorker();
+        SegmentResult words = worker.segment(str);
+        System.out.println(words);
+        Assert.assertEquals("一曲曲", words.getWord(3));
+    }
+
+    @Test
     public void should_merge_adjacent_numbers() {
         String str = "一个几十万人口的社区";
         SegmentEngine engine = SegmentEngine.getInstance();

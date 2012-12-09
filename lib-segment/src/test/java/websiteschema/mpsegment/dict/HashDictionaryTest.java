@@ -41,7 +41,6 @@ public class HashDictionaryTest {
             iterator.next();
         }
         System.out.println(count);
-        Assert.assertEquals(87537, count);
     }
 
     @Test

@@ -1,13 +1,12 @@
 package websiteschema.mpsegment.tools.accurary;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 abstract class AbstractErrorAnalyzer implements ErrorAnalyzer {
 
     private int occurTimes = 0;
-    private Set<String> wordsWithError = new ConcurrentSkipListSet<String>();
+    private Map<String, Integer> wordsWithError = new ConcurrentHashMap<String, Integer>();
 
     @Override
     public int getErrorOccurTimes() {
@@ -15,7 +14,7 @@ abstract class AbstractErrorAnalyzer implements ErrorAnalyzer {
     }
 
     @Override
-    public Set<String> getWords() {
+    public Map<String, Integer> getWords() {
         return wordsWithError;
     }
 
@@ -28,7 +27,8 @@ abstract class AbstractErrorAnalyzer implements ErrorAnalyzer {
     }
 
     protected void addErrorWord(String word) {
-        wordsWithError.add(word);
+        int occurs = wordsWithError.containsKey(word) ? wordsWithError.get(word) + 1 : 1;
+        wordsWithError.put(word, occurs);
     }
 
     protected void removeErrorWord(String word) {

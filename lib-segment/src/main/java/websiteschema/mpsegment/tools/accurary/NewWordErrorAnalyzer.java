@@ -24,7 +24,7 @@ class NewWordErrorAnalyzer extends AbstractErrorAnalyzer {
 
     @Override
     public void postAnalysis(Map<String, Integer> allWordsAndFreqInCorpus) {
-        for(String wordStr : getWords()) {
+        for(String wordStr : getWords().keySet()) {
             IWord word = DictionaryFactory.getInstance().getCoreDictionary().getWord(wordStr);
             if(null != word) {
                 removeErrorWord(wordStr);

@@ -34,12 +34,12 @@ public class AccuracyTest {
         System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93680);
-        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 24033);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94021);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 23891);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() <= 4156);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3282);
-        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 35896);
-        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3603);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 35317);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3610);
     }
 
     @Test
@@ -61,11 +61,11 @@ public class AccuracyTest {
         System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93673);
-        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 23466);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93994);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 23534);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() <= 4155);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3036);
-        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 36781);
-        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3605);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 36202);
+        Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3612);
     }
 }
