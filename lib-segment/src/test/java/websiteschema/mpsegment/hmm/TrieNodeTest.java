@@ -4,12 +4,12 @@
  */
 package websiteschema.mpsegment.hmm;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import websiteschema.mpsegment.util.SerializeHandler;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author twer
@@ -17,6 +17,17 @@ import websiteschema.mpsegment.util.SerializeHandler;
 public class TrieNodeTest {
 
     String filename = "test_trie.dat";
+
+    @Test
+    public void should_insert_ngram_and_add_count() {
+        Trie trie = new Trie();
+        trie.insert(new int[]{1, 2});
+        trie.insert(new int[]{1, 2});
+        trie.insert(new int[]{1, 2});
+        Assert.assertEquals(3, trie.searchNode(new int[]{1,2}).getCount());
+        trie.buildIndex(1);
+        Assert.assertTrue(trie.searchNode(new int[]{1,2}).getProb() - 0.75 < 0.0000001);
+    }
 
     @Test
     public void should_save_Trie_into_a_file_and_load_it_correctly() throws IOException {

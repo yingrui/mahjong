@@ -40,6 +40,23 @@ public class MPSegment {
         this.useContextFreqSegment = useContextFreqSegment;
     }
 
+    private void initialize() {
+        initializeGraph();
+        maxWordLength = config.isSegmentMin() ? 4 : config.getMaxWordLength();
+        withPinyin = config.isWithPinyin();
+        initializePOSTagging();
+    }
+
+    private void initializeGraph() {
+        graph = new Graph();
+        dijk = new DijkstraImpl();
+    }
+
+    private void initializePOSTagging() {
+        posTagging = new POSRecognizer();
+    }
+
+
     public SegmentResult segmentMP(String sentence, boolean withPOS) {
         if (sentence == null || sentence.length() < 1) {
             return null;
@@ -66,14 +83,10 @@ public class MPSegment {
         return result;
     }
 
-    private String getSection(String sentence, int startIndex) {
-        String sectionedSentence;
-        if (sentence.length() - startIndex >= 1000) {
-            sectionedSentence = sentence.substring(startIndex, startIndex + 1000);
-        } else {
-            sectionedSentence = sentence.substring(startIndex);
-        }
-        return sectionedSentence;
+    private void buildGraph(final String sen, final int startPos) {
+        GraphBuilder builder = new GraphBuilder(graph, useDomainDictionary, config);
+        builder.setUseContextFreqSegment(useContextFreqSegment);
+        builder.buildGraph(sen, startPos);
     }
 
     private SegmentResult buildSegmentResult(Path path) {
@@ -102,27 +115,14 @@ public class MPSegment {
         return segmentResult;
     }
 
-
-    private void initialize() {
-        initializeGraph();
-        maxWordLength = config.isSegmentMin() ? 4 : config.getMaxWordLength();
-        withPinyin = config.isWithPinyin();
-        initializePOSTagging();
-    }
-
-    private void initializeGraph() {
-        graph = new Graph();
-        dijk = new DijkstraImpl();
-    }
-
-    private void initializePOSTagging() {
-        posTagging = new POSRecognizer();
-    }
-
-    private void buildGraph(final String sen, final int startPos) {
-        GraphBuilder builder = new GraphBuilder(graph, useDomainDictionary, config);
-        builder.setUseContextFreqSegment(useContextFreqSegment);
-        builder.buildGraph(sen, startPos);
+    private String getSection(String sentence, int startIndex) {
+        String sectionedSentence;
+        if (sentence.length() - startIndex >= 1000) {
+            sectionedSentence = sentence.substring(startIndex, startIndex + 1000);
+        } else {
+            sectionedSentence = sentence.substring(startIndex);
+        }
+        return sectionedSentence;
     }
 
     private int lookupStopVertex(String sentence) {

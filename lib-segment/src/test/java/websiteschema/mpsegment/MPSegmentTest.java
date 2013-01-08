@@ -216,6 +216,20 @@ public class MPSegmentTest {
     }
 
     @Test
+    public void should_stem_english_words() {
+        String str = "She likes hunting";
+        SegmentEngine engine = SegmentEngine.getInstance();
+        SegmentWorker worker = engine.getSegmentWorker(
+                "segment.lang.en = true",
+                "segment.uppercaseall = false");
+        SegmentResult words = worker.segment(str);
+        System.out.println(words);
+        Assert.assertEquals(words.getWord(0), "She");
+        Assert.assertEquals(words.getWord(1), "like");
+        Assert.assertEquals(words.getWord(2), "hunt");
+    }
+
+    @Test
     public void should_know_stop_vertex_in_multi_sections_situation() {
         String str =
                 "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +

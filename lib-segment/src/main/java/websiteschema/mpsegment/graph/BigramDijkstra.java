@@ -14,8 +14,10 @@ public class BigramDijkstra implements IShortestPath {
     private final static int numOfVertexes = MPSegmentConfiguration.SectionSize();
     private int[] route;
     private DijkstraElement dijk = new DijkstraElement(numOfVertexes);
+    private WordBigram wordBigram;
 
-    public BigramDijkstra() {
+    public BigramDijkstra(WordBigram wordBigram) {
+        this.wordBigram = wordBigram;
         route = new int[numOfVertexes];
         clear();
     }
@@ -32,7 +34,6 @@ public class BigramDijkstra implements IShortestPath {
      *
      * @param end - In case reuse the results
      * @return
-     * @throws Exception
      */
     @Override
     public Path getShortestPath(int start, int end) {
@@ -73,13 +74,29 @@ public class BigramDijkstra implements IShortestPath {
     }
 
     private void findAndSaveShorterRoute(final int location, final int vertex, DijkstraElement dijk) {
-        int distance = graph.getEdgeWeight(location, vertex) + (dijk.hasFoundShortestPathTo(location) ? dijk.getDistanceOfPathTo(location) : 0);
+        int distance = getEdgeWeight(location, vertex) + (dijk.hasFoundShortestPathTo(location) ? dijk.getDistanceOfPathTo(location) : 0);
         int knownDistance = dijk.getDistanceOfPathTo(vertex);
         if (distance < knownDistance) {
             dijk.setDistanceOfPathTo(vertex, distance);
             dijk.reached(vertex);
             route[vertex] = location;
         }
+    }
+
+    private int getEdgeWeight(int location, int vertex) {
+        if(location >= 0) {
+            IWord lastWord = getEdgeObject(location);
+            IWord word = graph.getEdgeObject(location, vertex);
+            if(null != lastWord && null != word) {
+                double conditionProb = getConditionProbability(lastWord.getWordName(), word.getWordName());
+                if(conditionProb > 0.00000000001) {
+                    conditionProb = Math.log(conditionProb);
+//                    System.out.println("Found Bigram: " + lastWord.getWordName() + " " + word.getWordName() + " prob: " + conditionProb);
+                    return (int)conditionProb;
+                }
+            }
+        }
+        return graph.getEdgeWeight(location, vertex);
     }
 
     @Override
@@ -93,6 +110,10 @@ public class BigramDijkstra implements IShortestPath {
             return graph.getEdgeObject(head, tail);
         }
         return null;
+    }
+
+    public double getConditionProbability(String word1, String word2) {
+        return wordBigram.getProbability(word1, word2);
     }
 
     /**

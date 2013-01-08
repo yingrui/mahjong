@@ -6,22 +6,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractSegmentFilter implements ISegmentFilter {
+    interface Operation {
+        public void modify(SegmentResult segmentResult);
+    }
 
-    class MergeSetting {
+    class DeleteOperation implements Operation {
+        int index;
+        DeleteOperation(int index) {
+            this.index = index;
+        }
+        public void modify(SegmentResult segmentResult) {
+            segmentResult.markWordToBeDeleted(index);
+        }
+    }
+
+    class MergeOperation implements Operation {
         int start;
         int end;
         int pos;
 
-        MergeSetting(int start, int end, int pos) {
+        MergeOperation(int start, int end, int pos) {
             this.start = start;
             this.end = end;
             this.pos = pos;
+        }
+
+        public void modify(SegmentResult segmentResult) {
+            segmentResult.merge(start, end, pos);
         }
     }
 
     protected SegmentResult segmentResult;
     private int wordPosIndexes[];
-    private List<MergeSetting> mergeSettings = new ArrayList<MergeSetting>();
+    private List<Operation> operationSettings = new ArrayList<Operation>();
 
     public abstract void doFilter();
 
@@ -38,17 +55,21 @@ public abstract class AbstractSegmentFilter implements ISegmentFilter {
     }
 
     protected void setWordIndexesAndPOSForMerge(int startWordIndex, int endWordIndex, int POS) {
-        mergeSettings.add(new MergeSetting(startWordIndex, endWordIndex, POS));
+        operationSettings.add(new MergeOperation(startWordIndex, endWordIndex, POS));
         markWordsHasBeenRecognized(startWordIndex, endWordIndex, POS);
     }
 
+    protected void deleteWordAt(int index) {
+        operationSettings.add(new DeleteOperation(index));
+    }
+
     protected void compactSegmentResult() {
-        if (mergeSettings.size() > 0) {
-            for (MergeSetting mergeSetting : mergeSettings) {
-                segmentResult.merge(mergeSetting.start, mergeSetting.end, mergeSetting.pos);
+        if (operationSettings.size() > 0) {
+            for (Operation mergeSetting : operationSettings) {
+                mergeSetting.modify(segmentResult);
             }
             segmentResult.compact();
-            mergeSettings.clear();
+            operationSettings.clear();
         }
     }
 

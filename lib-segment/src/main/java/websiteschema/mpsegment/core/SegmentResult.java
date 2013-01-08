@@ -82,6 +82,10 @@ public class SegmentResult {
         return wordAtoms.get(i);
     }
 
+    public void setWord(int index, String word) {
+        wordAtoms.get(index).word = word;
+    }
+
     public void setPOS(int index, int pos) {
         wordAtoms.get(index).pos = pos;
     }
@@ -102,9 +106,13 @@ public class SegmentResult {
         WordAtom wordAtom = mergedWordAtom(start, end, pos);
         if (null != wordAtom) {
             for (int i = start + 1; i <= end; i++) {
-                wordAtoms.set(i, null);
+                markWordToBeDeleted(i);
             }
         }
+    }
+
+    public void markWordToBeDeleted(int i) {
+        wordAtoms.set(i, null);
     }
 
     public void compact() {

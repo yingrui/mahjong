@@ -15,6 +15,7 @@ class NewWordErrorAnalyzer extends AbstractErrorAnalyzer {
         if (possibleErrorWord.replaceAll(" ", "").equals(expect.word)) {
             if (expect.pos != POSUtil.POS_NR && expect.pos != POSUtil.POS_NS) {
                 increaseOccur();
+//                System.out.println(possibleErrorWord + " -> " + expect.word);
                 addErrorWord(expect.word);
                 foundError = true;
             }

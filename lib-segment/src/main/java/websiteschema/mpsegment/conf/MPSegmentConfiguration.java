@@ -75,6 +75,10 @@ public final class MPSegmentConfiguration {
         withPinyin = Boolean.valueOf(properties.getProperty("segment.pinyin", "false")).booleanValue();
     }
 
+    public boolean is(String property) {
+        return Boolean.valueOf(properties.getProperty(property));
+    }
+
     public String getDefaultFileEncoding() {
         return defaultFileEncoding;
     }

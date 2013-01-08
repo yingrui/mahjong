@@ -16,11 +16,8 @@ public class DomainDictionaryTest {
             List<IWord> synonymSet = DomainDictFactory.getInstance().getDomainDictionary().getSynonymSet("个人电脑");
             Assert.assertEquals(synonymSet.get(0).getWordName(), "PC机");
             Assert.assertEquals(synonymSet.get(1).getWordName(), "个人电脑");
-        } catch (Exception ex) {
-            Assert.fail();
-        }
-        try {
-            List<IWord> synonymSet = DomainDictFactory.getInstance().getDomainDictionary().getSynonymSet("PC机");
+
+            synonymSet = DomainDictFactory.getInstance().getDomainDictionary().getSynonymSet("PC机");
             Assert.assertEquals(synonymSet.get(0).getWordName(), "PC机");
             Assert.assertEquals(synonymSet.get(1).getWordName(), "个人电脑");
         } catch (Exception ex) {

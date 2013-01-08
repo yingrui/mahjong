@@ -3,3 +3,5 @@
 target
 corpus.txt
 dict.txt
+test.dat
+word-bigram.dat

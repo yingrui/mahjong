@@ -117,7 +117,7 @@ public class PerformanceTest {
     }
 
     @Test
-    public void should_spend_memory_within_30_MB() throws IOException, InterruptedException {
+    public void should_spend_memory_within_25_MB() throws IOException, InterruptedException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         getClass().getClassLoader().getResourceAsStream("Sophie's_World.txt"), "UTF-8"));
@@ -136,7 +136,7 @@ public class PerformanceTest {
         long totalMemory = Runtime.getRuntime().totalMemory();
         long freeMemory = Runtime.getRuntime().freeMemory();
         long memorySize = (totalMemory - freeMemory) / 1024 / 1024;
-        System.out.println("should_spend_memory_within_30_MB");
+        System.out.println("should_spend_memory_within_25_MB");
         System.out.println("    Current application has taken " + memorySize + "MB memory size.");
         Assert.assertTrue(memorySize < 25);
     }

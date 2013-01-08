@@ -1,12 +1,5 @@
 package websiteschema.mpsegment.util;
 
-/**
- * Created with IntelliJ IDEA.
- * User: twer
- * Date: 9/22/12
- * Time: 11:28 AM
- * To change this template use File | Settings | File Templates.
- */
 public class StringUtil {
 
     public static char halfShape(final char original) {

@@ -27,4 +27,12 @@ public class CharCheckUtil {
         int i = Character.getType(c);
         return i == 24 || i == 25 || i == 21 || i == 22 || i == 27 || i == 23 || i == 26 || i == 20;
     }
+
+    public static boolean isWhiteSpace(String word) {
+        return word.matches("\\s+");
+    }
+
+    public static boolean isEnglish(String word) {
+        return word.matches("[A-z]+('|'s)?");
+    }
 }
