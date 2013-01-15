@@ -142,7 +142,7 @@ public class PerformanceTest {
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Run for performance profile.");
+        System.out.println("In case you want to run for performance profile.");
         SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker();
         segmentWorker.setRecognizePOS(true);
         segmentWorker.segment("世界您好！");

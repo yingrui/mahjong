@@ -9,7 +9,6 @@ public class MPSegment {
 
     public MPSegment(MPSegmentConfiguration config) {
         this.config = config;
-        maxWordLength = 18;
         lastSection = false;
         lastSectionStr = "";
         useDomainDictionary = true;
@@ -24,14 +23,6 @@ public class MPSegment {
         useDomainDictionary = flag;
     }
 
-    public int getMaxWordLength() {
-        return maxWordLength;
-    }
-
-    public void setMaxWordLength(int len) {
-        maxWordLength = len;
-    }
-
     public boolean isUseContextFreqSegment() {
         return useContextFreqSegment;
     }
@@ -42,13 +33,13 @@ public class MPSegment {
 
     private void initialize() {
         initializeGraph();
-        maxWordLength = config.isSegmentMin() ? 4 : config.getMaxWordLength();
         withPinyin = config.isWithPinyin();
         initializePOSTagging();
     }
 
     private void initializeGraph() {
         graph = new Graph();
+//        dijk = new BigramDijkstra(WordBigram.getInstance("word-bigram.dat"));
         dijk = new DijkstraImpl();
     }
 
@@ -192,7 +183,6 @@ public class MPSegment {
         result.setConcepts(conceptRecognizer.getConcepts());
     }
 
-    private int maxWordLength;
     private IShortestPath dijk;
     private IGraph graph;
     private IPOSRecognizer posTagging;
