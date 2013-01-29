@@ -18,6 +18,10 @@ public class SegmentResult {
         }
     }
 
+    public List<WordAtom> getWordAtoms() {
+        return wordAtoms;
+    }
+
     public void setWords(String words[]) {
         for (int i = 0; i < words.length; i++) {
             wordAtoms.get(i).word = words[i];
