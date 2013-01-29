@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AccuracyTest {
 
     @Test
-    public void should_be_higher_accuracy_rate_than_0_dot_93_with_segment_minimum() throws IOException {
+    public void should_be_higher_than_93_percent_with_segment_minimum() throws IOException {
         SegmentWorker segmentWorker =
                 SegmentEngine.getInstance().getSegmentWorker(
                         "segment.xingmingseparate -> true",
@@ -34,7 +34,7 @@ public class AccuracyTest {
         System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94021);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94021 * 0.99);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 23891 * 1.05);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() <= 4156 * 1.05);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3282 * 1.05);
@@ -43,7 +43,7 @@ public class AccuracyTest {
     }
 
     @Test
-    public void should_be_higher_accuracy_rate_than_0_dot_93() throws IOException {
+    public void should_be_higher_than_93_percent() throws IOException {
         SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker("segment.xingmingseparate -> true");
         SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker);
         segmentAccuracy.checkSegmentAccuracy();
@@ -61,7 +61,7 @@ public class AccuracyTest {
         System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
-        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93994);
+        Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93994 * 0.99);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getErrorOccurTimes() <= 23534 * 1.05);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NR).getErrorOccurTimes() <= 4155 * 1.05);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3036 * 1.05);

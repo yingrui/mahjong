@@ -230,6 +230,19 @@ public class MPSegmentTest {
     }
 
     @Test
+    public void should_recognize_numbers() {
+        String str = "２飞亚达Ａ３５．５５";
+        SegmentEngine engine = SegmentEngine.getInstance();
+        SegmentWorker worker = engine.getSegmentWorker(
+                "segment.lang.en = true",
+                "segment.uppercaseall = false");
+        SegmentResult words = worker.segment(str);
+        System.out.println(words);
+        Assert.assertEquals(words.getPOS(0), POSUtil.POS_M);
+        Assert.assertEquals(words.getPOS(2), POSUtil.POS_M);
+    }
+
+    @Test
     public void should_know_stop_vertex_in_multi_sections_situation() {
         String str =
                 "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +

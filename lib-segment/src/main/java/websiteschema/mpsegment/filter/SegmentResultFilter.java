@@ -26,6 +26,10 @@ public class SegmentResultFilter {
         if (config.is("segment.lang.en")) {
             filters.add(new EnglishStemFilter());
         }
+
+        if(config.isHalfShapeAll() || config.isUpperCaseAll()) {
+            filters.add(new UpperCaseAndHalfShapeFilter(config.isHalfShapeAll(), config.isUpperCaseAll()));
+        }
     }
 
     public void filter(SegmentResult segmentResult) {

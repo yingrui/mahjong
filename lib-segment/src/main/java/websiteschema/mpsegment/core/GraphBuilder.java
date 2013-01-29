@@ -49,7 +49,7 @@ public class GraphBuilder {
     }
 
     public void setSentence(String sen) {
-        sentence = doUpperCaseAndHalfShape(sen);
+        sentence = sen;//doUpperCaseAndHalfShape(sen);
     }
 
     public void buildGraph(final String sen, final int startPos) {

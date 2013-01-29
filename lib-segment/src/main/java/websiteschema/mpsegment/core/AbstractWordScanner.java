@@ -21,9 +21,8 @@ public abstract class AbstractWordScanner {
         int lastMinWordLen = 0;
         final int length = sentence.length();
         try {
-            for (int begin = startPos; begin < length; begin += lastMinWordLen) {
+            for (int begin = startPos; begin < length; begin += 1) {
                 final int minWordLen = scanTheMinWordLength(begin);
-                lastMinWordLen = minWordLen;
 
                 //find single char word or multi-chars alpha-numeric word
                 String atomWord = sentence.substring(begin, begin + minWordLen);
