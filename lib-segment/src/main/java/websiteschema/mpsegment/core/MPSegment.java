@@ -40,6 +40,7 @@ public class MPSegment {
     private void initializeGraph() {
         graph = new Graph();
 //        dijk = new BigramDijkstra(WordBigram.getInstance("word-bigram.dat"));
+//        dijk = new BigramDijkstra(WordBigram.getInstance("google-bigram.dat"));
         dijk = new DijkstraImpl();
     }
 

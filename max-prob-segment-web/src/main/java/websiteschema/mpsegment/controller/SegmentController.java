@@ -12,7 +12,9 @@ import websiteschema.mpsegment.core.WordAtom;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/segment")
@@ -20,33 +22,29 @@ public class SegmentController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public List<WordAtom> get(HttpServletRequest request) throws UnsupportedEncodingException {
-        String sentence = getSentence(request);
-        return segment(sentence);
+    public List<WordDto> get(HttpServletRequest request) throws UnsupportedEncodingException {
+        RequestHelper requestHelper = new RequestHelper(request);
+        Map<String,String> params = requestHelper.getParams();
+        String sentence = params.get("sentence");
+        return segment(sentence, params);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public List<WordAtom> post(@RequestBody String sentence) {
-        return segment(sentence);
+    public List<WordDto> post(@RequestBody String sentence, HttpServletRequest request) throws UnsupportedEncodingException {
+        RequestHelper requestHelper = new RequestHelper(request);
+        Map<String,String> params = requestHelper.getParams();
+        return segment(sentence, params);
     }
 
-    private String getSentence(HttpServletRequest request) throws UnsupportedEncodingException {
-        String sentence = "";
-        String queryString = java.net.URLDecoder.decode(request.getQueryString(), "UTF-8");
-        String[] strings = queryString.split("&");
-        for(String str : strings) {
-            if(str.startsWith("sentence=")) {
-                sentence = str.substring(9);
-                break;
-            }
-        }
-        return sentence;
-    }
-
-    private List<WordAtom> segment(String sentence) {
-        SegmentWorker worker = SegmentEngine.getInstance().getSegmentWorker();
+    private List<WordDto> segment(String sentence, Map<String, String> params) {
+        SegmentWorker worker = SegmentEngine.getInstance().getSegmentWorker(params);
         SegmentResult result = worker.segment(sentence);
-        return result.getWordAtoms();
+        List<WordDto> words = new ArrayList<WordDto>(result.length());
+        for(WordAtom wordAtom : result.getWordAtoms()) {
+            words.add(new WordDto(wordAtom));
+        }
+        return words;
     }
 }
+

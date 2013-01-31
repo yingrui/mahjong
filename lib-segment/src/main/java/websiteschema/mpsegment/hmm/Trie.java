@@ -4,11 +4,12 @@
  */
 package websiteschema.mpsegment.hmm;
 
+import websiteschema.mpsegment.util.ISerialize;
+import websiteschema.mpsegment.util.SerializeHandler;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import websiteschema.mpsegment.util.ISerialize;
-import websiteschema.mpsegment.util.SerializeHandler;
 
 /**
  *
@@ -41,7 +42,11 @@ public class Trie implements ISerialize {
     }
 
     public Trie insert(int[] ngram) {
-        count++;
+        return insert(ngram, 1);
+    }
+
+    public Trie insert(int[] ngram, int freq) {
+        count += freq;
         if (ngram.length > 0) {
             int k = ngram[0];
             Trie n = null != descendant ? binarySearch(descendant, descendant.length, k) : null;

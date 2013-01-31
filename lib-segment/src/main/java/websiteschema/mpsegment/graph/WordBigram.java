@@ -53,6 +53,7 @@ public class WordBigram {
         SerializeHandler reader = new SerializeHandler(new DataInputStream(inputStream));
         nodeRepository.load(reader);
         trie.load(reader);
+        trie.buildIndex(1);
     }
 
     public double getProbability(String word1, String word2) {
