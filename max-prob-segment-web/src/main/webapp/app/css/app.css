@@ -1,0 +1,161 @@
+
+html {
+    height: 100%;
+}
+
+body {
+    background: #585858;
+    font-family: sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100%;
+    float: left;
+    margin-left: 5px;
+}
+
+.sidebar-background {
+    background: #ffffff;
+    position: fixed;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    z-index: -1;
+}
+
+.main-background {
+    background: #eeeeee;
+    position: fixed;
+    top: 0;
+    left: 15%;
+    width: 85%;
+    height: 100%;
+    z-index: -2;
+}
+
+.main-frame {
+    background: #FFFFFF;
+    position: fixed;
+    top: 60px;
+    left: 15%;
+    margin-left: 5px;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.main {
+    position: absolute;
+    left: 15%;
+    width: 85%;
+}
+
+.sidebar .control ul {
+    padding: 0px;
+}
+
+.sidebar-text-field {
+    padding: 0px;
+    width: 118px;
+}
+
+.sidebar-select {
+    border:1px solid;
+}
+
+li.control-comp {
+    list-style-type: none;
+    font-size: 14px;
+    margin: 2px 10px;
+}
+
+.message-frame {
+    height: 60px;
+}
+
+.actions-frame {
+    height: 40px;
+    line-height: 40px;
+    margin-left: 5px;
+    background-color: #808080;
+}
+
+.horizontal-separator {
+    border-bottom: solid 1px;
+}
+/* Navigation Menu */
+.nav-list {
+    list-style-type: none;
+}
+
+.nav-list li {
+    height: 40px;
+    text-align: center;
+    margin-left: -30px;
+    margin-right: 15px;
+    margin-bottom: 1px;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+.nav-decorate {
+    position: absolute;
+    height: 40px;
+    width: 5px;
+}
+
+.nav-chinese-breaking {
+    background: #EEEEEE;
+    color: #FFFFFF;
+}
+
+.nav-chinese-breaking .nav-decorate {
+    background: #606060;
+}
+
+.nav-chinese-breaking.selected {
+    color: #606060;
+}
+
+.nav-chinese-dictionary {
+    background: #EEEEEE;
+    color: #FFFFFF;
+}
+
+.nav-chinese-dictionary .nav-decorate {
+    background: #30608F;
+}
+
+.nav-chinese-dictionary.selected {
+    color: #30608F;
+}
+
+/* Components */
+.btn {
+    border: outset 0px;
+    height: 30px;
+    cursor: pointer;
+    margin: 2px;
+}
+
+/* Segment */
+.segment-text {
+    margin-left: 5px;
+    width:640px;
+    height:200px;
+}
+
+/* Article List Page */
+.article-list-menu {
+    height: 250px
+}
+
+/* Article Detail Page */
+.article-detail {
+    margin-left: 10px;
+}
+
+/* Directives */

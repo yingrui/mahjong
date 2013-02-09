@@ -1,0 +1,18 @@
+<div class="actions-frame">
+    <span>Max Prob Segment Playground</span>
+</div>
+<div>
+    <textarea class='segment-text' ng-model="inputText"
+              placeholder="You could input some Chinese here; and then try it"></textarea>
+
+</div>
+<div>
+    <input class="btn" type="button" value="Segment" ng-click="segment()"/>
+</div>
+<div>
+    <p>
+        <span ng-repeat="word in segmentResult">
+            <word ng-model="word"/>
+        </span>
+    </p>
+</div>

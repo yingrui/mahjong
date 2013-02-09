@@ -1,0 +1,11 @@
+.word {
+    display: inline-block;
+}
+
+.word input {
+    width: 50px;
+}
+
+.with-color .word-pos-n {
+    color: #55C5C5
+}
