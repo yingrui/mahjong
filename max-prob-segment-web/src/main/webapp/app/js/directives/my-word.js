@@ -1,7 +1,6 @@
 'use strict';
 
 /* Directives */
-var corpusEditorDirectives = angular.module('corpusEditorDirectives', []);
 
 corpusEditorDirectives.directive('word', function () {
     function bindKeyPressEvent(eleInput) {
@@ -14,7 +13,7 @@ corpusEditorDirectives.directive('word', function () {
 
     return {
         priority:0,
-        templateUrl:'partials/directive-word.html',
+        templateUrl:'partials/directives/word.htm',
         replace:false,
         restrict:'E',
         scope:false,

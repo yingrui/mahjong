@@ -49,6 +49,7 @@ body {
 
 .main {
     position: absolute;
+    padding-left: 5px;
     left: 15%;
     width: 85%;
 }
@@ -79,7 +80,6 @@ li.control-comp {
 .actions-frame {
     height: 40px;
     line-height: 40px;
-    margin-left: 5px;
     background-color: #808080;
 }
 
@@ -138,12 +138,10 @@ li.control-comp {
     border: outset 0px;
     height: 30px;
     cursor: pointer;
-    margin: 2px;
 }
 
 /* Segment */
 .segment-text {
-    margin-left: 5px;
     width:640px;
     height:200px;
 }

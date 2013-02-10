@@ -2,18 +2,16 @@
 
 /* App Module */
 
+var corpusEditorDirectives = angular.module('corpusEditorDirectives', []);
+var corpusEditorServices = angular.module('corpusEditorServices', []);
+
 angular.module('corpusEditor', ['corpusEditorFilters', 'corpusEditorServices', 'corpusEditorDirectives']).
     config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
         when('/segment', {
-            templateUrl: 'layout.html',
-            mainTemplateUrl: 'partials/segment/main.html',
-            sidebarTemplateUrl: 'partials/sidebar.html',
+            templateUrl: 'layout.htm',
+            mainTemplateUrl: 'partials/segment/main.htm',
+            sidebarTemplateUrl: 'partials/sidebar.htm',
             controller: SegmentCtrl}).
-        when('/dictionary', {
-            templateUrl: 'layout.html',
-            mainTemplateUrl: 'partials/dictionary/main.html',
-            sidebarTemplateUrl: 'partials/sidebar.html',
-            controller: DictionaryCtrl}).
         otherwise({redirectTo:'/segment'});
 }]);
