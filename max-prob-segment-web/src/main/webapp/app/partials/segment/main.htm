@@ -1,13 +1,13 @@
 <div class="actions-frame">
-    <span>最大概率分词</span>
+    <span>{{i18n('SegmentIntroduceText')}}</span>
 </div>
 <div>
     <textarea class='segment-text' ng-model="inputText"
-              placeholder="您可以在这里输入一些句子短语，试一试"></textarea>
+              placeholder="{{i18n('SegmentInputPlaceholderText')}}"></textarea>
 
 </div>
 <div>
-    <input class="btn" type="button" value="Segment" ng-click="segment()"/>
+    <input class="btn" type="button" value="{{i18n('SegmentButtonText')}}" ng-click="segment()"/>
 </div>
 <div>
     <p>

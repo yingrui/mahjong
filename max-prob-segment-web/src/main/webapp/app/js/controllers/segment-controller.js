@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function SegmentCtrl($scope, segmentService) {
+function SegmentCtrl($scope, segmentService, i18n) {
     $scope.inputText = "";
     $scope.segmentResult = [];
     $scope.segment = function() {
@@ -11,6 +11,7 @@ function SegmentCtrl($scope, segmentService) {
             scope.segmentResult = result;
         });
     }
+    $scope.i18n = i18n;
 }
 
-SegmentCtrl.$inject = ['$scope', 'SegmentService'];
+SegmentCtrl.$inject = ['$scope', 'SegmentService', 'i18n'];

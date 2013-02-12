@@ -1,4 +1,11 @@
 <div class="word">
-    <span ng-click="enableOrDisableModifyInput()">{{ word.word }}</span>
-    <input ng-model="word.word" style="display: none;"/>
+    <ul>
+        <li>
+            <span ng-click="enableOrDisableModifyInput()">{{ word.word }}</span>
+            <input ng-model="word.word" style="display: none;"/>
+        </li>
+        <li>{{ word.pos }}</li>
+        <li>{{ word.pinyin }}</li>
+        <li>{{ word.concept }}</li>
+    </ul>
 </div>

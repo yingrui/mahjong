@@ -9,3 +9,5 @@
 .with-color .word-pos-n {
     color: #55C5C5
 }
+
+.word ul {list-style-type: none;}
