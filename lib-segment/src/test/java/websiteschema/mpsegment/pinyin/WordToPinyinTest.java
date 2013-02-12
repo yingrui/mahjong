@@ -2,6 +2,7 @@ package websiteschema.mpsegment.pinyin;
 
 import org.junit.Assert;
 import org.junit.Test;
+import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.hmm.ObserveListException;
 
 import java.io.IOException;
@@ -38,6 +39,14 @@ public class WordToPinyinTest {
 
     @Test
     public void should_keep_digtal_and_alphabetical_in_result() throws ObserveListException {
+        SegmentResult segmentResult = new SegmentResult(1);
+        segmentResult.setWords(new String[]{"１２日"});
+        classifier.classify(segmentResult);
+        Assert.assertEquals("１２'ri", segmentResult.getPinyin(0));
+    }
+
+    @Test
+    public void should_keep_full_sharp_digtal_and_alphabetical_in_result() throws ObserveListException {
         List<String> result = classifier.classify("AK47很厉害。");
         Assert.assertEquals("A", result.get(0));
         Assert.assertEquals("K", result.get(1));

@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.hmm.Node;
 import websiteschema.mpsegment.hmm.ObserveListException;
+import websiteschema.mpsegment.util.CharCheckUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class WordToPinyinClassifier {
             int pos = 0;
             for (int i = 0; i < result.length(); i++) {
                 int wordLength = result.getWord(i).length();
-                String pinyin = join(pinyinList.subList(pos, pos += wordLength), "'");
+                String pinyin = join(pinyinList.subList(pos, pos += wordLength), "'", result.getWord(i));
                 result.setPinyin(i, pinyin);
             }
         } catch (ObserveListException ex) {
@@ -33,12 +34,12 @@ public class WordToPinyinClassifier {
         }
     }
 
-    private String join(List<String> list, String sep) {
+    private String join(List<String> list, String sep, String word) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             String str = list.get(i);
             stringBuilder.append(str);
-            if (null != sep && i < list.size() - 1) {
+            if (null != sep && i < list.size() - 1 && CharCheckUtil.isChinese(word.charAt(i+1))) {
                 stringBuilder.append(sep);
             }
         }

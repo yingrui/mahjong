@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.core;
 
 import websiteschema.mpsegment.dict.POSUtil;
+import websiteschema.mpsegment.util.CharCheckUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,12 @@ public class SegmentResult {
     public void setConcepts(String[] concepts) {
         for (int i = 0; i < concepts.length; i++) {
             wordAtoms.get(i).concept = concepts[i];
+        }
+    }
+
+    public void setPinyin(String[] pinyin) {
+        for (int i = 0; i < pinyin.length; i++) {
+            wordAtoms.get(i).pinyin = pinyin[i];
         }
     }
 
@@ -167,7 +174,16 @@ public class SegmentResult {
 
     private void appendWordAndPinyin(StringBuilder wordName, StringBuilder pinyin, WordAtom startWordAtom) {
         wordName.append(startWordAtom.word);
-        if (null != startWordAtom.pinyin) pinyin.append(startWordAtom.pinyin);
+        appendPinyin(pinyin, startWordAtom);
+    }
+
+    private void appendPinyin(StringBuilder pinyin, WordAtom startWordAtom) {
+        if (null != startWordAtom.pinyin) {
+            if (pinyin.length() > 0 && CharCheckUtil.isChinese(startWordAtom.word)) {
+                pinyin.append("'");
+            }
+            pinyin.append(startWordAtom.pinyin);
+        }
     }
 
     private WordAtom getStartWordAtom(int index) {
