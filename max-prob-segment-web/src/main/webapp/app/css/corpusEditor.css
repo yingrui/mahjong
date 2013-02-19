@@ -11,3 +11,13 @@
 }
 
 .word ul {list-style-type: none;}
+
+.segment-area {
+    width: 100%;
+    text-align: center;
+}
+
+.segment-text {
+    width: 90%;
+    height: 200px;
+}

@@ -1,19 +1,41 @@
-<div class="sidebar">
-    <div style="text-align: center;">
-        <img src="img/neural.jpg" style="width: 100px;"/>
-    </div>
-
-    <!--Sidebar content-->
-    <div class="article-list-menu horizontal-separator">
-        <ng-include src="'partials/navigation.htm'"/>
-    </div>
-
-    <ng-include src="sidebarTemplateUrl"/>
+<div class="jumbotron">
+    <h1>恭/喜/发/财</h1>
+    <p class="lead">Max probability segment is a simple and efficient algorithm for Chinese Breaking.</p>
+    <a class="btn btn-large btn-success" href="#">Give it a shot</a>
 </div>
-<div class="main">
-    <div class="message-frame"></div>
-    <ng-include src="mainTemplateUrl"/>
+
+<hr>
+
+<!-- Example row of columns -->
+<div class="row-fluid">
+    <div class="span4">
+        <h2>Introduce</h2>
+        <p>
+            max-prob-segment is the Java implementation of this algorithm.
+            By now it not only can break Chinese words, but Part-Of-Speech, Chinese Pinyin Recognition, Chinese Concept Tree etc.
+            It is an open source software, and looking forward your contributions.
+        </p>
+        <p><a class="btn" href="http://yingrui.github.com/nlp/2013/02/15/What-Chinese-Breaking-Suppose-to-Be/">Get to know more &raquo;</a></p>
+    </div>
+    <div class="span4">
+        <h2>State-of-the-Art</h2>
+        <p>max-prob-segment is the one you can trust it.</p>
+        <ul>
+            <li>easy to use and scale</li>
+            <li>well designed</li>
+            <li>fully tested</li>
+            <li>more than your imagine</li>
+        </ul>
+        <p><a class="btn" href="">View details &raquo;</a></p>
+    </div>
+    <div class="span4">
+        <h2>Segment Web Api</h2>
+        <p><b>max-prob-segment-web</b> offer a Web Api: <a href="http://max-prob-segment.herokuapp.com/api/segment?sentence=input+word+here">http://max-prob-segment.herokuapp.com/api/segment</a></p>
+        <p>Which receive both GET and POST method; please do not forget to add header content-type:"application/json;charset=utf-8" and header accept:"application/json"</p>
+        <p>GET /api/segment?sentence={your words here}</p>
+        <p>POST /api/segment?params...\n\n<br/>
+            {your words here in request body}
+        </p>
+        <p><a class="btn" href="/api/segment?sentence=input+word+here">Try Web Api &raquo;</a></p>
+    </div>
 </div>
-<div class="sidebar-background"></div>
-<div class="main-background"></div>
-<div class="main-frame"></div>

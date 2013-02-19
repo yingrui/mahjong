@@ -1,14 +1,13 @@
-<div class="actions-frame">
-    <span>{{i18n('SegmentIntroduceText')}}</span>
-</div>
-<div>
+
+<div class='segment-area'>
+    <div>{{i18n('SegmentIntroduceText')}}</div>
+    <div>
     <textarea class='segment-text' ng-model="inputText"
               placeholder="{{i18n('SegmentInputPlaceholderText')}}"></textarea>
-
-</div>
-<div>
+    <div>
     <input class="btn" type="button" value="{{i18n('SegmentButtonText')}}" ng-click="segment()"/>
 </div>
+
 <div>
     <p>
         <span ng-repeat="word in segmentResult">

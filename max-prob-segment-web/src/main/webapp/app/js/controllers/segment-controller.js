@@ -7,6 +7,7 @@ function SegmentCtrl($scope, segmentService, i18n) {
     $scope.segmentResult = [];
     $scope.segment = function() {
         var scope = this;
+        console.log(scope.inputText);
         segmentService.segment(scope.inputText, function(result){
             scope.segmentResult = result;
         });
