@@ -8,6 +8,16 @@ function NavigationCtrl($scope) {
         {'class': '', 'value': 'Downloads', href:"#"},
         {'class': '', 'value': 'Contact', href:"#"}
     ];
+
+    $scope.select = function(item) {
+        _.each(this.menu, function(ele){
+            if(ele.value === item.value) {
+                ele.class = 'active';
+            } else {
+                ele.class = '';
+            }
+        });
+    };
 }
 
 NavigationCtrl.$inject = ['$scope'];
