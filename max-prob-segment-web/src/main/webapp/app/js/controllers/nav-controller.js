@@ -1,12 +1,12 @@
 
-function NavigationCtrl($scope) {
+function NavigationCtrl($scope, $location) {
     $scope.menu = [
-        {'class': 'active', 'value': 'Home', href:"#"},
+        {'class': 'active', 'value': 'Home', href:"#/"},
         {'class': '', 'value': 'Playground', href:"#/segment"},
-        {'class': '', 'value': 'Dictionary', href:"#"},
-        {'class': '', 'value': 'Concepts', href:"#"},
-        {'class': '', 'value': 'Downloads', href:"#"},
-        {'class': '', 'value': 'Contact', href:"#"}
+        {'class': '', 'value': 'Dictionary', href:"#/dictionary"},
+        {'class': '', 'value': 'Concepts', href:"#/concepts"},
+        {'class': '', 'value': 'Downloads', href:"#/download"},
+        {'class': '', 'value': 'Contact', href:"#/contact"}
     ];
 
     $scope.select = function(item) {
@@ -18,6 +18,15 @@ function NavigationCtrl($scope) {
             }
         });
     };
+
+    checkCurrentLocation();
+    function checkCurrentLocation() {
+        var path = $location.path();
+        _.each($scope.menu, function(item){
+            var href = item.href.substring(1);
+            item.class = href === path ? 'active' : ''
+        });
+    }
 }
 
-NavigationCtrl.$inject = ['$scope'];
+NavigationCtrl.$inject = ['$scope', '$location'];

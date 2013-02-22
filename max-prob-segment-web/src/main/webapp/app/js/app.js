@@ -1,7 +1,5 @@
 'use strict';
 
-/* App Module */
-
 var corpusEditorDirectives = angular.module('corpusEditorDirectives', []);
 var corpusEditorServices = angular.module('corpusEditorServices', []);
 
@@ -15,5 +13,11 @@ angular.module('corpusEditor', ['corpusEditorFilters', 'corpusEditorServices', '
         when('/segment', {
             templateUrl: '/app/partials/segment/main.htm',
             controller: SegmentCtrl}).
-        otherwise({redirectTo:'/segment'});
+        when('/download', {
+            templateUrl: '/app/partials/download/main.htm',
+            controller: function(){}}).
+        when('/contact', {
+            templateUrl: '/app/partials/contact/main.htm',
+            controller: function(){}}).
+        otherwise({redirectTo:'/'});
 }]);
