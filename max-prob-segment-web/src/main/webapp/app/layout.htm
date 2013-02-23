@@ -1,7 +1,7 @@
 <div class="jumbotron">
     <h1>恭/喜/发/财</h1>
-    <p class="lead">Max probability segment is a simple and efficient algorithm for Chinese Breaking.</p>
-    <a class="btn btn-large btn-success" href="#/segment">Give it a shot</a>
+    <p class="lead">最大概率分词是一种简单高效的中文分词算法，这正是此算法的Java实现</p>
+    <a class="btn btn-large btn-success" href="#/segment">试一试吧</a>
 </div>
 
 <hr>
@@ -9,33 +9,32 @@
 <!-- Example row of columns -->
 <div class="row-fluid">
     <div class="span4">
-        <h2>Introduce</h2>
+        <h2>项目简介</h2>
         <p>
-            max-prob-segment is the Java implementation of this algorithm.
-            By now it not only can break Chinese words, but Part-Of-Speech, Chinese Pinyin Recognition, Chinese Concept Tree etc.
-            It is an open source software, and looking forward your contributions.
+            Max-Prob-Segment是最大概率分词的Java实现，不仅是分词，同时支持词性标注、中文拼音识别、层次概念标注等。
+            同时这是一个Open Source项目，期待您参与贡献。
         </p>
-        <p><a class="btn" href="http://yingrui.github.com/nlp/2013/02/15/What-Chinese-Breaking-Suppose-to-Be/">Get to know more &raquo;</a></p>
+        <p><a class="btn" href="http://yingrui.github.com/nlp/2013/02/15/What-Chinese-Breaking-Suppose-to-Be/">更多 &raquo;</a></p>
     </div>
     <div class="span4">
         <h2>State-of-the-Art</h2>
-        <p>max-prob-segment is the one you can trust it.</p>
+        <p>Max-Prob-Segment让您完全信任</p>
         <ul>
-            <li>easy to use and scale</li>
-            <li>well designed</li>
-            <li>fully tested</li>
-            <li>more than your imagine</li>
+            <li>完整的测试</li>
+            <li>易于使用和扩展</li>
+            <li>良好的设计</li>
+            <li>超乎您的想象…</li>
         </ul>
-        <p><a class="btn" href="">View details &raquo;</a></p>
+        <p><a class="btn" href="#/download">下载 &raquo;</a></p>
     </div>
     <div class="span4">
-        <h2>Segment Web Api</h2>
-        <p><b>max-prob-segment-web</b> offer a Web Api: <a href="http://max-prob-segment.herokuapp.com/api/segment?sentence=input+word+here">http://max-prob-segment.herokuapp.com/api/segment</a></p>
-        <p>Which receive both GET and POST method; please do not forget to add header content-type:"application/json;charset=utf-8" and header accept:"application/json"</p>
-        <p>GET /api/segment?sentence={your words here}</p>
+        <h2>中文分词Web Api</h2>
+        <p><b>Max-Prob-Segment-Web</b>是一个Web Api: <a href="/api/segment?sentence=分词测试">http://max-prob-segment.herokuapp.com/api/segment</a></p>
+        <p>其支持GET和POST方法访问，使用时请添加Header content-type:"application/json;charset=utf-8"和accept:"application/json"</p>
+        <p>GET /api/segment?sentence={分词测试}</p>
         <p>POST /api/segment?params...\n\n<br/>
-            {your words here in request body}
+            {将文本放在请求的Body中}
         </p>
-        <p><a class="btn" href="/api/segment?sentence=input+word+here">Try Web Api &raquo;</a></p>
+        <p><a class="btn" href="/api/segment?sentence=分词测试">访问Web Api &raquo;</a></p>
     </div>
 </div>
