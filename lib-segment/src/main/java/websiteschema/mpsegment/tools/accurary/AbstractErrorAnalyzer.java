@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.tools.accurary;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 abstract class AbstractErrorAnalyzer implements ErrorAnalyzer {
@@ -14,8 +14,8 @@ abstract class AbstractErrorAnalyzer implements ErrorAnalyzer {
     }
 
     @Override
-    public Map<String, Integer> getWords() {
-        return wordsWithError;
+    public Map<String,Integer> getWords() {
+        return sort();
     }
 
     @Override
@@ -33,5 +33,20 @@ abstract class AbstractErrorAnalyzer implements ErrorAnalyzer {
 
     protected void removeErrorWord(String word) {
         wordsWithError.remove(word);
+    }
+
+    private Map<String,Integer> sort() {
+        List<Map.Entry<String,Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(wordsWithError.entrySet());
+        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
+            @Override
+            public int compare(Map.Entry<String,Integer> o1, Map.Entry<String,Integer> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+        Map<String, Integer> sortedMap = new LinkedHashMap<String, Integer>(entries.size());
+        for(Map.Entry<String, Integer> mapEntry : entries) {
+            sortedMap.put(mapEntry.getKey(), mapEntry.getValue());
+        }
+        return sortedMap;
     }
 }

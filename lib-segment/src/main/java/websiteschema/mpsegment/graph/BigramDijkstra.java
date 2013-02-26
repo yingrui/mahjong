@@ -18,7 +18,7 @@ public class BigramDijkstra extends DijkstraImpl {
             IWord word = getEdgeObject(location, vertex);
             if(null != lastWord && null != word) {
                 double conditionProb = getConditionProbability(lastWord.getWordName(), word.getWordName());
-                if(conditionProb > 0.001) {
+                if(conditionProb > 0.0001) {
                     conditionProb = -Math.log(conditionProb);
 //                    System.out.println("Found Bigram: " + lastWord.getWordName() + " " + word.getWordName() + " prob: " + conditionProb);
                     return (int)((conditionProb / 3) + super.getEdgeWeight(location, vertex) * 2 / 3);
