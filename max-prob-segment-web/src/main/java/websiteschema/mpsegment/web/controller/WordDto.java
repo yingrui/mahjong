@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.controller;
+package websiteschema.mpsegment.web.controller;
 
 import websiteschema.mpsegment.core.WordAtom;
 import websiteschema.mpsegment.dict.POSUtil;

@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.controller;
+package websiteschema.mpsegment.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
