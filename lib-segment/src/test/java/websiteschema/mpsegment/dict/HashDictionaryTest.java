@@ -33,7 +33,7 @@ public class HashDictionaryTest {
             System.out.println("词：" + word.getWordName() + "\n" + word.getPOSArray());
         }
 
-        Assert.assertEquals(5991, hashDictionary.getCapacity());
+        Assert.assertEquals(6594, hashDictionary.getCapacity());
         Iterator<IWord> iterator = hashDictionary.iterator();
         int count = 0;
         while(iterator.hasNext()) {
