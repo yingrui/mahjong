@@ -82,6 +82,17 @@ public class PunctuationTest {
     }
 
     @Test
+    public void should_contains_breaking_characters() {
+        String punctuations[] = new String[]{"\r\n", "\r", "\n", " ", "　"};
+        for (String punctuation : punctuations) {
+            System.out.print(java.net.URLEncoder.encode(punctuation) + " ");
+            IWord word = hashDictionary.getWord(punctuation);
+            Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W);
+        }
+        System.out.println();
+    }
+
+    @Test
     public void should_contains_other_characters() {
         char punctuations[] = ("┌┍┎┏┐┑┒┓─┄┈├┝┞┟┠┡┢┣│┆┊┬┭┮┯┰┱┲┳┼┽┾┿╀╁╂╃§☆★●◎◇◆□■△▲※→←↑↓〓＃＿＆＠＼＾αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯㄅㄉㄓㄚㄞㄢㄦㄆㄊㄍㄐㄔㄗㄧㄛㄟㄣㄇㄋㄎㄑㄕㄘㄨㄜㄠㄤㄈㄏㄒㄖㄙㄩㄝㄡㄥāáǎàōóǒòêēéěèīíǐìūúǔùǖǘǚǜぁぃぅぇぉかきくけこんさしすせそたちつってとゐなにぬねのはひふへほゑまみむめもゃゅょゎをあいうえおがぎぐげござじずぜぞだぢづでどぱぴぷぺぽぼびぶべぼらりるれろやゆよわァィゥヴェォカヵキクケヶコサシスセソタチツッテトヰンナニヌネノハヒフヘホヱマミムメモャュョヮヲアイウエオガギグゲゴザジズゼゾダヂヅデドパピプペポバビブベボラリルレロヤユヨワ]レロヤユヨワ").toCharArray();
         for (char punctuation : punctuations) {
