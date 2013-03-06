@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package websiteschema.mpsegment.pos;
 
 import org.junit.Assert;
@@ -14,9 +10,6 @@ import websiteschema.mpsegment.util.SerializeHandler;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @author ray
- */
 public class PartOfSpeechRecognitionTest {
 
     @Test
@@ -48,7 +41,7 @@ public class PartOfSpeechRecognitionTest {
         testInput = "《大卫·科波菲尔》通过主人公大卫一生的悲欢离合，多层次地揭示了当时社会的真实面貌，突出地表现了金钱对婚姻、家庭和社会的腐蚀作用。";
         result = SegmentEngine.getInstance().getSegmentWorker().segment(testInput);
         System.out.println(result.toString());
-        expected = "《/UN 大卫/NR ·/UN 科/NR 波/NR 菲/NR 尔/NR 》/UN 通过/P 主人公/N 大卫/NR 一生/N 的/U 悲欢离合/I ，/W 多层次/N 地/U 揭示/V 了/U 当时/T 社会/N 的/U 真实/A 面貌/N ，/W 突出/A 地/U 表现/VN 了/U 金钱/N 对/P 婚姻/N 、/W 家庭/N 和/C 社会/N 的/U 腐蚀/VN 作用/N 。/W";
+        expected = "《/W 大卫/NR ·/W 科/NR 波/NR 菲/NR 尔/NR 》/W 通过/P 主人公/N 大卫/NR 一生/N 的/U 悲欢离合/I ，/W 多层次/N 地/U 揭示/V 了/U 当时/T 社会/N 的/U 真实/A 面貌/N ，/W 突出/A 地/U 表现/VN 了/U 金钱/N 对/P 婚姻/N 、/W 家庭/N 和/C 社会/N 的/U 腐蚀/VN 作用/N 。/W";
         Assert.assertEquals(expected, result.toString().trim());
     }
 

@@ -15,8 +15,8 @@ public class AccuracyTest {
     public void should_be_higher_than_93_percent_with_segment_minimum() throws IOException {
         SegmentWorker segmentWorker =
                 SegmentEngine.getInstance().getSegmentWorker(
-                        "segment.xingmingseparate -> true",
-                        "segment.min -> true"
+                        "separate.xingming -> true",
+                        "minimize.word -> true"
                 );
         SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker);
         segmentAccuracy.checkSegmentAccuracy();
@@ -44,7 +44,7 @@ public class AccuracyTest {
 
     @Test
     public void should_be_higher_than_93_percent() throws IOException {
-        SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker("segment.xingmingseparate -> true");
+        SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker("separate.xingming -> true");
         SegmentAccuracy segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker);
         segmentAccuracy.checkSegmentAccuracy();
         System.out.println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate());

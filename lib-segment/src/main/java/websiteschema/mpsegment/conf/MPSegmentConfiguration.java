@@ -62,17 +62,16 @@ public final class MPSegmentConfiguration {
     }
 
     private void initialize() {
-        stopwordfilter = Boolean.valueOf(properties.getProperty("segment.stopwordfilter", "false")).booleanValue();
-        querysyntax = Boolean.valueOf(properties.getProperty("segment.querysyntax", "false")).booleanValue();
-        loaduserdictionary = Boolean.valueOf(properties.getProperty("user.loaduserdictionary", "false")).booleanValue();
-        loaddomaindictionary = Boolean.valueOf(properties.getProperty("domain.loaddomaindictionary", "true")).booleanValue();
-        segment_min = Boolean.valueOf(properties.getProperty("segment.min", "false")).booleanValue();
-        chinesenameidentify = Boolean.valueOf(properties.getProperty("segment.chinesenameidentify", "true")).booleanValue();
-        xingmingseparate = Boolean.valueOf(properties.getProperty("segment.xingmingseparate", "true")).booleanValue();
-        halfshapeall = Boolean.valueOf(properties.getProperty("segment.halfshapeall", "false")).booleanValue();
-        uppercaseall = Boolean.valueOf(properties.getProperty("segment.uppercaseall", "false")).booleanValue();
-        ExtendPOSInDomainDictionary = Boolean.valueOf(properties.getProperty("domain.extendposindomaindictionary", "false")).booleanValue();
-        withPinyin = Boolean.valueOf(properties.getProperty("segment.pinyin", "false")).booleanValue();
+        stopwordfilter = Boolean.valueOf(properties.getProperty("filter.stopword", "false")).booleanValue();
+        querysyntax = Boolean.valueOf(properties.getProperty("support.querysyntax", "false")).booleanValue();
+        loaduserdictionary = Boolean.valueOf(properties.getProperty("load.userdictionary", "false")).booleanValue();
+        loaddomaindictionary = Boolean.valueOf(properties.getProperty("load.domaindictionary", "true")).booleanValue();
+        segment_min = Boolean.valueOf(properties.getProperty("minimize.word", "false")).booleanValue();
+        chinesenameidentify = Boolean.valueOf(properties.getProperty("recognize.chinesename", "true")).booleanValue();
+        xingmingseparate = Boolean.valueOf(properties.getProperty("separate.xingming", "true")).booleanValue();
+        halfshapeall = Boolean.valueOf(properties.getProperty("convert.tohalfshape", "false")).booleanValue();
+        uppercaseall = Boolean.valueOf(properties.getProperty("convert.touppercase", "false")).booleanValue();
+        withPinyin = Boolean.valueOf(properties.getProperty("recognize.pinyin", "false")).booleanValue();
     }
 
     public boolean is(String property) {
@@ -83,24 +82,14 @@ public final class MPSegmentConfiguration {
         return defaultFileEncoding;
     }
 
-    public String getSegmentDict() {
-        return new StringBuilder(getHomePath()).
-                append(properties.getProperty("cnnlp.lexical.segment.MPSegment", "segment.dict")).toString();
-    }
-
     public String getPOSMatrix() {
         return new StringBuilder(getHomePath()).
-                append(properties.getProperty("cnnlp.lexical.segment.POSTagging", "pos.dat")).toString();
-    }
-
-    public String getNamePOSMatrix() {
-        return new StringBuilder(getHomePath()).
-                append(properties.getProperty("cnnlp.lexical.segment.NameTagging", "NamePOSMatrix.fre")).toString();
+                append(properties.getProperty("resource.pos", "pos.dat")).toString();
     }
 
     public String getChNameDict() {
         return new StringBuilder(getHomePath()).
-                append(properties.getProperty("cnnlp.lexical.segment.ChNameDict", "ChName.dict")).toString();
+                append(properties.getProperty("resource.chinesename", "ChName.dict")).toString();
     }
 
     public boolean isLoadDomainDictionary() {
@@ -120,35 +109,19 @@ public final class MPSegmentConfiguration {
     }
 
     public String getStopPosList() {
-        return properties.getProperty("user.stoplist", "");
-    }
-
-    public String getStopWordFile() {
-        return new StringBuilder(getHomePath()).append(properties.getProperty("user.stopwordfile", "")).toString();
+        return properties.getProperty("filter.wordbypos", "");
     }
 
     public boolean isSegmentMin() {
         return segment_min;
     }
 
-    public void setSegmentMin(boolean segmentMin) {
-        this.segment_min = segmentMin;
-    }
-
     public String getGlueChar() {
-        return properties.getProperty("segment.gluechar", "*?~/_[]:");
+        return properties.getProperty("glue.queryoperater", "*?~/_[]:");
     }
 
     public int getMaxQueryLength() {
-        return Integer.parseInt(properties.getProperty("segment.maxquerylength", "512").trim());
-    }
-
-    public boolean isFilterStopWord() {
-        return stopwordfilter;
-    }
-
-    public boolean isChineseNumberToDigital() {
-        return chinesenumbertodigital;
+        return Integer.parseInt(properties.getProperty("maximum.querylength", "512").trim());
     }
 
     public boolean isChineseNameIdentify() {
@@ -157,10 +130,6 @@ public final class MPSegmentConfiguration {
 
     public boolean isXingMingSeparate() {
         return xingmingseparate;
-    }
-
-    public void setXingmingSeparate(boolean separate) {
-        xingmingseparate = separate;
     }
 
     public boolean isHalfShapeAll() {
@@ -172,11 +141,11 @@ public final class MPSegmentConfiguration {
     }
 
     public int getMaxWordLength() {
-        return Integer.parseInt(properties.getProperty("segment.maxwordlength", "8").trim());
+        return Integer.parseInt(properties.getProperty("maximum.wordlength", "8").trim());
     }
 
     public String getDomainDictLoader() {
-        return properties.getProperty("domain.dictloader", "");
+        return properties.getProperty("dictionary.loaders", "");
     }
 
     public boolean isWithPinyin() {
@@ -184,11 +153,7 @@ public final class MPSegmentConfiguration {
     }
 
     public String getPinyinModel() {
-        return properties.getProperty("segment.pinyinmodel", "wtp.m");
-    }
-
-    public boolean isExtendPOSInDomainDictionary() {
-        return ExtendPOSInDomainDictionary;
+        return properties.getProperty("pinyin.model", "wtp.m");
     }
 
     private static Log l = LogFactory.getLog("segment");
@@ -204,12 +169,9 @@ public final class MPSegmentConfiguration {
     private boolean querysyntax = false;
     //TODO: add test case for stop word filter.
     private boolean stopwordfilter = false;
-    private boolean chinesenumbertodigital = false;
     private boolean chinesenameidentify = true;
     private boolean xingmingseparate = true;
     private boolean halfshapeall = false;
     private boolean uppercaseall = false;
-    //领域词典中的词是否扩展其在普通词典中的词性
-    private boolean ExtendPOSInDomainDictionary = false;
     public final static double LOG_CORPUS = Math.log(8000000) * 100;
 }
