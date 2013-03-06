@@ -1,6 +1,5 @@
 package websiteschema.mpsegment.dict;
 
-import org.apache.commons.logging.*;
 import websiteschema.mpsegment.util.BufReader;
 
 import java.io.IOException;
@@ -11,18 +10,6 @@ import java.util.LinkedHashMap;
 
 public class POSArray
         implements Serializable {
-
-    private static final Log l = LogFactory.getLog("segment");
-
-    public POSArray(RandomAccessFile randomaccessfile)
-            throws IOException {
-        load(randomaccessfile);
-    }
-
-    public POSArray(BufReader bufreader)
-            throws IOException {
-        load(bufreader);
-    }
 
     public POSArray() {
         posTable = new LinkedHashMap<String, POS>();
@@ -172,7 +159,6 @@ public class POSArray
             resources.read(nameBytes);
             String name = new String(nameBytes);
             int count = resources.readInt();
-            l.trace(name + "->" + count);
             POS pos = new POS(name, count);
             posTable.put(name, pos);
         }
@@ -188,7 +174,6 @@ public class POSArray
             resources.read(nameBytes);
             String name = new String(nameBytes);
             int count = resources.readInt();
-            l.trace(name + "->" + count);
             POS pos = new POS(name, count);
             posTable.put(name, pos);
         }

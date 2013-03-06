@@ -1,7 +1,5 @@
 package websiteschema.mpsegment.pinyin;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.hmm.Node;
 import websiteschema.mpsegment.hmm.ObserveListException;
@@ -13,7 +11,6 @@ import java.util.List;
 public class WordToPinyinClassifier {
 
     WordToPinyinModel model;
-    final static Log l = LogFactory.getLog("segment");
 
     public void setModel(WordToPinyinModel model) {
         this.model = model;
@@ -30,7 +27,7 @@ public class WordToPinyinClassifier {
                 result.setPinyin(i, pinyin);
             }
         } catch (ObserveListException ex) {
-            l.error(ex);
+            System.err.println(ex);
         }
     }
 

@@ -1,12 +1,10 @@
 package websiteschema.mpsegment.dict.domain;
 
-import org.apache.commons.logging.*;
 import websiteschema.mpsegment.conf.MPSegmentConfiguration;
 
 public class DomainDictFactory {
 
     private final static DomainDictFactory ins = new DomainDictFactory();
-    private final static Log l = LogFactory.getLog("segment");
     private volatile DomainDictionary domainDict;
     private final MPSegmentConfiguration config = MPSegmentConfiguration.getInstance();
     private final boolean loadDomainDictionary = config.isLoadDomainDictionary();
@@ -33,7 +31,7 @@ public class DomainDictFactory {
         try {
             initializeAndLoad(dict);
         } catch (Exception ex) {
-            l.error("Exception thrown when load domain dictionary. " + ex.getMessage());
+            System.err.println("Exception thrown when load domain dictionary. " + ex.getMessage());
         }
     }
 

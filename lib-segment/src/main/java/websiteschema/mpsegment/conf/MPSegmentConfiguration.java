@@ -1,7 +1,5 @@
 package websiteschema.mpsegment.conf;
 
-import org.apache.commons.logging.*;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
@@ -17,14 +15,14 @@ public final class MPSegmentConfiguration {
 
     private void loadFromConfiguration() {
         try {
-            l.info("load maxprob-default.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob-default.cfg"));
+            System.out.println("load maxprob-default.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob-default.cfg"));
             properties.load(MPSegmentConfiguration.class.getClassLoader().getResourceAsStream("maxprob-default.cfg"));
             if (null != MPSegmentConfiguration.class.getClassLoader().getResource("maxprob.cfg")) {
-                l.info("load maxprob.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob.cfg"));
+                System.out.println("load maxprob.cfg: " + MPSegmentConfiguration.class.getClassLoader().getResource("maxprob.cfg"));
                 properties.load(MPSegmentConfiguration.class.getClassLoader().getResourceAsStream("maxprob.cfg"));
             }
         } catch (IOException ex) {
-            l.error("error when loading Chinese NLP instance files", ex);
+            System.err.println("error when loading Chinese NLP instance files: " + ex.getMessage());
         }
     }
 
@@ -156,7 +154,6 @@ public final class MPSegmentConfiguration {
         return properties.getProperty("pinyin.model", "wtp.m");
     }
 
-    private static Log l = LogFactory.getLog("segment");
     private static final MPSegmentConfiguration instance = new MPSegmentConfiguration();
     private static int SECTION_SIZE = 1024;
     private Properties properties;

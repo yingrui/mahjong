@@ -1,6 +1,5 @@
 package websiteschema.mpsegment.dict.domain;
 
-import org.apache.commons.logging.*;
 import websiteschema.mpsegment.dict.*;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class DomainDictionary implements IDictionary {
 
     public void pushWord(String wordName, String synonym, String pos, int freq, int domainType) throws DictionaryException {
         if (wordName == null || wordName.trim().equals("") || pos == null || pos.trim().equals("") || wordName.trim().length() < 2) {
-            l.warn("Load a error word '" + wordName + "'into domain dictionary, already ignored.");
+            System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.");
             return;
         }
         wordName = wordName.trim();
@@ -146,5 +145,4 @@ public class DomainDictionary implements IDictionary {
     private HashMap<Integer, Integer> synonymIndexHashMap;
     private HashMap<Integer, List<Integer>> synonymHashMap;
     private int maxWordLength = 0;
-    private final static Log l = LogFactory.getLog("segment");
 }

@@ -1,14 +1,11 @@
 package websiteschema.mpsegment.core;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import websiteschema.mpsegment.dict.DictionaryLookupResult;
 import websiteschema.mpsegment.dict.DictionaryService;
 import websiteschema.mpsegment.dict.IWord;
 import websiteschema.mpsegment.util.StringUtil;
 
 public abstract class AbstractWordScanner {
-    private final static Log logger = LogFactory.getLog(AbstractWordScanner.class);
     private String sentence;
     private int maxWordLength;
     private DictionaryService dictionaryService;
@@ -34,7 +31,7 @@ public abstract class AbstractWordScanner {
                 processFoundWordItems(begin, singleCharWord, result);
             }
         } catch (Exception ex) {
-            logger.error(ex);
+            System.out.println(ex);
         } finally {
         }
     }

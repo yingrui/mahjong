@@ -1,7 +1,5 @@
 package websiteschema.mpsegment.dict;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import websiteschema.mpsegment.util.FileUtil;
 import websiteschema.mpsegment.util.SerializeHandler;
 
@@ -10,8 +8,6 @@ import java.io.File;
 import java.util.Map;
 
 public class ChNameDictionary {
-
-    private static Log l = LogFactory.getLog("segment");
 
     public ChNameDictionary() {
         factor = 0.88400000000000001D;
@@ -203,8 +199,7 @@ public class ChNameDictionary {
             writeHandler.serializeArrayDouble(rightBoundaryProbs);
             writeHandler.close();
         } catch (Exception exception) {
-            System.out.println((new StringBuilder("Error: saveNameDict.save(")).append(dictFile).append(") ").append(exception.getMessage()).toString());
-            l.error((new StringBuilder("Error: saveNameDict.save(")).append(dictFile).append(") ").append(exception.getMessage()).toString());
+            System.err.println((new StringBuilder("Error: saveNameDict.save(")).append(dictFile).append(") ").append(exception.getMessage()).toString());
         }
     }
 
@@ -231,8 +226,7 @@ public class ChNameDictionary {
             rightBoundaryProbs = readHandler.deserializeArrayDouble();
             objectinputstream.close();
         } catch (Exception exception) {
-            System.out.println((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString());
-            l.debug((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString());
+            System.err.println((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString());
         }
     }
     private double factor;
