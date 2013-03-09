@@ -43,11 +43,11 @@
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
-        <url-pattern>/people/*</url-pattern>
+        <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>segment</servlet-name>

@@ -4,10 +4,12 @@ import junit.framework.Assert;
 import org.junit.Test;
 import websiteschema.mpsegment.core.SegmentEngine;
 import websiteschema.mpsegment.core.SegmentWorker;
+import websiteschema.mpsegment.tools.accurary.ErrorAnalyzer;
 import websiteschema.mpsegment.tools.accurary.SegmentAccuracy;
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class AccuracyTest {
 
@@ -29,9 +31,11 @@ public class AccuracyTest {
         System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.");
         System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() + " other errors");
 
-        System.out.println("Possible " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords().size() + " new words, they are:");
+        System.out.println("Possible " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords().size() + " new words");
+        System.out.println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord))+", they are:");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords());
-        System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
+        System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary");
+        System.out.println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate)) + ", they are:");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
         Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94021 * 0.99);
@@ -56,9 +60,11 @@ public class AccuracyTest {
         System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.");
         System.out.println("There are " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() + " other errors");
 
-        System.out.println("Possible " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords().size() + " new words, they are:");
+        System.out.println("Possible " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords().size() + " new words");
+        System.out.println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord))+", they are:");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.UnknownWord).getWords());
-        System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary: ");
+        System.out.println("Those " + segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords().size() + " words maybe could delete from dictionary");
+        System.out.println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate)) + ", they are:");
         System.out.println(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getWords());
 
         Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.93994 * 0.99);
@@ -67,5 +73,14 @@ public class AccuracyTest {
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.NER_NS).getErrorOccurTimes() <= 3036 * 1.05);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.ContainDisambiguate).getErrorOccurTimes() <= 36202 * 1.05);
         Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(SegmentErrorType.Other).getErrorOccurTimes() <= 3612 * 1.05);
+    }
+
+    private int getWordsCount(ErrorAnalyzer errorAnalyzer) {
+        Map<String,Integer> words = errorAnalyzer.getWords();
+        int count = 0;
+        for(String word : words.keySet()) {
+            count += words.get(word);
+        }
+        return count;
     }
 }

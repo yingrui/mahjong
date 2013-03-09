@@ -8,8 +8,9 @@ import websiteschema.mpsegment.util.NumberUtil;
 import websiteschema.mpsegment.util.StringUtil;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SegmentAccuracy {
 
@@ -19,7 +20,6 @@ public class SegmentAccuracy {
     private int wrong = 0;
     private double accuracyRate;
 
-    private Set<String> wordsWithContainDisambiguate = new ConcurrentSkipListSet<String>();
     private HashMap<String, Integer> allWordsAndFreqInCorpus = new HashMap<String, Integer>();
     private SegmentWorker segmentWorker;
     private Map<SegmentErrorType, ErrorAnalyzer> allErrorAnalyzer;
@@ -30,13 +30,20 @@ public class SegmentAccuracy {
         loader = new PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus));
     }
 
-    private void initialErrorAnalyzer() {
-        allErrorAnalyzer = new LinkedHashMap<SegmentErrorType, ErrorAnalyzer>();
-        allErrorAnalyzer.put(SegmentErrorType.NER_NR, new NerNameErrorAnalyzer());
-        allErrorAnalyzer.put(SegmentErrorType.NER_NS, new NerPlaceErrorAnalyzer());
-        allErrorAnalyzer.put(SegmentErrorType.UnknownWord, new NewWordErrorAnalyzer());
-        allErrorAnalyzer.put(SegmentErrorType.ContainDisambiguate, new ContainErrorAnalyzer());
-        allErrorAnalyzer.put(SegmentErrorType.Other, new OtherErrorAnalyzer());
+    public double getAccuracyRate() {
+        return accuracyRate;
+    }
+
+    public int getWrong() {
+        return wrong;
+    }
+
+    public int getTotalWords() {
+        return totalWords;
+    }
+
+    public ErrorAnalyzer getErrorAnalyzer(SegmentErrorType errorType) {
+        return allErrorAnalyzer.get(errorType);
     }
 
     public void checkSegmentAccuracy() {
@@ -63,26 +70,13 @@ public class SegmentAccuracy {
         accuracyRate = (double) correct / (double) totalWords;
     }
 
-    private void postAnalysis() {
-        for (SegmentErrorType errorType : allErrorAnalyzer.keySet()) {
-            getErrorAnalyzer(errorType).postAnalysis(allWordsAndFreqInCorpus);
-        }
-    }
-
-    public double getAccuracyRate() {
-        return accuracyRate;
-    }
-
-    public int getWrong() {
-        return wrong;
-    }
-
-    public int getTotalWords() {
-        return totalWords;
-    }
-
-    public ErrorAnalyzer getErrorAnalyzer(SegmentErrorType errorType) {
-        return allErrorAnalyzer.get(errorType);
+    private void initialErrorAnalyzer() {
+        allErrorAnalyzer = new LinkedHashMap<SegmentErrorType, ErrorAnalyzer>();
+        allErrorAnalyzer.put(SegmentErrorType.NER_NR, new NerNameErrorAnalyzer());
+        allErrorAnalyzer.put(SegmentErrorType.NER_NS, new NerPlaceErrorAnalyzer());
+        allErrorAnalyzer.put(SegmentErrorType.UnknownWord, new NewWordErrorAnalyzer());
+        allErrorAnalyzer.put(SegmentErrorType.ContainDisambiguate, new ContainErrorAnalyzer());
+        allErrorAnalyzer.put(SegmentErrorType.Other, new OtherErrorAnalyzer());
     }
 
     private void compare(SegmentResult expectResult, SegmentResult actualResult) {
@@ -159,6 +153,12 @@ public class SegmentAccuracy {
             }
         }
         return false;
+    }
+
+    private void postAnalysis() {
+        for (SegmentErrorType errorType : allErrorAnalyzer.keySet()) {
+            getErrorAnalyzer(errorType).postAnalysis(allWordsAndFreqInCorpus);
+        }
     }
 }
 

@@ -74,6 +74,11 @@
             <version>3.6.10.Final</version>
         </dependency>
         <dependency>
+            <groupId>com.googlecode.flyway</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.jsimone</groupId>
             <artifactId>webapp-runner</artifactId>
             <version>7.0.34.0</version>
