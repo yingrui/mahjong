@@ -3,7 +3,10 @@ package websiteschema.mpsegment.web.ui.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "USERS")
+@Table(
+    name = "USERS",
+    uniqueConstraints = {@UniqueConstraint(name = "email_unique", columnNames = "email")}
+)
 public class User {
 
     @Id
@@ -16,6 +19,7 @@ public class User {
 
     @Column(name = "LastName")
     private String lastName;
+
 
     @Column(name = "Email")
     private String email;

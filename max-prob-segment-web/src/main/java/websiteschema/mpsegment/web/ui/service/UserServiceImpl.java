@@ -16,8 +16,8 @@ public class UserServiceImpl implements UserService {
     EntityManager em;
         
     @Transactional
-    public void addUser(User person) {
-        em.persist(person);
+    public void addUser(User user) {
+        em.persist(user);
     }
 
     @Transactional

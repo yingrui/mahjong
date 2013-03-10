@@ -45,13 +45,12 @@
                 <form:input path="firstName" />
                 <form:label path="lastName">Last Name</form:label>
                 <form:input path="lastName" />
-                <form:label path="email">Last Name</form:label>
+                <form:label path="email">Email</form:label>
                 <form:input path="email" />
-                <form:label path="password">Last Name</form:label>
+                <form:label path="password">Password</form:label>
                 <form:input path="password" />
                 <input type="submit" value="Add User" class="btn"/>
             </form:form>
-
 
             <c:if  test="${!empty userList}">
                 <h3>People</h3>
