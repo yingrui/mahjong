@@ -88,6 +88,17 @@ public class UserServiceTest extends UsingFixtures {
         }
     }
 
+    @Test
+    public void should_get_user_by_email_from_database() {
+        String firstName = uniq("Yingrui");
+        String lastName = uniq("Feng");
+        String email = uniq("a@b.com");
+
+        User user = addUser(firstName, lastName, email);
+        User userInDatabase = userService.getUserByEmail(user.getEmail());
+        assertEquals(firstName, userInDatabase.getFirstName());
+    }
+
     private boolean equals(User user, User other) {
         return other.getFirstName().equals(user.getFirstName()) && other.getLastName().equals(user.getLastName());
     }

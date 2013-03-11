@@ -1,11 +1,10 @@
-
 <div class='segment-area'>
     <div>{{i18n('SegmentIntroduceText')}}</div>
     <div>
-    <textarea class='segment-text' ng-model="inputText"
-              placeholder="{{i18n('SegmentInputPlaceholderText')}}"></textarea>
-    <div>
-    <input class="btn" type="button" value="{{i18n('SegmentButtonText')}}" ng-click="segment()"/>
+        <textarea class='segment-text' ng-model="inputText"
+                  placeholder="{{i18n('SegmentInputPlaceholderText')}}"></textarea>
+    </div>
+    <input class="btn btn-success" type="button" value="{{i18n('SegmentButtonText')}}" ng-click="segment()"/>
 </div>
 
 <div>
