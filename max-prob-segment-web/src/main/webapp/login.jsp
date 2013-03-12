@@ -68,7 +68,9 @@
           <input type="checkbox" value="remember-me" name='_spring_security_remember_me'> Remember me
         </label>
         <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+        <hr/><a href="/">I am a visitor, let me return to home page.</a>
       </form>
+
 
     </div> <!-- /container -->
 

@@ -3,7 +3,7 @@
 var corpusEditorDirectives = angular.module('corpusEditorDirectives', []);
 var corpusEditorServices = angular.module('corpusEditorServices', []);
 
-angular.module('corpusEditor', ['corpusEditorFilters', 'corpusEditorServices', 'corpusEditorDirectives']).
+angular.module('corpusEditor', ['ui','corpusEditorFilters', 'corpusEditorServices', 'corpusEditorDirectives']).
     config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
         when('/', {

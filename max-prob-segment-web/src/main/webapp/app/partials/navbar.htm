@@ -7,19 +7,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand">Max-Prob-Segment</a>
+            <a class="brand" href="/">Max-Prob-Segment</a>
 
-            <div class="nav-collapse collapse">
-                <ul class="nav" ng-controller="NavigationCtrl">
+            <div class="nav-collapse collapse" ng-controller="NavigationCtrl">
+                <ul class="nav">
                     <li ng-repeat="item in menu" class="{{item.class}}" ng-click='select(item)'>
                         <a href="{{item.href}}">{{item.value}}</a>
                     </li>
 
                 </ul>
-                <ul class="navbar-form pull-right">
-                    <li class="btn"><a href="../login.jsp">Sign in</a></li>
-                    <!--<li class="btn"><a href="../j_spring_security_logout">Sign in</a></li>-->
-                </ul>
+
+                <div class="navbar-form pull-right" ng-switch on="hasSignedIn()">
+                    <span ng-switch-when="false"><a class="btn" href="../login.jsp">Sign in</a></span>
+                    <span class="btn" ng-switch-when="true">{{currentUser.firstName}} <a href="../j_spring_security_logout">Sign out</a></span>
+                </div>
             </div>
 
         </div>

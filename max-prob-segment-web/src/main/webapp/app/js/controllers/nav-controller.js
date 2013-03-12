@@ -1,5 +1,5 @@
 
-function NavigationCtrl($scope, $location) {
+function NavigationCtrl($scope, $location, userService) {
     $scope.menu = [
         {'class': 'active', 'value': 'Home', href:"#/"},
         {'class': '', 'value': 'Playground', href:"#/segment"},
@@ -19,6 +19,24 @@ function NavigationCtrl($scope, $location) {
         });
     };
 
+    $scope.currentUser = null;
+
+    userService.getCurrentUser(function(user) {
+        $scope.currentUser = user;
+    });
+
+    $scope.hasSignedIn = function() {
+        return $scope.currentUser != null;
+    };
+
+    $scope.location = function() {
+        return $location.path();
+    }
+
+    $scope.$watch('location()', function(){
+        checkCurrentLocation();
+    })
+
     checkCurrentLocation();
     function checkCurrentLocation() {
         var path = $location.path();
@@ -29,4 +47,4 @@ function NavigationCtrl($scope, $location) {
     }
 }
 
-NavigationCtrl.$inject = ['$scope', '$location'];
+NavigationCtrl.$inject = ['$scope', '$location', 'UserService'];

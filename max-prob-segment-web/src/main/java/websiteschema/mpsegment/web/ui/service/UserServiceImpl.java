@@ -32,6 +32,11 @@ public class UserServiceImpl implements UserService {
         return em.createQuery(query).getSingleResult();
     }
 
+    @Override
+    public User getUserById(int id) {
+        return em.find(User.class, id);
+    }
+
     @Transactional
     public List<User> listUser() {
         CriteriaQuery<User> c = em.getCriteriaBuilder().createQuery(User.class);

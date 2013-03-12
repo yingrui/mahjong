@@ -23,7 +23,7 @@
                 authentication-failure-url="/login.jsp?login_error=1"
                 login-processing-url="/security_check"
                 default-target-url="/"/>
-        <logout />
+        <logout invalidate-session="true" logout-success-url="/login.jsp"/>
         <remember-me />
 
         <!-- Uncomment to limit the number of sessions a user can have -->

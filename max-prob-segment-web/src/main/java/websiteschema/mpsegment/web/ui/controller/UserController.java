@@ -1,12 +1,11 @@
 package websiteschema.mpsegment.web.ui.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import websiteschema.mpsegment.web.ui.model.User;
 import websiteschema.mpsegment.web.ui.service.UserService;
 
@@ -42,5 +41,18 @@ public class UserController {
         userService.removeUser(userId);
 
         return "redirect:..";
+    }
+
+    @RequestMapping(value = "current", method = RequestMethod.GET)
+    @ResponseBody
+    public User getCurrentUser() {
+        boolean authenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        if (authenticated) {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+            return userService.getUserById(Integer.valueOf(userDetails.getUsername()));
+        }
+        throw new RuntimeException("NotFound");
     }
 }
