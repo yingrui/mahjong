@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import websiteschema.mpsegment.web.ui.model.User;
+import websiteschema.mpsegment.web.ui.model.UserDto;
 import websiteschema.mpsegment.web.ui.service.UserService;
 
 import java.util.Map;
@@ -45,13 +46,14 @@ public class UserController {
 
     @RequestMapping(value = "current", method = RequestMethod.GET)
     @ResponseBody
-    public User getCurrentUser() {
+    public UserDto getCurrentUser() {
         boolean authenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
         if (authenticated) {
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
                     .getAuthentication()
                     .getPrincipal();
-            return userService.getUserById(Integer.valueOf(userDetails.getUsername()));
+            int userId = Integer.valueOf(userDetails.getUsername());
+            return UserDto.toDto(userService.getUserById(userId));
         }
         throw new RuntimeException("NotFound");
     }
