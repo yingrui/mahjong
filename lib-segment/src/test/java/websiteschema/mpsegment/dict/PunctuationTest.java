@@ -72,7 +72,7 @@ public class PunctuationTest {
 
     @Test
     public void should_contains_units_of_measurement() {
-        char punctuations[] = ("㎎㎏㎜㎝㎞㎡㏄㏎㏑°′″＄￡￥‰％℃¤￠○").toCharArray();
+        char punctuations[] = ("㎎㎏㎜㎝㎞㎡㏄㏎㏑°′″＄￡￥‰％℃¤￠").toCharArray();
         for (char punctuation : punctuations) {
             System.out.print(punctuation + " ");
             IWord word = hashDictionary.getWord(String.valueOf(punctuation));

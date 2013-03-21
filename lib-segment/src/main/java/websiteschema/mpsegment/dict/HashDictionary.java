@@ -1,21 +1,8 @@
 package websiteschema.mpsegment.dict;
 
-import websiteschema.mpsegment.util.BufReader;
-import websiteschema.mpsegment.util.ByteArrayReader;
-import websiteschema.mpsegment.util.FileUtil;
-
-import java.io.*;
 import java.util.*;
 
 public class HashDictionary<Word extends IWord> implements IDictionary {
-
-    public HashDictionary(String dictResource) {
-        maxWordLength = 0;
-        if (!loaded) {
-            loadDict(dictResource);
-            loaded = true;
-        }
-    }
 
     public HashDictionary() {
         maxWordLength = 0;
@@ -28,36 +15,6 @@ public class HashDictionary<Word extends IWord> implements IDictionary {
 
     public synchronized void clear() {
         headIndexersHashMap.clear();
-    }
-
-    private synchronized void loadDict(String s) {
-        try {
-            BufReader bufReader = new ByteArrayReader(FileUtil.getResourceAsStream("segment.dict"));
-            loadDict(bufReader);
-            bufReader.close();
-            bufReader = null;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void loadDict(BufReader bufreader)
-            throws IOException {
-        int wordOccuredSum = 0;
-        maxWordLength = 0;
-        int wordCount = 0;
-        int totalHeader = bufreader.readInt();
-        headIndexers = new ArrayList<HeadIndexer<Word>>();
-        for (int i = 0; i < totalHeader; i++) {
-            HeadIndexer headindexer = new HeadIndexer(bufreader);
-            wordOccuredSum += headindexer.getWordOccuredSum();
-            if (maxWordLength < headindexer.getMaxWordLength()) {
-                maxWordLength = headindexer.getMaxWordLength();
-            }
-            wordCount += headindexer.getWordCount();
-            headIndexers.add(headindexer);
-            headIndexersHashMap.put(headindexer.getHeadStr(), headindexer);
-        }
     }
 
     protected HeadIndexer<Word> lookupHeadIndexer(String head) {

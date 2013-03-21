@@ -1,18 +1,10 @@
 package websiteschema.mpsegment.dict;
 
-import websiteschema.mpsegment.util.BufReader;
-
-import java.io.IOException;
 import java.util.LinkedList;
 
 public class HeadIndexer<Word extends IWord> {
 
     private static int Word_Array_Size_Threshold = 64;
-
-    public HeadIndexer(BufReader bufreader)
-            throws IOException {
-        load(bufreader);
-    }
 
     public HeadIndexer(Word headWord) {
         this.headStr = headWord.getWordName().substring(0, 1);
@@ -100,35 +92,6 @@ public class HeadIndexer<Word extends IWord> {
         }
 
         return stringBuilder.toString();
-    }
-
-    public final void load(BufReader bufreader)
-            throws IOException {
-        int headWordByte = bufreader.readIntByte();
-        byte headWordBytes[] = new byte[headWordByte];
-        bufreader.read(headWordBytes);
-        headStr = new String(headWordBytes, "gbk");
-        wordCount = bufreader.readInt();
-        maxWordLength = 0;
-        wordOccuredSum = 0;
-        IWord[] wordItems = new WordImpl[wordCount];
-        for (int i = 0; i < wordCount; i++) {
-            WordImpl word = new WordImpl(bufreader);
-            wordOccuredSum += word.getOccuredSum();
-            if (maxWordLength < word.getWordLength()) {
-                maxWordLength = word.getWordLength();
-            }
-            wordItems[i] = word;
-            if (i == 0) {
-                headWord = (Word) word;
-            }
-        }
-        if (wordCount <= Word_Array_Size_Threshold) {
-            wordArray = new BinaryWordArray<Word>((Word[])wordItems);
-        } else {
-            wordArray = new HashWordArray<Word>((Word[])wordItems);
-        }
-
     }
 
     public Word get(String word) {

@@ -1,0 +1,17 @@
+2 动词 v-verb
+2.1 静态关系 v-static
+2.1.1 心理活动 v-metal-activity
+2.2 动态行为 v-dynamic
+2.2.1 变化 v-change
+2.2.2 气象 v-weather
+2.2.3 身体活动 v-body
+2.2.4 五官感觉 v-five-senses
+2.2.5 消耗 v-consumption
+2.2.6 位移 v-displace
+2.2.7 创造 v-create
+2.2.8 接触 v-touch
+2.2.9 领属转移 v-transfer
+2.2.10 信息交流 v-info-transfer
+2.2.11 比赛 v-contest
+2.2.12 社会活动 v-social-activity
+2.2.13 其他行为 v-others

@@ -1,11 +1,6 @@
 package websiteschema.mpsegment.dict;
 
-import websiteschema.mpsegment.util.BufReader;
-
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class POSArray
@@ -147,54 +142,6 @@ public class POSArray
         }
 
         return posIndex;
-    }
-
-    private void load(RandomAccessFile resources)
-            throws IOException {
-        byte numPos = resources.readByte();
-        posTable = new LinkedHashMap<String, POS>(numPos);
-        for (int i = 0; i < numPos; i++) {
-            byte nameLength = resources.readByte();
-            byte nameBytes[] = new byte[nameLength];
-            resources.read(nameBytes);
-            String name = new String(nameBytes);
-            int count = resources.readInt();
-            POS pos = new POS(name, count);
-            posTable.put(name, pos);
-        }
-    }
-
-    private void load(BufReader resources)
-            throws IOException {
-        int size = resources.readIntByte();
-        posTable = new LinkedHashMap<String, POS>(size);
-        for (int i = 0; i < size; i++) {
-            int len = resources.readIntByte();
-            byte nameBytes[] = new byte[len];
-            resources.read(nameBytes);
-            String name = new String(nameBytes);
-            int count = resources.readInt();
-            POS pos = new POS(name, count);
-            posTable.put(name, pos);
-        }
-    }
-
-    public void save(RandomAccessFile randomaccessfile)
-            throws IOException {
-        randomaccessfile.write((byte) getSize());
-        POS pos[] = new POS[getSize()];
-        int i = 0;
-        for (String name : posTable.keySet()) {
-            pos[i++] = posTable.get(name);
-        }
-        Arrays.sort(pos);
-        for (int j = 0; j < pos.length; j++) {
-            byte bytes[] = pos[j].getName().getBytes();
-            randomaccessfile.write((byte) bytes.length);
-            randomaccessfile.write(bytes);
-            randomaccessfile.writeInt(pos[j].getCount());
-        }
-
     }
 
     public long getOccurredCount(String s) {

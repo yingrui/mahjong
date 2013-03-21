@@ -1,9 +1,7 @@
 package websiteschema.mpsegment.dict;
 
 import websiteschema.mpsegment.concept.Concept;
-import websiteschema.mpsegment.util.BufReader;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 public class WordImpl implements Serializable, Comparable, IWord {
@@ -14,17 +12,6 @@ public class WordImpl implements Serializable, Comparable, IWord {
         domainType = 0;
         posArray = new POSArray();
         posArray.add(new POS("UN", 200));
-    }
-
-    public WordImpl(String wordName, int i) {
-        log2Freq = 0;
-        this.wordName = wordName;
-        domainType = i;
-    }
-
-    public WordImpl(BufReader bufreader)
-            throws IOException {
-        log2Freq = 0;
     }
 
     @Override
@@ -138,17 +125,6 @@ public class WordImpl implements Serializable, Comparable, IWord {
     @Override
     public void incOccuredCount(String s) {
         setOccuredCount(s, (int) getOccuredCount(s) + 1);
-    }
-
-    private POSArray buildPOSArray() {
-        posArray = new POSArray();
-        for (int i = 0; i < wordPOSNumber; i++) {
-            String name = POSUtil.getPOSString(POSAndFreq.getPOS(indexOfPosDB + i));
-            int count = POSAndFreq.getFreq(indexOfPosDB + i);
-            POS pos = new POS(name, count);
-            posArray.add(pos);
-        }
-        return posArray;
     }
 
     @Override
