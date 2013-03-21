@@ -1,0 +1,8 @@
+.idea
+*.log
+target
+corpus.txt
+dict.txt
+test.dat
+word-bigram.dat
+google-bigram.dat

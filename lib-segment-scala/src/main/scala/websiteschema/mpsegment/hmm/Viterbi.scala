@@ -10,54 +10,54 @@ class Viterbi {
   var tran = Transition()
   var pi = Pi()
   var e = new Emission()
-  var n = 2;
+  var n = 2
 
   def setSortor(sortor: TrieNodeSortor) {
-    tran.setSortor(sortor);
+    tran.setSortor(sortor)
   }
 
   def setN(n: Int) {
-    this.n = n;
+    this.n = n
   }
 
   def getE(): Emission = {
-    return e;
+    return e
   }
 
   def setE(e: Emission) {
-    this.e = e;
+    this.e = e
   }
 
   def getObserveBank(): NodeRepository = {
-    return observeBank;
+    return observeBank
   }
 
   def setObserveBank(observeBank: NodeRepository) {
-    this.observeBank = observeBank;
+    this.observeBank = observeBank
   }
 
   def getPi(): Pi = {
-    return pi;
+    return pi
   }
 
   def setPi(pi: Pi) {
-    this.pi = pi;
+    this.pi = pi
   }
 
   def getStateBank(): NodeRepository = {
-    return stateBank;
+    return stateBank
   }
 
   def setStateBank(stateBank: NodeRepository) {
-    this.stateBank = stateBank;
+    this.stateBank = stateBank
   }
 
   def getTran(): Transition = {
-    return tran;
+    return tran
   }
 
   def setTran(tran: Transition) {
-    this.tran = tran;
+    this.tran = tran
   }
 
   def getStatePath(states: Array[Array[Int]], psai: Array[Array[Int]], end: Int, depth: Int, position: Int): Array[Int] = {
@@ -66,8 +66,8 @@ class Viterbi {
     var pos = position
     for (i <- 0 until maxDepth) {
       val state = states(end - i)(pos)
-      pos = psai(end - i)(pos);
-      ret(ret.length - i - 1) = state;
+      pos = psai(end - i)(pos)
+      ret(ret.length - i - 1) = state
     }
     ret
   }
@@ -76,53 +76,53 @@ class Viterbi {
     val ret = new HmmResult()
 
     if (listObserve.isEmpty) {
-      throw new ObserveListException("observe list is empty.");
+      throw new ObserveListException("observe list is empty.")
     }
 
     var o = listObserve(0)
     var o1 = observeBank.get(o)
     if (o1 == null) {
-      o1 = Node(o);
-      observeBank.add(o1);
+      o1 = Node(o)
+      observeBank.add(o1)
     }
 
     val relatedStates = e.getStateProbByObserve(o1.getIndex())
     if (null == relatedStates || relatedStates.isEmpty) {
-      throw new ObserveListException("UNKNOWN observe object " + o + ".");
+      throw new ObserveListException("UNKNOWN observe object " + o + ".")
     }
-    ret.states = new Array[Array[Int]](listObserve.size);
-    ret.delta = new Array[Array[Double]](listObserve.size);
-    ret.psai = new Array[Array[Int]](listObserve.size);
-    ret.states(0) = new Array[Int](relatedStates.size);
-    ret.delta(0) = new Array[Double](relatedStates.size);
-    ret.psai(0) = new Array[Int](relatedStates.size);
+    ret.states = new Array[Array[Int]](listObserve.size)
+    ret.delta = new Array[Array[Double]](listObserve.size)
+    ret.psai = new Array[Array[Int]](listObserve.size)
+    ret.states(0) = new Array[Int](relatedStates.size)
+    ret.delta(0) = new Array[Double](relatedStates.size)
+    ret.psai(0) = new Array[Int](relatedStates.size)
     var index = 0
     for (s <- relatedStates) {
-      ret.states(0)(index) = s;
-      ret.delta(0)(index) = Math.log(pi.getPi(s)) + Math.log(e.getProb(s, o1.getIndex()));
-      ret.psai(0)(index) = 0;
-      index += 1;
+      ret.states(0)(index) = s
+      ret.delta(0)(index) = Math.log(pi.getPi(s)) + Math.log(e.getProb(s, o1.getIndex()))
+      ret.psai(0)(index) = 0
+      index += 1
     }
 
     //
     for (p <- 1 until listObserve.size) {
-      o = listObserve(p);
+      o = listObserve(p)
       var oi = observeBank.get(o)
       if (oi == null) {
-        oi = Node(o);
-        observeBank.add(oi);
+        oi = Node(o)
+        observeBank.add(oi)
       }
 
       val stateSet = e.getStateProbByObserve(oi.getIndex())
       if (stateSet.isEmpty) {
-        throw new ObserveListException("UNKNOWN observe object " + o + ".");
+        throw new ObserveListException("UNKNOWN observe object " + o + ".")
       }
       ret.states(p) = new Array[Int](stateSet.size)
       ret.delta(p) = new Array[Double](stateSet.size)
       ret.psai(p) = new Array[Int](stateSet.size)
       var i = 0
       for (state <- stateSet) {
-        ret.states(p)(i) = state;
+        ret.states(p)(i) = state
         var maxDelta = Double.NegativeInfinity
         var maxPsai = Double.NegativeInfinity
         var ls = 0
@@ -133,23 +133,23 @@ class Viterbi {
           val psai_j = ret.delta(p - 1)(j) + Aij
           val delta_j = psai_j + b
           if (delta_j > maxDelta) {
-            maxDelta = delta_j;
+            maxDelta = delta_j
           }
 
           if (psai_j > maxPsai) {
-            maxPsai = psai_j;
-            ls = j;
+            maxPsai = psai_j
+            ls = j
           }
         }
 
-        ret.delta(p)(i) = maxDelta;
-        ret.psai(p)(i) = ls;
+        ret.delta(p)(i) = maxDelta
+        ret.psai(p)(i) = ls
 
         i += 1
       }
     }
 
-    return ret;
+    return ret
   }
 
   def calculateWithLog(listObserve: List[String]): List[Node] = {
@@ -159,13 +159,13 @@ class Viterbi {
     for (j <- 0 until ret.delta(listObserve.size - 1).length) {
       val p = ret.delta(listObserve.size - 1)(j)
       if (p > maxProb) {
-        maxProb = p;
-        pos = j;
+        maxProb = p
+        pos = j
       }
     }
 
     val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
     val path = statePath.toList.map(stateBank.get(_))
-    return path;
+    return path
   }
 }

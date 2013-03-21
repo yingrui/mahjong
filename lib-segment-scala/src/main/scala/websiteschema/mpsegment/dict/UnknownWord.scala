@@ -1,6 +1,6 @@
-package websiteschema.mpsegment.dict;
+package websiteschema.mpsegment.dict
 
-import websiteschema.mpsegment.concept.Concept;
+import websiteschema.mpsegment.concept.Concept
 
 object UnknownWord {
 
@@ -16,36 +16,36 @@ class UnknownWord extends IWord {
     var wordName: String = ""
 
     override def getLog2Freq() : Int = {
-        return 0;
+        return 0
     }
 
     override def getDomainType() : Int = {
-        return 0;
+        return 0
     }
 
     override def getOccuredCount(s: String) : Long = {
         if (s.equals(POSUtil.getPOSString(POSUtil.POS_UNKOWN))) {
-            return 1L;
+            return 1L
         }
-        return 0L;
+        return 0L
     }
 
     override def getOccuredSum() : Long = {
-        return 1L;
+        return 1L
     }
 
     override def getPOSArray() : POSArray = {
-        return POSArrayFactory.getUnknownWordPOSArray();
+        return POSArrayFactory.getUnknownWordPOSArray()
     }
 
     override def getWordPOSTable() = getPOSArray().getWordPOSTable()
 
     override def getWordLength() : Int = {
-        return wordName.length();
+        return wordName.length()
     }
 
     override def getWordName() : String = {
-        return wordName;
+        return wordName
     }
 
     override def incOccuredCount(s: String) {
@@ -61,13 +61,13 @@ class UnknownWord extends IWord {
     }
 
     override def getWordMaxPOS() : Int = {
-        return POSUtil.POS_UNKOWN;
+        return POSUtil.POS_UNKOWN
     }
 
     override def toDBFString() : String = {
         val stringBuilder = new StringBuilder()
-        stringBuilder.append(getPOSArray().toDBFString(getWordName()));
-        return stringBuilder.toString();
+        stringBuilder.append(getPOSArray().toDBFString(getWordName()))
+        return stringBuilder.toString()
     }
 
     override def getConcepts() : Array[Concept] = {

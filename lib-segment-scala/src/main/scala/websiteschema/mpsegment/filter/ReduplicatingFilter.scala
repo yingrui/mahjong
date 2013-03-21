@@ -1,6 +1,6 @@
-//package websiteschema.mpsegment.filter;
+//package websiteschema.mpsegment.filter
 //
-//import websiteschema.mpsegment.util.CharCheckUtil;
+//import websiteschema.mpsegment.util.CharCheckUtil
 //
 //class ReduplicatingFilter extends AbstractSegmentFilter {
 //
@@ -12,26 +12,26 @@
 //            if (isChineseWord(lastWord) && lastWord.equals(word)) {
 //                if (index - 2 >= 0) {
 //                    if (getWord(index - 2).equals("一")) {
-//                        setWordIndexesAndPOSForMerge(index - 2, index, segmentResult.getPOS(index - 1));
+//                        setWordIndexesAndPOSForMerge(index - 2, index, segmentResult.getPOS(index - 1))
 //                    }
 //                } else {
-//                    setWordIndexesAndPOSForMerge(index - 1, index, segmentResult.getPOS(index - 1));
+//                    setWordIndexesAndPOSForMerge(index - 1, index, segmentResult.getPOS(index - 1))
 //                }
 //            }
 //
 //            if(word.length() == 2 && word.charAt(0) == word.charAt(1)) {
 //                if(lastWord.equals("一")) {
-//                    setWordIndexesAndPOSForMerge(index - 1, index, segmentResult.getPOS(index));
+//                    setWordIndexesAndPOSForMerge(index - 1, index, segmentResult.getPOS(index))
 //                }
 //            }
 //        }
 //    }
 //
 //    private def isChineseWord(lastWord: String) : Boolean = {
-//        return lastWord.length() == 1 && CharCheckUtil.isChinese(lastWord);
+//        return lastWord.length() == 1 && CharCheckUtil.isChinese(lastWord)
 //    }
 //
 //    private def getWord(i: Int) : String = {
-//        return segmentResult.getWord(i);
+//        return segmentResult.getWord(i)
 //    }
 //}

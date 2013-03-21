@@ -1,39 +1,39 @@
-package websiteschema.mpsegment.util;
+package websiteschema.mpsegment.util
 
 object StringUtil {
 
     def halfShape(original: Char): Char = {
         if (isFullShapedChar(original)) {
-            return (original - 65248).toChar;
+            return (original - 65248).toChar
         }
 
-        return original;
+        return original
     }
 
     def isFullShapedChar(original: Char): Boolean = {
-        return (original >= '\uFF21' && original <= '\uFF41' || original >= '\uFF3A' && original <= '\uFF5A' || original >= '\uFF10' && original <= '\uFF19');
+        return (original >= '\uFF21' && original <= '\uFF41' || original >= '\uFF3A' && original <= '\uFF5A' || original >= '\uFF10' && original <= '\uFF19')
     }
 
     def halfShape(original: String): String = {
         val chArray = original.toArray
         for (i1 <- 0 until chArray.length()) {
             if (isCharAlphabeticalOrDigital(chArray(i1))) {
-                chArray(i1) = StringUtil.halfShape(chArray(i1));
+                chArray(i1) = StringUtil.halfShape(chArray(i1))
             }
         }
 
-        return new String(chArray);
+        return new String(chArray)
     }
 
     def toUpperCase(original: String): String = {
         val chArray = original.toArray
         for (i1 <- 0 until chArray.length) {
             if (isCharAlphabeticalOrDigital(chArray(i1))) {
-                chArray(i1) = StringUtil.toUpperCase(chArray(i1));
+                chArray(i1) = StringUtil.toUpperCase(chArray(i1))
             }
         }
 
-        return new String(chArray);
+        return new String(chArray)
     }
 
     def toUpperCase(original: Char): Char = {
@@ -44,19 +44,19 @@ object StringUtil {
     }
 
     def isLowerCaseChar(original: Char): Boolean = {
-        return original >= 'a' && original <= 'z';
+        return original >= 'a' && original <= 'z'
     }
 
     def doUpperCaseAndHalfShape(original: String): String = {
         val chArray = original.toArray
         for (i1 <- 0 until chArray.length) {
             if (isCharAlphabeticalOrDigital(chArray(i1))) {
-                chArray(i1) = StringUtil.halfShape(chArray(i1));
-                chArray(i1) = StringUtil.toUpperCase(chArray(i1));
+                chArray(i1) = StringUtil.halfShape(chArray(i1))
+                chArray(i1) = StringUtil.toUpperCase(chArray(i1))
             }
         }
 
-        return new String(chArray);
+        return new String(chArray)
     }
 
     def isCharAlphabeticalOrDigital(ch: Char): Boolean = {

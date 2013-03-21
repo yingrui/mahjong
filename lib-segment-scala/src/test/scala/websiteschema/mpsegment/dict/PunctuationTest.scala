@@ -12,9 +12,9 @@ class PunctuationTest {
   def should_contains_basic_punctuations() {
     val punctuations = ",./<>?;':\"{}[]!@#$%^&*()_+-=\\|。，、；：？！…-·ˉˇ¨‘`~'“”々～‖∶＂＇｀｜〃〔〕〈〉《》「」『』．〖〗【】（）［］｛｝".toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ");
+      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W)
     }
     println()
   }
@@ -23,11 +23,11 @@ class PunctuationTest {
   def should_contains_money_symbols() {
     val punctuations = "฿€￡₤￥".toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ");
+      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_Q);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_Q)
     }
-    println();
+    println()
   }
 
   @Test
@@ -39,35 +39,35 @@ class PunctuationTest {
       "①②③④⑤⑥⑦⑧⑨⑩№" +
       "⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇" +
       "⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛" +
-      "ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ").toCharArray();
+      "ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ").toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ");
+      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_M);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_M)
     }
-    println();
+    println()
   }
 
   @Test
   def should_contains_math_symbols() {
     val punctuations = ("≈≡≠＝≤≥＜＞≮≯∷±＋－×÷／∫∮∝∞∧∨∑∏∪∩∈∵∴⊥∥∠⌒⊙≌∽√").toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ");
+      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W)
     }
-    println();
+    println()
   }
 
   @Test
   def should_contains_units_of_measurement() {
     val punctuations = ("㎎㎏㎜㎝㎞㎡㏄㏎㏑°′″＄￡￥‰％℃¤￠").toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ");
+      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_Q);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_Q)
     }
-    println();
+    println()
   }
 
   @Test
@@ -76,25 +76,25 @@ class PunctuationTest {
       "\r\n", "\r", "\n", " ", "　"
     )
     for (punctuation <- punctuations) {
-      print(java.net.URLEncoder.encode(punctuation) + " ");
+      print(java.net.URLEncoder.encode(punctuation) + " ")
       val word = hashDictionary.getWord(punctuation)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W)
     }
-    println();
+    println()
   }
 
   @Test
   def should_contains_other_characters() {
     val punctuations = ("┌┍┎┏┐┑┒┓─┄┈├┝┞┟┠┡┢┣│┆┊┬┭┮┯┰┱┲┳┼┽┾┿╀╁╂╃§☆★●◎◇◆□■△▲※→←↑↓〓＃＿＆＠＼＾αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯㄅㄉㄓㄚㄞㄢㄦㄆㄊㄍㄐㄔㄗㄧㄛㄟㄣㄇㄋㄎㄑㄕㄘㄨㄜㄠㄤㄈㄏㄒㄖㄙㄩㄝㄡㄥāáǎàōóǒòêēéěèīíǐìūúǔùǖǘǚǜぁぃぅぇぉかきくけこんさしすせそたちつってとゐなにぬねのはひふへほゑまみむめもゃゅょゎをあいうえおがぎぐげござじずぜぞだぢづでどぱぴぷぺぽぼびぶべぼらりるれろやゆよわァィゥヴェォカヵキクケヶコサシスセソタチツッテトヰンナニヌネノハヒフヘホヱマミムメモャュョヮヲアイウエオガギグゲゴザジズゼゾダヂヅデドパピプペポバビブベボラリルレロヤユヨワ]レロヤユヨワ").toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ");
+      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W);
+      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W)
     }
-    println();
+    println()
   }
 
   private def getFirstPosOfWord(word: IWord): Int = {
-    return word.getPOSArray().getWordPOSTable()(0)(0);
+    return word.getPOSArray().getWordPOSTable()(0)(0)
   }
 }

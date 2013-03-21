@@ -4,9 +4,88 @@
     <list default="true" id="28bb6243-1d0c-40b1-baf7-7e3710dab099" name="Default" comment="" />
     <ignored path="max-prob-segment-scala.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363883458318" ignored="false" />
-    <file path="/fragment.java" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363883458318" ignored="false" />
+    <file path="/Dummy.txt" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885778840" ignored="false" />
+    <file path="/fragment.java" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885778840" ignored="false" />
     <file path="/SerializationTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363845069280" ignored="false" />
+    <file path="/PorterStemmer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885251439" ignored="false" />
+    <file path="/a.dummy" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885339205" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/domain/DomainDictFactory.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885376047" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/domain/DomainDictionary.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885376047" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/domain/DomainDictLoader.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885376047" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/domain/DomainDictUpdateModule.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885376047" ignored="false" />
+    <file path="/*.regexp" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885380223" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/AbstractSegmentFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/EnglishStemFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/ForeignName.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/ISegmentFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/NumberAndTimeFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/QuerySyntaxFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/ReduplicatingFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/SegmentResultFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/UnknownNameFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/UnknownPlaceFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/filter/UpperCaseAndHalfShapeFilter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391908" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Node.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/ObserveListException.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeBinarySort.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeQuickSort.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeSortor.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Viterbi.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/PFRCorpusLoader.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/StringWordConverter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/WordBigramBuilder.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/WordStringConverter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/AbstractErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/ContainErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/ErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/NerNameErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/NerPlaceErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/NewWordErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/OtherErrorAnalyzer.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/SegmentAccuracy.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/accurary/SegmentErrorType.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/BufReader.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/ByteArrayReader.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/CharCheckUtil.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/ISerialize.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/NumberUtil.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/pinyin/Pair.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/pinyin/Window.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/pinyin/WordToPinyinClassfierFactory.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/pinyin/WordToPinyinClassifier.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/pinyin/WordToPinyinModel.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/pinyin/WordToPinyinModelBuilder.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/ConceptLoader.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/DictionaryWriter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391909" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/tools/GoogleBigramBuilder.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/SerializeHandler.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/concept/ConceptLoaderTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/concept/ConceptRepositoryTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/StringUtil.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/concept/ConceptTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/util/WordUtil.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/concept/ConceptTreeTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/core/ConceptRecognizeTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/core/SegmentResultTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/filter/AbstractSegmentFilterTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/filter/EnglishStemFilterTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/filter/NumberFilterTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/filter/ReduplicatingFilterTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/graph/BigramDijkstraTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/graph/WordBigramTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/performance/AccuracyTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/performance/DisambiguationSegmentTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885391910" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/performance/PerformanceTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/pinyin/WordToPinyinTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/pos/PartOfSpeechRecognitionTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/tools/PFRCorpusLoaderTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/tools/PFRCorpusPrinter.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/tools/StringToWordTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/tools/WordToStringTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/util/CharCheckUtilTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/util/NumberUtilTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/util/SerializationTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
+    <file path="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/util/WordUtilTest.scala" changelist="28bb6243-1d0c-40b1-baf7-7e3710dab099" time="1363885394020" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,73 +163,75 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ConceptLoader.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ConceptLoader.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/concept/ConceptLoader.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="54" selection-start="1370" selection-end="1370" vertical-scroll-proportion="1.0408163">
+            <state line="37" column="57" selection-start="1037" selection-end="1037" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NodeRepository.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/NodeRepository.scala">
+      <file leaf-file-name="PorterStemmer.scala" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/lang/en/PorterStemmer.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="20" selection-start="184" selection-end="184" vertical-scroll-proportion="0.0">
+            <state line="13" column="31" selection-start="281" selection-end="281" vertical-scroll-proportion="0.39795917">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Pi.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Pi.scala">
+      <file leaf-file-name="PorterStemmerTest.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/lang/en/PorterStemmerTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="8" selection-start="210" selection-end="210" vertical-scroll-proportion="0.0">
+            <state line="3" column="21" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#41#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MPSegmentConfiguration.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/conf/MPSegmentConfiguration.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="26" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrieNodeTest.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/hmm/TrieNodeTest.scala">
+      <file leaf-file-name="AbstractWordScanner.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/AbstractWordScanner.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="64" selection-start="621" selection-end="621" vertical-scroll-proportion="0.0">
+            <state line="0" column="38" selection-start="38" selection-end="38" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ViterbiTest.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/hmm/ViterbiTest.scala">
+      <file leaf-file-name="ContextFrequencyScanner.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/ContextFrequencyScanner.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="17" selection-start="1847" selection-end="1847" vertical-scroll-proportion="0.0">
+            <state line="0" column="38" selection-start="38" selection-end="38" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Trie.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Trie.scala">
+      <file leaf-file-name="GraphBuilder.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/GraphBuilder.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="6" selection-start="1511" selection-end="1511" vertical-scroll-proportion="0.0">
+            <state line="0" column="38" selection-start="38" selection-end="38" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Emission.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Emission.scala">
+      <file leaf-file-name="UserDictionaryLoader.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/UserDictionaryLoader.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="14" selection-start="216" selection-end="216" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Flag.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Flag.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="6" selection-start="143" selection-end="143" vertical-scroll-proportion="0.0">
+            <state line="186" column="40" selection-start="6862" selection-end="6862" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -166,13 +247,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/NodeRepository.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/ObserveListException.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/HmmResult.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Pi.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeSortor.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeBinarySort.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Trie.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeQuickSort.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/util/SerializationTest.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Flag.scala" />
@@ -182,6 +256,13 @@
         <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Transition.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/concept/Concept.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/concept/ConceptLoader.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/lang/en/PorterStemmerTest.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/conf/MPSegmentConfiguration.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/AbstractWordScanner.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/ContextFrequencyScanner.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/GraphBuilder.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/UserDictionaryLoader.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/lang/en/PorterStemmer.scala" />
       </list>
     </option>
   </component>
@@ -360,6 +441,36 @@
               <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mpsegment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="en" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="max-prob-segment-scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib-segment-scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -384,6 +495,36 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="mpsegment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="max-prob-segment-scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib-segment-scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mpsegment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="en" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -471,9 +612,7 @@
       <patterns />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="test-compile" />
-      </method>
+      <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
@@ -584,7 +723,7 @@
       <patterns />
       <method>
         <option name="Make" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="package" />
+        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="test-compile" />
       </method>
     </configuration>
     <configuration default="true" type="ScalaTestRunConfiguration" factoryName="ScalaTest">
@@ -656,9 +795,10 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32889965" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.67070216" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39951575" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.346247" sideWeight="0.5034722" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3458283" sideWeight="0.5034722" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769045" sideWeight="0.48333332" order="7" side_tool="false" content_ui="tabs" />
@@ -666,12 +806,11 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24097222" sideWeight="0.6541717" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3458283" sideWeight="0.49166667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24097222" sideWeight="0.6541717" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3458283" sideWeight="0.49166667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Heroku" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3292978" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SBT Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -737,47 +876,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeQuickSort.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="36" selection-end="36" vertical-scroll-proportion="0.02970297" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/TrieNodeSortor.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.11881188" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/util/SerializationTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="14" selection-start="1928" selection-end="1928" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/WordItemTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="22" selection-start="448" selection-end="448" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Flag.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="6" selection-start="143" selection-end="143" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Node.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="6" selection-start="739" selection-end="739" vertical-scroll-proportion="0.9943182" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Trie.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="6" selection-start="1511" selection-end="1511" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/hmm/TrieNodeTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="64" selection-start="621" selection-end="621" vertical-scroll-proportion="0.0">
@@ -815,7 +913,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Viterbi.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="26" selection-start="182" selection-end="182" vertical-scroll-proportion="0.24439919" />
+        <state line="8" column="26" selection-start="182" selection-end="182" vertical-scroll-proportion="0.24439919">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/hmm/Transition.scala">
@@ -834,7 +934,58 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/concept/ConceptLoader.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="54" selection-start="1370" selection-end="1370" vertical-scroll-proportion="1.0408163">
+        <state line="37" column="57" selection-start="1037" selection-end="1037" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/conf/MPSegmentConfiguration.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="26" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/AbstractWordScanner.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="38" selection-start="38" selection-end="38" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/ContextFrequencyScanner.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="38" selection-start="38" selection-end="38" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/core/GraphBuilder.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="38" selection-start="38" selection-end="38" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/dict/UserDictionaryLoader.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="186" column="40" selection-start="6862" selection-end="6862" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/websiteschema/mpsegment/lang/en/PorterStemmerTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="21" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#41#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/websiteschema/mpsegment/lang/en/PorterStemmer.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="31" selection-start="281" selection-end="281" vertical-scroll-proportion="0.39795917">
           <folding />
         </state>
       </provider>

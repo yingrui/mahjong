@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.util;
+package websiteschema.mpsegment.util
 
 trait BufReader {
 

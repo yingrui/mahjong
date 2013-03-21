@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.hmm;
+package websiteschema.mpsegment.hmm
 
 trait TrieNodeSortor {
 

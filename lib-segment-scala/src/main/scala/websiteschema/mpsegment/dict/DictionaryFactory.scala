@@ -8,21 +8,21 @@ import websiteschema.mpsegment.tools.StringWordConverter
 import io.Source
 
 object DictionaryFactory {
-  val instance = new DictionaryFactory();
+  val instance = new DictionaryFactory()
 
   def apply() = instance
 }
 
 class DictionaryFactory {
 
-    private val config = MPSegmentConfiguration();
+    private val config = MPSegmentConfiguration()
     private var coreDict : HashDictionary = null
     private var domainFactory : DomainDictFactory = null
-    private var isLoadDomainDictionary : Boolean = config.isLoadDomainDictionary();
-    private var isLoadUserDictionary : Boolean = config.isLoadUserDictionary();
+    private var isLoadDomainDictionary : Boolean = config.isLoadDomainDictionary()
+    private var isLoadUserDictionary : Boolean = config.isLoadUserDictionary()
 
     def getCoreDictionary() : HashDictionary = {
-        return coreDict;
+        return coreDict
     }
 
     def loadDictionary() {
@@ -34,17 +34,17 @@ class DictionaryFactory {
             for (wordStr <- list) {
                 val word = converter.convert(wordStr)
                 if (word != null) {
-                    coreDict.addWord(word);
+                    coreDict.addWord(word)
                 }
             }
         } catch {
           case e: Throwable =>
-            System.err.println(e);
+            System.err.println(e)
         }
     }
 
     private def loadWordStr(dictResource: String) : List[String] = {
-        coreDict = new HashDictionary();
+        coreDict = new HashDictionary()
         val inputStream = getClass.getClassLoader.getResource(dictResource).toURI
         val source = Source.fromFile(inputStream, "utf-8")
         return source.getLines.toList
@@ -52,8 +52,8 @@ class DictionaryFactory {
 
     def loadDomainDictionary() {
         if (isLoadDomainDictionary || isLoadUserDictionary) {
-            domainFactory = DomainDictFactory();
-            domainFactory.buildDictionary();
+            domainFactory = DomainDictFactory()
+            domainFactory.buildDictionary()
         }
     }
 //
@@ -64,15 +64,15 @@ class DictionaryFactory {
 //            var domainDictionary = DomainDictFactory.getInstance().getDomainDictionary()
 //            var userDictionaryLoader = new UserDictionaryLoader(domainDictionary, coreDict)
 //            try {
-//                userDictionaryLoader.loadUserDictionary(userDictFile);
-//                userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration.getInstance()));
+//                userDictionaryLoader.loadUserDictionary(userDictFile)
+//                userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration.getInstance()))
 //            } catch {
 //              case e:Throwable =>
-//                System.err.println(e);
+//                System.err.println(e)
 //            }
-//            userDictionaryLoader.clear();
-//            l1 = System.currentTimeMillis() - l1;
-//            println((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString());
+//            userDictionaryLoader.clear()
+//            l1 = System.currentTimeMillis() - l1
+//            println((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString())
 //        }
 //    }
 }

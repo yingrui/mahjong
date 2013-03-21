@@ -1,6 +1,6 @@
-package websiteschema.mpsegment.core;
+package websiteschema.mpsegment.core
 
-import websiteschema.mpsegment.dict.IWord;
+import websiteschema.mpsegment.dict.IWord
 
 trait IConceptRecognizer {
 

@@ -1,37 +1,37 @@
 package websiteschema.mpsegment.util
 
-import java.io.File;
+import java.io.File
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.Assert
+import org.junit.Test
 
 class SerializationTest {
 
     @Test
     def should_serialize_a_map_and_deserialize_it() {
         var map = scala.collection.mutable.Map[String,Int]()
-        map.put("张三", 10);
-        map.put("李四", 20);
-        map.put("王五", 30);
+        map.put("张三", 10)
+        map.put("李四", 20)
+        map.put("王五", 30)
         var filename = "test-map.dat"
         var file = new File(filename)
         try {
             var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
-            writeHandler.serializeMapStringInt(map);
-            writeHandler.close();
+            writeHandler.serializeMapStringInt(map)
+            writeHandler.close()
 
             var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
             var newone = readHandler.deserializeMapStringInt()
-            readHandler.close();
-            Assert.assertEquals(3, newone.size);
-            Assert.assertEquals(newone("张三"), 10);
-            Assert.assertEquals(newone("李四"), 20);
-            Assert.assertEquals(newone("王五"), 30);
+            readHandler.close()
+            Assert.assertEquals(3, newone.size)
+            Assert.assertEquals(newone("张三"), 10)
+            Assert.assertEquals(newone("李四"), 20)
+            Assert.assertEquals(newone("王五"), 30)
         } catch {
           case _: Throwable =>
-            Assert.fail();
+            Assert.fail()
         } finally {
-            file.delete();
+            file.delete()
         }
     }
 
@@ -42,17 +42,17 @@ class SerializationTest {
         var file = new File(filename)
         try {
             var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
-            writeHandler.serializeArrayInt(array.toArray);
-            writeHandler.close();
+            writeHandler.serializeArrayInt(array.toArray)
+            writeHandler.close()
             var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
             var newone = readHandler.deserializeArrayInt()
-            readHandler.close();
-            Assert.assertArrayEquals(newone, array.toArray);
+            readHandler.close()
+            Assert.assertArrayEquals(newone, array.toArray)
         } catch {
           case _: Throwable =>
-            Assert.fail();
+            Assert.fail()
         } finally {
-            file.delete();
+            file.delete()
         }
     }
 
@@ -65,19 +65,19 @@ class SerializationTest {
         var file = new File(filename)
         try {
             var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
-            writeHandler.serialize2DArrayInt(array);
-            writeHandler.close();
+            writeHandler.serialize2DArrayInt(array)
+            writeHandler.close()
             var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
             var newone = readHandler.deserialize2DArrayInt()
-            readHandler.close();
-            Assert.assertEquals(newone.length, array.length);
-            Assert.assertArrayEquals(newone(0), array(0).toArray);
-            Assert.assertArrayEquals(newone(1), array(1).toArray);
+            readHandler.close()
+            Assert.assertEquals(newone.length, array.length)
+            Assert.assertArrayEquals(newone(0), array(0).toArray)
+            Assert.assertArrayEquals(newone(1), array(1).toArray)
         } catch {
           case _: Throwable =>
-            Assert.fail();
+            Assert.fail()
         } finally {
-            file.delete();
+            file.delete()
         }
     }
 }

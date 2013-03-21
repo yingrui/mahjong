@@ -5,7 +5,7 @@ import collection.mutable
 class HashDictionary extends IDictionary {
 
   def getCapacity(): Int = {
-    return headIndexersHashMap.size;
+    return headIndexersHashMap.size
   }
 
   def clear() {
@@ -13,7 +13,7 @@ class HashDictionary extends IDictionary {
   }
 
   def lookupHeadIndexer(head: String): HeadIndexer = {
-    return headIndexersHashMap.getOrElse(head, null);
+    return headIndexersHashMap.getOrElse(head, null)
   }
 
   override def getWord(wordStr: String): IWord = {
@@ -27,47 +27,47 @@ class HashDictionary extends IDictionary {
   }
 
   override def getWords(sentenceStr: String): Array[IWord] = {
-    val headIndexer = lookupHeadIndexer(getHead(sentenceStr));
+    val headIndexer = lookupHeadIndexer(getHead(sentenceStr))
     if (headIndexer != null)
-      headIndexer.findMultiWord(sentenceStr);
+      headIndexer.findMultiWord(sentenceStr)
     else
-      null;
+      null
   }
 
   override def iterator(): List[IWord] = {
-    var wordList = List[IWord]();
+    var wordList = List[IWord]()
     for (i <- 0 until headIndexers.size) {
-      val headIndexer = headIndexers(i);
-      val wordArray = headIndexer.getWordArray();
+      val headIndexer = headIndexers(i)
+      val wordArray = headIndexer.getWordArray()
       wordList = wordList ++ wordArray.getWordItems().toList
     }
-    return wordList;
+    return wordList
   }
 
   def getHead(wordStr: String): String = {
-    return wordStr.substring(0, headLength);
+    return wordStr.substring(0, headLength)
   }
 
   def addWord(word: IWord) {
-    var headIndexer = lookupHeadIndexer(getHead(word.getWordName()));
+    var headIndexer = lookupHeadIndexer(getHead(word.getWordName()))
     if (null == headIndexer) {
-      headIndexer = createHeadIndexer(word);
+      headIndexer = createHeadIndexer(word)
     }
-    headIndexer.add(word);
+    headIndexer.add(word)
   }
 
   private def createHeadIndexer(word: IWord): HeadIndexer = {
-    val headIndexer = HeadIndexer(word, headLength);
+    val headIndexer = HeadIndexer(word, headLength)
     headIndexers = headIndexers ++ List(headIndexer)
     headIndexersHashMap += (headIndexer.getHeadStr() -> headIndexer)
-    return headIndexer;
+    return headIndexer
   }
 
   def setHeadLength(headLength: Int) {
-    this.headLength = headLength;
+    this.headLength = headLength
   }
 
-  private var headLength: Int = 1;
-  private var headIndexersHashMap = mutable.HashMap[String, HeadIndexer]();
-  private var headIndexers = List[HeadIndexer]();
+  private var headLength: Int = 1
+  private var headIndexersHashMap = mutable.HashMap[String, HeadIndexer]()
+  private var headIndexers = List[HeadIndexer]()
 }

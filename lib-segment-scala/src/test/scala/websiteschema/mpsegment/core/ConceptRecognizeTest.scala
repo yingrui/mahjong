@@ -2,13 +2,13 @@
 // * To change this template, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package websiteschema.mpsegment.core;
+//package websiteschema.mpsegment.core
 //
-//import org.junit.Assert;
-//import org.junit.Test;
-//import websiteschema.mpsegment.dict.IWord;
-//import websiteschema.mpsegment.dict.POSUtil;
-//import websiteschema.mpsegment.dict.WordImpl;
+//import org.junit.Assert
+//import org.junit.Test
+//import websiteschema.mpsegment.dict.IWord
+//import websiteschema.mpsegment.dict.POSUtil
+//import websiteschema.mpsegment.dict.WordImpl
 //
 //class ConceptRecognizeTest {
 //
@@ -19,11 +19,11 @@
 //        var posArray = new Array[Int]{POSUtil.POS_NR}
 //
 //        var conceptRecognizer = new SimpleConceptRecognizer()
-//        conceptRecognizer.setPosArray(posArray);
-//        conceptRecognizer.setWordArray(words);
+//        conceptRecognizer.setPosArray(posArray)
+//        conceptRecognizer.setWordArray(words)
 //
 //        var concepts = conceptRecognizer.getConcepts()
-//        Assert.assertArrayEquals(new Array[String]{"n-name"}, concepts);
+//        Assert.assertArrayEquals(new Array[String]{"n-name"}, concepts)
 //    }
 //
 //    @Test
@@ -33,11 +33,11 @@
 //        var posArray = new Array[Int]{POSUtil.POS_NS}
 //
 //        var conceptRecognizer = new SimpleConceptRecognizer()
-//        conceptRecognizer.setPosArray(posArray);
-//        conceptRecognizer.setWordArray(words);
+//        conceptRecognizer.setPosArray(posArray)
+//        conceptRecognizer.setWordArray(words)
 //
 //        var concepts = conceptRecognizer.getConcepts()
-//        Assert.assertArrayEquals(new Array[String]{"n-location"}, concepts);
+//        Assert.assertArrayEquals(new Array[String]{"n-location"}, concepts)
 //    }
 //
 //    @Test
@@ -47,10 +47,10 @@
 //        var posArray = new Array[Int]{POSUtil.POS_N}
 //
 //        var conceptRecognizer = new SimpleConceptRecognizer()
-//        conceptRecognizer.setPosArray(posArray);
-//        conceptRecognizer.setWordArray(words);
+//        conceptRecognizer.setPosArray(posArray)
+//        conceptRecognizer.setWordArray(words)
 //
 //        var concepts = conceptRecognizer.getConcepts()
-//        Assert.assertArrayEquals(new Array[String]{"N/A"}, concepts);
+//        Assert.assertArrayEquals(new Array[String]{"N/A"}, concepts)
 //    }
 //}

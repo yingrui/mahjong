@@ -13,8 +13,8 @@ object CharCheckUtil {
   }
 
   def isSymbol(c: Char): Boolean = {
-    val typo = Character.getType(c);
-    return typo == 24 || typo == 25 || typo == 21 || typo == 22 || typo == 27 || typo == 23 || typo == 26 || typo == 20;
+    val typo = Character.getType(c)
+    return typo == 24 || typo == 25 || typo == 21 || typo == 22 || typo == 27 || typo == 23 || typo == 26 || typo == 20
   }
 
   def isWhiteSpace(word: String): Boolean = word.matches("\\s+")

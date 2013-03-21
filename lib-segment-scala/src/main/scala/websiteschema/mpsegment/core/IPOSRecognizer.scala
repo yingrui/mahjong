@@ -2,10 +2,10 @@
 // * To change this template, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package websiteschema.mpsegment.core;
+//package websiteschema.mpsegment.core
 //
-//import websiteschema.mpsegment.graph.IGraph;
-//import websiteschema.mpsegment.graph.Path;
+//import websiteschema.mpsegment.graph.IGraph
+//import websiteschema.mpsegment.graph.Path
 //
 ///**
 // *

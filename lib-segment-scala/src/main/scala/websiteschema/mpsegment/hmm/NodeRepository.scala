@@ -13,29 +13,29 @@ class NodeRepository extends ISerialize {
     val name = node.getName()
     if (!indexMap.contains(name)) {
       val index = repo.size
-      node.setIndex(index);
+      node.setIndex(index)
       repo = repo ++ List(node)
-      indexMap += (name -> index);
-      return node;
+      indexMap += (name -> index)
+      return node
     } else {
-      return repo(indexMap(name));
+      return repo(indexMap(name))
     }
   }
 
   def get(name: String): Node = {
     if (indexMap.contains(name)) {
       val index = indexMap(name)
-      return repo(index);
+      return repo(index)
     } else {
-      return null;
+      return null
     }
   }
 
   def get(index: Int): Node = {
     if (repo.size > index) {
-      return repo(index);
+      return repo(index)
     } else {
-      return null;
+      return null
     }
   }
 
@@ -44,10 +44,10 @@ class NodeRepository extends ISerialize {
 
   override def save(writeHandler: SerializeHandler) {
     val length = if (null != repo) repo.size else 0
-    writeHandler.serializeInt(length);
+    writeHandler.serializeInt(length)
     for (i <- 0 until length) {
       val node = repo(i)
-      node.save(writeHandler);
+      node.save(writeHandler)
     }
   }
 
@@ -56,7 +56,7 @@ class NodeRepository extends ISerialize {
     if (length > 0) {
       for (i <- 0 until length) {
         val node = new Node()
-        node.load(readHandler);
+        node.load(readHandler)
         repo = repo ++ List(node)
         indexMap += (node.getName() -> node.getIndex())
       }

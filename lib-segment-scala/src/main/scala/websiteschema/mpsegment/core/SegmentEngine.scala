@@ -1,60 +1,60 @@
-//package websiteschema.mpsegment.core;
+//package websiteschema.mpsegment.core
 //
-//import websiteschema.mpsegment.conf.MPSegmentConfiguration;
-//import websiteschema.mpsegment.dict.DictionaryFactory;
+//import websiteschema.mpsegment.conf.MPSegmentConfiguration
+//import websiteschema.mpsegment.dict.DictionaryFactory
 //
-//import java.util.HashMap;
-//import java.util.Map;
+//import java.util.HashMap
+//import java.util.Map
 //
 //class SegmentEngine {
 //
-//    private static ThreadLocal[SegmentWorker] workers = new ThreadLocal();
-//    private static SegmentEngine instance = new SegmentEngine();
-//    private var configuration : MPSegmentConfiguration = MPSegmentConfiguration.getInstance();
+//    private static ThreadLocal[SegmentWorker] workers = new ThreadLocal()
+//    private static SegmentEngine instance = new SegmentEngine()
+//    private var configuration : MPSegmentConfiguration = MPSegmentConfiguration.getInstance()
 //
 //    private SegmentEngine() {
-//        loadDictionary();
+//        loadDictionary()
 //    }
 //
 //    private def loadDictionary() {
-//        DictionaryFactory.getInstance().loadDictionary();
-//        DictionaryFactory.getInstance().loadDomainDictionary();
-//        DictionaryFactory.getInstance().loadUserDictionary();
+//        DictionaryFactory.getInstance().loadDictionary()
+//        DictionaryFactory.getInstance().loadDomainDictionary()
+//        DictionaryFactory.getInstance().loadUserDictionary()
 //    }
 //
 //    public static SegmentEngine getInstance() {
-//        return instance;
+//        return instance
 //    }
 //
 //    def getReusableSegmentWorker() : SegmentWorker = {
-//        SegmentWorker segmentWorker = workers.get();
+//        SegmentWorker segmentWorker = workers.get()
 //        if (null == segmentWorker) {
-//            segmentWorker = new SegmentWorker(configuration);
-//            workers.set(segmentWorker);
+//            segmentWorker = new SegmentWorker(configuration)
+//            workers.set(segmentWorker)
 //        }
 //
-//        return segmentWorker;
+//        return segmentWorker
 //    }
 //
 //    def getSegmentWorker() : SegmentWorker = {
-//        return new SegmentWorker(configuration);
+//        return new SegmentWorker(configuration)
 //    }
 //
 //    def getSegmentWorker(Map<String,String> config) : SegmentWorker = {
-//        return new SegmentWorker(new MPSegmentConfiguration(config));
+//        return new SegmentWorker(new MPSegmentConfiguration(config))
 //    }
 //
 //    def getSegmentWorker(String ... props) : SegmentWorker = {
-//        Map[String,String] map = null;
+//        Map[String,String] map = null
 //        if(null != props) {
-//            map = new HashMap[String,String](props.length);
+//            map = new HashMap[String,String](props.length)
 //            for(String p : props) {
-//                Array[String] keyAndValue = p.split("(=|->)");
+//                Array[String] keyAndValue = p.split("(=|->)")
 //                if(null != keyAndValue && keyAndValue.length == 2) {
-//                    map.put(keyAndValue(0).trim(), keyAndValue(1).trim());
+//                    map.put(keyAndValue(0).trim(), keyAndValue(1).trim())
 //                }
 //            }
 //        }
-//        return getSegmentWorker(map);
+//        return getSegmentWorker(map)
 //    }
 //}

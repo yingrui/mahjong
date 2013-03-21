@@ -1,6 +1,6 @@
-package websiteschema.mpsegment.graph;
+package websiteschema.mpsegment.graph
 
-import websiteschema.mpsegment.dict.IWord;
+import websiteschema.mpsegment.dict.IWord
 
 trait IGraph {
 

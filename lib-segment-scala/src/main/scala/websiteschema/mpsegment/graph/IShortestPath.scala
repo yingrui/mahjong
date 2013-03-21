@@ -1,9 +1,9 @@
-//package websiteschema.mpsegment.graph;
+//package websiteschema.mpsegment.graph
 //
 //trait IShortestPath {
 //
-//    Path getShortestPath(Int start, Int end);
+//    Path getShortestPath(Int start, Int end)
 //
-//    void setGraph(IGraph graph);
+//    void setGraph(IGraph graph)
 //    
 //}

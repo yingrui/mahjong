@@ -5,8 +5,8 @@ import websiteschema.mpsegment.util.SerializeHandler
 
 class Node extends ISerialize {
 
-  private var index = -1;
-  private var name: String = null;
+  private var index = -1
+  private var name: String = null
 
   def getIndex(): Int =  index
 
@@ -21,8 +21,8 @@ class Node extends ISerialize {
   }
 
   override def save(writeHandler: SerializeHandler) {
-    writeHandler.serializeString(name);
-    writeHandler.serializeInt(index);
+    writeHandler.serializeString(name)
+    writeHandler.serializeInt(index)
   }
 
   override def load(readHandler: SerializeHandler) {
@@ -36,7 +36,7 @@ object Node {
 
   def apply(name: String) = {
     val node = new Node()
-    node.name = name;
+    node.name = name
     node
   }
 

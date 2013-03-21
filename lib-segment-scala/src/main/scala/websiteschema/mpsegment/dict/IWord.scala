@@ -1,6 +1,6 @@
-package websiteschema.mpsegment.dict;
+package websiteschema.mpsegment.dict
 
-import websiteschema.mpsegment.concept.Concept;
+import websiteschema.mpsegment.concept.Concept
 
 trait IWord {
 

@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.dict
 
-import websiteschema.mpsegment.concept.Concept;
+import websiteschema.mpsegment.concept.Concept
 
 class WordImpl(wordName: String) extends IWord with Comparable[Object] {
 
@@ -9,137 +9,137 @@ class WordImpl(wordName: String) extends IWord with Comparable[Object] {
   private var posArray: POSArray = new POSArray
   private var concepts: Array[Concept] = null
 
-  posArray.add(POS("UN", 200));
+  posArray.add(POS("UN", 200))
 
   override def setOccuredCount(posName: String, freq: Int) {
-    val posTable = posArray.getWordPOSTable();
+    val posTable = posArray.getWordPOSTable()
     posTable.find(
       array => posName.equals(POSUtil.getPOSString(array(0)))
     ) match {
       case Some(array) =>
-        array(1) = freq; calculateLogFreq();
+        array(1) = freq; calculateLogFreq()
       case _ =>
     }
   }
 
   override def setOccuredSum(sum: Int) {
-    val factor = sum.toDouble / getOccuredSum().toDouble;
-    val posTable = posArray.getWordPOSTable();
+    val factor = sum.toDouble / getOccuredSum().toDouble
+    val posTable = posArray.getWordPOSTable()
     for (i <- 0 until posTable.length) {
-      val freq = posTable(i)(1);
-      posTable(i)(1) = (freq * factor).toInt;
-      calculateLogFreq();
+      val freq = posTable(i)(1)
+      posTable(i)(1) = (freq * factor).toInt
+      calculateLogFreq()
     }
-    calculateLogFreq();
+    calculateLogFreq()
   }
 
   override def getPOSArray(): POSArray = {
-    return posArray;
+    return posArray
   }
 
   override def getWordPOSTable(): Array[Array[Int]] = {
-    return getPOSArray().getWordPOSTable();
+    return getPOSArray().getWordPOSTable()
   }
 
   def setPosArray(posArray: POSArray) {
-    this.posArray = posArray;
+    this.posArray = posArray
   }
 
   override def getWordMaxPOS(): Int = {
-    var maxOccuredPOS = POSUtil.POS_UNKOWN;
-    val maxOccured = 0;
-    val posTable = posArray.getWordPOSTable();
+    var maxOccuredPOS = POSUtil.POS_UNKOWN
+    val maxOccured = 0
+    val posTable = posArray.getWordPOSTable()
     for (i <- 0 until posTable.length) {
-      val freq = posTable(i)(1);
+      val freq = posTable(i)(1)
       if (freq > maxOccured) {
-        maxOccuredPOS = posTable(i)(0);
+        maxOccuredPOS = posTable(i)(0)
       }
     }
 
-    return maxOccuredPOS;
+    return maxOccuredPOS
   }
 
   override def getWordName(): String = {
-    return wordName;
+    return wordName
   }
 
   override def getWordLength(): Int = {
-    return wordName.length();
+    return wordName.length()
   }
 
   override def setDomainType(i: Int) {
-    domainType = i;
+    domainType = i
   }
 
   override def getDomainType(): Int = {
-    return domainType;
+    return domainType
   }
 
   override def getLog2Freq(): Int = {
     if (log2Freq == 0) {
-      calculateLogFreq();
+      calculateLogFreq()
     }
-    return log2Freq;
+    return log2Freq
   }
 
   private def calculateLogFreq() {
-    log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt;
+    log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt
   }
 
   override def getOccuredSum(): Long = {
-    val posTable = getPOSArray().getWordPOSTable();
-    var occuredSum = 0;
+    val posTable = getPOSArray().getWordPOSTable()
+    var occuredSum = 0
     for (i <- 0 until posTable.length) {
-      occuredSum += posTable(i)(1);
+      occuredSum += posTable(i)(1)
     }
-    return occuredSum;
+    return occuredSum
   }
 
   override def getOccuredCount(s: String): Long = {
-    val pos = POSUtil.getPOSIndex(s);
-    val posTable = getPOSArray().getWordPOSTable();
+    val pos = POSUtil.getPOSIndex(s)
+    val posTable = getPOSArray().getWordPOSTable()
     for (i <- 0 until posTable.length) {
       if (posTable(i)(0) == pos) {
-        return posTable (i)(1).toLong;
+        return posTable (i)(1).toLong
       }
     }
-    return 0L;
+    return 0L
   }
 
   override def incOccuredCount(s: String) {
-    setOccuredCount(s, (getOccuredCount(s) + 1).toInt);
+    setOccuredCount(s, (getOccuredCount(s) + 1).toInt)
   }
 
   override def compareTo(obj: Object): Int = {
     if (obj != null && (obj.isInstanceOf[String])) {
-      return wordName.compareTo(obj.asInstanceOf[String]);
+      return wordName.compareTo(obj.asInstanceOf[String])
     }
     if (obj != null && (obj.isInstanceOf[WordImpl])) {
-      return wordName.compareTo(obj.asInstanceOf[WordImpl].getWordName());
+      return wordName.compareTo(obj.asInstanceOf[WordImpl].getWordName())
     } else {
-      return 1;
+      return 1
     }
   }
 
   def equals(obj: WordImpl): Boolean = {
     if (obj != null) {
-      return wordName.equals(obj.getWordName());
+      return wordName.equals(obj.getWordName())
     }else{
-      return false;
+      return false
     }
   }
 
   override def toString(): String = {
-    val stringBuilder = new StringBuilder();
-    stringBuilder.append((new StringBuilder(String.valueOf(getWordName()))).append("\n").toString());
-    stringBuilder.append(getPOSArray().toString());
-    return stringBuilder.toString();
+    val stringBuilder = new StringBuilder()
+    stringBuilder.append((new StringBuilder(String.valueOf(getWordName()))).append("\n").toString())
+    stringBuilder.append(getPOSArray().toString())
+    return stringBuilder.toString()
   }
 
   override def toDBFString(): String = {
-    val stringBuilder = new StringBuilder();
-    stringBuilder.append(getPOSArray().toDBFString(getWordName()));
-    return stringBuilder.toString();
+    val stringBuilder = new StringBuilder()
+    stringBuilder.append(getPOSArray().toDBFString(getWordName()))
+    return stringBuilder.toString()
   }
 
   override def getConcepts(): Array[Concept] =
@@ -153,7 +153,7 @@ class WordImpl(wordName: String) extends IWord with Comparable[Object] {
 
 
   def setConcepts(concepts: Array[Concept]) {
-    this.concepts = concepts;
+    this.concepts = concepts
   }
 
 }

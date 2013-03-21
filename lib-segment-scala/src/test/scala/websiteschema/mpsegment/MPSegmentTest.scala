@@ -1,11 +1,11 @@
-//package websiteschema.mpsegment;
+//package websiteschema.mpsegment
 //
-//import org.junit.Assert;
-//import org.junit.Test;
-//import websiteschema.mpsegment.core.SegmentEngine;
-//import websiteschema.mpsegment.core.SegmentResult;
-//import websiteschema.mpsegment.core.SegmentWorker;
-//import websiteschema.mpsegment.dict.POSUtil;
+//import org.junit.Assert
+//import org.junit.Test
+//import websiteschema.mpsegment.core.SegmentEngine
+//import websiteschema.mpsegment.core.SegmentResult
+//import websiteschema.mpsegment.core.SegmentWorker
+//import websiteschema.mpsegment.dict.POSUtil
 //
 //class MPSegmentTest {
 //
@@ -15,12 +15,12 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.length(), 2);
-//        Assert.assertEquals(words.getWord(0), "中国");
-//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_NS);
-//        Assert.assertEquals(words.getWord(1), "长城");
-//        Assert.assertEquals(words.getPOS(1), POSUtil.POS_NS);
+//        println(words)
+//        Assert.assertEquals(words.length(), 2)
+//        Assert.assertEquals(words.getWord(0), "中国")
+//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_NS)
+//        Assert.assertEquals(words.getWord(1), "长城")
+//        Assert.assertEquals(words.getPOS(1), POSUtil.POS_NS)
 //    }
 //
 //    @Test
@@ -29,18 +29,18 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "张三丰");
-//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_NR);
-//        Assert.assertEquals(words.getPOS(1), POSUtil.POS_V);
-//        Assert.assertEquals(words.getPOS(2), POSUtil.POS_U);
-//        Assert.assertEquals(words.getPOS(3), POSUtil.POS_N);
-//        Assert.assertEquals(words.getPOS(4), POSUtil.POS_W);
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "张三丰")
+//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_NR)
+//        Assert.assertEquals(words.getPOS(1), POSUtil.POS_V)
+//        Assert.assertEquals(words.getPOS(2), POSUtil.POS_U)
+//        Assert.assertEquals(words.getPOS(3), POSUtil.POS_N)
+//        Assert.assertEquals(words.getPOS(4), POSUtil.POS_W)
 //
-//        str = "太极拳的创始人是张三丰";
-//        words = worker.segment(str);
-//        println(words);
-//        Assert.assertEquals(words.getWord(4), "张三丰");
+//        str = "太极拳的创始人是张三丰"
+//        words = worker.segment(str)
+//        println(words)
+//        Assert.assertEquals(words.getWord(4), "张三丰")
 //    }
 //
 //    @Test
@@ -49,11 +49,11 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker("separate.xingming -> true")
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals("张", words.getWord(0));
-//        Assert.assertEquals("三丰", words.getWord(1));
-//        Assert.assertEquals(POSUtil.POS_NR, words.getPOS(0));
-//        Assert.assertEquals(POSUtil.POS_NR,words.getPOS(1));
+//        println(words)
+//        Assert.assertEquals("张", words.getWord(0))
+//        Assert.assertEquals("三丰", words.getWord(1))
+//        Assert.assertEquals(POSUtil.POS_NR, words.getPOS(0))
+//        Assert.assertEquals(POSUtil.POS_NR,words.getPOS(1))
 //    }
 //
 //    @Test
@@ -62,23 +62,23 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker("support.querysyntax -> true")
 //        var words = worker.segment(str)
-//        print(words + " ");
-//        Assert.assertEquals(words.getWord(0), "中国~[250]");
+//        print(words + " ")
+//        Assert.assertEquals(words.getWord(0), "中国~[250]")
 //
-//        str = "中国*";
-//        words = worker.segment(str);
-//        print(words + " ");
-//        Assert.assertEquals(words.getWord(0), "中国*");
+//        str = "中国*"
+//        words = worker.segment(str)
+//        print(words + " ")
+//        Assert.assertEquals(words.getWord(0), "中国*")
 //
-//        str = "中国:title社会";
-//        words = worker.segment(str);
-//        print(words + " ");
-//        Assert.assertEquals(words.getWord(0), "中国:TITLE");
+//        str = "中国:title社会"
+//        words = worker.segment(str)
+//        print(words + " ")
+//        Assert.assertEquals(words.getWord(0), "中国:TITLE")
 //
-//        str = "中国?";
-//        words = worker.segment(str);
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "中国?");
+//        str = "中国?"
+//        words = worker.segment(str)
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "中国?")
 //    }
 //
 //    @Test
@@ -87,8 +87,8 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals("德江县", words.getWord(3));
+//        println(words)
+//        Assert.assertEquals("德江县", words.getWord(3))
 //    }
 //
 //    @Test
@@ -97,13 +97,13 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals("7月", words.getWord(0));
-//        Assert.assertEquals("1日", words.getWord(1));
-//        Assert.assertEquals("10时", words.getWord(2));
-//        Assert.assertEquals(POSUtil.POS_T, words.getPOS(0));
-//        Assert.assertEquals(POSUtil.POS_T, words.getPOS(1));
-//        Assert.assertEquals(POSUtil.POS_T, words.getPOS(2));
+//        println(words)
+//        Assert.assertEquals("7月", words.getWord(0))
+//        Assert.assertEquals("1日", words.getWord(1))
+//        Assert.assertEquals("10时", words.getWord(2))
+//        Assert.assertEquals(POSUtil.POS_T, words.getPOS(0))
+//        Assert.assertEquals(POSUtil.POS_T, words.getPOS(1))
+//        Assert.assertEquals(POSUtil.POS_T, words.getPOS(2))
 //    }
 //
 //    @Test
@@ -112,8 +112,8 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals("一曲曲", words.getWord(3));
+//        println(words)
+//        Assert.assertEquals("一曲曲", words.getWord(3))
 //    }
 //
 //    @Test
@@ -122,11 +122,11 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals("一个", words.getWord(0));
-//        Assert.assertEquals("几十万", words.getWord(1));
-//        Assert.assertEquals(POSUtil.POS_M, words.getPOS(0));
-//        Assert.assertEquals(POSUtil.POS_M, words.getPOS(1));
+//        println(words)
+//        Assert.assertEquals("一个", words.getWord(0))
+//        Assert.assertEquals("几十万", words.getWord(1))
+//        Assert.assertEquals(POSUtil.POS_M, words.getPOS(0))
+//        Assert.assertEquals(POSUtil.POS_M, words.getPOS(1))
 //    }
 //
 //    @Test
@@ -135,9 +135,9 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "A");
-//        Assert.assertEquals(words.getWord(3), "B");
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "A")
+//        Assert.assertEquals(words.getWord(3), "B")
 //    }
 //
 //    @Test
@@ -146,9 +146,9 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(1), "CREATED");
-//        Assert.assertEquals(words.getPOS(1), POSUtil.POS_UNKOWN);
+//        println(words)
+//        Assert.assertEquals(words.getWord(1), "CREATED")
+//        Assert.assertEquals(words.getPOS(1), POSUtil.POS_UNKOWN)
 //    }
 //
 //    @Test
@@ -157,13 +157,13 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(2), "1949年");
-//        Assert.assertEquals(words.getPOS(2), POSUtil.POS_T);
-//        Assert.assertEquals(words.getWord(3), "10月");
-//        Assert.assertEquals(words.getPOS(3), POSUtil.POS_T);
-//        Assert.assertEquals(words.getWord(4), "1日");
-//        Assert.assertEquals(words.getPOS(4), POSUtil.POS_T);
+//        println(words)
+//        Assert.assertEquals(words.getWord(2), "1949年")
+//        Assert.assertEquals(words.getPOS(2), POSUtil.POS_T)
+//        Assert.assertEquals(words.getWord(3), "10月")
+//        Assert.assertEquals(words.getPOS(3), POSUtil.POS_T)
+//        Assert.assertEquals(words.getWord(4), "1日")
+//        Assert.assertEquals(words.getPOS(4), POSUtil.POS_T)
 //    }
 //
 //    @Test
@@ -172,10 +172,10 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker("minimize.word -> true")
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "中华");
-//        Assert.assertEquals(words.getWord(1), "人民");
-//        Assert.assertEquals(words.getWord(2), "共和国");
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "中华")
+//        Assert.assertEquals(words.getWord(1), "人民")
+//        Assert.assertEquals(words.getWord(2), "共和国")
 //    }
 //
 //    @Test
@@ -184,9 +184,9 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker("minimize.word = true")
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "习惯成自然");
-//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_I);
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "习惯成自然")
+//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_I)
 //    }
 //
 //    @Test
@@ -195,12 +195,12 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getConcept(0), "n-food");
-//        Assert.assertEquals(words.getConcept(1), "N/A");
-//        Assert.assertEquals(words.getConcept(2), "N/A");
-//        Assert.assertEquals(words.getConcept(3), "N/A");
-//        Assert.assertEquals(words.getConcept(4), "N/A");
+//        println(words)
+//        Assert.assertEquals(words.getConcept(0), "n-food")
+//        Assert.assertEquals(words.getConcept(1), "N/A")
+//        Assert.assertEquals(words.getConcept(2), "N/A")
+//        Assert.assertEquals(words.getConcept(3), "N/A")
+//        Assert.assertEquals(words.getConcept(4), "N/A")
 //    }
 //
 //    @Test
@@ -209,10 +209,10 @@
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker("recognize.pinyin = true")
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getPinyin(0), "zhong'wen");
-//        Assert.assertEquals(words.getPinyin(1), "fen'ci");
-//        Assert.assertEquals(words.getPinyin(2), "。");
+//        println(words)
+//        Assert.assertEquals(words.getPinyin(0), "zhong'wen")
+//        Assert.assertEquals(words.getPinyin(1), "fen'ci")
+//        Assert.assertEquals(words.getPinyin(2), "。")
 //    }
 //
 //    @Test
@@ -221,12 +221,12 @@
 //        var engine = SegmentEngine.getInstance()
 //        SegmentWorker worker = engine.getSegmentWorker(
 //                "segment.lang.en = true",
-//                "convert.touppercase = false");
+//                "convert.touppercase = false")
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "She");
-//        Assert.assertEquals(words.getWord(1), "like");
-//        Assert.assertEquals(words.getWord(2), "hunt");
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "She")
+//        Assert.assertEquals(words.getWord(1), "like")
+//        Assert.assertEquals(words.getWord(2), "hunt")
 //    }
 //
 //    @Test
@@ -235,11 +235,11 @@
 //        var engine = SegmentEngine.getInstance()
 //        SegmentWorker worker = engine.getSegmentWorker(
 //                "segment.lang.en = true",
-//                "convert.touppercase = false");
+//                "convert.touppercase = false")
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_M);
-//        Assert.assertEquals(words.getPOS(2), POSUtil.POS_M);
+//        println(words)
+//        Assert.assertEquals(words.getPOS(0), POSUtil.POS_M)
+//        Assert.assertEquals(words.getPOS(2), POSUtil.POS_M)
 //    }
 //
 //    @Test
@@ -255,17 +255,17 @@
 //                "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
 //                "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
 //                "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
-//                "中华人民共和国在1949年10月1日正式宣布成立，从此中国人民走上了繁荣富强的正确道路。";
-//        println(str.length());
+//                "中华人民共和国在1949年10月1日正式宣布成立，从此中国人民走上了繁荣富强的正确道路。"
+//        println(str.length())
 //        var engine = SegmentEngine.getInstance()
 //        var worker = engine.getSegmentWorker()
 //        var words = worker.segment(str)
 //        var containsPRC = false
 //        for (Int i = 0; i < words.length(); i++) {
 //            if (words.getWord(i).equals("中华人民共和国")) {
-//                containsPRC = true;
+//                containsPRC = true
 //            }
 //        }
-//        assert (containsPRC);
+//        assert (containsPRC)
 //    }
 //}

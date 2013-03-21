@@ -1,11 +1,11 @@
-package websiteschema.mpsegment.util;
+package websiteschema.mpsegment.util
 
 import java.io.{InputStream, DataInputStream}
 
 class ByteArrayReader(stream:InputStream)
         extends BufReader {
 
-    val input = new DataInputStream(stream);
+    val input = new DataInputStream(stream)
 
     override def close(): Unit = input.close()
 

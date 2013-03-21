@@ -10,52 +10,52 @@ object DomainDictFactory{
 
 class DomainDictFactory {
 
-    private var domainDict: DomainDictionary = null;
-    private val config : MPSegmentConfiguration = MPSegmentConfiguration();
-    private val loadDomainDictionary : Boolean = config.isLoadDomainDictionary();
+    private var domainDict: DomainDictionary = null
+    private val config : MPSegmentConfiguration = MPSegmentConfiguration()
+    private val loadDomainDictionary : Boolean = config.isLoadDomainDictionary()
 
     def buildDictionary() {
         if (loadDomainDictionary) {
-            val dict = new DomainDictionary();
-            initializeDictionaryLoaderThenLoad(dict);
-            domainDict = dict;
+            val dict = new DomainDictionary()
+            initializeDictionaryLoaderThenLoad(dict)
+            domainDict = dict
         } else {
-            domainDict = new DomainDictionary();
+            domainDict = new DomainDictionary()
         }
     }
 
     def getDomainDictionary() : DomainDictionary = {
-        return domainDict;
+        return domainDict
     }
 
     def initializeDictionaryLoaderThenLoad(dict: DomainDictionary) {
         try {
-            initializeAndLoad(dict);
+            initializeAndLoad(dict)
         } catch {
           case ex: Throwable =>
-            System.err.println("Exception thrown when load domain dictionary. " + ex.getMessage());
+            System.err.println("Exception thrown when load domain dictionary. " + ex.getMessage())
         }
     }
 
     private def initializeAndLoad(dict: DomainDictionary) {
-        val classNames = config.getDomainDictLoader().split("[,; ]+");
+        val classNames = config.getDomainDictLoader().split("[,; ]+")
         for (className <- classNames) {
-            val loader = createDictLoader(className);
+            val loader = createDictLoader(className)
             if (null != loader) {
-                loader.load(dict);
+                loader.load(dict)
             }
         }
     }
 
     private def createDictLoader(className: String) : DomainDictLoader = {
         try {
-            val clazz = Class.forName(className);
-            val loader = clazz.newInstance();
-            return loader.asInstanceOf[DomainDictLoader];
+            val clazz = Class.forName(className)
+            val loader = clazz.newInstance()
+            return loader.asInstanceOf[DomainDictLoader]
         } catch {
           case ex: Throwable =>
             ex.printStackTrace()
         }
-        return null;
+        return null
     }
 }

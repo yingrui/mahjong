@@ -5,10 +5,10 @@ import websiteschema.mpsegment.concept.Concept
 class DomainWordItem extends IWord with Comparable[Object] {
 
   var wordName = ""
-  var domainType = 0;
+  var domainType = 0
 
   override def setOccuredCount(pos: String, freq: Int) {
-    posArray.setPOSCount(pos, freq);
+    posArray.setPOSCount(pos, freq)
   }
 
   override def setOccuredSum(sum: Int) {
@@ -16,93 +16,93 @@ class DomainWordItem extends IWord with Comparable[Object] {
     val posTable = posArray.getWordPOSTable()
     for (i <- 0 until posTable.length) {
       val freq = posTable(i)(1)
-      posTable(i)(1) = (freq * factor).toInt;
+      posTable(i)(1) = (freq * factor).toInt
       calculateLogFreq()
     }
     calculateLogFreq()
   }
 
   private def calculateLogFreq() {
-    log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt;
+    log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt
   }
 
   override def getPOSArray(): POSArray = {
-    return posArray;
+    return posArray
   }
 
   override def getWordPOSTable(): Array[Array[Int]] = {
-    return getPOSArray().getWordPOSTable();
+    return getPOSArray().getWordPOSTable()
   }
 
   override def getWordMaxPOS(): Int = {
-    return posArray.getWordMaxPOS();
+    return posArray.getWordMaxPOS()
   }
 
   override def getWordName(): String = {
-    return wordName;
+    return wordName
   }
 
   override def getWordLength(): Int = {
-    return wordName.length();
+    return wordName.length()
   }
 
   override def setDomainType(domainType: Int) {
-    this.domainType = domainType;
+    this.domainType = domainType
   }
 
   override def getDomainType(): Int = {
-    return domainType;
+    return domainType
   }
 
   override def getLog2Freq(): Int = {
     if (log2Freq == 0) {
-      log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt;
+      log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt
     }
-    return log2Freq;
+    return log2Freq
   }
 
   override def getOccuredSum(): Long = {
-    return posArray.getOccurredSum();
+    return posArray.getOccurredSum()
   }
 
   override def getOccuredCount(s: String): Long = {
-    return posArray.getOccurredCount(s);
+    return posArray.getOccurredCount(s)
   }
 
   override def incOccuredCount(s: String) {
-    posArray.incPOSCount(s);
+    posArray.incPOSCount(s)
   }
 
   override def compareTo(obj: Object): Int = {
     if (obj != null && (obj.isInstanceOf[String])) {
-      return wordName.compareTo(obj.asInstanceOf[String]);
+      return wordName.compareTo(obj.asInstanceOf[String])
     }
     if (obj != null && (obj.isInstanceOf[DomainWordItem])) {
-      return wordName.compareTo(obj.asInstanceOf[DomainWordItem].getWordName());
+      return wordName.compareTo(obj.asInstanceOf[DomainWordItem].getWordName())
     } else {
-      return 1;
+      return 1
     }
   }
 
   def equals(obj: DomainWordItem): Boolean = {
     if (obj != null ) {
-      return wordName.equals(obj.wordName);
+      return wordName.equals(obj.wordName)
     } else {
-      return false;
+      return false
     }
   }
 
   override def toString(): String = {
-    val stringBuilder = new StringBuilder();
-    stringBuilder.append((new StringBuilder(String.valueOf(getWordName()))).append("\n").toString());
-    stringBuilder.append(getPOSArray().toString());
-    return stringBuilder.toString();
+    val stringBuilder = new StringBuilder()
+    stringBuilder.append((new StringBuilder(String.valueOf(getWordName()))).append("\n").toString())
+    stringBuilder.append(getPOSArray().toString())
+    return stringBuilder.toString()
   }
 
   override def toDBFString(): String = {
-    val stringBuilder = new StringBuilder();
-    stringBuilder.append(getPOSArray().toDBFString(getWordName()));
-    return stringBuilder.toString();
+    val stringBuilder = new StringBuilder()
+    stringBuilder.append(getPOSArray().toDBFString(getWordName()))
+    return stringBuilder.toString()
   }
 
   override def getConcepts(): Array[Concept] = {
@@ -112,7 +112,7 @@ class DomainWordItem extends IWord with Comparable[Object] {
   }
 
   private var log2Freq: Int = 0
-  private val posArray = new POSArray();
+  private val posArray = new POSArray()
 }
 
 object DomainWordItem {

@@ -7,7 +7,7 @@ object WordUtil {
 
   def isNumerical(wordString: String): Int = {
     if (wordString.length() <= 0) {
-      2;
+      2
     } else {
       wordString.find(!Character.isDigit(_)) match {
         case Some(ch) => return 2
@@ -17,7 +17,7 @@ object WordUtil {
   }
 
   def isCharaterOrDigit(ch: Char): Boolean = {
-    return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9';
+    return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9'
   }
 
   def isAlphaNumericWithUnderScore(wordString: String): Boolean =
@@ -39,28 +39,28 @@ object WordUtil {
     }
 
   def isPos_P_C_U_W_UN(POS: Int): Boolean = {
-    return POS == POSUtil.POS_P || POS == POSUtil.POS_C || POS == POSUtil.POS_U || POS == POSUtil.POS_W || POS == POSUtil.POS_UNKOWN;
+    return POS == POSUtil.POS_P || POS == POSUtil.POS_C || POS == POSUtil.POS_U || POS == POSUtil.POS_W || POS == POSUtil.POS_UNKOWN
   }
 
   def isChineseJieCi(wordString: String): Boolean = {
-    return wordString.equals("向") || wordString.equals("和") || wordString.equals("丁") || wordString.equals("自") || wordString.equals("若") || wordString.equals("于") || wordString.equals("同") || wordString.equals("为") || wordString.equals("以") || wordString.equals("连") || wordString.equals("从") || wordString.equals("得") || wordString.equals("则");
+    return wordString.equals("向") || wordString.equals("和") || wordString.equals("丁") || wordString.equals("自") || wordString.equals("若") || wordString.equals("于") || wordString.equals("同") || wordString.equals("为") || wordString.equals("以") || wordString.equals("连") || wordString.equals("从") || wordString.equals("得") || wordString.equals("则")
   }
 
   def isLeftOrRightBraceOrColonOrSlash(ch: String): Boolean = {
     var flag = false
     if (glueChars.indexOf(ch) >= 0 && glueChar.indexOf(ch) < 0) {
-      flag = true;
+      flag = true
     }
-    return flag;
+    return flag
   }
 
   def isSpecialMingChar(ch: String): Boolean = {
-    return ch.equals("向") || ch.equals("自") || ch.equals("乃") || ch.equals("以") || ch.equals("从") || ch.equals("和") || ch.equals("得") || ch.equals("为") || ch.equals("则") || ch.equals("如");
+    return ch.equals("向") || ch.equals("自") || ch.equals("乃") || ch.equals("以") || ch.equals("从") || ch.equals("和") || ch.equals("得") || ch.equals("为") || ch.equals("则") || ch.equals("如")
   }
 
   val glueChars = "*?~/Array[_]:"
 
   val config = MPSegmentConfiguration()
 
-  val glueChar = config.getGlueChar();
+  val glueChar = config.getGlueChar()
 }

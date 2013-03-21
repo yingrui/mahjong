@@ -1,29 +1,29 @@
-//package websiteschema.mpsegment.pinyin;
+//package websiteschema.mpsegment.pinyin
 //
-//import websiteschema.mpsegment.conf.MPSegmentConfiguration;
+//import websiteschema.mpsegment.conf.MPSegmentConfiguration
 //
-//import java.io.IOException;
+//import java.io.IOException
 //
 //class WordToPinyinClassfierFactory {
 //
-//    private static WordToPinyinClassfierFactory instance = new WordToPinyinClassfierFactory();
-//    private var classifier : WordToPinyinClassifier = new WordToPinyinClassifier();
+//    private static WordToPinyinClassfierFactory instance = new WordToPinyinClassfierFactory()
+//    private var classifier : WordToPinyinClassifier = new WordToPinyinClassifier()
 //
 //    private WordToPinyinClassfierFactory() {
 //        try {
 //            var model = new WordToPinyinModel()
-//            model.load(MPSegmentConfiguration.getInstance().getPinyinModel());
-//            classifier.setModel(model);
+//            model.load(MPSegmentConfiguration.getInstance().getPinyinModel())
+//            classifier.setModel(model)
 //        } catch {
-//            ex.printStackTrace();
+//            ex.printStackTrace()
 //        }
 //    }
 //
 //    public static WordToPinyinClassfierFactory getInstance() {
-//        return instance;
+//        return instance
 //    }
 //
 //    def getClassifier() : WordToPinyinClassifier = {
-//        return classifier;
+//        return classifier
 //    }
 //}

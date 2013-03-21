@@ -1,11 +1,11 @@
-//package websiteschema.mpsegment.performance;
+//package websiteschema.mpsegment.performance
 //
-//import org.junit.Assert;
-//import org.junit.Ignore;
-//import org.junit.Test;
-//import websiteschema.mpsegment.core.SegmentEngine;
-//import websiteschema.mpsegment.core.SegmentResult;
-//import websiteschema.mpsegment.core.SegmentWorker;
+//import org.junit.Assert
+//import org.junit.Ignore
+//import org.junit.Test
+//import websiteschema.mpsegment.core.SegmentEngine
+//import websiteschema.mpsegment.core.SegmentResult
+//import websiteschema.mpsegment.core.SegmentWorker
 //
 //class DisambiguationSegmentTest {
 //
@@ -16,14 +16,14 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var words = worker.segment(str)
-//        println(words);
+//        println(words)
 //
 //        var old = worker.isUseContextFreqSegment()
-//        worker.setUseContextFreqSegment(true);
-//        words = worker.segment(str);
-//        println(words);
-//        Assert.assertEquals(words.getWord(1), "机会");
-//        worker.setUseContextFreqSegment(old);
+//        worker.setUseContextFreqSegment(true)
+//        words = worker.segment(str)
+//        println(words)
+//        Assert.assertEquals(words.getWord(1), "机会")
+//        worker.setUseContextFreqSegment(old)
 //    }
 //
 //    @Test
@@ -33,18 +33,18 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "学生");
-//        Assert.assertEquals(words.getWord(1), "物");
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "学生")
+//        Assert.assertEquals(words.getWord(1), "物")
 //
 //        var old = worker.isUseContextFreqSegment()
-//        worker.setUseContextFreqSegment(true);
-//        words = worker.segment(str);
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "学");
-//        Assert.assertEquals(words.getWord(1), "生物");
+//        worker.setUseContextFreqSegment(true)
+//        words = worker.segment(str)
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "学")
+//        Assert.assertEquals(words.getWord(1), "生物")
 //
-//        worker.setUseContextFreqSegment(old);
+//        worker.setUseContextFreqSegment(old)
 //    }
 //
 //    @Test
@@ -54,13 +54,13 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var old = worker.isUseContextFreqSegment()
-//        worker.setUseContextFreqSegment(true);
+//        worker.setUseContextFreqSegment(true)
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(8), "乒乓球");
-//        Assert.assertEquals(words.getWord(9), "拍卖");
+//        println(words)
+//        Assert.assertEquals(words.getWord(8), "乒乓球")
+//        Assert.assertEquals(words.getWord(9), "拍卖")
 //
-//        worker.setUseContextFreqSegment(old);
+//        worker.setUseContextFreqSegment(old)
 //    }
 //
 //    @Test
@@ -70,14 +70,14 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var old = worker.isUseContextFreqSegment()
-//        worker.setUseContextFreqSegment(true);
+//        worker.setUseContextFreqSegment(true)
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(0), "乒乓");
-//        Assert.assertEquals(words.getWord(1), "球拍");
-//        Assert.assertEquals(words.getWord(2), "卖");
+//        println(words)
+//        Assert.assertEquals(words.getWord(0), "乒乓")
+//        Assert.assertEquals(words.getWord(1), "球拍")
+//        Assert.assertEquals(words.getWord(2), "卖")
 //
-//        worker.setUseContextFreqSegment(old);
+//        worker.setUseContextFreqSegment(old)
 //    }
 //
 //    @Test
@@ -87,16 +87,16 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(8), "学生");
+//        println(words)
+//        Assert.assertEquals(words.getWord(8), "学生")
 //
 //        var old = worker.isUseContextFreqSegment()
-//        worker.setUseContextFreqSegment(true);
-//        words = worker.segment(str);
-//        println(words);
-//        Assert.assertEquals(words.getWord(8), "学");
+//        worker.setUseContextFreqSegment(true)
+//        words = worker.segment(str)
+//        println(words)
+//        Assert.assertEquals(words.getWord(8), "学")
 //
-//        worker.setUseContextFreqSegment(old);
+//        worker.setUseContextFreqSegment(old)
 //    }
 //
 //    @Test
@@ -106,9 +106,9 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var words = worker.segment(str)
-//        println(words);
+//        println(words)
 //
-//        Assert.assertEquals(words.getWord(1), "和");
+//        Assert.assertEquals(words.getWord(1), "和")
 //    }
 //
 //    @Ignore
@@ -119,14 +119,14 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var words = worker.segment(str)
-//        println(words);
-//        Assert.assertEquals(words.getWord(1), "把手");
+//        println(words)
+//        Assert.assertEquals(words.getWord(1), "把手")
 //
-//        str = "请把手拿开";
-//        words = worker.segment(str);
+//        str = "请把手拿开"
+//        words = worker.segment(str)
 //        // TODO: Should break 把手 to 把 and 手.
-//        Assert.assertEquals(words.getWord(1), "把");
-//        println(words);
+//        Assert.assertEquals(words.getWord(1), "把")
+//        println(words)
 //    }
 //
 //    @Ignore
@@ -137,13 +137,13 @@
 //        var worker = engine.getSegmentWorker()
 //
 //        var words = worker.segment(str)
-//        println(words);
+//        println(words)
 //        // TODO: Should break 中将 to 中 and 将.
-//        Assert.assertEquals(words.getWord(3), "中");
+//        Assert.assertEquals(words.getWord(3), "中")
 //
-//        str = "将军任命了一名中将";
-//        words = worker.segment(str);
-//        Assert.assertEquals(words.getWord(5), "中将");
-//        println(words);
+//        str = "将军任命了一名中将"
+//        words = worker.segment(str)
+//        Assert.assertEquals(words.getWord(5), "中将")
+//        println(words)
 //    }
 //}

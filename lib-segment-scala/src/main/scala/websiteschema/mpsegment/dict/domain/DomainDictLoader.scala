@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.dict.domain;
+package websiteschema.mpsegment.dict.domain
 
 trait DomainDictLoader {
 

@@ -2,10 +2,10 @@
 // * To change this template, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package websiteschema.mpsegment.graph;
+//package websiteschema.mpsegment.graph
 //
-//import java.util.Iterator;
-//import java.util.TreeMap;
+//import java.util.Iterator
+//import java.util.TreeMap
 //
 ///**
 // *
@@ -18,48 +18,48 @@
 //
 //    // initialize the all 0s vector of length N
 //    public SparseVector(Int N) {
-//        this.N = N;
-//        this.st = new SymbolTable<Int, Int, Obj>();
+//        this.N = N
+//        this.st = new SymbolTable<Int, Int, Obj>()
 //    }
 //
 //    // put st(i) = value
 //    def put(i: Int, value: Int, obj: Obj) {
 //        if (i < 0 || i >= N) {
-//            throw new RuntimeException("Illegal index");
+//            throw new RuntimeException("Illegal index")
 //        }
 //        if (value == 0.0) {
-//            st.delete(i);
+//            st.delete(i)
 //        } else {
-//            st.put(i, value, obj);
+//            st.put(i, value, obj)
 //        }
 //    }
 //
 //    // return st(i)
 //    def get(i: Int) : Int = {
 //        if (i < 0 || i >= N) {
-//            throw new RuntimeException("Illegal index");
+//            throw new RuntimeException("Illegal index")
 //        }
 //        if (st.contains(i)) {
-//            return st.get(i);
+//            return st.get(i)
 //        } else {
-//            return 0;
+//            return 0
 //        }
 //    }
 //
 //    def getObject(i: Int) : Obj = {
 //        if (i < 0 || i >= N) {
-//            throw new RuntimeException("Illegal index");
+//            throw new RuntimeException("Illegal index")
 //        }
 //        if (st.contains(i)) {
-//            return st.getObject(i);
+//            return st.getObject(i)
 //        } else {
-//            return null;
+//            return null
 //        }
 //    }
 //
 //    // return the number of nonzero entries
 //    def nnz() : Int = {
-//        return st.size();
+//        return st.size()
 //    }
 //
 //    def getNonZeroColumns() : Array[Int] = {
@@ -68,28 +68,28 @@
 //        if (null != keys) {
 //            var i = 0
 //            while (keys.hasNext()) {
-//                cols[i++] = keys.next();
+//                cols[i++] = keys.next()
 //            }
 //        }
-//        return cols;
+//        return cols
 //    }
 //
 //    // return the size of the vector
 //    def size() : Int = {
-//        return N;
+//        return N
 //    }
 //
 //    // return a string representation
 //    override def toString() : String = {
 //        var s = ""
 //        for (i <- st) {
-//            s += "(" + i + ", " + st.get(i) + ") ";
+//            s += "(" + i + ", " + st.get(i) + ") "
 //        }
-//        return s;
+//        return s
 //    }
 //
 //    void clear() {
-//        st.clear();
+//        st.clear()
 //    }
 //
 //    /**
@@ -107,7 +107,7 @@
 //    class SymbolTable<Key extends Comparable[Key], Value, Obj> extends Iterable[Key] {
 //
 //        private def clear() {
-//            st.clear();
+//            st.clear()
 //        }
 //
 //        class Pair {
@@ -116,11 +116,11 @@
 //            var obj: Obj = null
 //
 //            Pair(Value v, Obj o) {
-//                value = v;
-//                obj = o;
+//                value = v
+//                obj = o
 //            }
 //        }
-//        private TreeMap[Key,Pair] st;
+//        private TreeMap[Key,Pair] st
 //
 //        /**
 //         * Create an empty symbol table.
@@ -135,9 +135,9 @@
 //         */
 //        void put(Key key, Value val, Obj obj) {
 //            if (val == null) {
-//                st.remove(key);
+//                st.remove(key)
 //            } else {
-//                st.put(key, new Pair(val, obj));
+//                st.put(key, new Pair(val, obj))
 //            }
 //        }
 //
@@ -145,27 +145,27 @@
 //         * Return the value paired with given key; null if key is not in table.
 //         */
 //        Value get(Key key) {
-//            return st.get(key).value;
+//            return st.get(key).value
 //        }
 //
 //        Obj getObject(Key key) {
-//            return st.get(key).obj;
+//            return st.get(key).obj
 //        }
 //
 //        Value delete(Key key) {
-//            return st.remove(key).value;
+//            return st.remove(key).value
 //        }
 //
 //        Boolean contains(Key key) {
-//            return st.containsKey(key);
+//            return st.containsKey(key)
 //        }
 //
 //        Int size() {
-//            return st.size();
+//            return st.size()
 //        }
 //
 //        override def iterator() : Iterator[Key] = {
-//            return st.keySet().iterator();
+//            return st.keySet().iterator()
 //        }
 //    }
 //}

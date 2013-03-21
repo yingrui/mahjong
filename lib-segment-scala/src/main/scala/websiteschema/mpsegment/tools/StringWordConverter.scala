@@ -18,7 +18,7 @@ class StringWordConverter {
   private val conceptsKey = "concepts"
 
   def setConceptRepository(conceptRepository: ConceptRepository) {
-    this.conceptRepository = conceptRepository;
+    this.conceptRepository = conceptRepository
   }
 
   def convert(str: String): IWord = {
@@ -27,18 +27,18 @@ class StringWordConverter {
         var wordName = m.group(1)
         var properties = convertToMap(m.group(2))
         try {
-          wordName = new String(java.net.URLDecoder.decode(wordName, "utf-8"));
+          wordName = new String(java.net.URLDecoder.decode(wordName, "utf-8"))
         } catch {
           case e: Exception =>
-            e.printStackTrace();
+            e.printStackTrace()
         }
 
         val word = new WordImpl(wordName)
-        setDomainType(properties.getOrElse(domainTypeKey, null), word);
-        setPOSTable(properties.getOrElse(posTableKey, null), word);
-        setConcepts(properties.getOrElse(conceptsKey, null), word);
-        properties = null;
-        return word;
+        setDomainType(properties.getOrElse(domainTypeKey, null), word)
+        setPOSTable(properties.getOrElse(posTableKey, null), word)
+        setConcepts(properties.getOrElse(conceptsKey, null), word)
+        properties = null
+        return word
       }
       case _ => return null
     }
@@ -52,13 +52,13 @@ class StringWordConverter {
         val conceptName = conceptStrList(i)
         try {
           val concept = conceptRepository.getConceptByName(conceptName)
-          concepts(i) = concept;
+          concepts(i) = concept
         } catch {
           case _: Exception =>
-            println(conceptName);
+            println(conceptName)
         }
       }
-      word.setConcepts(concepts);
+      word.setConcepts(concepts)
     }
   }
 
@@ -67,11 +67,11 @@ class StringWordConverter {
       var posTable = convertToMap(posTableString)
       val posArray = new POSArray()
       for (pos <- posTable.keys) {
-        posArray.add(POS(pos, posTable(pos).toInt));
+        posArray.add(POS(pos, posTable(pos).toInt))
       }
-      posArray.buildPOSArray();
-      word.setPosArray(posArray);
-      posTable = null;
+      posArray.buildPOSArray()
+      word.setPosArray(posArray)
+      posTable = null
     }
   }
 
@@ -88,9 +88,9 @@ class StringWordConverter {
       for (pair <- patternPair.findAllMatchIn(content)) {
         map += (pair.group(1) -> pair.group(2))
       }
-      return map;
+      return map
     }
-    return null;
+    return null
   }
 
   private def convertToList(str: String): List[String] = {
@@ -98,7 +98,7 @@ class StringWordConverter {
       val content = str.substring(1, str.length() - 1)
       return content.split(",").toList
     }
-    return null;
+    return null
   }
 
 }

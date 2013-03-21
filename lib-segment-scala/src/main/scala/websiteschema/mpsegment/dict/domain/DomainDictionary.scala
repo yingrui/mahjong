@@ -7,11 +7,11 @@ import collection.mutable
 class DomainDictionary extends IDictionary {
 
   private def lookupWord(wordName: String): IWord = {
-    return hashDictionary.lookupWord(wordName);
+    return hashDictionary.lookupWord(wordName)
   }
 
   private def getWord(wordIndex: Int): IWord = {
-    return if (wordIndex >= 0) arrayWordItem(wordIndex) else null;
+    return if (wordIndex >= 0) arrayWordItem(wordIndex) else null
   }
 
   private def getWordIndex(wordName: String): Int = wordNameIndexHashMap.getOrElse(wordName, -1)
@@ -31,35 +31,35 @@ class DomainDictionary extends IDictionary {
 
   def pushWord(wordName: String, synonym: String, pos: String, freq: Int, domainType: Int) {
     if (wordName == null || wordName.trim().equals("") || pos == null || pos.trim().equals("") || wordName.trim().length() < 2) {
-      System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.");
-      return;
+      System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.")
+      return
     }
     val word = lookupWord(wordName)
     var index = -1
     if (null != word) {
-      word.setOccuredCount(pos, freq);
-      word.setDomainType(domainType);
-      index = getWordIndex(wordName);
+      word.setOccuredCount(pos, freq)
+      word.setDomainType(domainType)
+      index = getWordIndex(wordName)
     } else {
-      index = addWord(wordName, pos, freq, domainType);
+      index = addWord(wordName, pos, freq, domainType)
     }
     if (null != synonym && !synonym.isEmpty()) {
       val synonymIndex = getWordIndex(synonym)
-      addSynonym(index, synonymIndex);
+      addSynonym(index, synonymIndex)
     }
   }
 
   private def addSynonym(index: Int, synonymIndex: Int) {
     if (index >= 0 && synonymIndex >= 0) {
-      synonymIndexHashMap += (index -> synonymIndex);
+      synonymIndexHashMap += (index -> synonymIndex)
       var synonymSet = synonymHashMap.getOrElse(synonymIndex, null)
       if (null == synonymSet) {
-        synonymSet = List[Int]();
+        synonymSet = List[Int]()
       }
       if (!synonymSet.contains(index)) {
-        synonymSet = synonymSet ++ List(index);
+        synonymSet = synonymSet ++ List(index)
       }
-      synonymHashMap += (synonymIndex -> synonymSet);
+      synonymHashMap += (synonymIndex -> synonymSet)
     }
   }
 
@@ -74,11 +74,11 @@ class DomainDictionary extends IDictionary {
         return head :: synonymSet.map(i => getWord(i))
       }
     }
-    return null;
+    return null
   }
 
   override def getWord(wordName: String): IWord = {
-    return hashDictionary.getWord(wordName);
+    return hashDictionary.getWord(wordName)
   }
 
   def getWordItem(wordName: String): IWord = {
@@ -95,15 +95,15 @@ class DomainDictionary extends IDictionary {
       length -= 1
     }
 
-    return null;
+    return null
   }
 
   override def getWords(wordStr: String): Array[IWord] = {
-    return hashDictionary.getWords(wordStr);
+    return hashDictionary.getWords(wordStr)
   }
 
   override def iterator(): List[IWord] = {
-    return arrayWordItem;
+    return arrayWordItem
   }
 
   private val hashDictionary = new HashDictionary()
@@ -112,5 +112,5 @@ class DomainDictionary extends IDictionary {
   private var arrayWordItem = List[DomainWordItem]()
   private val synonymIndexHashMap = mutable.HashMap[Int, Int]()
   private val synonymHashMap = mutable.HashMap[Int, List[Int]]()
-  private var maxWordLength: Int = 0;
+  private var maxWordLength: Int = 0
 }

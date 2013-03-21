@@ -10,23 +10,23 @@ class ViterbiTest {
         val viterbi = new Viterbi()
         val sortor = new TrieNodeBinarySort()
 
-        viterbi.setSortor(sortor);
+        viterbi.setSortor(sortor)
 
-        initTestData(viterbi);
-        viterbi.setN(2);
+        initTestData(viterbi)
+        viterbi.setN(2)
 
         val o = List("T", "H", "T", "H", "T", "H")
         try {
-            val s = viterbi.calculateWithLog(o);
+            val s = viterbi.calculateWithLog(o)
             val sb = new StringBuilder()
             for (state <- s) {
-                print(state.getName() + " ");
-                sb.append(state.getName()).append(" ");
+                print(state.getName() + " ")
+                sb.append(state.getName()).append(" ")
             }
-            assert (sb.toString().trim().equals("three three three three three two"));
+            assert (sb.toString().trim().equals("three three three three three two"))
         } catch {
           case ex: Throwable =>
-            Assert.fail(ex.getMessage());
+            Assert.fail(ex.getMessage())
         }
     }
 
@@ -36,70 +36,70 @@ class ViterbiTest {
         val viterbi = new Viterbi()
         val sortor = new TrieNodeBinarySort()
 
-        viterbi.setSortor(sortor);
+        viterbi.setSortor(sortor)
 
-        initTestData(viterbi);
-        viterbi.setN(2);
+        initTestData(viterbi)
+        viterbi.setN(2)
 
         try {
-            val s = viterbi.calculateWithLog(o);
+            val s = viterbi.calculateWithLog(o)
             val sb = new StringBuilder()
             for (state <- s) {
-                print(state.getName() + " ");
-                sb.append(state.getName()).append(" ");
+                print(state.getName() + " ")
+                sb.append(state.getName()).append(" ")
             }
-            Assert.fail("should throw ObserveListException.");
+            Assert.fail("should throw ObserveListException.")
         } catch {
           case ex: Throwable =>
-            println(ex.getMessage());
+            println(ex.getMessage())
         }
 
     }
 
     def initTestData(v: Viterbi) {
         var s1 = Node("one")
-        v.getStateBank().add(s1);
+        v.getStateBank().add(s1)
         var s2 = Node("two")
-        v.getStateBank().add(s2);
+        v.getStateBank().add(s2)
         var s3 = Node("three")
-        v.getStateBank().add(s3);
+        v.getStateBank().add(s3)
 
         var o1 = Node("H")
-        v.getObserveBank().add(o1);
+        v.getObserveBank().add(o1)
         var o2 = Node("T")
-        v.getObserveBank().add(o2);
+        v.getObserveBank().add(o2)
 
         //transition
         //   s1  s2  s3
         //s1 0.8 0.1 0.1
         //s2 0.1 0.8 0.1
         //s3 0.1 0.1 0.8
-        v.getTran().setStateBank(v.getStateBank());
-        v.getTran().setProb(s1.getIndex(), s1.getIndex(), 0.3);
-        v.getTran().setProb(s1.getIndex(), s2.getIndex(), 0.3);
-        v.getTran().setProb(s1.getIndex(), s3.getIndex(), 0.4);
-        v.getTran().setProb(s2.getIndex(), s1.getIndex(), 0.2);
-        v.getTran().setProb(s2.getIndex(), s2.getIndex(), 0.6);
-        v.getTran().setProb(s2.getIndex(), s3.getIndex(), 0.2);
-        v.getTran().setProb(s3.getIndex(), s1.getIndex(), 0.2);
-        v.getTran().setProb(s3.getIndex(), s2.getIndex(), 0.2);
-        v.getTran().setProb(s3.getIndex(), s3.getIndex(), 0.6);
-        v.getTran().getRoot().printTreeNode("");
+        v.getTran().setStateBank(v.getStateBank())
+        v.getTran().setProb(s1.getIndex(), s1.getIndex(), 0.3)
+        v.getTran().setProb(s1.getIndex(), s2.getIndex(), 0.3)
+        v.getTran().setProb(s1.getIndex(), s3.getIndex(), 0.4)
+        v.getTran().setProb(s2.getIndex(), s1.getIndex(), 0.2)
+        v.getTran().setProb(s2.getIndex(), s2.getIndex(), 0.6)
+        v.getTran().setProb(s2.getIndex(), s3.getIndex(), 0.2)
+        v.getTran().setProb(s3.getIndex(), s1.getIndex(), 0.2)
+        v.getTran().setProb(s3.getIndex(), s2.getIndex(), 0.2)
+        v.getTran().setProb(s3.getIndex(), s3.getIndex(), 0.6)
+        v.getTran().getRoot().printTreeNode("")
         //emission
         //   o1  o2
         //s1 0.5 0.5
         //s2 0.8 0.2
         //s3 0.2 0.8
-        v.getE().setProb(s1.getIndex(), o1.getIndex(), 0.5);
-        v.getE().setProb(s1.getIndex(), o2.getIndex(), 0.5);
-        v.getE().setProb(s2.getIndex(), o1.getIndex(), 0.8);
-        v.getE().setProb(s2.getIndex(), o2.getIndex(), 0.2);
-        v.getE().setProb(s3.getIndex(), o1.getIndex(), 0.2);
-        v.getE().setProb(s3.getIndex(), o2.getIndex(), 0.8);
+        v.getE().setProb(s1.getIndex(), o1.getIndex(), 0.5)
+        v.getE().setProb(s1.getIndex(), o2.getIndex(), 0.5)
+        v.getE().setProb(s2.getIndex(), o1.getIndex(), 0.8)
+        v.getE().setProb(s2.getIndex(), o2.getIndex(), 0.2)
+        v.getE().setProb(s3.getIndex(), o1.getIndex(), 0.2)
+        v.getE().setProb(s3.getIndex(), o2.getIndex(), 0.8)
 
         //Pi = [0.2 0.3 0.5]
-        v.getPi().setPi(s1.getIndex(), 0.2);
-        v.getPi().setPi(s2.getIndex(), 0.4);
-        v.getPi().setPi(s3.getIndex(), 0.4);
+        v.getPi().setPi(s1.getIndex(), 0.2)
+        v.getPi().setPi(s2.getIndex(), 0.4)
+        v.getPi().setPi(s3.getIndex(), 0.4)
     }
 }

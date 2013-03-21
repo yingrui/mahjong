@@ -1,9 +1,9 @@
-//package websiteschema.mpsegment.core;
+//package websiteschema.mpsegment.core
 //
-//import websiteschema.mpsegment.dict.DictionaryLookupResult;
-//import websiteschema.mpsegment.dict.DictionaryService;
-//import websiteschema.mpsegment.dict.IWord;
-//import websiteschema.mpsegment.util.StringUtil;
+//import websiteschema.mpsegment.dict.DictionaryLookupResult
+//import websiteschema.mpsegment.dict.DictionaryService
+//import websiteschema.mpsegment.dict.IWord
+//import websiteschema.mpsegment.util.StringUtil
 //
 //public abstract class AbstractWordScanner {
 //    private var sentence : String = null
@@ -11,7 +11,7 @@
 //    private var dictionaryService : DictionaryService = null
 //
 //    def getDictionaryService() : DictionaryService = {
-//        return dictionaryService;
+//        return dictionaryService
 //    }
 //
 //    def startScanningAt(startPos: Int) {
@@ -28,10 +28,10 @@
 //                //find all possible slices except single word
 //                var candidateWord = getCandidateSentence(begin, lastMinWordLen)
 //                var result = dictionaryService.lookup(candidateWord)
-//                processFoundWordItems(begin, singleCharWord, result);
+//                processFoundWordItems(begin, singleCharWord, result)
 //            }
 //        } catch {
-//            println(ex);
+//            println(ex)
 //        } finally {
 //        }
 //    }
@@ -40,21 +40,21 @@
 //    abstract def processFoundWordItems(begin: Int, singleCharWord: IWord, lookupResult: DictionaryLookupResult) 
 //
 //    def setSentence(sentence: String) {
-//        this.sentence = sentence;
+//        this.sentence = sentence
 //    }
 //
 //    def setMaxWordLength(maxWordLength: Int) {
-//        this.maxWordLength = maxWordLength;
+//        this.maxWordLength = maxWordLength
 //    }
 //
 //    def setDictionaryService(dictionaryService: DictionaryService) {
-//        this.dictionaryService = dictionaryService;
+//        this.dictionaryService = dictionaryService
 //    }
 //
 //    private def scanTheMinWordLength(begin: Int) : Int = {
 //        var index = scanEnglishWordAndShorten(begin)
 //        var minWordLen = (index - begin) + 1
-//        return minWordLen;
+//        return minWordLen
 //    }
 //
 //    private def scanEnglishWordAndShorten(begin: Int) : Int = {
@@ -62,11 +62,11 @@
 //        var index = begin
 //        if (StringUtil.isCharAlphabeticalOrDigital(sentence.charAt(index))) {
 //            while (index < sentenceLength && StringUtil.isCharAlphabeticalOrDigital(sentence.charAt(index))) {
-//                index++;
+//                index++
 //            }
-//            index--;
+//            index--
 //        }
-//        return index;
+//        return index
 //    }
 //
 //    private def getCandidateSentence(begin: Int, lastMinWordLen1: Int) : String = {
@@ -76,11 +76,11 @@
 //        if (maxWordLength <= rest) {
 //            var end = (begin + maxWordLength + lastMinWordLen1) - 1
 //            end = end < length
-//                    ? end : length;
-//            candidateWord = sentence.substring(begin, end);
+//                    ? end : length
+//            candidateWord = sentence.substring(begin, end)
 //        } else {
-//            candidateWord = sentence.substring(begin);
+//            candidateWord = sentence.substring(begin)
 //        }
-//        return candidateWord;
+//        return candidateWord
 //    }
 //}

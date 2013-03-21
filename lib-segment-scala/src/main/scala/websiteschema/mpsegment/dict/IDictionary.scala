@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.dict;
+package websiteschema.mpsegment.dict
 
 trait IDictionary {
 

@@ -2,9 +2,9 @@
 // * To change this template, choose Tools | Templates
 // * and open the template in the editor.
 // */
-//package websiteschema.mpsegment.filter;
+//package websiteschema.mpsegment.filter
 //
-//import websiteschema.mpsegment.dict.POSUtil;
+//import websiteschema.mpsegment.dict.POSUtil
 //
 ///**
 // *
@@ -12,8 +12,8 @@
 // */
 //class UnknownPlaceFilter extends AbstractSegmentFilter {
 //
-//    private static String adminLevels = "省市县区乡镇村旗州";
-//    private var recognizeDiMing : Boolean = true;
+//    private static String adminLevels = "省市县区乡镇村旗州"
+//    private var recognizeDiMing : Boolean = true
 //
 //    override def doFilter() {
 //        if (recognizeDiMing) {
@@ -24,7 +24,7 @@
 //                    if (pos == POSUtil.POS_NS && wordI + 1 < length) {
 //                        var word = segmentResult.getWord(wordI)
 //                        if (segmentResult.getWord(wordI + 1).length() == 1 && adminLevels.indexOf(segmentResult.getWord(wordI + 1)) > 0 && word.lastIndexOf(segmentResult.getWord(wordI + 1)) != length - 1) {
-//                            setWordIndexesAndPOSForMerge(wordI, wordI + 1, POSUtil.POS_NS);
+//                            setWordIndexesAndPOSForMerge(wordI, wordI + 1, POSUtil.POS_NS)
 //                        }
 //                    }
 //                }

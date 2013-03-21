@@ -5,54 +5,54 @@ object POSUtil {
   def getSize = posTable.size
 
   def getPOSIndex(s: String): Int = {
-    val unknownPos = 44;
+    val unknownPos = 44
     if (s != null && s.length() > 0) {
       posTable.get(s) match {
         case Some(pos) => return pos
         case _ => return unknownPos
       }
     }
-    return unknownPos;
+    return unknownPos
   }
 
   def getPOSString(i: Int): String = {
-    return posString(i);
+    return posString(i)
   }
 
   def isSubstantive(i: Int): Boolean = {
-    var flag = false;
+    var flag = false
     if (i <= 11 || i >= 21 && i <= 23 || i >= 27 && i <= 30 || i >= 40 && i <= 43 || i == 44 || i == 33) {
-      flag = true;
+      flag = true
     }
-    return flag;
+    return flag
   }
 
   def isUnknown(i: Int): Boolean = {
-    var flag = false;
+    var flag = false
     if (i == 44) {
-      flag = true;
+      flag = true
     }
-    return flag;
+    return flag
   }
 
   def isNWord(i: Int): Boolean = {
-    return i == 1 || i == 21 || i == 2 || i == 3 || i == 22 || i == 23 || i == 40 || i == 41 || i == 28 || i == 27 || i == 29 || i == 30 || i == 33 || i == 44 || i == 36;
+    return i == 1 || i == 21 || i == 2 || i == 3 || i == 22 || i == 23 || i == 40 || i == 41 || i == 28 || i == 27 || i == 29 || i == 30 || i == 33 || i == 44 || i == 36
   }
 
   def isVWord(i: Int): Boolean = {
-    return i == 9 || i == 34 || i == 40 || i == 42;
+    return i == 9 || i == 34 || i == 40 || i == 42
   }
 
   def isAWord(i: Int): Boolean = {
-    return i == 10 || i == 7 || i == 11 || i == 35 || i == 41 || i == 43;
+    return i == 10 || i == 7 || i == 11 || i == 35 || i == 41 || i == 43
   }
 
   def isDWord(i: Int): Boolean = {
-    return i == 12 || i == 42 || i == 43;
+    return i == 12 || i == 42 || i == 43
   }
 
   def isILWord(i: Int): Boolean = {
-    return i == 19 || i == 20;
+    return i == 19 || i == 20
   }
 
   val POS_N = 1
@@ -101,7 +101,7 @@ object POSUtil {
 
 
   val posTable = scala.collection.mutable.Map[String, Int]()
-  val posString = new Array[String](50);
+  val posString = new Array[String](50)
   posTable += ("N" -> 1)
   posTable += ("T" -> 2)
   posTable += ("S" -> 3)
@@ -216,49 +216,49 @@ object POSUtil {
   posTable += ("prefix" -> 22)
   posTable += ("suffix" -> 23)
   posTable += ("aux" -> 9)
-  posString(1) = "N";
-  posString(2) = "T";
-  posString(3) = "S";
-  posString(4) = "F";
-  posString(5) = "M";
-  posString(6) = "Q";
-  posString(7) = "B";
-  posString(8) = "R";
-  posString(9) = "V";
-  posString(10) = "A";
-  posString(11) = "Z";
-  posString(12) = "D";
-  posString(13) = "P";
-  posString(14) = "C";
-  posString(15) = "U";
-  posString(16) = "Y";
-  posString(17) = "E";
-  posString(18) = "O";
-  posString(19) = "I";
-  posString(20) = "L";
-  posString(21) = "J";
-  posString(22) = "H";
-  posString(23) = "K";
-  posString(24) = "G";
-  posString(25) = "X";
-  posString(26) = "W";
-  posString(27) = "NR";
-  posString(28) = "NS";
-  posString(29) = "NT";
-  posString(30) = "NZ";
-  posString(31) = "NX";
-  posString(33) = "NG";
-  posString(34) = "VG";
-  posString(35) = "AG";
-  posString(36) = "TG";
-  posString(37) = "DG";
-  posString(38) = "OG";
-  posString(40) = "VN";
-  posString(41) = "AN";
-  posString(42) = "VD";
-  posString(43) = "AD";
-  posString(39) = "AUX";
-  posString(44) = "UN";
+  posString(1) = "N"
+  posString(2) = "T"
+  posString(3) = "S"
+  posString(4) = "F"
+  posString(5) = "M"
+  posString(6) = "Q"
+  posString(7) = "B"
+  posString(8) = "R"
+  posString(9) = "V"
+  posString(10) = "A"
+  posString(11) = "Z"
+  posString(12) = "D"
+  posString(13) = "P"
+  posString(14) = "C"
+  posString(15) = "U"
+  posString(16) = "Y"
+  posString(17) = "E"
+  posString(18) = "O"
+  posString(19) = "I"
+  posString(20) = "L"
+  posString(21) = "J"
+  posString(22) = "H"
+  posString(23) = "K"
+  posString(24) = "G"
+  posString(25) = "X"
+  posString(26) = "W"
+  posString(27) = "NR"
+  posString(28) = "NS"
+  posString(29) = "NT"
+  posString(30) = "NZ"
+  posString(31) = "NX"
+  posString(33) = "NG"
+  posString(34) = "VG"
+  posString(35) = "AG"
+  posString(36) = "TG"
+  posString(37) = "DG"
+  posString(38) = "OG"
+  posString(40) = "VN"
+  posString(41) = "AN"
+  posString(42) = "VD"
+  posString(43) = "AD"
+  posString(39) = "AUX"
+  posString(44) = "UN"
 
 
 }

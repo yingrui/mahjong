@@ -1,4 +1,4 @@
-//package websiteschema.mpsegment.tools.accurary;
+//package websiteschema.mpsegment.tools.accurary
 //
 //public enum SegmentErrorType {
 //    ContainDisambiguate,

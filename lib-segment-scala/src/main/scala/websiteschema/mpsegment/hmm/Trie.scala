@@ -11,57 +11,57 @@ class Trie extends ISerialize {
   var descendant:Array[Trie] = null
 
   def getKey(): Int = {
-    return key;
+    return key
   }
 
   def buildIndex(c: Int) {
-    prob = count.toDouble /(c.toDouble + 1.0D);
+    prob = count.toDouble /(c.toDouble + 1.0D)
     if (null != descendant) {
       for (node <- descendant.toList) {
-        node.buildIndex(count);
+        node.buildIndex(count)
       }
-      Trie.sortor.sort(descendant);
+      Trie.sortor.sort(descendant)
     }
   }
 
   def insert(ngram: Array[Int]): Trie = {
-    return insert(ngram, 1);
+    return insert(ngram, 1)
   }
 
   def insert(ngram: Array[Int], freq: Int): Trie = {
-    count += freq;
+    count += freq
     if (ngram.length > 0) {
       val k = ngram(0)
       var n:Trie = if (null != descendant) binarySearch(descendant, descendant.length, k) else null
       if (null == n) {
-        n = new Trie();
-        n.key = k;
-        add(n);
-        descendant = Trie.sortor.sort(descendant);
+        n = new Trie()
+        n.key = k
+        add(n)
+        descendant = Trie.sortor.sort(descendant)
       }
 
       val rec = new Array[Int](ngram.length - 1)
       for (i <- 1 until ngram.length)
       {
-        rec(i - 1) = ngram(i);
+        rec(i - 1) = ngram(i)
       }
-      return n.insert(rec);
+      return n.insert(rec)
     } else {
-      return this;
+      return this
     }
   }
 
   def add(e: Trie) {
     var i = 0
     if (null == descendant) {
-      descendant = new Array[Trie](1);
+      descendant = new Array[Trie](1)
     } else {
       val tmp = new Array[Trie](descendant.length + 1)
-      System.arraycopy(descendant, 0, tmp, 0, descendant.length);
-      i = descendant.length;
-      descendant = tmp;
+      System.arraycopy(descendant, 0, tmp, 0, descendant.length)
+      i = descendant.length
+      descendant = tmp
     }
-    descendant(i) = e;
+    descendant(i) = e
   }
 
   def searchNode(ngram: Array[Int]): Trie = {
@@ -71,11 +71,11 @@ class Trie extends ISerialize {
       val rec = new Array[Int](ngram.length - 1)
       for (i <- 1 until ngram.length)
       {
-        rec(i - 1) = ngram(i);
+        rec(i - 1) = ngram(i)
       }
-      return n.searchNode(rec);
+      return n.searchNode(rec)
     }
-    return n;
+    return n
   }
 
   def searchNode(k: Int): Trie = {
@@ -83,24 +83,24 @@ class Trie extends ISerialize {
   }
 
   def getCount(): Int = {
-    return count;
+    return count
   }
 
   def setCount(count: Int) {
-    this.count = count;
+    this.count = count
   }
 
   def getProb(): Double = {
-    return prob;
+    return prob
   }
 
   def setProb(prob: Double) {
-    this.prob = prob;
+    this.prob = prob
   }
 
   def binarySearch(list: Array[Trie], listLength: Int, searchItem: Int): Trie = {
     if (null == list) {
-      return null;
+      return null
     }
     var first = 0
     var last = listLength - 1
@@ -108,33 +108,33 @@ class Trie extends ISerialize {
 
     var found = false
     while (first <= last && !found) {
-      mid = (first + last) / 2;
+      mid = (first + last) / 2
 
       val i = list(mid).key - searchItem
 
       if (i == 0) {
-        found = true;
+        found = true
       } else {
         if (i > 0) {
-          last = mid - 1;
+          last = mid - 1
         } else {
-          first = mid + 1;
+          first = mid + 1
         }
       }
     }
 
     if (found) {
-      return list(mid);
+      return list(mid)
     } else {
-      return null;
+      return null
     }
   }
 
   def printTreeNode(indent: String) {
-    println(indent + key + " - " + count + " - " + prob);
+    println(indent + key + " - " + count + " - " + prob)
     if (null != descendant) {
       for (node <- descendant) {
-        node.printTreeNode(indent + "  ");
+        node.printTreeNode(indent + "  ")
       }
     }
   }
@@ -145,16 +145,16 @@ class Trie extends ISerialize {
 
     if (null != descendant) {
       for (node <- descendant) {
-        c += node.getNumberOfNodeWhichCountLt(lt);
+        c += node.getNumberOfNodeWhichCountLt(lt)
       }
     }
 
-    return c;
+    return c
   }
 
   def cutCountLowerThan(lt: Int) {
     if (lt == 1) {
-      return;
+      return
     }
     if (null != descendant) {
       var l = List[Trie]()
@@ -163,41 +163,41 @@ class Trie extends ISerialize {
         val node = descendant(i)
         if (node.getCount() >= lt) {
           l = l ++ List(node)
-          node.cutCountLowerThan(lt);
+          node.cutCountLowerThan(lt)
         }
       }
 
-      descendant = l.toArray;
+      descendant = l.toArray
     }
   }
 
   override def save(writeHandler: SerializeHandler) {
-    writeHandler.serializeInt(key);
-    writeHandler.serializeInt(count);
-    writeHandler.serializeDouble(prob);
+    writeHandler.serializeInt(key)
+    writeHandler.serializeInt(count)
+    writeHandler.serializeDouble(prob)
     if (null != descendant) {
-      writeHandler.serializeInt(descendant.length);
+      writeHandler.serializeInt(descendant.length)
       for (child <- descendant.toList)
       {
-        child.save(writeHandler);
+        child.save(writeHandler)
       }
     } else {
-      writeHandler.serializeInt(0);
+      writeHandler.serializeInt(0)
     }
   }
 
   override def load(readHandler: SerializeHandler) {
-    key = readHandler.deserializeInt();
-    count = readHandler.deserializeInt();
-    prob = readHandler.deserializeDouble();
+    key = readHandler.deserializeInt()
+    count = readHandler.deserializeInt()
+    prob = readHandler.deserializeDouble()
     var numberOfDescendant = readHandler.deserializeInt()
     if (numberOfDescendant > 0) {
-      descendant = new Array[Trie](numberOfDescendant);
+      descendant = new Array[Trie](numberOfDescendant)
       for (i <- 0 until numberOfDescendant)
       {
         val child = new Trie()
-        child.load(readHandler);
-        descendant(i) = child;
+        child.load(readHandler)
+        descendant(i) = child
       }
     }
   }

@@ -10,73 +10,73 @@ class POSArray {
 
   def setPOSCount(pos: String, freq: Int) {
     if (pos == null || pos.trim().equals("")) {
-      return;
+      return
     }
-    var a1 = posTable.getOrElse(pos.trim(), null);
+    var a1 = posTable.getOrElse(pos.trim(), null)
     if (a1 != null) {
-      a1.setCount(freq);
+      a1.setCount(freq)
     } else {
-      a1 = POS(pos.trim(), freq);
+      a1 = POS(pos.trim(), freq)
     }
-    posTable += (pos.trim() -> a1);
+    posTable += (pos.trim() -> a1)
   }
 
   def setPOSCount(count: Int) {
     var discount = getOccurredSum().toDouble
     if (discount > 0.0D) {
-      discount = count.toDouble / discount;
+      discount = count.toDouble / discount
     }
     for (name <- posTable.keys) {
-      val pos = posTable(name);
-      val d1 = pos.getCount().toDouble * discount;
-      setPOSCount(name, d1.toInt);
+      val pos = posTable(name)
+      val d1 = pos.getCount().toDouble * discount
+      setPOSCount(name, d1.toInt)
     }
   }
 
   def add(posArray: POSArray) {
     if (posArray == null && arrayPOSAndFreq == null) {
-      return;
+      return
     }
 
     if (posArray == null) {
-      posTable = LinkedHashMap[String, POS]();
+      posTable = LinkedHashMap[String, POS]()
       for (i <- 0 until arrayPOSAndFreq.length) {
-        val posString = POSUtil.getPOSString(arrayPOSAndFreq(i)(0));
+        val posString = POSUtil.getPOSString(arrayPOSAndFreq(i)(0))
         posTable += (posString -> POS(posString, arrayPOSAndFreq(i)(1)))
       }
     }
 
-    val arrayPosTable = posArray.getWordPOSTable();
+    val arrayPosTable = posArray.getWordPOSTable()
     for (i <- 0 until arrayPosTable.length) {
-      val posString = POSUtil.getPOSString(arrayPosTable(i)(0));
-      add(POS(posString, arrayPosTable(i)(1)));
+      val posString = POSUtil.getPOSString(arrayPosTable(i)(0))
+      add(POS(posString, arrayPosTable(i)(1)))
     }
   }
 
   def add(pos: POS) {
     if (pos == null) {
-      return;
+      return
     }
-    var a2 = posTable.getOrElse(pos.getName(), null);
+    var a2 = posTable.getOrElse(pos.getName(), null)
     if (a2 != null) {
-      a2.setCount(a2.getCount() + pos.getCount());
+      a2.setCount(a2.getCount() + pos.getCount())
     } else {
-      a2 = POS(pos.getName(), pos.getCount());
+      a2 = POS(pos.getName(), pos.getCount())
     }
-    posTable += (a2.getName() -> a2);
+    posTable += (a2.getName() -> a2)
   }
 
   def incPOSCount(s: String) {
     if (s == null || s.trim().equals("")) {
-      return;
+      return
     }
-    var a1 = posTable.getOrElse(s.trim(), null);
+    var a1 = posTable.getOrElse(s.trim(), null)
     if (a1 != null) {
-      a1.setCount(a1.getCount() + 1);
+      a1.setCount(a1.getCount() + 1)
     } else {
-      a1 = POS(s.trim(), 1);
+      a1 = POS(s.trim(), 1)
     }
-    posTable += (s.trim() -> a1);
+    posTable += (s.trim() -> a1)
   }
 
   def getSize(): Int = {
@@ -85,59 +85,59 @@ class POSArray {
 
   def getWordPOSTable(): Array[Array[Int]] = {
     if (null == arrayPOSAndFreq) {
-      arrayPOSAndFreq = buildPOSArray();
+      arrayPOSAndFreq = buildPOSArray()
     }
-    return arrayPOSAndFreq;
+    return arrayPOSAndFreq
   }
 
   def buildPOSArray(): Array[Array[Int]] = {
-    val arrayPOS = new Array[POS](getSize());
-    var i = 0;
+    val arrayPOS = new Array[POS](getSize())
+    var i = 0
     for (name <- posTable.keys) {
-      arrayPOS(i) = posTable(name);
+      arrayPOS(i) = posTable(name)
       i += 1
     }
-    val posAndFreq = new Array[Array[Int]](arrayPOS.length);
+    val posAndFreq = new Array[Array[Int]](arrayPOS.length)
     for (j <- 0 until arrayPOS.length) {
       posAndFreq(j) = new Array[Int](2)
-      posAndFreq(j)(0) = POSUtil.getPOSIndex(arrayPOS(j).getName());
-      posAndFreq(j)(1) = arrayPOS(j).getCount();
+      posAndFreq(j)(0) = POSUtil.getPOSIndex(arrayPOS(j).getName())
+      posAndFreq(j)(1) = arrayPOS(j).getCount()
     }
-    posTable.clear();
-    posTable = null;
-    this.arrayPOSAndFreq = posAndFreq;
-    return posAndFreq;
+    posTable.clear()
+    posTable = null
+    this.arrayPOSAndFreq = posAndFreq
+    return posAndFreq
   }
 
   def getWordPOSTable(arrayPOSAndFreq: Array[Array[Int]]): Int = {
-    var i = 0;
-    var j = 0;
+    var i = 0
+    var j = 0
     for (name <- posTable.keys) {
-      val pos = posTable(name);
+      val pos = posTable(name)
       if (j < arrayPOSAndFreq.length) {
-        arrayPOSAndFreq(j)(0) = POSUtil.getPOSIndex(pos.getName());
-        arrayPOSAndFreq(j)(1) = pos.getCount();
+        arrayPOSAndFreq(j)(0) = POSUtil.getPOSIndex(pos.getName())
+        arrayPOSAndFreq(j)(1) = pos.getCount()
       }
-      j += 1;
+      j += 1
     }
 
-    i = j;
+    i = j
     for (k <- i until arrayPOSAndFreq.length) {
-      arrayPOSAndFreq(k)(0) = 0;
-      arrayPOSAndFreq(k)(1) = 0;
+      arrayPOSAndFreq(k)(0) = 0
+      arrayPOSAndFreq(k)(1) = 0
     }
 
-    return i;
+    return i
   }
 
   def getWordMaxPOS(): Int = {
-    var posIndex: Int = 1;
-    var count = 0;
+    var posIndex: Int = 1
+    var count = 0
     for (name <- posTable.keys) {
-      val pos = posTable(name);
+      val pos = posTable(name)
       if (pos.getCount() > count) {
-        posIndex = POSUtil.getPOSIndex(pos.getName());
-        count = pos.getCount();
+        posIndex = POSUtil.getPOSIndex(pos.getName())
+        count = pos.getCount()
       }
     }
 
@@ -146,44 +146,44 @@ class POSArray {
 
   def getOccurredCount(s: String): Long = {
     if (s == null || s.trim().equals("")) {
-      return 0L;
+      return 0L
     }
-    val pos = posTable.getOrElse(s.trim(), null);
+    val pos = posTable.getOrElse(s.trim(), null)
     if (pos == null) {
-      return 0L;
+      return 0L
     } else {
-      return pos.getCount().toLong;
+      return pos.getCount().toLong
     }
   }
 
   def getOccurredSum(): Long = {
-    var sum = 0L;
-    val posAndFreq = getWordPOSTable();
+    var sum = 0L
+    val posAndFreq = getWordPOSTable()
     for (i <- 0 until posAndFreq.length) {
-      sum += posAndFreq(i)(1);
+      sum += posAndFreq(i)(1)
     }
 
-    return sum;
+    return sum
   }
 
   override def toString(): String = {
-    val stringBuilder = new StringBuilder();
+    val stringBuilder = new StringBuilder()
     for (i <- 0 until arrayPOSAndFreq.length) {
-      val pos = POS(POSUtil.getPOSString(arrayPOSAndFreq(i)(0)), arrayPOSAndFreq(i)(1));
-      stringBuilder.append((new StringBuilder(String.valueOf(pos.toString()))).append("\n").toString());
+      val pos = POS(POSUtil.getPOSString(arrayPOSAndFreq(i)(0)), arrayPOSAndFreq(i)(1))
+      stringBuilder.append((new StringBuilder(String.valueOf(pos.toString()))).append("\n").toString())
     }
 
-    return stringBuilder.toString();
+    return stringBuilder.toString()
   }
 
   def toDBFString(s: String): String = {
-    val stringBuilder = new StringBuilder();
+    val stringBuilder = new StringBuilder()
     for (i <- 0 until arrayPOSAndFreq.length) {
-      val pos = POS(POSUtil.getPOSString(arrayPOSAndFreq(i)(0)), arrayPOSAndFreq(i)(1));
-      stringBuilder.append((new StringBuilder(String.valueOf(s))).append(pos.toDBFString()).append("\n").toString());
+      val pos = POS(POSUtil.getPOSString(arrayPOSAndFreq(i)(0)), arrayPOSAndFreq(i)(1))
+      stringBuilder.append((new StringBuilder(String.valueOf(s))).append(pos.toDBFString()).append("\n").toString())
     }
 
-    return stringBuilder.toString();
+    return stringBuilder.toString()
   }
 
 }

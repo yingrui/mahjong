@@ -1,14 +1,14 @@
-//package websiteschema.mpsegment.tools.accurary;
+//package websiteschema.mpsegment.tools.accurary
 //
-//import websiteschema.mpsegment.core.WordAtom;
+//import websiteschema.mpsegment.core.WordAtom
 //
-//import java.util.Map;
+//import java.util.Map
 //
 //trait ErrorAnalyzer {
 //
 //    def getErrorOccurTimes() : Int
 //
-//    public Map[String,Int] getWords();
+//    public Map[String,Int] getWords()
 //
 //    def analysis(expect: WordAtom, possibleErrorWord: String) : Boolean
 //

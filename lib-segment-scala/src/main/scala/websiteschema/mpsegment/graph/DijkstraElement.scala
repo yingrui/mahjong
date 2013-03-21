@@ -1,8 +1,8 @@
-//package websiteschema.mpsegment.graph;
+//package websiteschema.mpsegment.graph
 //
-//import java.util.Collection;
-//import java.util.HashSet;
-//import java.util.TreeSet;
+//import java.util.Collection
+//import java.util.HashSet
+//import java.util.TreeSet
 //
 ///**
 // * "Dijkstra Shortest Path" defined 3 elements.
@@ -19,69 +19,69 @@
 //        var distance: Int = null
 //
 //        public Element(Int vertex, Int distance) {
-//            this.vertex = vertex;
-//            this.distance = distance;
+//            this.vertex = vertex
+//            this.distance = distance
 //        }
 //
 //        override def compareTo(other: Element) : Int = {
 //            if (distance == other.distance) {
-//                return vertex != other.vertex ? -1 : 0;
+//                return vertex != other.vertex ? -1 : 0
 //            }
-//            return distance >= other.distance ? 1 : -1;
+//            return distance >= other.distance ? 1 : -1
 //        }
 //    }
 //
 //    DijkstraElement(Int num) {
-//        size = num;
-//        S = new HashSet[Int](size);
-//        reachedVertexSet = new TreeSet[Element]();
-//        D = new Array[Int](size);
+//        size = num
+//        S = new HashSet[Int](size)
+//        reachedVertexSet = new TreeSet[Element]()
+//        D = new Array[Int](size)
 //    }
 //
 //    void init() {
-//        S.clear();
-//        reachedVertexSet.clear();
+//        S.clear()
+//        reachedVertexSet.clear()
 //        for (Int i = 0; i < size; i++) {
-//            D[i] = Int.MAX_VALUE;
+//            D[i] = Int.MAX_VALUE
 //        }
 //    }
 //
 //    Boolean hasFoundShortestPathTo(Int vertex) {
-//        return S.contains(vertex);
+//        return S.contains(vertex)
 //    }
 //
 //    void reached(Int vertex) {
 //        var ele = new Element(vertex, D[vertex])
-//        reachedVertexSet.add(ele);
+//        reachedVertexSet.add(ele)
 //    }
 //
 //    Int getDistanceOfPathTo(Int vertex) {
-//        return D[vertex];
+//        return D[vertex]
 //    }
 //
 //    void setDistanceOfPathTo(Int vertex, Int distance) {
-//        D[vertex] = distance;
+//        D[vertex] = distance
 //    }
 //
 //    void foundShortestPathOf(Int vertex) {
-//        S.add(vertex);
+//        S.add(vertex)
 //    }
 //
 //    Int findNewShortestPath() {
 //        var nextVertex = getResolvedVertex()
 //        if (nextVertex >= 0) {
-//            foundShortestPathOf(nextVertex);
+//            foundShortestPathOf(nextVertex)
 //        }
-//        return nextVertex;
+//        return nextVertex
 //    }
 //
 //    Int getResolvedVertex() {
 //        if (!reachedVertexSet.isEmpty()) {
 //            var ele = reachedVertexSet.first()
-//            reachedVertexSet.remove(ele);
-//            return ele.vertex;
+//            reachedVertexSet.remove(ele)
+//            return ele.vertex
 //        }
-//        return -1;
+//        return -1
 //    }
 //
 //}

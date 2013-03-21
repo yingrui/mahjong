@@ -1,6 +1,6 @@
-//package websiteschema.mpsegment.filter;
+//package websiteschema.mpsegment.filter
 //
-//import websiteschema.mpsegment.core.SegmentResult;
+//import websiteschema.mpsegment.core.SegmentResult
 //
 //trait ISegmentFilter {
 //

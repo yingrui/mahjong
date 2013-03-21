@@ -6,11 +6,11 @@ class TrieNodeQuickSort extends TrieNodeSortor {
 
   override def sort(values: Array[Trie]): Array[Trie] = {
     if (values == null || values.length == 0) {
-      return values;
+      return values
     }
     var number = values.length
-    quicksort(values, 0, number - 1);
-    return values;
+    quicksort(values, 0, number - 1)
+    return values
   }
 
   private def quicksort(numbers: Array[Trie], low: Int, high: Int) {
@@ -25,15 +25,15 @@ class TrieNodeQuickSort extends TrieNodeSortor {
       // element then get the next element from the left list
       var c = compare(numbers(i), pivot)
       while (c < 0) {
-        i += 1;
-        c = compare(numbers(i), pivot);
+        i += 1
+        c = compare(numbers(i), pivot)
       }
       // If the current value from the right list is larger then the pivot
       // element then get the next element from the right list
-      c = compare(numbers(j), pivot);
+      c = compare(numbers(j), pivot)
       while (c > 0) {
-        j -= 1;
-        c = compare(numbers(j), pivot);
+        j -= 1
+        c = compare(numbers(j), pivot)
       }
 
       // If we have found a values in the left list which is larger then
@@ -42,23 +42,23 @@ class TrieNodeQuickSort extends TrieNodeSortor {
       // values.
       // As we are done we can increase i and j
       if (i <= j) {
-        exchange(numbers, i, j);
-        i += 1;
-        j -= 1;
+        exchange(numbers, i, j)
+        i += 1
+        j -= 1
       }
     }
     // Recursion
     if (low < j) {
-      quicksort(numbers, low, j);
+      quicksort(numbers, low, j)
     }
     if (i < high) {
-      quicksort(numbers, i, high);
+      quicksort(numbers, i, high)
     }
   }
 
   private def exchange(numbers: Array[Trie], i: Int, j: Int) {
     var temp = numbers(i)
-    numbers(i) = numbers(j);
-    numbers(j) = temp;
+    numbers(i) = numbers(j)
+    numbers(j) = temp
   }
 }

@@ -1,8 +1,8 @@
 package websiteschema.mpsegment
 
-import junit.framework.Assert._;
-import org.junit.Test;
-import websiteschema.mpsegment.conf.MPSegmentConfiguration;
+import junit.framework.Assert._
+import org.junit.Test
+import websiteschema.mpsegment.conf.MPSegmentConfiguration
 
 class MPSegmentConfigurationTest {
 
@@ -13,11 +13,11 @@ class MPSegmentConfigurationTest {
 
   @Test
   def should_load_config_options_from_input_map() {
-    val loadDomainDictionary = MPSegmentConfiguration().isLoadDomainDictionary();
+    val loadDomainDictionary = MPSegmentConfiguration().isLoadDomainDictionary()
     val config = Map[String, String]("load.domaindictionary" -> (!loadDomainDictionary).toString)
 
-    val configuration = MPSegmentConfiguration(config);
-    assertTrue(configuration.isLoadDomainDictionary() != loadDomainDictionary);
+    val configuration = MPSegmentConfiguration(config)
+    assertTrue(configuration.isLoadDomainDictionary() != loadDomainDictionary)
   }
 
 }

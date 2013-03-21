@@ -10,235 +10,235 @@ import java.io.File
 class ChNameDictionary {
 
   def isXing(familyName: String): Boolean = {
-    return xingHashMap.contains(familyName);
+    return xingHashMap.contains(familyName)
   }
 
   def computeLgLP3(familyName: String, fisrtNameWord: String, secondNameWord: String): Double = {
-    val d2 = getXingProb(familyName);
-    val d3 = getMingFreq0(fisrtNameWord);
-    val d4 = getMingFreq1(secondNameWord);
-    return getNameWordProb(d2, d3, d4);
+    val d2 = getXingProb(familyName)
+    val d3 = getMingFreq0(fisrtNameWord)
+    val d4 = getMingFreq1(secondNameWord)
+    return getNameWordProb(d2, d3, d4)
   }
 
   def computeLgLP3_2(s: String, s1: String): Double = {
-    val d2 = getXingProb(s.substring(0, 1));
-    val d3 = getMingFreq0(s.substring(1));
-    val d4 = getMingFreq1(s1);
-    return getNameWordProb(d2, d3, d4);
+    val d2 = getXingProb(s.substring(0, 1))
+    val d3 = getMingFreq0(s.substring(1))
+    val d4 = getMingFreq1(s1)
+    return getNameWordProb(d2, d3, d4)
   }
 
   def computeLgLP2(s: String, s1: String): Double = {
-    val d2 = getXingProb(s);
-    val d3 = getMingFreq2(s1);
-    return getNameWordProb(d2, d3);
+    val d2 = getXingProb(s)
+    val d3 = getMingFreq2(s1)
+    return getNameWordProb(d2, d3)
   }
 
   def computeLgMing23(s: String, s1: String): Double = {
-    var d1 = getMingFreq0(s).toDouble;
-    val d2 = getMingFreq1(s1);
-    d1 += d2;
-    d1 /= 1000D;
-    return d1;
+    var d1 = getMingFreq0(s).toDouble
+    val d2 = getMingFreq1(s1)
+    d1 += d2
+    d1 /= 1000D
+    return d1
   }
 
   def getRightBoundaryWordLP(s: String): Double = {
-    val index = get(rightBoundaryHashMap, s);
-    var d = 0.0D;
+    val index = get(rightBoundaryHashMap, s)
+    var d = 0.0D
     if (index > 0) {
-      d = (rightBoundaryProbs(index) - 0.10000000000000001D) / 3D;
+      d = (rightBoundaryProbs(index) - 0.10000000000000001D) / 3D
     }
-    return d;
+    return d
   }
 
   def outSummary() {
-    println((new StringBuilder("xingTop=")).append(xingTop).toString());
-    println((new StringBuilder("mingTop=")).append(mingTop).toString());
+    println((new StringBuilder("xingTop=")).append(xingTop).toString())
+    println((new StringBuilder("mingTop=")).append(mingTop).toString())
     for (i1 <- 0 until 3) {
-      println((new StringBuilder("totalMingProb(i)=")).append(totalMingProb(i1)).toString());
+      println((new StringBuilder("totalMingProb(i)=")).append(totalMingProb(i1)).toString())
     }
   }
 
   private def getXingProb(s: String): Int = {
-    var index = get(xingHashMap, s);
-    var prob = 0.0D;
+    var index = get(xingHashMap, s)
+    var prob = 0.0D
     if (index <= 0) {
-      index = 0;
+      index = 0
     } else {
-      prob = xingFreq(index).toDouble * (1.0D + xingProb(index));
+      prob = xingFreq(index).toDouble * (1.0D + xingProb(index))
     }
-    return prob.toInt;
+    return prob.toInt
   }
 
   private def get(map: Map[String, Int], key: String): Int = {
     if (map.contains(key)) {
-      return map(key);
+      return map(key)
     }
-    return 0;
+    return 0
   }
 
   private def getMingFreq0(name: String): Int = {
-    var index = get(mingHashMap, name);
+    var index = get(mingHashMap, name)
     if (index <= 0) {
-      index = 0;
+      index = 0
     } else {
-      index = mingFreqs(index)(0);
+      index = mingFreqs(index)(0)
     }
-    return index;
+    return index
   }
 
   private def getMingFreq1(name: String): Int = {
-    var index = get(mingHashMap, name);
+    var index = get(mingHashMap, name)
     if (index <= 0) {
-      index = 0;
+      index = 0
     } else {
-      index = mingFreqs(index)(1);
+      index = mingFreqs(index)(1)
     }
-    return index;
+    return index
   }
 
   private def getMingFreq2(name: String): Int = {
-    var index = get(mingHashMap, name);
+    var index = get(mingHashMap, name)
     if (index <= 0) {
-      index = 0;
+      index = 0
     } else {
-      index = mingFreqs(index)(2);
+      index = mingFreqs(index)(2)
     }
-    return index;
+    return index
   }
 
   private def getNameWordProb(d2: Double, d3: Double, d4: Double): Double = {
-    var d = d2 * factor * ((d3 + d4) / 1000000D);
+    var d = d2 * factor * ((d3 + d4) / 1000000D)
     if (d4 <= 0.0D && d > 1.0D) {
-      d *= 0.90000000000000002D;
+      d *= 0.90000000000000002D
     }
-    return d;
+    return d
   }
 
   private def getNameWordProb(d2: Double, d3: Double): Double = {
-    val d = d2 * (d3 / 1000000D);
-    return d;
+    val d = d2 * (d3 / 1000000D)
+    return d
   }
 
   def toText(): String = {
-    val lineSeparator = System.getProperty("line.separator");
-    var space = " ";
-    val sb = new StringBuilder();
-    sb.append("//ChName.dict").append(lineSeparator);
-    sb.append("[xingHashMap] //").append(xingHashMap.size).append(lineSeparator);
+    val lineSeparator = System.getProperty("line.separator")
+    var space = " "
+    val sb = new StringBuilder()
+    sb.append("//ChName.dict").append(lineSeparator)
+    sb.append("[xingHashMap] //").append(xingHashMap.size).append(lineSeparator)
     for (key <- xingHashMap.keys) {
-      sb.append(key).append(space).append(xingHashMap.get(key)).append(space);
+      sb.append(key).append(space).append(xingHashMap.get(key)).append(space)
     }
-    sb.append(lineSeparator);
-    sb.append("[xingFreq] //").append(xingFreq.length).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[xingFreq] //").append(xingFreq.length).append(lineSeparator)
     for (i <- 0 until xingFreq.length) {
-      sb.append(xingFreq(i)).append(space);
+      sb.append(xingFreq(i)).append(space)
     }
 
-    sb.append(lineSeparator);
-    sb.append("[mingHashMap] //").append(mingHashMap.size).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[mingHashMap] //").append(mingHashMap.size).append(lineSeparator)
 
     for (key <- mingHashMap.keys) {
-      sb.append(key).append(space).append(mingHashMap.get(key)).append(space);
+      sb.append(key).append(space).append(mingHashMap.get(key)).append(space)
     }
-    sb.append(lineSeparator);
-    sb.append("[mingFreqs] //").append(mingFreqs.length).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[mingFreqs] //").append(mingFreqs.length).append(lineSeparator)
     for (i <- 0 until mingFreqs.length) {
       for (j <- 0 until 3) {
-        sb.append(mingFreqs(i)(j)).append(space);
+        sb.append(mingFreqs(i)(j)).append(space)
       }
-      sb.append("\t");
+      sb.append("\t")
     }
 
-    sb.append(lineSeparator);
-    sb.append("[totalMingProb] //").append(totalMingProb.length).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[totalMingProb] //").append(totalMingProb.length).append(lineSeparator)
     for (i <- 0 until totalMingProb.length) {
-      sb.append(totalMingProb(i)).append(space);
+      sb.append(totalMingProb(i)).append(space)
     }
 
-    sb.append(lineSeparator);
-    sb.append("[fuXing] //").append(fuXing.size).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[fuXing] //").append(fuXing.size).append(lineSeparator)
     for (key <- fuXing.keys) {
-      sb.append(key).append(space).append(fuXing.get(key)).append(space);
+      sb.append(key).append(space).append(fuXing.get(key)).append(space)
     }
-    sb.append(lineSeparator);
-    sb.append("[xingProb] //").append(xingProb.length).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[xingProb] //").append(xingProb.length).append(lineSeparator)
     for (i <- 0 until xingProb.length) {
-      sb.append(xingProb(i)).append(space);
+      sb.append(xingProb(i)).append(space)
     }
-    sb.append(lineSeparator);
-    sb.append("[rightBoundaryHashMap] //").append(rightBoundaryHashMap.size).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[rightBoundaryHashMap] //").append(rightBoundaryHashMap.size).append(lineSeparator)
     for (key <- rightBoundaryHashMap.keys) {
-      sb.append(key).append(space).append(rightBoundaryHashMap.get(key)).append(space);
+      sb.append(key).append(space).append(rightBoundaryHashMap.get(key)).append(space)
     }
-    sb.append(lineSeparator);
-    sb.append("[rightBoundaryProbs] //").append(rightBoundaryProbs.length).append(lineSeparator);
+    sb.append(lineSeparator)
+    sb.append("[rightBoundaryProbs] //").append(rightBoundaryProbs.length).append(lineSeparator)
     for (i <- 0 until rightBoundaryProbs.length) {
-      sb.append(rightBoundaryProbs(i)).append(space);
+      sb.append(rightBoundaryProbs(i)).append(space)
     }
-    sb.append(lineSeparator);
-    return sb.toString();
+    sb.append(lineSeparator)
+    return sb.toString()
   }
 
   def saveNameDict(dictFile: String) {
     try {
-      val writeHandler = SerializeHandler(new File(dictFile), SerializeHandler.MODE_WRITE_ONLY);
-      writeHandler.serializeMapStringInt(xingHashMap);
-      writeHandler.serializeArrayInt(xingFreq);
-      writeHandler.serializeMapStringInt(mingHashMap);
-      writeHandler.serialize2DArrayInt(mingFreqs);
-      writeHandler.serializeArrayDouble(totalMingProb);
-      writeHandler.serializeMapStringInt(fuXing);
-      writeHandler.serializeArrayDouble(xingProb);
-      writeHandler.serializeMapStringInt(rightBoundaryHashMap);
-      writeHandler.serializeArrayDouble(rightBoundaryProbs);
-      writeHandler.close();
+      val writeHandler = SerializeHandler(new File(dictFile), SerializeHandler.MODE_WRITE_ONLY)
+      writeHandler.serializeMapStringInt(xingHashMap)
+      writeHandler.serializeArrayInt(xingFreq)
+      writeHandler.serializeMapStringInt(mingHashMap)
+      writeHandler.serialize2DArrayInt(mingFreqs)
+      writeHandler.serializeArrayDouble(totalMingProb)
+      writeHandler.serializeMapStringInt(fuXing)
+      writeHandler.serializeArrayDouble(xingProb)
+      writeHandler.serializeMapStringInt(rightBoundaryHashMap)
+      writeHandler.serializeArrayDouble(rightBoundaryProbs)
+      writeHandler.close()
     } catch {
       case exception: Throwable =>
-        System.err.println((new StringBuilder("Error: saveNameDict.save(")).append(dictFile).append(") ").append(exception.getMessage()).toString());
+        System.err.println((new StringBuilder("Error: saveNameDict.save(")).append(dictFile).append(") ").append(exception.getMessage()).toString())
     }
   }
 
   def loadNameDict(dictFile: String) {
     try {
-      var objectinputstream: DataInputStream = null;
-      var f = new File(dictFile);
-      var readHandler: SerializeHandler = null;
+      var objectinputstream: DataInputStream = null
+      var f = new File(dictFile)
+      var readHandler: SerializeHandler = null
       if (f.exists()) {
-        readHandler = SerializeHandler(f, SerializeHandler.MODE_READ_ONLY);
+        readHandler = SerializeHandler(f, SerializeHandler.MODE_READ_ONLY)
       } else {
         objectinputstream = new DataInputStream(
-          FileUtil.getResourceAsStream(dictFile));
-        readHandler = SerializeHandler(objectinputstream);
+          FileUtil.getResourceAsStream(dictFile))
+        readHandler = SerializeHandler(objectinputstream)
       }
-      xingHashMap = readHandler.deserializeMapStringInt();
-      xingFreq = readHandler.deserializeArrayInt();
-      mingHashMap = readHandler.deserializeMapStringInt();
-      mingFreqs = readHandler.deserialize2DArrayInt();
-      totalMingProb = readHandler.deserializeArrayDouble();
-      fuXing = readHandler.deserializeMapStringInt();
-      xingProb = readHandler.deserializeArrayDouble();
-      rightBoundaryHashMap = readHandler.deserializeMapStringInt();
-      rightBoundaryProbs = readHandler.deserializeArrayDouble();
-      objectinputstream.close();
+      xingHashMap = readHandler.deserializeMapStringInt()
+      xingFreq = readHandler.deserializeArrayInt()
+      mingHashMap = readHandler.deserializeMapStringInt()
+      mingFreqs = readHandler.deserialize2DArrayInt()
+      totalMingProb = readHandler.deserializeArrayDouble()
+      fuXing = readHandler.deserializeMapStringInt()
+      xingProb = readHandler.deserializeArrayDouble()
+      rightBoundaryHashMap = readHandler.deserializeMapStringInt()
+      rightBoundaryProbs = readHandler.deserializeArrayDouble()
+      objectinputstream.close()
     } catch {
       case exception: Throwable =>
-        System.err.println((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString());
+        System.err.println((new StringBuilder()).append(dictFile).append("没找到！").append(exception.getMessage()).toString())
     }
   }
 
   private var factor: Double = 0.88400000000000001D
-  private var xingHashMap: Map[String, Int] = null;
+  private var xingHashMap: Map[String, Int] = null
   private var xingFreq: Array[Int] = null
   private var xingProb: Array[Double] = null
-  private var mingHashMap: Map[String, Int] = null;
+  private var mingHashMap: Map[String, Int] = null
   private var mingFreqs: Array[Array[Int]] = null
   private var totalMingProb: Array[Double] = null
   private var xingTop: Int = 1
   private var mingTop: Int = 1
-  private var fuXing: Map[String, Int] = null;
+  private var fuXing: Map[String, Int] = null
 
   def getFuXing() = fuXing
 
-  private var rightBoundaryHashMap: Map[String, Int] = null;
-  private var rightBoundaryProbs: Array[Double] = null;
+  private var rightBoundaryHashMap: Map[String, Int] = null
+  private var rightBoundaryProbs: Array[Double] = null
 }

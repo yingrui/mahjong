@@ -1,13 +1,13 @@
 package websiteschema.mpsegment.concept
 
-;
 
-import org.junit.Assert;
-import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.junit.Assert
+import org.junit.Test
+
+import java.io.ByteArrayInputStream
+import java.io.IOException
+import java.io.InputStream
 
 class ConceptRepositoryTest {
 
@@ -18,17 +18,17 @@ class ConceptRepositoryTest {
     "1.4 时间 n-time\n" +
     "1.4.1 绝对时间 n-absolute-time\n" +
     "1.4.10 相对时间 n-relative-time\n" +
-    "1.1.1.2.1.14.3 武器 n-weapon";
+    "1.1.1.2.1.14.3 武器 n-weapon"
 
   var conceptTree: ConceptTree = null
 
   try {
     val inputStream = new ByteArrayInputStream(text.getBytes("utf-8"))
     val loader = ConceptLoader(inputStream)
-    conceptTree = loader.getConceptTree();
+    conceptTree = loader.getConceptTree()
   } catch {
     case ex: Exception =>
-      ex.printStackTrace();
+      ex.printStackTrace()
   }
 
   @Test
@@ -40,8 +40,8 @@ class ConceptRepositoryTest {
       var adjConceptTree = conceptRepository.getAdjConceptTree()
     } catch {
       case ex: Exception =>
-        ex.printStackTrace();
-        Assert.fail();
+        ex.printStackTrace()
+        Assert.fail()
     }
   }
 
@@ -49,18 +49,18 @@ class ConceptRepositoryTest {
   def should_return_concept_by_name() {
     try {
       val conceptRepository = new ConceptRepository()
-      conceptRepository.setNounConceptTree(conceptTree);
+      conceptRepository.setNounConceptTree(conceptTree)
 
       var concept = conceptRepository.getConceptByName("n-noun")
-      Assert.assertEquals(1, concept.getId());
-      Assert.assertEquals("n-noun", concept.getName());
+      Assert.assertEquals(1, concept.getId())
+      Assert.assertEquals("n-noun", concept.getName())
 
-      concept = conceptRepository.getConceptByName("n-UNKNOWN");
-      Assert.assertNull(concept);
+      concept = conceptRepository.getConceptByName("n-UNKNOWN")
+      Assert.assertNull(concept)
     } catch {
       case ex: Exception =>
-        ex.printStackTrace();
-        Assert.fail();
+        ex.printStackTrace()
+        Assert.fail()
     }
   }
 }
