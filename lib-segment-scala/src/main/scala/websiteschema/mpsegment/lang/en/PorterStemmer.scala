@@ -109,18 +109,21 @@ class PorterStemmer {
   private def m(): Int = {
     var n = 0
     var i = 0
+    if (i > j) return n
     while (cons(i)) {
       if (i > j) return n
       i += 1
     }
     i += 1
     while (true) {
+      if (i > j) return n
       while (!cons(i)) {
         if (i > j) return n
         i += 1
       }
       i += 1
       n += 1
+      if (i > j) return n
       while (cons(i)) {
         if (i > j) return n
         i += 1

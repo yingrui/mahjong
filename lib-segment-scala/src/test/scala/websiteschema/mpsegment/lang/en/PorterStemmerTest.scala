@@ -18,4 +18,10 @@ class PorterStemmerTest {
         var actualWord = porterStemmer.stem("started")
         Assert.assertEquals("start", actualWord)
     }
+
+    @Test
+    def should_stem_word_likes_to_like() {
+        var actualWord = porterStemmer.stem("likes")
+        Assert.assertEquals("like", actualWord)
+    }
 }

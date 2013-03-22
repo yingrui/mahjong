@@ -18,4 +18,10 @@ public class PorterStemmerTest {
         String actualWord = porterStemmer.stem("started");
         Assert.assertEquals("start", actualWord);
     }
+
+    @Test
+    public void should_stem_word_likes_to_like() {
+        String actualWord = porterStemmer.stem("likes");
+        Assert.assertEquals("like", actualWord);
+    }
 }
