@@ -1,29 +1,27 @@
-//package websiteschema.mpsegment.pinyin
-//
-//import websiteschema.mpsegment.conf.MPSegmentConfiguration
-//
-//import java.io.IOException
-//
-//class WordToPinyinClassfierFactory {
-//
-//    private static WordToPinyinClassfierFactory instance = new WordToPinyinClassfierFactory()
-//    private var classifier : WordToPinyinClassifier = new WordToPinyinClassifier()
-//
-//    private WordToPinyinClassfierFactory() {
-//        try {
-//            var model = new WordToPinyinModel()
-//            model.load(MPSegmentConfiguration.getInstance().getPinyinModel())
-//            classifier.setModel(model)
-//        } catch {
-//            ex.printStackTrace()
-//        }
-//    }
-//
-//    public static WordToPinyinClassfierFactory getInstance() {
-//        return instance
-//    }
-//
-//    def getClassifier() : WordToPinyinClassifier = {
-//        return classifier
-//    }
-//}
+package websiteschema.mpsegment.pinyin
+
+import websiteschema.mpsegment.conf.MPSegmentConfiguration
+
+class WordToPinyinClassfierFactory {
+
+  private val classifier: WordToPinyinClassifier = new WordToPinyinClassifier()
+
+  try {
+    val model = new WordToPinyinModel()
+    model.load(MPSegmentConfiguration().getPinyinModel())
+    classifier.setModel(model)
+  } catch {
+    case ex: Throwable =>
+      ex.printStackTrace()
+  }
+
+  def getClassifier(): WordToPinyinClassifier = {
+    return classifier
+  }
+}
+
+object WordToPinyinClassfierFactory {
+  val instance = new WordToPinyinClassfierFactory()
+
+  def apply() = instance
+}

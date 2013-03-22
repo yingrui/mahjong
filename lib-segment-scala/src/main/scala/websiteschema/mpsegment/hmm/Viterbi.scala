@@ -153,6 +153,8 @@ class Viterbi {
   }
 
   def calculateWithLog(listObserve: List[String]): List[Node] = {
+    if (listObserve.isEmpty) return List[Node]()
+
     val ret = calculateHmmResult(listObserve)
     var maxProb = Double.NegativeInfinity
     var pos = 0
