@@ -69,9 +69,9 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
             markPositionMaybeName()
           } else {
             val _isPos_P_C_U_W_UN = isPos_P_C_U_W_UN(segmentResult.getPOS(wordIndex))
-            val _isChineseJieCi = isChineseJieCi(segmentResult.getWord(wordIndex))
+            val _isChinesePreposition = isChinesePreposition(segmentResult.getWord(wordIndex))
             if (hasPossibleFoundName) {
-              if ((_isPos_P_C_U_W_UN && !_isChineseJieCi)
+              if ((_isPos_P_C_U_W_UN && !_isChinesePreposition)
                 || segmentResult.getWord(wordIndex).length() > 2) {
                 processPotentialName()
               } else {
@@ -82,7 +82,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
                 }
               }
             } else if (segmentResult.getWord(wordIndex).length() == 1
-              && !_isPos_P_C_U_W_UN || _isChineseJieCi) {
+              && !_isPos_P_C_U_W_UN || _isChinesePreposition) {
               markPositionMaybeName()
             }
           }
