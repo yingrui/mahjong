@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package websiteschema.mpsegment.graph;
 
 import java.util.Iterator;
 import java.util.TreeMap;
 
-/**
- *
- * @author twer
- */
 public class SparseVector<Obj> {
 
     private final int N;             // length

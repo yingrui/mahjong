@@ -38,9 +38,9 @@ public class MPSegmentTest {
         Assert.assertEquals(words.getPOS(4), POSUtil.POS_W);
 
         str = "太极拳的创始人是张三丰";
-        words = worker.segment(str);
-        System.out.println(words);
-        Assert.assertEquals(words.getWord(4), "张三丰");
+        SegmentResult words2 = worker.segment(str);
+        System.out.println(words2);
+        Assert.assertEquals(words2.getWord(4), "张三丰");
     }
 
     @Test

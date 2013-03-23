@@ -1,7 +1,3 @@
-/*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
 package websiteschema.mpsegment.filter
 
 import websiteschema.mpsegment.concept.Concept
@@ -13,11 +9,6 @@ import websiteschema.mpsegment.util.WordUtil
 import websiteschema.mpsegment.util.WordUtil._
 import websiteschema.mpsegment.util.WordUtil._
 
-object UnknownNameFilter {
-  private val chNameDict: ChNameDictionary = new ChNameDictionary()
-  chNameDict.loadNameDict(MPSegmentConfiguration().getChNameDict())
-}
-
 class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentFilter {
 
   private val factor1 = 1.1180000000000001D
@@ -25,13 +16,13 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   private val factor3 = 1.6299999999999999D
   private var foreignName: ForeignName = null
   private val useChNameDict: Boolean = true
-  private var useForeignNameDict: Boolean = false
+  private val useForeignNameDict = false
   private var segmentResultLength: Int = 0
-  private var maxNameWordLength: Int = 5
-  private var nameStartIndex: Int = -1
-  private var nameEndIndex: Int = -1
+  private val maxNameWordLength = 5
+  private var nameStartIndex = -1
+  private var nameEndIndex = -1
   private var hasPossibleFoundName: Boolean = false
-  private var wordIndex: Int = 0
+  private var wordIndex = 0
   private var numOfNameWordItem: Int = -1
 
   if (useChNameDict) {
@@ -42,12 +33,12 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   }
 
   private def reachTheEnd(wordIndex: Int): Boolean = {
-    return wordIndex + 1 >= segmentResultLength
+    return (wordIndex + 1) >= segmentResultLength
   }
 
   private def processPotentialName() {
     if (nameEndIndex - nameStartIndex >= 1) {
-      var recognizedNameLength = recognizeNameWord()
+      val recognizedNameLength = recognizeNameWord()
       if (numOfNameWordItem >= 2) {
         wordIndex = nameStartIndex + recognizedNameLength
       } else {
@@ -61,40 +52,42 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
     if (useChNameDict && config.isChineseNameIdentify()) {
       segmentResultLength = segmentResult.length()
       markPositionImpossibleToBeName()
-
-      for (wordIndex <- 0 until segmentResultLength if (!isWordConfirmed(wordIndex)))
-      {
-        if (hasPossibleFoundName && (nameEndIndex - nameStartIndex >= maxNameWordLength || reachTheEnd(wordIndex))) {
-          if (reachTheEnd(wordIndex)) {
-            nameEndIndex = wordIndex
-          }
-          processPotentialName()
-          if (wordIndex + 1 > segmentResultLength) {
-            return
-          }
-        }
-
-        if (segmentResult.getPOS(wordIndex) == POSUtil.POS_NR) {
-          markPositionMaybeName()
-        } else {
-          val _isPos_P_C_U_W_UN = isPos_P_C_U_W_UN(segmentResult.getPOS(wordIndex))
-          val _isChineseJieCi = isChineseJieCi(segmentResult.getWord(wordIndex))
-          if (hasPossibleFoundName) {
-            if ((_isPos_P_C_U_W_UN && !_isChineseJieCi)
-              || segmentResult.getWord(wordIndex).length() > 2) {
-              processPotentialName()
-            } else {
+      wordIndex = 0
+      while (wordIndex < segmentResultLength) {
+        if (!isWordConfirmed(wordIndex)) {
+          if (hasPossibleFoundName && (nameEndIndex - nameStartIndex >= maxNameWordLength || reachTheEnd(wordIndex))) {
+            if (reachTheEnd(wordIndex)) {
               nameEndIndex = wordIndex
-              if (wordIndex + 1 == segmentResultLength && nameEndIndex - nameStartIndex >= 1) {
-                assert(false)
-                recognizeNameWord()
-              }
             }
-          } else if (segmentResult.getWord(wordIndex).length() == 1
-            && !_isPos_P_C_U_W_UN || _isChineseJieCi) {
+            processPotentialName()
+            if (wordIndex + 1 > segmentResultLength) {
+              return
+            }
+          }
+
+          if (segmentResult.getPOS(wordIndex) == POSUtil.POS_NR) {
             markPositionMaybeName()
+          } else {
+            val _isPos_P_C_U_W_UN = isPos_P_C_U_W_UN(segmentResult.getPOS(wordIndex))
+            val _isChineseJieCi = isChineseJieCi(segmentResult.getWord(wordIndex))
+            if (hasPossibleFoundName) {
+              if ((_isPos_P_C_U_W_UN && !_isChineseJieCi)
+                || segmentResult.getWord(wordIndex).length() > 2) {
+                processPotentialName()
+              } else {
+                nameEndIndex = wordIndex
+                if (wordIndex + 1 == segmentResultLength && nameEndIndex - nameStartIndex >= 1) {
+                  assert(false)
+                  recognizeNameWord()
+                }
+              }
+            } else if (segmentResult.getWord(wordIndex).length() == 1
+              && !_isPos_P_C_U_W_UN || _isChineseJieCi) {
+              markPositionMaybeName()
+            }
           }
         }
+        wordIndex+=1
       }
     }
   }
@@ -122,7 +115,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
     if (numOfNameWordItem > 0) {
       if (config.isXingMingSeparate()) {
         if (numOfNameWordItem >= 3) {
-          var numOfMingWord = numOfNameWordItem - 1
+          val numOfMingWord = numOfNameWordItem - 1
           setWordIndexesAndPOSForMerge(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR)
         }
         segmentResult.setPOS(nameStartIndex, POSUtil.POS_NR)
@@ -139,7 +132,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   }
 
   private def recognizeNameWordBetween(begin: Int, end: Int): Int = {
-    var gap = (end - begin) + 1
+    val gap = (end - begin) + 1
     numOfNameWordItem = -1
     if (segmentResult.getWord(begin).length() > 2 || segmentResult.getWord(begin + 1).length() > 2) {
       return numOfNameWordItem
@@ -160,7 +153,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
         if (d4 > d1 && d4 > factor1) {
           numOfNameWordItem = 3
           if (isSpecialMingChar(begin + 2)) {
-            var d5 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(begin + 1), segmentResult.getWord(begin + 2))
+            val d5 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(begin + 1), segmentResult.getWord(begin + 2))
             numOfNameWordItem = 2
             if (d5 > 1.1339999999999999D || d5 > 0.90000000000000002D && d4 > 1.6000000000000001D && d4 / d1 > 2D) {
               numOfNameWordItem = 3
@@ -175,7 +168,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
           }
         }
       } else {
-        var d2 = UnknownNameFilter.chNameDict.computeLgLP2(segmentResult.getWord(begin), segmentResult.getWord(begin + 1))
+        val d2 = UnknownNameFilter.chNameDict.computeLgLP2(segmentResult.getWord(begin), segmentResult.getWord(begin + 1))
         if (d2 > factor2) {
           numOfNameWordItem = 2
           if (isSpecialMingChar(begin + 1)) {
@@ -186,7 +179,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
         }
       }
     } else if (segmentResult.getWord(begin + 1).length() == 2) {
-      var d3 = UnknownNameFilter.chNameDict.computeLgLP3(segmentResult.getWord(begin), segmentResult.getWord(begin + 1).substring(0, 1), segmentResult.getWord(begin + 1).substring(1, 2))
+      val d3 = UnknownNameFilter.chNameDict.computeLgLP3(segmentResult.getWord(begin), segmentResult.getWord(begin + 1).substring(0, 1), segmentResult.getWord(begin + 1).substring(1, 2))
       if (d3 > factor3) {
         numOfNameWordItem = 2
       }
@@ -196,8 +189,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
 
   private def processForeignName(i1: Int, j1: Int): Int = {
     var l1 = -1
-    for (i2 <- i1 to j1)
-    {
+    for (i2 <- i1 to j1) {
       if (!foreignName.isForiegnName(segmentResult.getWord(i2))) {
         return l1
       }
@@ -208,10 +200,10 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
 
   private def getNumNR(i1: Int): Int = {
     var byte0 = -1
-    var s1 = segmentResult.getWord(i1).substring(0, 1)
-    var s2 = segmentResult.getWord(i1).substring(1, 2)
-    var s3 = segmentResult.getWord(i1 + 1)
-    var d2 = UnknownNameFilter.chNameDict.computeLgLP3_2(segmentResult.getWord(i1), segmentResult.getWord(i1 + 1))
+    val s1 = segmentResult.getWord(i1).substring(0, 1)
+    val s2 = segmentResult.getWord(i1).substring(1, 2)
+    val s3 = segmentResult.getWord(i1 + 1)
+    val d2 = UnknownNameFilter.chNameDict.computeLgLP3_2(segmentResult.getWord(i1), segmentResult.getWord(i1 + 1))
     var d1 = UnknownNameFilter.chNameDict.computeLgLP2(s1, s2)
     if (d1 > 0.95999999999999996D) {
       d1 *= getRightBoundaryWordLP(s3)
@@ -230,38 +222,43 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   }
 
   private def getRightBoundaryWordLP(s1: String): Double = {
-    var d1 = 1.0D + UnknownNameFilter.chNameDict.getRightBoundaryWordLP(s1)
+    val d1 = 1.0D + UnknownNameFilter.chNameDict.getRightBoundaryWordLP(s1)
     return d1
   }
 
   private def isSpecialMingChar(wordIndex: Int): Boolean = {
-    var word = segmentResult.getWord(wordIndex)
+    val word = segmentResult.getWord(wordIndex)
     return WordUtil.isSpecialMingChar(word)
   }
 
   private def wouldNotBeMingWithSpecialChar(index: Int): Boolean = {
-    var word = segmentResult.getWord(index)
+    val word = segmentResult.getWord(index)
     if (word.equals("以") || word.equals("从")) {
-      var d1 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
+      val d1 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
       if (d1 < 0.92000000000000004D) {
         return true
       }
     } else if (word.equals("得") || word.equals("为") || word.equals("向") || word.equals("自")) {
-      var d2 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
+      val d2 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
       if (d2 <= 0.93000000000000005D) {
         return true
       }
     } else if (word.equals("则")) {
-      var d3 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
+      val d3 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
       if (d3 <= 0.80000000000000004D) {
         return true
       }
     } else if (word.equals("如")) {
-      var d4 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
+      val d4 = UnknownNameFilter.chNameDict.computeLgMing23(segmentResult.getWord(index), segmentResult.getWord(index + 1))
       if (d4 <= 1.0D) {
         return true
       }
     }
     return false
   }
+}
+
+object UnknownNameFilter {
+  private val chNameDict: ChNameDictionary = new ChNameDictionary()
+  chNameDict.loadNameDict(MPSegmentConfiguration().getChNameDict())
 }

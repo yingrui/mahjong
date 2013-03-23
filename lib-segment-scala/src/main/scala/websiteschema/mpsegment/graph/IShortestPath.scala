@@ -1,9 +1,9 @@
-//package websiteschema.mpsegment.graph
-//
-//trait IShortestPath {
-//
-//    Path getShortestPath(Int start, Int end)
-//
-//    void setGraph(IGraph graph)
-//    
-//}
+package websiteschema.mpsegment.graph
+
+trait IShortestPath {
+
+  def getShortestPath(start: Int, end: Int): Path
+
+  def setGraph(graph: IGraph): Unit
+
+}

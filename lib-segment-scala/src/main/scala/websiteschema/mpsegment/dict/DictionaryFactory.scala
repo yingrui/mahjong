@@ -6,6 +6,7 @@ import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.tools.StringWordConverter
 
 import io.Source
+import websiteschema.mpsegment.core.MPSegment
 
 object DictionaryFactory {
   val instance = new DictionaryFactory()
@@ -18,8 +19,8 @@ class DictionaryFactory {
     private val config = MPSegmentConfiguration()
     private var coreDict : HashDictionary = null
     private var domainFactory : DomainDictFactory = null
-    private var isLoadDomainDictionary : Boolean = config.isLoadDomainDictionary()
-    private var isLoadUserDictionary : Boolean = config.isLoadUserDictionary()
+    private val isLoadDomainDictionary : Boolean = config.isLoadDomainDictionary()
+    private val isLoadUserDictionary : Boolean = config.isLoadUserDictionary()
 
     def getCoreDictionary() : HashDictionary = {
         return coreDict
@@ -56,23 +57,23 @@ class DictionaryFactory {
             domainFactory.buildDictionary()
         }
     }
-//
-//    def loadUserDictionary() {
-//        if (isLoadUserDictionary) {
-//            var l1 = System.currentTimeMillis()
-//            var userDictFile = config.getUserDictionaryFile()
-//            var domainDictionary = DomainDictFactory.getInstance().getDomainDictionary()
-//            var userDictionaryLoader = new UserDictionaryLoader(domainDictionary, coreDict)
-//            try {
-//                userDictionaryLoader.loadUserDictionary(userDictFile)
-//                userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration.getInstance()))
-//            } catch {
-//              case e:Throwable =>
-//                System.err.println(e)
-//            }
-//            userDictionaryLoader.clear()
-//            l1 = System.currentTimeMillis() - l1
-//            println((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString())
-//        }
-//    }
+
+    def loadUserDictionary() {
+        if (isLoadUserDictionary) {
+            var l1 = System.currentTimeMillis()
+            val userDictFile = config.getUserDictionaryFile()
+            val domainDictionary = DomainDictFactory().getDomainDictionary()
+            val userDictionaryLoader = UserDictionaryLoader(domainDictionary, coreDict)
+            try {
+                userDictionaryLoader.loadUserDictionary(userDictFile)
+                userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration()))
+            } catch {
+              case e:Throwable =>
+                System.err.println(e)
+            }
+            userDictionaryLoader.clear()
+            l1 = System.currentTimeMillis() - l1
+            println((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString())
+        }
+    }
 }

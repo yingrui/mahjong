@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.conf
 
 import io.Source
+import collection.Map
 
 class MPSegmentConfiguration {
 
@@ -15,9 +16,8 @@ class MPSegmentConfiguration {
     }
   }
 
-  def is(property: String): Boolean = {
-    return properties(property).toBoolean
-  }
+  def is(property: String): Boolean =
+    if(properties.contains(property)) properties(property).toBoolean else false
 
   def getDefaultFileEncoding(): String = {
     return defaultFileEncoding
@@ -104,7 +104,7 @@ class MPSegmentConfiguration {
     loaddomaindictionary = properties.getOrElse("load.domaindictionary", "true").toBoolean
     segment_min = properties.getOrElse("minimize.word", "false").toBoolean
     chinesenameidentify = properties.getOrElse("recognize.chinesename", "true").toBoolean
-    xingmingseparate = properties.getOrElse("separate.xingming", "true").toBoolean
+    xingmingseparate = properties.getOrElse("separate.xingming", "false").toBoolean
     halfshapeall = properties.getOrElse("convert.tohalfshape", "false").toBoolean
     uppercaseall = properties.getOrElse("convert.touppercase", "false").toBoolean
     withPinyin = properties.getOrElse("recognize.pinyin", "false").toBoolean
@@ -169,7 +169,7 @@ object MPSegmentConfiguration {
 
   def SectionSize = 1024
 
-  val LOG_CORPUS = Math.log(8000000) * 100
+  val LOG_CORPUS = Math.log(8000000) * 100D
 
   def apply() = instance
 
