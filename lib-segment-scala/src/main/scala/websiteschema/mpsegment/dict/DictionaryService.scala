@@ -54,7 +54,7 @@ class DictionaryService(useDomainDictionary:Boolean, loadDomainDictionary:Boolea
     private def getItem(candidateWord: String) : IWord = {
         var word: IWord = null
         if (useDomainDictionary && (loadDomainDictionary || loadUserDictionary) && candidateWord.length() > 1) {
-            word = getDomainDictionary().getWordItem(candidateWord)
+            word = getDomainDictionary().getWord(candidateWord)
         }
         if (word == null) {
             //如果在领域词典中没有找到对应的词

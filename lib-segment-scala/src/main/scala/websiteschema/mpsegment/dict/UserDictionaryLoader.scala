@@ -6,6 +6,7 @@ import websiteschema.mpsegment.dict.domain.DomainDictionary
 import websiteschema.mpsegment.dict.domain.DomainDictFactory
 import java.io.{File, FileInputStream, InputStreamReader, BufferedReader}
 import collection.mutable.ListBuffer
+import io.Source
 
 object UserDictionaryLoader {
   def apply(domaindictionary: DomainDictionary, hashdictionary: HashDictionary) = {
@@ -37,19 +38,14 @@ class UserDictionaryLoader {
   def loadUserDictionary(file: String) {
     val encoding = "utf-8"
     try {
-      var i = 0
-      val bufferedReader = new BufferedReader(
-        new InputStreamReader(
-          getClass().getClassLoader().getResourceAsStream(file), encoding))
-      var line = ""
-      while ((line = bufferedReader.readLine()) != null) {
-        i += 1
-        line = line.trim()
-        if (line.length >= 1) {
-          processUserDictLine(line)
+      val source = Source.fromFile(
+          getClass().getClassLoader().getResource(file).toURI, encoding)
+      for (line <- source.getLines; str = line.trim()) {
+        if (str.length >= 1) {
+          processUserDictLine(str)
         }
       }
-      bufferedReader.close()
+      source.close()
     } catch {
       case exception: Throwable =>
         println((new StringBuilder("[UserDictionary] exception:")).append(exception.getMessage()).toString())
@@ -188,34 +184,6 @@ class UserDictionaryLoader {
     if (word != null) {
       word.setOccuredSum(factor)
     }
-  }
-
-  def loadSynonymMap(s: String): List[String] = {
-    val file = new File(s)
-    val synonyms = ListBuffer[String]()
-    if (file.isFile() && file.exists()) {
-      try {
-        var i = 0
-
-        val bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))
-        var s2 = ""
-        while ((s2 = bufferedReader.readLine()) != null) {
-          i += 1
-          s2 = s2.trim()
-          if (s2.length() >= 1 && !s2.startsWith("#") && s2.indexOf("=") > 0) {
-            synonyms += (s2)
-          }
-        }
-        bufferedReader.close()
-      } catch {
-        case exception: Throwable =>
-          println((new StringBuilder("[UserDictionary] exception:")).append(exception.getMessage()).toString())
-          exception.printStackTrace()
-      }
-    } else {
-      println((new StringBuilder("[UserDictionary] ")).append(s).append(" 不存在！").toString())
-    }
-    return synonyms.toList
   }
 
   def loadStopWord(s: String): List[String] = {

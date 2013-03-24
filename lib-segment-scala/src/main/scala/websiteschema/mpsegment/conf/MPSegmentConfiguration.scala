@@ -100,7 +100,7 @@ class MPSegmentConfiguration {
   private def initialize() = {
     stopwordfilter = properties.getOrElse("filter.stopword", "false").toBoolean
     querysyntax = properties.getOrElse("support.querysyntax", "false").toBoolean
-    loaduserdictionary = properties.getOrElse("load.userdictionary", "false").toBoolean
+    loaduserdictionary = properties.getOrElse("load.userdictionary", "true").toBoolean
     loaddomaindictionary = properties.getOrElse("load.domaindictionary", "true").toBoolean
     segment_min = properties.getOrElse("minimize.word", "false").toBoolean
     chinesenameidentify = properties.getOrElse("recognize.chinesename", "true").toBoolean
@@ -175,7 +175,7 @@ object MPSegmentConfiguration {
 
   def apply(config: Map[String, String]) = {
     val conf = new MPSegmentConfiguration()
-    conf.properties = collection.mutable.Map[String, String]() ++ defaultProperties ++ config
+    conf.properties = collection.mutable.Map[String, String]() ++ instance.properties ++ config
     conf.initialize
   }
 }

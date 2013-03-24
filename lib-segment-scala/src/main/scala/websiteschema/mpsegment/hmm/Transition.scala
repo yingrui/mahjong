@@ -3,22 +3,6 @@ package websiteschema.mpsegment.hmm
 import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
 
-object Transition {
-  def apply() = {
-    val transition = new Transition()
-    transition.stateBank = new NodeRepository()
-    transition.root = new Trie()
-    transition
-  }
-
-  def apply(root: Trie, stateBank: NodeRepository) = {
-    val transition = new Transition()
-    transition.stateBank = stateBank
-    transition.root = root
-    transition
-  }
-}
-
 class Transition extends ISerialize {
 
   var root: Trie = null
@@ -42,7 +26,7 @@ class Transition extends ISerialize {
     node.setProb(prob)
   }
 
-  private def getProb(ngram: List[Int]): Double = {
+  private def getProb(ngram: Array[Int]): Double = {
     var ret: Double = 0.0D
 
     val node = root.searchNode(ngram.toArray)
@@ -60,15 +44,17 @@ class Transition extends ISerialize {
     System.arraycopy(c, 0, ngram, 0, c.length)
     ngram(c.length) = s
 
-    return getProb(ngram.toList, ngram.length)
+    return getProb(ngram, ngram.length)
   }
 
   def getProb(s1: Int, s2: Int): Double = {
-    val ngram = List[Int](s1, s2)
+    val ngram = new Array[Int](2)
+    ngram(0) = s1
+    ngram(1) = s2
     return getProb(ngram, 2)
   }
 
-  def getProb(ngram: List[Int], n: Int): Double = {
+  def getProb(ngram: Array[Int], n: Int): Double = {
     var ret = 0.00000001D
 
     //bigram
@@ -81,7 +67,7 @@ class Transition extends ISerialize {
       for (j <- 1 to i) {
         igram(i - j) = ngram(n - j)
       }
-      ret += Flag.labda(i - 1) * getProb(igram.toList)
+      ret += Flag.labda(i - 1) * getProb(igram)
       i -= 1
     }
 
@@ -96,5 +82,21 @@ class Transition extends ISerialize {
   override def load(readHandler: SerializeHandler) {
     root.load(readHandler)
     stateBank.load(readHandler)
+  }
+}
+
+object Transition {
+  def apply() = {
+    val transition = new Transition()
+    transition.stateBank = new NodeRepository()
+    transition.root = new Trie()
+    transition
+  }
+
+  def apply(root: Trie, stateBank: NodeRepository) = {
+    val transition = new Transition()
+    transition.stateBank = stateBank
+    transition.root = root
+    transition
   }
 }

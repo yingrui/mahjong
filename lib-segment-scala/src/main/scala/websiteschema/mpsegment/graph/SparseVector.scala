@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.graph
 
-import collection.immutable.TreeMap
+import collection.mutable.HashMap
 
 class SparseVector[Obj](N: Int) {
 
@@ -78,12 +78,9 @@ class SparseVector[Obj](N: Int) {
 
   /**
    * ***********************************************************************
-   * Compilation: javac ST.java Execution: java ST
    *
-   * Sorted symbol table implementation using a java.util.TreeMap. Does not
+   * Sorted symbol table implementation using a HashMap. Does not
    * allow duplicate keys.
-   *
-   * % java ST
    *
    * ***********************************************************************
    *
@@ -91,7 +88,7 @@ class SparseVector[Obj](N: Int) {
   class SymbolTable[Value, Obj] {
 
     def clear() {
-      st = TreeMap[Int, Pair]()
+      st.clear()
     }
 
     class Pair(value: Value, obj: Obj) {
@@ -103,7 +100,7 @@ class SparseVector[Obj](N: Int) {
     /**
      * Create an empty symbol table.
      */
-    private var st = TreeMap[Int, Pair]()
+    private var st = HashMap[Int, Pair]()
 
 
     /**

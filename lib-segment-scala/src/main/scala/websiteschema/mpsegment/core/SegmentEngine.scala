@@ -9,8 +9,6 @@ class SegmentEngine {
 
   private val configuration = MPSegmentConfiguration()
 
-  loadDictionary()
-
   private def loadDictionary() {
     DictionaryFactory().loadDictionary()
     DictionaryFactory().loadDomainDictionary()
@@ -43,6 +41,6 @@ class SegmentEngine {
 
 object SegmentEngine {
   val instance = new SegmentEngine()
-
+  instance.loadDictionary()
   def apply() = instance
 }

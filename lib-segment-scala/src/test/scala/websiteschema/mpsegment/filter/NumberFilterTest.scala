@@ -25,4 +25,20 @@ class NumberFilterTest {
         Assert.assertEquals(POSUtil.POS_M, segmentResult.getPOS(1))
     }
 
+    @Test
+    def should_merge_two_word_with_POS_T() {
+        val segmentResult = new SegmentResult(6)
+        segmentResult.setWords(List[String]("本报", "北京", "１", "月", "１", "日").toArray)
+        segmentResult.setPOSArray(List[Int](POSUtil.POS_R, POSUtil.POS_NS, POSUtil.POS_M, POSUtil.POS_T, POSUtil.POS_M, POSUtil.POS_T).toArray)
+        segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0, 0).toArray)
+        segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A", "N/A").toArray)
+
+        filter.setSegmentResult(segmentResult)
+        filter.filtering()
+        Assert.assertEquals("１月", segmentResult.getWord(2))
+        Assert.assertEquals("１日", segmentResult.getWord(3))
+        Assert.assertEquals(POSUtil.POS_T, segmentResult.getPOS(2))
+        Assert.assertEquals(POSUtil.POS_T, segmentResult.getPOS(3))
+    }
+
 }

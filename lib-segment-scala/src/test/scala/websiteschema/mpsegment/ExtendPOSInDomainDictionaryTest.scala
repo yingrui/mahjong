@@ -1,31 +1,37 @@
-///*
-// * To change this template, choose Tools | Templates
-// * and open the template in the editor.
-// */
-//package websiteschema.mpsegment
+package websiteschema.mpsegment
+
+import dict.domain.{DomainDictionary, DomainDictFactory}
+import dict.{DictionaryFactory, POSUtil}
+import websiteschema.mpsegment.core.SegmentEngine
+import org.junit.{Test, Assert}
+
+class ExtendPOSInDomainDictionaryTest {
+
+  @Test
+  def should_set_extra_POS_to_domain_word() {
+    SegmentEngine()
+
+//    val factory: DomainDictFactory = new DomainDictFactory()
+//    factory.buildDictionary()
+//    val dictionary: DomainDictionary = factory.getDomainDictionary()
 //
-//import websiteschema.mpsegment.dict.POSUtil
-//import websiteschema.mpsegment.core.SegmentEngine
-//import websiteschema.mpsegment.core.SegmentWorker
-//import websiteschema.mpsegment.core.SegmentResult
-//import junit.framework.TestCase
+//    dictionary.pushWord("高峰", null, "NR", 100, 100001)
 //
-///**
-// * @author taskmgr
-// */
-//class ExtendPOSInDomainDictionaryTest extends TestCase {
-//
-//    def testPOS() {
-//        try {
-//            var str = "我的同学叫高峰,高峰同志,高峰经理,科学高峰"
-//            var worker = SegmentEngine.getInstance().getSegmentWorker()
-//            var words = worker.segment(str)
-//            for (Int i = 0; i < words.length(); i++) {
-//                println(words.getWord(i) + " - " + POSUtil.getPOSString(words.getPOS(i)) + " - " + words.getDomainType(i))
-//            }
-//        } catch {
-//            ex.printStackTrace()
-//            assert (false)
-//        }
-//    }
-//}
+//    val word = dictionary.getWord("高峰")
+//    val numberOfPOS = word.getPOSArray().getWordPOSTable().length
+//    println(numberOfPOS)
+//    Assert.assertTrue(numberOfPOS > 1);
+
+    try {
+      val str = "我的同学叫高峰,高峰同志,高峰经理,科学高峰"
+      val worker = SegmentEngine().getSegmentWorker()
+      val words = worker.segment(str)
+      for (i <- 0 until words.length) {
+        println(words.getWord(i) + " - " + POSUtil.getPOSString(words.getPOS(i)) + " - " + words.getDomainType(i))
+      }
+    } catch {
+      case ex: Throwable =>
+        ex.printStackTrace()
+    }
+  }
+}

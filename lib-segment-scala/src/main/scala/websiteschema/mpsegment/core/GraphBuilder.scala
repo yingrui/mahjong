@@ -50,7 +50,7 @@ class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmen
   }
 
   private def getContextFrequencyScanner(): ContextFrequencyScanner = {
-    var scanner = new ContextFrequencyScanner()
+    val scanner = new ContextFrequencyScanner()
     scanner.setSentence(sentence)
     scanner.setDictionaryService(dictionaryService)
     scanner.setMaxWordLength(maxWordLength)

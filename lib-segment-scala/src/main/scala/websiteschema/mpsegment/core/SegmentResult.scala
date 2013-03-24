@@ -6,15 +6,15 @@ import collection.mutable.ListBuffer
 
 class SegmentResult(size: Int) {
 
-  private var wordAtoms: ListBuffer[WordAtom] = null
+  private var wordAtoms: Array[WordAtom] = null
 
-  wordAtoms = new ListBuffer[WordAtom]()
+  wordAtoms = new Array[WordAtom](size)
   for (i <- 0 until size) {
-    wordAtoms += (new WordAtom())
+    wordAtoms(i) = new WordAtom()
   }
 
   def getWordAtoms(): Array[WordAtom] = {
-    return wordAtoms.toArray
+    return wordAtoms
   }
 
   def setWords(words: Array[String]) {
@@ -121,14 +121,7 @@ class SegmentResult(size: Int) {
   }
 
   def compact() {
-    var i = 0
-    while (i < length()) {
-      if (wordAtoms(i) == null) {
-        wordAtoms.remove(i)
-      } else {
-        i += 1
-      }
-    }
+    wordAtoms = wordAtoms.filter(_ != null)
   }
 
   def toOriginalString(): String = {

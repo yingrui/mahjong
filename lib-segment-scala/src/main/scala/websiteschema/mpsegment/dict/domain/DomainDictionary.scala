@@ -1,10 +1,17 @@
 package websiteschema.mpsegment.dict.domain
 
-import websiteschema.mpsegment.dict.{IWord, DomainWordItem, HashDictionary, IDictionary}
+import websiteschema.mpsegment.dict._
 
 import collection.mutable
 
 class DomainDictionary extends IDictionary {
+  private val hashDictionary = new HashDictionary()
+  hashDictionary.setHeadLength(2)
+  private val wordNameIndexHashMap = mutable.HashMap[String, Int]()
+  private var arrayWordItem = List[DomainWordItem]()
+  private val synonymIndexHashMap = mutable.HashMap[Int, Int]()
+  private val synonymHashMap = mutable.HashMap[Int, List[Int]]()
+  private var maxWordLength: Int = 0
 
   private def lookupWord(wordName: String): IWord = {
     return hashDictionary.lookupWord(wordName)
@@ -19,6 +26,9 @@ class DomainDictionary extends IDictionary {
   private def addWord(wordName: String, pos: String, freq: Int, domainType: Int): Int = {
     val word = DomainWordItem(wordName, domainType)
     word.setOccuredCount(pos, freq)
+
+    addWordPOS(word)
+
     val index = arrayWordItem.size
     wordNameIndexHashMap += (wordName -> index)
     arrayWordItem = arrayWordItem ++ List(word)
@@ -29,11 +39,25 @@ class DomainDictionary extends IDictionary {
     return index
   }
 
+  private def addWordPOS(word: IWord) {
+    val coreDictionary: HashDictionary = DictionaryFactory().getCoreDictionary()
+    if (coreDictionary != null) {
+      val wordInCoreDictionary = coreDictionary.getWord(word.getWordName())
+      if (null != wordInCoreDictionary) {
+        val posTable = wordInCoreDictionary.getPOSArray().getWordPOSTable()
+        for (posAndFreq <- posTable) {
+          word.setOccuredCount(POSUtil.getPOSString(posAndFreq(0)), posAndFreq(1))
+        }
+      }
+    }
+  }
+
   def pushWord(wordName: String, synonym: String, pos: String, freq: Int, domainType: Int) {
     if (wordName == null || wordName.trim().equals("") || pos == null || pos.trim().equals("") || wordName.trim().length() < 2) {
       System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.")
       return
     }
+
     val word = lookupWord(wordName)
     var index = -1
     if (null != word) {
@@ -105,12 +129,4 @@ class DomainDictionary extends IDictionary {
   override def iterator(): List[IWord] = {
     return arrayWordItem
   }
-
-  private val hashDictionary = new HashDictionary()
-  hashDictionary.setHeadLength(2)
-  private val wordNameIndexHashMap = mutable.HashMap[String, Int]()
-  private var arrayWordItem = List[DomainWordItem]()
-  private val synonymIndexHashMap = mutable.HashMap[Int, Int]()
-  private val synonymHashMap = mutable.HashMap[Int, List[Int]]()
-  private var maxWordLength: Int = 0
 }

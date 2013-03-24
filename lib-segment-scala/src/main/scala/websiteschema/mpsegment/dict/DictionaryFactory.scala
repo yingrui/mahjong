@@ -62,7 +62,7 @@ class DictionaryFactory {
         if (isLoadUserDictionary) {
             var l1 = System.currentTimeMillis()
             val userDictFile = config.getUserDictionaryFile()
-            val domainDictionary = DomainDictFactory().getDomainDictionary()
+            val domainDictionary = domainFactory.getDomainDictionary()
             val userDictionaryLoader = UserDictionaryLoader(domainDictionary, coreDict)
             try {
                 userDictionaryLoader.loadUserDictionary(userDictFile)
