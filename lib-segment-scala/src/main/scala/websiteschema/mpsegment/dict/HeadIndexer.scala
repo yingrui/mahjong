@@ -140,7 +140,7 @@ class HeadIndexer {
 }
 
 object HeadIndexer {
-  private val Word_Array_Size_Threshold = 64
+  private val Word_Array_Size_Threshold = 32
 
   def apply(headWord:IWord) = create(headWord, 1)
 

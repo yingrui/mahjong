@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.dict
 
-import collection.mutable
+import collection.mutable.OpenHashMap
 
 class HashDictionary extends IDictionary {
 
@@ -9,11 +9,14 @@ class HashDictionary extends IDictionary {
   }
 
   def clear() {
-    headIndexersHashMap = mutable.HashMap[String, HeadIndexer]()
+    headIndexersHashMap = OpenHashMap[String, HeadIndexer]()
   }
 
   def lookupHeadIndexer(head: String): HeadIndexer = {
-    return headIndexersHashMap.getOrElse(head, null)
+    return headIndexersHashMap.get(head) match {
+      case Some(indexer) => indexer
+      case _ => null
+    }
   }
 
   override def getWord(wordStr: String): IWord = {
@@ -68,6 +71,6 @@ class HashDictionary extends IDictionary {
   }
 
   private var headLength: Int = 1
-  private var headIndexersHashMap = mutable.HashMap[String, HeadIndexer]()
+  private var headIndexersHashMap = OpenHashMap[String, HeadIndexer]()
   private var headIndexers = List[HeadIndexer]()
 }

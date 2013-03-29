@@ -3,9 +3,9 @@ package websiteschema.mpsegment.graph
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.dict.IWord
 
-class Graph extends IGraph {
+class Graph(size: Int) extends IGraph {
 
-  private val size = MPSegmentConfiguration.SectionSize
+//  private val size = MPSegmentConfiguration.SectionSize
   private val matrix: SparseMatrix[IWord] = new SparseMatrix[IWord](size)
 
   override def addVertex() {

@@ -3,23 +3,19 @@ package websiteschema.mpsegment.hmm
 import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
 import collection.mutable.Map
-import collection.mutable.HashMap
+import collection.mutable.OpenHashMap
 
 class Emission extends ISerialize {
 
   //observe -> states
-  private val matrix = HashMap[Int, Map[Int, Double]]()
+  private val matrix = OpenHashMap[Int, Map[Int, Double]]()
   private var total = 0
 
   def getProb(s: Int, o: Int): Double = {
-    val e = matrix.getOrElse(o, null)
-    if (null != e) {
-      if (e.contains(s)) {
-        return e(s)
-      }
+    matrix.get(o) match {
+      case Some(emission) => emission.getOrElse(s, 1.0D / total.toDouble)
+      case _ => 1.0D / total.toDouble
     }
-
-    return 1.0D / total.toDouble
   }
 
   def getStateProbByObserve(observe: Int): Iterable[Int] = {
@@ -30,7 +26,7 @@ class Emission extends ISerialize {
   def setProb(s: Int, o: Int, prob: Double) {
     var map = matrix.getOrElse(o, null)
     if (null == map) {
-      map = HashMap[Int, Double]()
+      map = OpenHashMap[Int, Double]()
     }
     map += (s -> prob)
     matrix += (o -> map)

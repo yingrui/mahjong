@@ -23,11 +23,11 @@ class GraphTest {
   def should_return_adjacent_vertexes() {
     val graph = createGraph()
     val vertexes = graph.getAdjacentVertices(0)
-    Assert.assertArrayEquals(List(1,2,3).toArray, vertexes)
+    Assert.assertArrayEquals(List(1,2,3).toArray, vertexes.sorted)
   }
 
   private def createGraph(): IGraph = {
-    val graph = new Graph()
+    val graph = new Graph(5)
     graph.addEdge(0, 1, 1, new WordImpl("S1"))
     graph.addEdge(0, 2, 5, new WordImpl("S1S2"))
     graph.addEdge(1, 2, 2, new WordImpl("S2"))

@@ -7,7 +7,7 @@ import collection.mutable.Map
 
 class Pi extends ISerialize {
 
-    private var pi: Map[Int,Double] = HashMap[Int,Double]().asInstanceOf[Map[Int,Double]]
+    private var pi: Map[Int, Double] = HashMap[Int,Double]()
     private var total = 1
 
     private def init(pii: Map[Int,Int]) {
@@ -21,13 +21,11 @@ class Pi extends ISerialize {
         }
     }
 
-    def getPi(index: Int) : Double = {
-        if (pi.contains(index)) {
-            return pi(index)
-        } else {
-            return 1.0 / total.toDouble
-        }
-    }
+    def getPi(index: Int) : Double =
+      pi.get(index) match {
+        case Some(p) => p
+        case _ => 1.0D / total.toDouble
+      }
 
     def setPi(index: Int, prob: Double) {
         pi += (index -> prob)

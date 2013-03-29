@@ -71,7 +71,7 @@ class MPSegmentTest {
     str = "中国:title社会"
     words = worker.segment(str)
     print(words + " ")
-    Assert.assertEquals(words.getWord(0), "中国:title")
+    Assert.assertEquals(words.getWord(0), "中国:TITLE")
 
     str = "中国?"
     words = worker.segment(str)

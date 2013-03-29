@@ -35,16 +35,15 @@ class MPSegment(config: MPSegmentConfiguration) {
   }
 
   private def initialize() {
-    initializeGraph()
     withPinyin = config.isWithPinyin()
     initializePOSTagging()
   }
 
-  private def initializeGraph() {
-    graph = new Graph()
+  private def initializeGraph(size: Int) {
+    graph = new Graph(size)
     //        dijk = new BigramDijkstra(WordBigram.getInstance("word-bigram.dat"))
     //        dijk = new BigramDijkstra(WordBigram.getInstance("google-bigram.dat"))
-    dijk = new DijkstraImpl()
+    dijk = new DijkstraImpl(size)
   }
 
   private def initializePOSTagging() {
@@ -80,6 +79,7 @@ class MPSegment(config: MPSegmentConfiguration) {
   }
 
   private def buildGraph(sen: String, startPos: Int) {
+
     val builder = new GraphBuilder(graph, useDomainDictionary, config)
     builder.setUseContextFreqSegment(useContextFreqSegment)
     builder.buildGraph(sen, startPos)
@@ -158,6 +158,7 @@ class MPSegment(config: MPSegmentConfiguration) {
   }
 
   private def segment(sentence: String, withPOS: Boolean, sectionSegment: Boolean): SegmentResult = {
+    initializeGraph(sentence.length + 2)
     val path = getShortestPathToStopVertex(sentence, sectionSegment)
     val result = buildSegmentResult(path)
     if (withPinyin) {
@@ -167,7 +168,6 @@ class MPSegment(config: MPSegmentConfiguration) {
       result.setPOSArray(posTagging.findPOS(path, graph))
       setConcepts(result, path)
     }
-    graph.clear()
     return result
   }
 

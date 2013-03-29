@@ -1,10 +1,11 @@
 package websiteschema.mpsegment.graph
 
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
+import collection.mutable.ListBuffer
 
-class DijkstraImpl extends IShortestPath {
+class DijkstraImpl(numOfVertexes: Int) extends IShortestPath {
 
-  private val numOfVertexes = MPSegmentConfiguration.SectionSize
+//  private val numOfVertexes = MPSegmentConfiguration.SectionSize
   private var graph: IGraph = null
   private val route = new Array[Int](numOfVertexes)
   private val dijk = DijkstraElement(numOfVertexes)
@@ -28,16 +29,14 @@ class DijkstraImpl extends IShortestPath {
   override def getShortestPath(start: Int, end: Int): Path = {
     clear()
     findShortestRoute(start, end, dijk)
-    return Path(backTracking(end))
+    return Path(backTracking(end).toList)
   }
 
-  private def backTracking(end: Int): List[Int] = {
+  private def backTracking(end: Int): ListBuffer[Int] = {
     val last = route(end)
-    if (last > 0) {
-      val routes = backTracking(last)
-      return routes ::: List[Int](end)
-    }
-    return List[Int](end)
+    val routes = if(last > 0) backTracking(last) else ListBuffer[Int]()
+    routes += end
+    return routes
   }
 
   private def findShortestRoute(location: Int, dest: Int, dijk: DijkstraElement) {

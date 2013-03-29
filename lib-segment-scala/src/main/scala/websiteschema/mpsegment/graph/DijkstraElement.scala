@@ -1,7 +1,7 @@
 package websiteschema.mpsegment.graph
 
-import collection.mutable.TreeSet
 import collection.mutable.HashSet
+import collection.mutable.SortedSet
 
 class Element(vertex: Int, distance: Int) extends Comparable[Element] {
 
@@ -21,8 +21,6 @@ object DijkstraElement {
   def apply(num: Int) = {
     val ele = new DijkstraElement();
     ele.size = num;
-    ele.S = TreeSet[Int]()
-    ele.reachedVertexSet = new TreeSet[Element]()
     ele.D = new Array[Int](ele.size)
     ele
   }
@@ -33,9 +31,9 @@ object DijkstraElement {
  */
 class DijkstraElement {
 
-  var S: TreeSet[Int] = null;
+  var S: HashSet[Int] = HashSet[Int]()
   // Set of vertexes which already found the shortest route.
-  var reachedVertexSet: TreeSet[Element] = null
+  var reachedVertexSet = SortedSet[Element]()
   var D: Array[Int] = null;
   // The distance of shortest routes.
   var size = 1024
@@ -54,7 +52,7 @@ class DijkstraElement {
 
   def reached(vertex: Int) {
     val ele = new Element(vertex, D(vertex))
-    reachedVertexSet.add(ele)
+    reachedVertexSet += (ele)
   }
 
   def getDistanceOfPathTo(vertex: Int): Int = {
@@ -66,7 +64,7 @@ class DijkstraElement {
   }
 
   def foundShortestPathOf (vertex: Int) {
-    S.add(vertex)
+    S += (vertex)
   }
 
   def findNewShortestPath(): Int = {
@@ -80,7 +78,7 @@ class DijkstraElement {
   def getResolvedVertex(): Int = {
     if (!reachedVertexSet.isEmpty) {
       val ele = reachedVertexSet.head
-      reachedVertexSet.remove(ele)
+      reachedVertexSet = reachedVertexSet.tail
       return ele.getVertex
     }
     return -1

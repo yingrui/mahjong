@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.graph
 
-import collection.mutable.HashMap
+import collection.mutable.OpenHashMap
 
 class SparseVector[Obj](N: Int) {
 
@@ -24,22 +24,15 @@ class SparseVector[Obj](N: Int) {
     if (i < 0 || i >= N) {
       throw new RuntimeException("Illegal index")
     }
-    if (st.contains(i)) {
-      return st.get(i)
-    } else {
-      return 0
-    }
+    return st.getOrElse(i, 0)
   }
 
   def getObject(i: Int): Obj = {
     if (i < 0 || i >= N) {
       throw new RuntimeException("Illegal index")
     }
-    if (st.contains(i)) {
-      return st.getObject(i)
-    } else {
-      return None.get
-    }
+
+    st.getOrElseObject(i)
   }
 
   // return the number of nonzero entries
@@ -51,9 +44,8 @@ class SparseVector[Obj](N: Int) {
     val cols = new Array[Int](nnz())
     val keys = st.iterator()
     if (null != keys) {
-      for (i <- 0 until keys.size) {
-        cols(i) = keys(i)
-      }
+      var i = 0
+      keys.foreach(key => {cols(i) = key; i += 1})
     }
     return cols
   }
@@ -100,7 +92,7 @@ class SparseVector[Obj](N: Int) {
     /**
      * Create an empty symbol table.
      */
-    private var st = HashMap[Int, Pair]()
+    private var st = OpenHashMap[Int, Pair]()
 
 
     /**
@@ -122,9 +114,20 @@ class SparseVector[Obj](N: Int) {
       return st(key).getValue()
     }
 
+    def getOrElse(key: Int, defaultValue: Value): Value = {
+      val pair = st.getOrElse(key, null)
+      if (null != pair) pair.getValue() else defaultValue
+    }
+
     def getObject(key: Int): Obj = {
       return st(key).getObj()
     }
+
+    def getOrElseObject(key: Int): Obj =
+      st.get(key) match {
+        case Some(pair) => pair.getObj()
+        case _ => None.get
+      }
 
     def delete(key: Int) {
       st -= (key)
@@ -136,8 +139,8 @@ class SparseVector[Obj](N: Int) {
 
     def size() = st.size
 
-    def iterator(): List[Int] = {
-      return st.keys.toList
+    def iterator(): Iterable[Int] = {
+      return st.keys
     }
   }
 

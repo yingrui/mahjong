@@ -12,6 +12,21 @@ import java.io.InputStreamReader;
 
 public class PerformanceTest {
 
+    public PerformanceTest() throws IOException {
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                        getClass().getClassLoader().getResourceAsStream("Sophie's_World.txt"), "UTF-8"));
+        SegmentWorker segmentWorker = SegmentEngine.getInstance().getSegmentWorker();
+        segmentWorker.setRecognizePOS(true);
+        segmentWorker.segment("世界您好！");
+        String line;
+        do {
+            line = reader.readLine();
+            SegmentResult result = segmentWorker.segment(line);
+        } while (null != line);
+        reader.close();
+    }
+
     @Test
     public void should_segment_Sophies_World_within_1_seconds() throws IOException {
         BufferedReader reader = new BufferedReader(

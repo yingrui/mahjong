@@ -3,6 +3,7 @@ package websiteschema.mpsegment.dict
 import java.util.Arrays
 import java.util.Comparator
 import scala.collection.mutable.Map
+import scala.collection.mutable.OpenHashMap
 
 trait IWordArray {
 
@@ -27,7 +28,7 @@ class BinaryWordArray extends IWordArray {
   var wordItems: Array[IWord] = null
 
   override def find(word: String): IWord = {
-    var index = lookupWordItem(word)
+    val index = lookupWordItem(word)
     if (index >= 0) {
       return wordItems(index)
     }
@@ -73,7 +74,7 @@ class BinaryWordArray extends IWordArray {
 object HashWordArray {
   def apply(words: Array[IWord]) = {
     val wordArray = new HashWordArray()
-    wordArray.wordIndex = Map[String, Int]()
+    wordArray.wordIndex = OpenHashMap[String, Int]()
     var i = 0
     for (word <- words) {
       wordArray.wordIndex += (word.getWordName() -> i)
@@ -91,11 +92,10 @@ class HashWordArray extends IWordArray {
   var wordItems: Array[IWord] = null
 
   override def find(word: String): IWord = {
-    val index = wordIndex.getOrElse(word, -1)
-    if (index >= 0) {
-      return wordItems(index)
+    wordIndex.get(word) match {
+      case Some(i) => wordItems(i)
+      case _ => null
     }
-    return null
   }
 
   override def getWordItems(): Array[IWord] = {

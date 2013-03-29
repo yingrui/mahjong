@@ -7,6 +7,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 import scala.collection.mutable.Map
+import scala.collection.mutable.OpenHashMap
 
 object SerializeHandler {
   val MODE_READ_ONLY = 0
@@ -87,10 +88,10 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
     def deserializeMapIntDouble(): Map[Int,Double] = {
         var size = input.readInt()
         if (size > 0) {
-            val map = Map[Int,Double]()
+            val map = OpenHashMap[Int,Double]()
             for (i <- 0 until size) {
-                var key = input.readInt()
-                var value = input.readDouble()
+                val key = input.readInt()
+                val value = input.readDouble()
                 map += (key -> value)
             }
           map
