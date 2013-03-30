@@ -1,12 +1,13 @@
 package websiteschema.mpsegment.performance
 
 import junit.framework.Assert
-import org.junit.Test
+import org.junit.{Ignore, Test}
 import websiteschema.mpsegment.core.SegmentEngine
 import websiteschema.mpsegment.tools.accurary.ErrorAnalyzer
 import websiteschema.mpsegment.tools.accurary.SegmentAccuracy
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType
 
+@Ignore
 class AccuracyTest {
 
     @Test

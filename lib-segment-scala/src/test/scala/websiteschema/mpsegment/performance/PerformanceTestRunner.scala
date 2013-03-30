@@ -3,7 +3,7 @@ package websiteschema.mpsegment.performance
 import websiteschema.mpsegment.core.SegmentEngine
 import io.Source
 
-object PerformanceTestRunner extends Application {
+object PerformanceTestRunner extends App {
 
   println("In case you want to run for performance profile.")
   println("This program would not stop unless you kill it.")

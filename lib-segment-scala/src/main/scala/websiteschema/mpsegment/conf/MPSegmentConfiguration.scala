@@ -2,6 +2,7 @@ package websiteschema.mpsegment.conf
 
 import io.Source
 import collection.Map
+import java.net.URL
 
 class MPSegmentConfiguration {
 
@@ -116,11 +117,14 @@ class MPSegmentConfiguration {
   }
 
   private def load() {
-    val configFile = this.getClass.getClassLoader.getResource("maxprob.cfg").toURI
-    val source = Source.fromFile(configFile)
-    val re = "^\\s*([\\w\\.]+)\\s*=\\s*([^\\s]+)\\s*$".r
-    for (line <- source.getLines; m <- re.findFirstMatchIn(line)) {
-      properties += (m.group(1) -> m.group(2))
+    val resource: URL = getClass.getClassLoader.getResource("maxprob.cfg")
+    if (null != resource) {
+      val configFile = resource.toURI
+      val source = Source.fromFile(configFile)
+      val re = "^\\s*([\\w\\.]+)\\s*=\\s*([^\\s]+)\\s*$".r
+      for (line <- source.getLines; m <- re.findFirstMatchIn(line)) {
+        properties += (m.group(1) -> m.group(2))
+      }
     }
   }
 

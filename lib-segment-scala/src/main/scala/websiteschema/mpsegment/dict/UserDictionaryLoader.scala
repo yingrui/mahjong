@@ -39,7 +39,7 @@ class UserDictionaryLoader {
     val encoding = "utf-8"
     try {
       val source = Source.fromFile(
-          getClass().getClassLoader().getResource(file).toURI, encoding)
+        getClass().getClassLoader().getResource(file).toURI, encoding)
       for (line <- source.getLines; str = line.trim()) {
         if (str.length >= 1) {
           processUserDictLine(str)
@@ -191,21 +191,18 @@ class UserDictionaryLoader {
     val arrayList = ListBuffer[String]()
     if (file.isFile() && file.exists()) {
       try {
-        var i = 0
-        val bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding))
-        var s2 = ""
-        while ((s2 = bufferedReader.readLine()) != null) {
-          i += 1
-          s2 = s2.trim()
-          if (s2.length() >= 1 && s2.startsWith("~~")) {
-            arrayList += (s2)
+        val source = Source.fromFile(
+          getClass().getClassLoader().getResource(s).toURI, encoding)
+        for (line <- source.getLines; str = line.trim()) {
+          if (str.length >= 1 && str.startsWith("~~")) {
+            arrayList += str
           }
         }
-        bufferedReader.close()
+        source.close()
       } catch {
-        case exception: Throwable =>
-          println((new StringBuilder("[UserDictionary] exception:")).append(exception.getMessage()).toString())
-          exception.printStackTrace()
+        case ex: Throwable =>
+          println((new StringBuilder("[UserDictionary] exception:")).append(ex.getMessage()).toString())
+          ex.printStackTrace()
       }
     } else {
       println((new StringBuilder("[UserDictionary] ")).append(s).append(" 不存在！").toString())
@@ -236,6 +233,4 @@ class UserDictionaryLoader {
   private def getLogCorpus(): Int = {
     return MPSegmentConfiguration.LOG_CORPUS.toInt
   }
-
-
 }
