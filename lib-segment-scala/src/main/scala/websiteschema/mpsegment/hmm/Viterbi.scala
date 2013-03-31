@@ -96,8 +96,11 @@ class Viterbi {
     ret.states(0) = new Array[Int](relatedStates.size)
     ret.delta(0) = new Array[Double](relatedStates.size)
     ret.psai(0) = new Array[Int](relatedStates.size)
+
     var index = 0
-    for (s <- relatedStates) {
+    val arrayRelatedStates = new java.util.ArrayList[Int](relatedStates)
+    while (index < arrayRelatedStates.size()) {
+      val s = arrayRelatedStates.get(index)
       ret.states(0)(index) = s
       ret.delta(0)(index) = Math.log(pi.getPi(s)) + Math.log(e.getProb(s, o1.getIndex()))
       ret.psai(0)(index) = 0
@@ -121,7 +124,9 @@ class Viterbi {
       ret.delta(p) = new Array[Double](stateSet.size)
       ret.psai(p) = new Array[Int](stateSet.size)
       var i = 0
-      for (state <- stateSet) {
+      val arrayStateSet = new java.util.ArrayList[Int](stateSet)
+      while (i < arrayStateSet.size()) {
+        val state = arrayStateSet.get(i)
         ret.states(p)(i) = state
         var maxDelta = Double.NegativeInfinity
         var maxPsai = Double.NegativeInfinity

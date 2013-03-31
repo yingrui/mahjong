@@ -48,10 +48,7 @@ class Transition extends ISerialize {
   }
 
   def getProb(s1: Int, s2: Int): Double = {
-    val ngram = new Array[Int](2)
-    ngram(0) = s1
-    ngram(1) = s2
-    return getProb(ngram, 2)
+    return getProb(Array[Int](s1, s2), 2)
   }
 
   def getProb(ngram: Array[Int], n: Int): Double = {

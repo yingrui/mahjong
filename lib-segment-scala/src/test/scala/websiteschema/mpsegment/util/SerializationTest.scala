@@ -9,7 +9,7 @@ class SerializationTest {
 
     @Test
     def should_serialize_a_map_and_deserialize_it() {
-        var map = scala.collection.mutable.Map[String,Int]()
+        var map = new java.util.HashMap[String,Int]()
         map.put("张三", 10)
         map.put("李四", 20)
         map.put("王五", 30)
@@ -24,9 +24,9 @@ class SerializationTest {
             var newone = readHandler.deserializeMapStringInt()
             readHandler.close()
             Assert.assertEquals(3, newone.size)
-            Assert.assertEquals(newone("张三"), 10)
-            Assert.assertEquals(newone("李四"), 20)
-            Assert.assertEquals(newone("王五"), 30)
+            Assert.assertEquals(newone.get("张三"), 10)
+            Assert.assertEquals(newone.get("李四"), 20)
+            Assert.assertEquals(newone.get("王五"), 30)
         } catch {
           case _: Throwable =>
             Assert.fail()

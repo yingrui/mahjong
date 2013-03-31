@@ -10,7 +10,7 @@ import java.io.File
 class ChNameDictionary {
 
   def isXing(familyName: String): Boolean = {
-    return xingHashMap.contains(familyName)
+    return xingHashMap.containsKey(familyName)
   }
 
   def computeLgLP3(familyName: String, fisrtNameWord: String, secondNameWord: String): Double = {
@@ -69,9 +69,9 @@ class ChNameDictionary {
     return prob.toInt
   }
 
-  private def get(map: Map[String, Int], key: String): Int = {
-    if (map.contains(key)) {
-      return map(key)
+  private def get(map: java.util.Map[String, Int], key: String): Int = {
+    if (map.containsKey(key)) {
+      return map.get(key)
     }
     return 0
   }
@@ -125,8 +125,12 @@ class ChNameDictionary {
     val sb = new StringBuilder()
     sb.append("//ChName.dict").append(lineSeparator)
     sb.append("[xingHashMap] //").append(xingHashMap.size).append(lineSeparator)
-    for (key <- xingHashMap.keys) {
+    val xingHashMapKeys = new java.util.ArrayList[String](xingHashMap.keySet())
+    var i = 0
+    while (i < xingHashMapKeys.size()) {
+      val key = xingHashMapKeys.get(i)
       sb.append(key).append(space).append(xingHashMap.get(key)).append(space)
+      i += 1
     }
     sb.append(lineSeparator)
     sb.append("[xingFreq] //").append(xingFreq.length).append(lineSeparator)
@@ -137,8 +141,12 @@ class ChNameDictionary {
     sb.append(lineSeparator)
     sb.append("[mingHashMap] //").append(mingHashMap.size).append(lineSeparator)
 
-    for (key <- mingHashMap.keys) {
+    val mingHashMapKeys = new java.util.ArrayList[String](mingHashMap.keySet())
+    i = 0
+    while (i < mingHashMapKeys.size()) {
+      val key = mingHashMapKeys.get(i)
       sb.append(key).append(space).append(mingHashMap.get(key)).append(space)
+      i += 1
     }
     sb.append(lineSeparator)
     sb.append("[mingFreqs] //").append(mingFreqs.length).append(lineSeparator)
@@ -157,8 +165,12 @@ class ChNameDictionary {
 
     sb.append(lineSeparator)
     sb.append("[fuXing] //").append(fuXing.size).append(lineSeparator)
-    for (key <- fuXing.keys) {
+    val fuXingKeys = new java.util.ArrayList[String](fuXing.keySet())
+    i = 0
+    while (i < fuXingKeys.size()) {
+      val key = fuXingKeys.get(i)
       sb.append(key).append(space).append(fuXing.get(key)).append(space)
+      i += 1
     }
     sb.append(lineSeparator)
     sb.append("[xingProb] //").append(xingProb.length).append(lineSeparator)
@@ -167,8 +179,12 @@ class ChNameDictionary {
     }
     sb.append(lineSeparator)
     sb.append("[rightBoundaryHashMap] //").append(rightBoundaryHashMap.size).append(lineSeparator)
-    for (key <- rightBoundaryHashMap.keys) {
+    val rightBoundaryHashMapKeys = new java.util.ArrayList[String](rightBoundaryHashMap.keySet())
+    i = 0
+    while (i < rightBoundaryHashMapKeys.size()) {
+      val key = rightBoundaryHashMapKeys.get(i)
       sb.append(key).append(space).append(rightBoundaryHashMap.get(key)).append(space)
+      i += 1
     }
     sb.append(lineSeparator)
     sb.append("[rightBoundaryProbs] //").append(rightBoundaryProbs.length).append(lineSeparator)
@@ -226,19 +242,19 @@ class ChNameDictionary {
     }
   }
 
-  private var factor: Double = 0.88400000000000001D
-  private var xingHashMap: Map[String, Int] = null
+  private val factor: Double = 0.88400000000000001D
+  private var xingHashMap: java.util.Map[String, Int] = null
   private var xingFreq: Array[Int] = null
   private var xingProb: Array[Double] = null
-  private var mingHashMap: Map[String, Int] = null
+  private var mingHashMap: java.util.Map[String, Int] = null
   private var mingFreqs: Array[Array[Int]] = null
   private var totalMingProb: Array[Double] = null
-  private var xingTop: Int = 1
-  private var mingTop: Int = 1
-  private var fuXing: Map[String, Int] = null
+  private val xingTop: Int = 1
+  private val mingTop: Int = 1
+  private var fuXing: java.util.Map[String, Int] = null
 
   def getFuXing() = fuXing
 
-  private var rightBoundaryHashMap: Map[String, Int] = null
+  private var rightBoundaryHashMap: java.util.Map[String, Int] = null
   private var rightBoundaryProbs: Array[Double] = null
 }

@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.graph
 
-import collection.mutable.OpenHashMap
+import java.util
 
 class SparseVector[Obj](N: Int) {
 
@@ -44,8 +44,8 @@ class SparseVector[Obj](N: Int) {
     val cols = new Array[Int](nnz())
     val keys = st.iterator()
     if (null != keys) {
-      var i = 0
-      keys.foreach(key => {cols(i) = key; i += 1})
+      var i = cols.length - 1
+      while(i >= 0){cols(i) = keys.get(i); i -= 1}
     }
     return cols
   }
@@ -58,8 +58,11 @@ class SparseVector[Obj](N: Int) {
   // return a string representation
   override def toString(): String = {
     var s = ""
-    for (i <- st.iterator()) {
+    val keys = st.iterator()
+    var i = 0
+    while (i < keys.size()) {
       s += "(" + i + ", " + st.get(i) + ") "
+      i += 1
     }
     return s
   }
@@ -92,7 +95,7 @@ class SparseVector[Obj](N: Int) {
     /**
      * Create an empty symbol table.
      */
-    private var st = OpenHashMap[Int, Pair]()
+    private var st = new java.util.TreeMap[Int, Pair]()
 
 
     /**
@@ -101,9 +104,9 @@ class SparseVector[Obj](N: Int) {
      */
     def put(key: Int, valu: Value, obj: Obj) {
       if (valu == null) {
-        st -= (key)
+        st.remove(key)
       } else {
-        st += (key -> new Pair(valu, obj))
+        st.put(key, new Pair(valu, obj))
       }
     }
 
@@ -111,36 +114,38 @@ class SparseVector[Obj](N: Int) {
      * Return the value paired with given key; null if key is not in table.
      */
     def get(key: Int): Value = {
-      return st(key).getValue()
+      return st.get(key).getValue()
     }
 
     def getOrElse(key: Int, defaultValue: Value): Value = {
-      val pair = st.getOrElse(key, null)
+      val pair = st.get(key)
       if (null != pair) pair.getValue() else defaultValue
     }
 
     def getObject(key: Int): Obj = {
-      return st(key).getObj()
+      return st.get(key).getObj()
     }
 
-    def getOrElseObject(key: Int): Obj =
-      st.get(key) match {
-        case Some(pair) => pair.getObj()
-        case _ => None.get
+    def getOrElseObject(key: Int): Obj = {
+      val pair = st.get(key)
+      if (pair != null) {
+        return pair.getObj()
       }
+      return None.get
+    }
 
     def delete(key: Int) {
-      st -= (key)
+      st.remove(key)
     }
 
     def contains(key: Int): Boolean = {
-      return st.contains(key)
+      return st.containsKey(key)
     }
 
     def size() = st.size
 
-    def iterator(): Iterable[Int] = {
-      return st.keys
+    def iterator(): java.util.List[Int] = {
+      new java.util.ArrayList[Int](st.keySet())
     }
   }
 

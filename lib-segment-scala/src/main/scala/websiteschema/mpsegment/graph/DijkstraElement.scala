@@ -31,9 +31,9 @@ object DijkstraElement {
  */
 class DijkstraElement {
 
-  var S: HashSet[Int] = HashSet[Int]()
+  val S = new java.util.HashSet[Int]()
   // Set of vertexes which already found the shortest route.
-  var reachedVertexSet = SortedSet[Element]()
+  val reachedVertexSet = new java.util.TreeSet[Element]()
   var D: Array[Int] = null;
   // The distance of shortest routes.
   var size = 1024
@@ -52,7 +52,7 @@ class DijkstraElement {
 
   def reached(vertex: Int) {
     val ele = new Element(vertex, D(vertex))
-    reachedVertexSet += (ele)
+    reachedVertexSet.add(ele)
   }
 
   def getDistanceOfPathTo(vertex: Int): Int = {
@@ -64,7 +64,7 @@ class DijkstraElement {
   }
 
   def foundShortestPathOf (vertex: Int) {
-    S += (vertex)
+    S.add(vertex)
   }
 
   def findNewShortestPath(): Int = {
@@ -77,8 +77,8 @@ class DijkstraElement {
 
   def getResolvedVertex(): Int = {
     if (!reachedVertexSet.isEmpty) {
-      val ele = reachedVertexSet.head
-      reachedVertexSet = reachedVertexSet.tail
+      val ele = reachedVertexSet.first()
+      reachedVertexSet.remove(ele)
       return ele.getVertex
     }
     return -1

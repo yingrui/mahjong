@@ -19,7 +19,7 @@ class ChineseNameDictionaryTest {
 
     private def testChineseName(dict: ChNameDictionary, name: String) {
         print(name + " ")
-        if (dict.getFuXing().contains(name.substring(0, 2))) {
+        if (dict.getFuXing().containsKey(name.substring(0, 2))) {
             Assert.fail()
         }
         var xing: String = null
