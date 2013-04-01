@@ -1,7 +1,5 @@
 package websiteschema.mpsegment.dict
 
-import collection.mutable.OpenHashMap
-
 class HashDictionary extends IDictionary {
 
   def getCapacity(): Int = {
@@ -9,14 +7,11 @@ class HashDictionary extends IDictionary {
   }
 
   def clear() {
-    headIndexersHashMap = OpenHashMap[String, HeadIndexer]()
+    headIndexersHashMap = new java.util.HashMap[String, HeadIndexer]()
   }
 
   def lookupHeadIndexer(head: String): HeadIndexer = {
-    return headIndexersHashMap.get(head) match {
-      case Some(indexer) => indexer
-      case _ => null
-    }
+    return headIndexersHashMap.get(head)
   }
 
   override def getWord(wordStr: String): IWord = {
@@ -62,7 +57,7 @@ class HashDictionary extends IDictionary {
   private def createHeadIndexer(word: IWord): HeadIndexer = {
     val headIndexer = HeadIndexer(word, headLength)
     headIndexers = headIndexers ++ List(headIndexer)
-    headIndexersHashMap += (headIndexer.getHeadStr() -> headIndexer)
+    headIndexersHashMap.put(headIndexer.getHeadStr(), headIndexer)
     return headIndexer
   }
 
@@ -71,6 +66,6 @@ class HashDictionary extends IDictionary {
   }
 
   private var headLength: Int = 1
-  private var headIndexersHashMap = OpenHashMap[String, HeadIndexer]()
+  private var headIndexersHashMap = new java.util.HashMap[String, HeadIndexer]()
   private var headIndexers = List[HeadIndexer]()
 }

@@ -98,9 +98,9 @@ class Viterbi {
     ret.psai(0) = new Array[Int](relatedStates.size)
 
     var index = 0
-    val arrayRelatedStates = new java.util.ArrayList[Int](relatedStates)
-    while (index < arrayRelatedStates.size()) {
-      val s = arrayRelatedStates.get(index)
+    val iterRlatedStates = relatedStates.iterator()
+    while (iterRlatedStates.hasNext) {
+      val s = iterRlatedStates.next()
       ret.states(0)(index) = s
       ret.delta(0)(index) = Math.log(pi.getPi(s)) + Math.log(e.getProb(s, o1.getIndex()))
       ret.psai(0)(index) = 0
@@ -124,14 +124,15 @@ class Viterbi {
       ret.delta(p) = new Array[Double](stateSet.size)
       ret.psai(p) = new Array[Int](stateSet.size)
       var i = 0
-      val arrayStateSet = new java.util.ArrayList[Int](stateSet)
-      while (i < arrayStateSet.size()) {
-        val state = arrayStateSet.get(i)
+      val iterStateSet = stateSet.iterator()
+      while (iterStateSet.hasNext) {
+        val state = iterStateSet.next()
         ret.states(p)(i) = state
         var maxDelta = Double.NegativeInfinity
         var maxPsai = Double.NegativeInfinity
         var ls = 0
-        for (j <- 0 until ret.states(p - 1).length) {
+        var j = 0
+        while (j < ret.states(p - 1).length) {
           val statePath = getStatePath(ret.states, ret.psai, p - 1, n - 1, j)
           val b = Math.log(e.getProb(state, oi.getIndex()))
           val Aij = Math.log(tran.getCoProb(statePath, state))
@@ -145,6 +146,7 @@ class Viterbi {
             maxPsai = psai_j
             ls = j
           }
+          j += 1
         }
 
         ret.delta(p)(i) = maxDelta
