@@ -20,7 +20,10 @@ class Graph(size: Int) extends IGraph {
   }
 
   override def getEdgeObject(head: Int, tail: Int): IWord = {
-    return matrix.getObject(head, tail)
+    matrix.getObject(head, tail) match {
+      case Some(word) => word
+      case _ => null
+    }
   }
 
   override def getAdjacentVertices(vertex: Int): Array[Int] = {

@@ -3,26 +3,21 @@ package websiteschema.mpsegment.hmm
 import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
 
-class Transition extends ISerialize {
+class Transition extends ITransition with ISerialize {
 
   var root: Trie = null
 
   def getRoot(): Trie = root
 
   var stateBank: NodeRepository = null
-  var sortor: TrieNodeSortor = null
 
   def setStateBank(stateBank: NodeRepository) {
     this.stateBank = stateBank
   }
 
-  def setSortor(sortor: TrieNodeSortor) {
-    Trie.setTreeNodeSorter(sortor)
-  }
-
   def setProb(s1: Int, s2: Int, prob: Double) {
-    val ngram = List[Int](s1, s2)
-    val node = root.insert(ngram.toArray)
+    val ngram = Array[Int](s1, s2)
+    val node = root.insert(ngram)
     node.setProb(prob)
   }
 
@@ -39,19 +34,19 @@ class Transition extends ISerialize {
     return ret
   }
 
-  def getCoProb(c: Array[Int], s: Int): Double = {
-    val ngram = new Array[Int](c.length + 1)
-    System.arraycopy(c, 0, ngram, 0, c.length)
-    ngram(c.length) = s
+  def getConditionProb(condition: Array[Int], state: Int): Double = {
+    val ngram = new Array[Int](condition.length + 1)
+    System.arraycopy(condition, 0, ngram, 0, condition.length)
+    ngram(condition.length) = state
 
     return getProb(ngram, ngram.length)
   }
 
-  def getProb(s1: Int, s2: Int): Double = {
-    return getProb(Array[Int](s1, s2), 2)
+  def getConditionProb(condition: Int, state: Int): Double = {
+    return getProb(Array[Int](condition, state), 2)
   }
 
-  def getProb(ngram: Array[Int], n: Int): Double = {
+  private def getProb(ngram: Array[Int], n: Int): Double = {
     var ret = 0.00000001D
 
     //bigram

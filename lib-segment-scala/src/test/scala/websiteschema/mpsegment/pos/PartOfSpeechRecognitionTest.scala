@@ -47,17 +47,17 @@ class PartOfSpeechRecognitionTest {
 
     @Test
     def should_save_POS_Matrix() {
-        var recognizer = new POSRecognizer()
-        var file = new File("pos.dat")
-        var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
+        val recognizer = new POSRecognizer()
+        val file = new File("pos.dat")
+        val writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
         recognizer.save(writeHandler)
     }
 
     @Test
     def should_load_POS_Matrix() {
-        var recognizer = new POSRecognizer()
-        var file = new File("pos.dat")
-        var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
+        val recognizer = new POSRecognizer()
+        val file = new File("pos.dat")
+        val readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
         recognizer.load()
         file.deleteOnExit()
     }

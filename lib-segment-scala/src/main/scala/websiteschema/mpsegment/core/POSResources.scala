@@ -1,19 +1,19 @@
 package websiteschema.mpsegment.core
 
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
-import websiteschema.mpsegment.hmm.NodeRepository
-import websiteschema.mpsegment.hmm.Pi
-import websiteschema.mpsegment.hmm.Transition
+import websiteschema.mpsegment.hmm._
 import websiteschema.mpsegment.util.FileUtil
 import websiteschema.mpsegment.util.SerializeHandler
 
 import java.io.DataInputStream
+import websiteschema.mpsegment.dict.POSUtil
 
-class POSResources {
+object POSResources {
 
   private var posFreq: Array[Int] = null
   private var transition: Transition = null
   private var pi: Pi = null
+  private val root = new Trie()
   private var stateBank: NodeRepository = null
 
   initialize()
@@ -35,17 +35,42 @@ class POSResources {
 
   private def load(readHandler: SerializeHandler) {
     posFreq = readHandler.deserializeArrayInt()
-    transition.load(readHandler)
+    loadTransition(readHandler)
     pi.load(readHandler)
+  }
+
+  private def loadTransition(readHandler: SerializeHandler) {
+    root.load(readHandler)
     stateBank.load(readHandler)
+  }
+
+  def save(writeHandler: SerializeHandler) {
+    writeHandler.serializeArrayInt(posFreq)
+    root.save(writeHandler)
+    stateBank.save(writeHandler)
+    pi.save(writeHandler)
   }
 
   def getPosFreq(): Array[Int] = {
     return posFreq
   }
 
-  def getTransition(): Transition = {
-    return transition
+  def getTransition(): ITransition = {
+    val tran = Transition()
+    tran.root = root
+    tran.stateBank = stateBank
+
+    //    val tran = new BigramTransition(50)
+    //    root.descendant.foreach(node => {
+    //      node.descendant.foreach(child => {
+    //        if (0 < node.getKey() && 0 < child.getKey()) {
+    //          println(POSUtil.getPOSString(node.getKey()) + " -> " + POSUtil.getPOSString(child.getKey()) + "(" + child.getKey() + ") : " + child.getProb())
+    //          tran.setProb(node.getKey(), child.getKey(), child.getProb())
+    //        }
+    //      })
+    //    })
+
+    return tran
   }
 
   def getPi(): Pi = {
@@ -55,10 +80,4 @@ class POSResources {
   def getStateBank(): NodeRepository = {
     return stateBank
   }
-}
-
-object POSResources {
-  val instance = new POSResources()
-
-  def apply() = instance
 }

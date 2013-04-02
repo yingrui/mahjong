@@ -29,7 +29,7 @@ class SparseMatrix[T](N: Int) {
     return rows(i).get(j)
   }
 
-  def getObject(row: Int, col: Int): T = {
+  def getObject(row: Int, col: Int): Option[T] = {
     return rows(row).getObject(col)
   }
 

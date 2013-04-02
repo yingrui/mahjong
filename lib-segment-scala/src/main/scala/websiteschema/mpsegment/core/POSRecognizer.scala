@@ -1,7 +1,6 @@
 package websiteschema.mpsegment.core
 
 import websiteschema.mpsegment.dict.IWord
-import websiteschema.mpsegment.dict.POSArray
 import websiteschema.mpsegment.graph.IGraph
 import websiteschema.mpsegment.graph.Path
 import websiteschema.mpsegment.hmm._
@@ -17,7 +16,7 @@ class POSRecognizer extends IPOSRecognizer {
   private var observeList = ListBuffer[String]()
 
   viterbi = new Viterbi()
-  viterbi.setSortor(new TrieNodeQuickSort())
+  Trie.setTreeNodeSorter(new TrieNodeQuickSort())
   load()
 
   private def initViterbiWithEmissionAndObserve() {
@@ -83,16 +82,13 @@ class POSRecognizer extends IPOSRecognizer {
   }
 
   def save(writeHandler: SerializeHandler) {
-    writeHandler.serializeArrayInt(posFreq)
-    viterbi.getTran().save(writeHandler)
-    viterbi.getPi().save(writeHandler)
-    viterbi.getStateBank().save(writeHandler)
+    POSResources.save(writeHandler)
   }
 
   def load() {
-    posFreq = POSResources().getPosFreq()
-    viterbi.setTran(POSResources().getTransition())
-    viterbi.setPi(POSResources().getPi())
-    viterbi.setStateBank(POSResources().getStateBank())
+    posFreq = POSResources.getPosFreq()
+    viterbi.setTran(POSResources.getTransition())
+    viterbi.setPi(POSResources.getPi())
+    viterbi.setStateBank(POSResources.getStateBank())
   }
 }

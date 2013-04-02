@@ -2,29 +2,28 @@ package websiteschema.mpsegment.hmm
 
 import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
-import collection.mutable
 
 class NodeRepository extends ISerialize {
 
   private var repo = List[Node]()
-  private var indexMap = mutable.HashMap[String, Int]()
+  private val indexMap = new java.util.HashMap[String, Int]()
 
   def add(node: Node): Node = {
     val name = node.getName()
-    if (!indexMap.contains(name)) {
+    if (!indexMap.containsKey(name)) {
       val index = repo.size
       node.setIndex(index)
-      repo = repo ++ List(node)
-      indexMap += (name -> index)
+      repo = repo :+ node
+      indexMap.put(name, index)
       return node
     } else {
-      return repo(indexMap(name))
+      return repo(indexMap.get(name))
     }
   }
 
   def get(name: String): Node = {
-    if (indexMap.contains(name)) {
-      val index = indexMap(name)
+    if (indexMap.containsKey(name)) {
+      val index = indexMap.get(name)
       return repo(index)
     } else {
       return null
@@ -39,7 +38,7 @@ class NodeRepository extends ISerialize {
     }
   }
 
-  def keySet() = indexMap.keys
+  def keySet() = indexMap.keySet
 
 
   override def save(writeHandler: SerializeHandler) {
@@ -57,8 +56,8 @@ class NodeRepository extends ISerialize {
       for (i <- 0 until length) {
         val node = new Node()
         node.load(readHandler)
-        repo = repo ++ List(node)
-        indexMap += (node.getName() -> node.getIndex())
+        repo = repo :+ node
+        indexMap.put(node.getName(), node.getIndex())
       }
     }
   }

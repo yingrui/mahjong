@@ -7,14 +7,10 @@ class Viterbi {
 
   var stateBank = new NodeRepository()
   var observeBank = new NodeRepository()
-  var tran = Transition()
+  var tran: ITransition = Transition()
   var pi = Pi()
   var e = new Emission()
   var n = 2
-
-  def setSortor(sortor: TrieNodeSortor) {
-    tran.setSortor(sortor)
-  }
 
   def setN(n: Int) {
     this.n = n
@@ -52,11 +48,7 @@ class Viterbi {
     this.stateBank = stateBank
   }
 
-  def getTran(): Transition = {
-    return tran
-  }
-
-  def setTran(tran: Transition) {
+  def setTran(tran: ITransition) {
     this.tran = tran
   }
 
@@ -135,7 +127,7 @@ class Viterbi {
         while (j < ret.states(p - 1).length) {
           val statePath = getStatePath(ret.states, ret.psai, p - 1, n - 1, j)
           val b = Math.log(e.getProb(state, oi.getIndex()))
-          val Aij = Math.log(tran.getCoProb(statePath, state))
+          val Aij = Math.log(tran.getConditionProb(statePath, state))
           val psai_j = ret.delta(p - 1)(j) + Aij
           val delta_j = psai_j + b
           if (delta_j > maxDelta) {

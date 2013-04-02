@@ -27,7 +27,7 @@ class SparseVector[Obj](N: Int) {
     return st.getOrElse(i, 0)
   }
 
-  def getObject(i: Int): Obj = {
+  def getObject(i: Int): Option[Obj] = {
     if (i < 0 || i >= N) {
       throw new RuntimeException("Illegal index")
     }
@@ -95,7 +95,7 @@ class SparseVector[Obj](N: Int) {
     /**
      * Create an empty symbol table.
      */
-    private var st = new java.util.TreeMap[Int, Pair]()
+    private val st = new java.util.TreeMap[Int, Pair]()
 
 
     /**
@@ -126,12 +126,12 @@ class SparseVector[Obj](N: Int) {
       return st.get(key).getObj()
     }
 
-    def getOrElseObject(key: Int): Obj = {
+    def getOrElseObject(key: Int): Option[Obj] = {
       val pair = st.get(key)
       if (pair != null) {
-        return pair.getObj()
+        return Option(pair.getObj())
       }
-      return None.get
+      return None
     }
 
     def delete(key: Int) {

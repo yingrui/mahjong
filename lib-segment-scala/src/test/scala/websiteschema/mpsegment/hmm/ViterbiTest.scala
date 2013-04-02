@@ -5,101 +5,104 @@ import org.junit.Test
 
 class ViterbiTest {
 
-    @Test
-    def should_return_status_333332_with_giving_observes_THTHTH() {
-        val viterbi = new Viterbi()
-        val sortor = new TrieNodeBinarySort()
+  @Test
+  def should_return_status_333332_with_giving_observes_THTHTH() {
+    Trie.setTreeNodeSorter(new TrieNodeBinarySort())
+    val viterbi = new Viterbi()
 
-        viterbi.setSortor(sortor)
+    initTestData(viterbi)
+    viterbi.setN(2)
 
-        initTestData(viterbi)
-        viterbi.setN(2)
+    val o = List("T", "H", "T", "H", "T", "H")
+    try {
+      val s = viterbi.calculateWithLog(o)
+      val sb = new StringBuilder()
+      for (state <- s) {
+        print(state.getName() + " ")
+        sb.append(state.getName()).append(" ")
+      }
+      assert(sb.toString().trim().equals("three three three three three two"))
+    } catch {
+      case ex: Throwable =>
+        Assert.fail(ex.getMessage())
+    }
+  }
 
-        val o = List("T", "H", "T", "H", "T", "H")
-        try {
-            val s = viterbi.calculateWithLog(o)
-            val sb = new StringBuilder()
-            for (state <- s) {
-                print(state.getName() + " ")
-                sb.append(state.getName()).append(" ")
-            }
-            assert (sb.toString().trim().equals("three three three three three two"))
-        } catch {
-          case ex: Throwable =>
-            Assert.fail(ex.getMessage())
-        }
+  @Test
+  def should_handle_unknown_State() {
+    val o = List("A", "H")
+    val viterbi = new Viterbi()
+    val sortor = new TrieNodeBinarySort()
+
+    Trie.setTreeNodeSorter(sortor)
+
+    initTestData(viterbi)
+    viterbi.setN(2)
+
+    try {
+      val s = viterbi.calculateWithLog(o)
+      val sb = new StringBuilder()
+      for (state <- s) {
+        print(state.getName() + " ")
+        sb.append(state.getName()).append(" ")
+      }
+      Assert.fail("should throw ObserveListException.")
+    } catch {
+      case ex: Throwable =>
+        println(ex.getMessage())
     }
 
-    @Test
-    def should_handle_unknown_State() {
-        val o = List("A", "H")
-        val viterbi = new Viterbi()
-        val sortor = new TrieNodeBinarySort()
+  }
 
-        viterbi.setSortor(sortor)
+  def initTestData(v: Viterbi) {
+    val stateBank: NodeRepository = new NodeRepository()
+    stateBank.add(Node("one"))
+    stateBank.add(Node("two"))
+    stateBank.add(Node("three"))
+    v.setStateBank(stateBank)
 
-        initTestData(viterbi)
-        viterbi.setN(2)
+    val observeBank: NodeRepository = v.getObserveBank()
+    observeBank.add(Node("H"))
+    observeBank.add(Node("T"))
+    v.setObserveBank(observeBank)
 
-        try {
-            val s = viterbi.calculateWithLog(o)
-            val sb = new StringBuilder()
-            for (state <- s) {
-                print(state.getName() + " ")
-                sb.append(state.getName()).append(" ")
-            }
-            Assert.fail("should throw ObserveListException.")
-        } catch {
-          case ex: Throwable =>
-            println(ex.getMessage())
-        }
+    //transition
+    //   s1  s2  s3
+    //s1 0.8 0.1 0.1
+    //s2 0.1 0.8 0.1
+    //s3 0.1 0.1 0.8
+    val tran = Transition()
+    tran.setStateBank(stateBank)
+    tran.setProb(stateBank.get("one").getIndex(), stateBank.get("one").getIndex(), 0.3)
+    tran.setProb(stateBank.get("one").getIndex(), stateBank.get("two").getIndex(), 0.3)
+    tran.setProb(stateBank.get("one").getIndex(), stateBank.get("three").getIndex(), 0.4)
+    tran.setProb(stateBank.get("two").getIndex(), stateBank.get("one").getIndex(), 0.2)
+    tran.setProb(stateBank.get("two").getIndex(), stateBank.get("two").getIndex(), 0.6)
+    tran.setProb(stateBank.get("two").getIndex(), stateBank.get("three").getIndex(), 0.2)
+    tran.setProb(stateBank.get("three").getIndex(), stateBank.get("one").getIndex(), 0.2)
+    tran.setProb(stateBank.get("three").getIndex(), stateBank.get("two").getIndex(), 0.2)
+    tran.setProb(stateBank.get("three").getIndex(), stateBank.get("three").getIndex(), 0.6)
+    tran.getRoot().printTreeNode("")
+    v.setTran(tran)
+    //emission
+    //   o1  o2
+    //s1 0.5 0.5
+    //s2 0.8 0.2
+    //s3 0.2 0.8
+    val e: Emission = v.getE()
+    e.setProb(stateBank.get("one").getIndex(), observeBank.get("H").getIndex(), 0.5)
+    e.setProb(stateBank.get("one").getIndex(), observeBank.get("T").getIndex(), 0.5)
+    e.setProb(stateBank.get("two").getIndex(), observeBank.get("H").getIndex(), 0.8)
+    e.setProb(stateBank.get("two").getIndex(), observeBank.get("T").getIndex(), 0.2)
+    e.setProb(stateBank.get("three").getIndex(), observeBank.get("H").getIndex(), 0.2)
+    e.setProb(stateBank.get("three").getIndex(), observeBank.get("T").getIndex(), 0.8)
+    v.setE(e)
 
-    }
-
-    def initTestData(v: Viterbi) {
-        var s1 = Node("one")
-        v.getStateBank().add(s1)
-        var s2 = Node("two")
-        v.getStateBank().add(s2)
-        var s3 = Node("three")
-        v.getStateBank().add(s3)
-
-        var o1 = Node("H")
-        v.getObserveBank().add(o1)
-        var o2 = Node("T")
-        v.getObserveBank().add(o2)
-
-        //transition
-        //   s1  s2  s3
-        //s1 0.8 0.1 0.1
-        //s2 0.1 0.8 0.1
-        //s3 0.1 0.1 0.8
-        v.getTran().setStateBank(v.getStateBank())
-        v.getTran().setProb(s1.getIndex(), s1.getIndex(), 0.3)
-        v.getTran().setProb(s1.getIndex(), s2.getIndex(), 0.3)
-        v.getTran().setProb(s1.getIndex(), s3.getIndex(), 0.4)
-        v.getTran().setProb(s2.getIndex(), s1.getIndex(), 0.2)
-        v.getTran().setProb(s2.getIndex(), s2.getIndex(), 0.6)
-        v.getTran().setProb(s2.getIndex(), s3.getIndex(), 0.2)
-        v.getTran().setProb(s3.getIndex(), s1.getIndex(), 0.2)
-        v.getTran().setProb(s3.getIndex(), s2.getIndex(), 0.2)
-        v.getTran().setProb(s3.getIndex(), s3.getIndex(), 0.6)
-        v.getTran().getRoot().printTreeNode("")
-        //emission
-        //   o1  o2
-        //s1 0.5 0.5
-        //s2 0.8 0.2
-        //s3 0.2 0.8
-        v.getE().setProb(s1.getIndex(), o1.getIndex(), 0.5)
-        v.getE().setProb(s1.getIndex(), o2.getIndex(), 0.5)
-        v.getE().setProb(s2.getIndex(), o1.getIndex(), 0.8)
-        v.getE().setProb(s2.getIndex(), o2.getIndex(), 0.2)
-        v.getE().setProb(s3.getIndex(), o1.getIndex(), 0.2)
-        v.getE().setProb(s3.getIndex(), o2.getIndex(), 0.8)
-
-        //Pi = [0.2 0.3 0.5]
-        v.getPi().setPi(s1.getIndex(), 0.2)
-        v.getPi().setPi(s2.getIndex(), 0.4)
-        v.getPi().setPi(s3.getIndex(), 0.4)
-    }
+    //Pi = [0.2 0.3 0.5]
+    val pi: Pi = v.getPi()
+    pi.setPi(stateBank.get("one").getIndex(), 0.2)
+    pi.setPi(stateBank.get("two").getIndex(), 0.4)
+    pi.setPi(stateBank.get("three").getIndex(), 0.4)
+    v.setPi(pi)
+  }
 }
