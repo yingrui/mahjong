@@ -30,7 +30,8 @@ class Transition extends ITransition with ISerialize {
     } else {
       ret = 1.0 / root.getCount().toDouble
     }
-
+    ngram.foreach(i => print(i + " "))
+    println(ret)
     return ret
   }
 

@@ -6,7 +6,6 @@ import websiteschema.mpsegment.util.FileUtil
 import websiteschema.mpsegment.util.SerializeHandler
 
 import java.io.DataInputStream
-import websiteschema.mpsegment.dict.POSUtil
 
 object POSResources {
 
@@ -56,19 +55,14 @@ object POSResources {
   }
 
   def getTransition(): ITransition = {
-    val tran = Transition()
-    tran.root = root
-    tran.stateBank = stateBank
-
-    //    val tran = new BigramTransition(50)
-    //    root.descendant.foreach(node => {
-    //      node.descendant.foreach(child => {
-    //        if (0 < node.getKey() && 0 < child.getKey()) {
-    //          println(POSUtil.getPOSString(node.getKey()) + " -> " + POSUtil.getPOSString(child.getKey()) + "(" + child.getKey() + ") : " + child.getProb())
-    //          tran.setProb(node.getKey(), child.getKey(), child.getProb())
-    //        }
-    //      })
-    //    })
+    val tran = new BigramTransition(50)
+    root.descendant.foreach(node => {
+      node.descendant.foreach(child => {
+        if (0 < node.getKey() && 0 < child.getKey()) {
+          tran.setProb(node.getKey(), child.getKey(), child.getProb())
+        }
+      })
+    })
 
     return tran
   }
