@@ -38,8 +38,8 @@ class UserDictionaryLoader {
   def loadUserDictionary(file: String) {
     val encoding = "utf-8"
     try {
-      val source = Source.fromFile(
-        getClass().getClassLoader().getResource(file).toURI, encoding)
+      val source = Source.fromInputStream(
+        getClass().getClassLoader().getResourceAsStream(file), encoding)
       for (line <- source.getLines; str = line.trim()) {
         if (str.length >= 1) {
           processUserDictLine(str)

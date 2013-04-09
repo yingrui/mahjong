@@ -39,7 +39,7 @@ class DomainDictFactory {
 
     private def initializeAndLoad(dict: DomainDictionary) {
         val classNames = config.getDomainDictLoader().split("[,; ]+")
-        for (className <- classNames) {
+        for (className <- classNames; if !className.isEmpty) {
             val loader = createDictLoader(className)
             if (null != loader) {
                 loader.load(dict)

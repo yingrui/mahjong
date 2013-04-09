@@ -15,7 +15,7 @@ import java.util.Map;
 public class SegmentService {
 
     public List<WordDto> segment(String sentence, Map<String, String> params) {
-        SegmentWorker worker = SegmentEngine.getInstance().getSegmentWorker(params);
+        SegmentWorker worker = SegmentEngine.apply().getSegmentWorker(params);
         SegmentResult result = worker.segment(sentence);
         List<WordDto> words = new ArrayList<WordDto>(result.length());
         for(WordAtom wordAtom : result.getWordAtoms()) {

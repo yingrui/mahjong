@@ -46,8 +46,8 @@ class DictionaryFactory {
 
     private def loadWordStr(dictResource: String) : List[String] = {
         coreDict = new HashDictionary()
-        val inputStream = getClass.getClassLoader.getResource(dictResource).toURI
-        val source = Source.fromFile(inputStream, "utf-8")
+        val inputStream = getClass.getClassLoader.getResourceAsStream(dictResource)
+        val source = Source.fromInputStream(inputStream, "utf-8")
         return source.getLines.toList
     }
 

@@ -9,6 +9,16 @@ class SegmentEngine {
 
   private val configuration = MPSegmentConfiguration()
 
+  implicit def javaMapToScalaMap(javaMap: java.util.Map[String, String]) = {
+    val map = HashMap[String, String]()
+    val iterator = javaMap.entrySet().iterator()
+    while (iterator.hasNext) {
+      val entry = iterator.next()
+      map += (entry.getKey -> entry.getValue)
+    }
+    map
+  }
+
   private def loadDictionary() {
     DictionaryFactory().loadDictionary()
     DictionaryFactory().loadDomainDictionary()
@@ -19,7 +29,7 @@ class SegmentEngine {
     return new SegmentWorker(configuration)
   }
 
-  def getSegmentWorker(config: Map[String, String]): SegmentWorker = {
+  def getSegmentWorker(config: java.util.Map[String, String]): SegmentWorker = {
     return new SegmentWorker(MPSegmentConfiguration(config))
   }
 
@@ -35,7 +45,7 @@ class SegmentEngine {
         }
       }
     }
-    return getSegmentWorker(map)
+    return new SegmentWorker(MPSegmentConfiguration(map))
   }
 }
 

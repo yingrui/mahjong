@@ -11,10 +11,15 @@ public class WordDto {
     public int domainType;
 
     public WordDto(WordAtom wordAtom) {
-        word = wordAtom.word;
-        pinyin = wordAtom.pinyin;
-        pos = POSUtil.getPOSString(wordAtom.pos);
-        concept = wordAtom.concept;
-        domainType = wordAtom.domainType;
+        word = wordAtom.word();
+        pinyin = wordAtom.pinyin();
+        pos = POSUtil.getPOSString(wordAtom.pos());
+        concept = wordAtom.concept();
+        domainType = wordAtom.domainType();
+    }
+
+    @Override
+    public String toString() {
+        return word + "/" + pos;
     }
 }

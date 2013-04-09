@@ -14,8 +14,13 @@
     <dependencies>
         <dependency>
             <groupId>websiteschema</groupId>
-            <artifactId>max-prob-segment</artifactId>
+            <artifactId>max-prob-segment-scala</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
