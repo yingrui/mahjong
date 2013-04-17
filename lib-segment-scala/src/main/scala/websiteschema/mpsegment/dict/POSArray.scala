@@ -144,20 +144,20 @@ class POSArray {
     posIndex
   }
 
-  def getOccurredCount(s: String): Long = {
+  def getOccurredCount(s: String): Int = {
     if (s == null || s.trim().equals("")) {
-      return 0L
+      return 0
     }
     val pos = posTable.getOrElse(s.trim(), null)
     if (pos == null) {
-      return 0L
+      return 0
     } else {
-      return pos.getCount().toLong
+      return pos.getCount()
     }
   }
 
-  def getOccurredSum(): Long = {
-    var sum = 0L
+  def getOccurredSum(): Int = {
+    var sum = 0
     val posAndFreq = getWordPOSTable()
     for (i <- 0 until posAndFreq.length) {
       sum += posAndFreq(i)(1)

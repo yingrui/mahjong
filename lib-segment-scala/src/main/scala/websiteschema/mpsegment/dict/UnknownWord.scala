@@ -23,15 +23,15 @@ class UnknownWord extends IWord {
         return 0
     }
 
-    override def getOccuredCount(s: String) : Long = {
+    override def getOccuredCount(s: String) : Int = {
         if (s.equals(POSUtil.getPOSString(POSUtil.POS_UNKOWN))) {
-            return 1L
+            return 1
         }
-        return 0L
+        return 0
     }
 
-    override def getOccuredSum() : Long = {
-        return 1L
+    override def getOccuredSum() : Int = {
+        return 1
     }
 
     override def getPOSArray() : POSArray = {

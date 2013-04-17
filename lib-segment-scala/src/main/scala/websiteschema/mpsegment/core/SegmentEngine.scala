@@ -23,6 +23,7 @@ class SegmentEngine {
     DictionaryFactory().loadDictionary()
     DictionaryFactory().loadDomainDictionary()
     DictionaryFactory().loadUserDictionary()
+    DictionaryFactory().loadEnglishDictionary()
   }
 
   def getSegmentWorker(): SegmentWorker = {

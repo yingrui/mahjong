@@ -86,7 +86,7 @@ class WordImpl(wordName: String) extends IWord with Comparable[Object] {
     log2Freq = (Math.log(getOccuredSum() + 1L) * 100D).toInt
   }
 
-  override def getOccuredSum(): Long = {
+  override def getOccuredSum(): Int = {
     val posTable = getPOSArray().getWordPOSTable()
     var occuredSum = 0
     for (i <- 0 until posTable.length) {
@@ -95,19 +95,19 @@ class WordImpl(wordName: String) extends IWord with Comparable[Object] {
     return occuredSum
   }
 
-  override def getOccuredCount(s: String): Long = {
+  override def getOccuredCount(s: String): Int = {
     val pos = POSUtil.getPOSIndex(s)
     val posTable = getPOSArray().getWordPOSTable()
     for (i <- 0 until posTable.length) {
       if (posTable(i)(0) == pos) {
-        return posTable (i)(1).toLong
+        return posTable (i)(1)
       }
     }
-    return 0L
+    return 0
   }
 
   override def incOccuredCount(s: String) {
-    setOccuredCount(s, (getOccuredCount(s) + 1).toInt)
+    setOccuredCount(s, getOccuredCount(s) + 1)
   }
 
   override def compareTo(obj: Object): Int = {

@@ -17,7 +17,7 @@ class WordStringConverter(word: IWord) {
     private def buildBody() {
         stringBuilder.append("{")
         stringBuilder.append(buildDomainType()).append(",")
-        var posTable = buildPOSTable()
+        val posTable = buildPOSTable()
         if (!posTable.isEmpty()) {
             stringBuilder.append(posTable).append(",")
         }

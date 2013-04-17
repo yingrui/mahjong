@@ -42,8 +42,16 @@ class MPSegmentConfiguration {
     return loaduserdictionary
   }
 
+  def isLoadEnglishDictionary(): Boolean = {
+    return loadEnglishDictionary
+  }
+
   def getUserDictionaryFile(): String = {
     return getHomePath() + properties.getOrElse("user.dictionaryfile", "userdict.txt")
+  }
+
+  def getEnglishDictionaryFile(): String = {
+    return getHomePath() + properties.getOrElse("english.dictionaryfile", "dict-en.txt")
   }
 
   def isSupportQuerySyntax(): Boolean = {
@@ -103,6 +111,7 @@ class MPSegmentConfiguration {
     querysyntax = properties.getOrElse("support.querysyntax", "false").toBoolean
     loaduserdictionary = properties.getOrElse("load.userdictionary", "true").toBoolean
     loaddomaindictionary = properties.getOrElse("load.domaindictionary", "true").toBoolean
+    loadEnglishDictionary = properties.getOrElse("load.englishdictionary", "false").toBoolean
     segment_min = properties.getOrElse("minimize.word", "false").toBoolean
     chinesenameidentify = properties.getOrElse("recognize.chinesename", "true").toBoolean
     xingmingseparate = properties.getOrElse("separate.xingming", "false").toBoolean
@@ -134,6 +143,7 @@ class MPSegmentConfiguration {
   private var withPinyin = false
   private var loaddomaindictionary = false
   private var loaduserdictionary = false
+  private var loadEnglishDictionary = false
   private var segment_min = false
   private var querysyntax = false
   //TODO: add test case for stop word filter.

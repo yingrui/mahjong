@@ -8,9 +8,9 @@ trait IWord {
 
     def getDomainType() : Int
 
-    def getOccuredCount(s: String) : Long
+    def getOccuredCount(s: String) : Int
 
-    def getOccuredSum() : Long
+    def getOccuredSum() : Int
 
     def getPOSArray() : POSArray
 

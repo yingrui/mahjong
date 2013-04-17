@@ -61,11 +61,11 @@ class DomainWordItem extends IWord with Comparable[Object] {
     return log2Freq
   }
 
-  override def getOccuredSum(): Long = {
+  override def getOccuredSum(): Int = {
     return posArray.getOccurredSum()
   }
 
-  override def getOccuredCount(s: String): Long = {
+  override def getOccuredCount(s: String): Int = {
     return posArray.getOccurredCount(s)
   }
 
