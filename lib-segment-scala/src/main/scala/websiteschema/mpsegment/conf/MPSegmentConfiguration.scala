@@ -111,7 +111,7 @@ class MPSegmentConfiguration {
     querysyntax = properties.getOrElse("support.querysyntax", "false").toBoolean
     loaduserdictionary = properties.getOrElse("load.userdictionary", "true").toBoolean
     loaddomaindictionary = properties.getOrElse("load.domaindictionary", "true").toBoolean
-    loadEnglishDictionary = properties.getOrElse("load.englishdictionary", "false").toBoolean
+    loadEnglishDictionary = properties.getOrElse("load.englishdictionary", "true").toBoolean
     segment_min = properties.getOrElse("minimize.word", "false").toBoolean
     chinesenameidentify = properties.getOrElse("recognize.chinesename", "true").toBoolean
     xingmingseparate = properties.getOrElse("separate.xingming", "false").toBoolean

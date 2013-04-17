@@ -155,7 +155,7 @@ class UserDictionaryLoader {
 
   private def getFee(mpsegment: MPSegment, s: String): Int = {
     var i = 0
-    val segmentResult = mpsegment.segmentMP(s, true)
+    val segmentResult = mpsegment.segmentMP(s, false)
     for (j <- 0 until segmentResult.length()) {
       i = (i + getLogCorpus()) - getLog2Freq(segmentResult.getWord(j))
     }

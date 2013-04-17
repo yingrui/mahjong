@@ -9,19 +9,19 @@ class PorterStemmerTest {
 
     @Test
     def should_stem_word_DOING_to_DO() {
-        var actualWord = porterStemmer.stem("greeting")
+        val actualWord = porterStemmer.stem("greeting")
         Assert.assertEquals("greet", actualWord)
     }
 
     @Test
     def should_stem_word_DONE_to_DO() {
-        var actualWord = porterStemmer.stem("started")
+        val actualWord = porterStemmer.stem("started")
         Assert.assertEquals("start", actualWord)
     }
 
     @Test
     def should_stem_word_likes_to_like() {
-        var actualWord = porterStemmer.stem("likes")
+        val actualWord = porterStemmer.stem("likes")
         Assert.assertEquals("like", actualWord)
     }
 }

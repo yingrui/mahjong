@@ -1,7 +1,6 @@
 package websiteschema.mpsegment
 
-import org.junit.Assert
-import org.junit.Test
+import org.junit.{Ignore, Assert, Test}
 import websiteschema.mpsegment.core.SegmentEngine
 import websiteschema.mpsegment.dict.POSUtil
 
@@ -237,6 +236,20 @@ class MPSegmentTest {
     Assert.assertEquals(words.getWord(0), "She")
     Assert.assertEquals(words.getWord(1), "like")
     Assert.assertEquals(words.getWord(2), "hunt")
+  }
+
+  @Ignore
+  def should_recognize_pos_of_english_words() {
+    val str = "She likes hunting"
+    val engine = SegmentEngine()
+    val worker = engine.getSegmentWorker(
+      "segment.lang.en = true",
+      "convert.touppercase = false")
+    val words = worker.segment(str)
+    println(words)
+    Assert.assertEquals(words.getPOS(0), POSUtil.POS_R)
+    Assert.assertEquals(words.getWord(1), POSUtil.POS_V)
+    Assert.assertEquals(words.getWord(2), POSUtil.POS_V)
   }
 
   @Test

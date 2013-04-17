@@ -29,6 +29,8 @@ class DictionaryFactory {
     return coreDict
   }
 
+  def getEnglishDictionary: IDictionary = englishDict
+
   def loadDictionary() {
     try {
       coreDict = new HashDictionary()
@@ -44,7 +46,7 @@ class DictionaryFactory {
       }
     } catch {
       case e: Throwable =>
-        System.err.println(e)
+        e.printStackTrace()
     }
   }
 
@@ -55,7 +57,7 @@ class DictionaryFactory {
   }
 
   def loadEnglishDictionary() {
-    if(isLoadEnglishDictionary){
+    if (isLoadEnglishDictionary) {
       val inputStream = FileUtil.getResourceAsStream(config.getEnglishDictionaryFile)
       var timestamp = System.currentTimeMillis()
       try {
@@ -68,7 +70,11 @@ class DictionaryFactory {
             englishDict.addWord(word)
           }
         }
-      } finally {
+      }
+      catch {
+        case ex: Throwable => ex.printStackTrace()
+      }
+      finally {
         inputStream.close()
         timestamp = System.currentTimeMillis() - timestamp
         println((new StringBuilder()).append("loading english dictionary time used(ms): ").append(timestamp).toString())
@@ -94,7 +100,7 @@ class DictionaryFactory {
         userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration()))
       } catch {
         case e: Throwable =>
-          System.err.println(e)
+          e.printStackTrace()
       }
       userDictionaryLoader.clear()
       l1 = System.currentTimeMillis() - l1
