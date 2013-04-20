@@ -63,4 +63,7 @@ object StringUtil {
         return (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9' || ch >= '\uFF21' && ch <= '\uFF41' || ch >= '\uFF3A' && ch <= '\uFF5A' || ch >= '\uFF10' && ch <= '\uFF19')
     }
 
+    def isCharAlphabetical(ch: Char): Boolean = {
+      return (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch >= '\uFF21' && ch <= '\uFF41' || ch >= '\uFF3A' && ch <= '\uFF5A')
+    }
 }

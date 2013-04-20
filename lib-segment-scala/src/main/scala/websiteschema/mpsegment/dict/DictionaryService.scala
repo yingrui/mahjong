@@ -3,6 +3,7 @@ package websiteschema.mpsegment.dict
 import websiteschema.mpsegment.dict.domain.DomainDictFactory
 import websiteschema.mpsegment.dict.domain.DomainDictionary
 import websiteschema.mpsegment.lang.en.PorterStemmer
+import websiteschema.mpsegment.util.StringUtil
 
 class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Boolean, loadUserDictionary: Boolean) {
   private var the2ndMatchWord: IWord = null
@@ -22,9 +23,9 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
     }
   }
 
-  def startWithAlphabetical(str: String): Boolean = Character.isAlphabetic(str(0).toInt)
+  private def startWithAlphabetical(str: String): Boolean = StringUtil.isCharAlphabetical(str(0))
 
-  def lookupEnglishWords(candidateWord: String): DictionaryLookupResult = {
+  private def lookupEnglishWords(candidateWord: String): DictionaryLookupResult = {
     val word = findWordInEnglishDictionary(candidateWord)
     createResult(word, null, null, if(null != word) 1 else 0)
   }
@@ -46,7 +47,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
     }
   }
 
-  def lookupChineseWords(candidateWord: String): DictionaryLookupResult = {
+  private def lookupChineseWords(candidateWord: String): DictionaryLookupResult = {
     val firstWord = getItem(candidateWord)
     createResult(firstWord, the2ndMatchWord, the3rdMatchWord, matchedWordCount)
   }
