@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.web.ui.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -47,13 +48,15 @@ public class UserController {
     @RequestMapping(value = "current", method = RequestMethod.GET)
     @ResponseBody
     public UserDto getCurrentUser() {
-        boolean authenticated = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean authenticated = authentication.isAuthenticated();
         if (authenticated) {
-            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                    .getAuthentication()
-                    .getPrincipal();
-            int userId = Integer.valueOf(userDetails.getUsername());
-            return UserDto.toDto(userService.getUserById(userId));
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) principal;
+                int userId = Integer.valueOf(userDetails.getUsername());
+                return UserDto.toDto(userService.getUserById(userId));
+            }
         }
         throw new RuntimeException("NotFound");
     }

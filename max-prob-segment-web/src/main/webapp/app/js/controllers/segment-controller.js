@@ -5,10 +5,17 @@
 function SegmentCtrl($scope, segmentService, i18n) {
     $scope.inputText = "";
     $scope.segmentResult = [];
+    $scope.isSupportEnglish = true
+    $scope.isRecognizePinyin = true
+    $scope.isSegmentMin = true
     $scope.segment = function() {
         var scope = this;
-        console.log(scope.inputText);
-        segmentService.segment(scope.inputText, function(result){
+        var param = {
+            isSupportEnglish: scope.isSupportEnglish,
+            isRecognizePinyin: scope.isRecognizePinyin,
+            isSegmentMin: scope.isSegmentMin
+            };
+        segmentService.segment(scope.inputText, param, function(result){
             scope.segmentResult = result;
         });
     }
