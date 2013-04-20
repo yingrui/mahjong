@@ -15,21 +15,35 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
   private val stemmer = new PorterStemmer()
 
   def lookup(candidateWord: String): DictionaryLookupResult = {
-//    if (startWithAlphabetical(candidateWord)) {
-//      lookupEnglishWords(candidateWord)
-//    } else {
+    if (startWithAlphabetical(candidateWord) && candidateWord.matches("[A-z0-9]+")) {
+      lookupEnglishWords(candidateWord)
+    } else {
       lookupChineseWords(candidateWord)
-//    }
+    }
   }
 
   def startWithAlphabetical(str: String): Boolean = Character.isAlphabetic(str(0).toInt)
+
   def lookupEnglishWords(candidateWord: String): DictionaryLookupResult = {
-    val wordString: String = candidateWord.toLowerCase
+    val word = findWordInEnglishDictionary(candidateWord)
+    createResult(word, null, null, if(null != word) 1 else 0)
+  }
+
+  private def findWordInEnglishDictionary(wordName: String): IWord = {
+    val wordString: String = wordName.toLowerCase
     var word = englishDictionary.getWord(wordString)
     if(null == word) {
       word = englishDictionary.getWord(stemmer.stem(wordString))
     }
-    createResult(word, null, null, if(null != word) 1 else 0)
+    if (null != word) {
+      if (wordName.equals(word.getWordName())) {
+        word
+      } else {
+        new DelegateWord(word, wordName)
+      }
+    } else {
+      null
+    }
   }
 
   def lookupChineseWords(candidateWord: String): DictionaryLookupResult = {

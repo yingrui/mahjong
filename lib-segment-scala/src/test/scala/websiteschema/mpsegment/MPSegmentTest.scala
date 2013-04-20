@@ -238,9 +238,9 @@ class MPSegmentTest {
     Assert.assertEquals(words.getWord(2), "hunt")
   }
 
-  @Ignore
+  @Test
   def should_recognize_pos_of_english_words() {
-    val str = "She likes hunting"
+    val str = "She has food"
     val engine = SegmentEngine()
     val worker = engine.getSegmentWorker(
       "segment.lang.en = true",
@@ -248,8 +248,8 @@ class MPSegmentTest {
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getPOS(0), POSUtil.POS_R)
-    Assert.assertEquals(words.getWord(1), POSUtil.POS_V)
-    Assert.assertEquals(words.getWord(2), POSUtil.POS_V)
+    Assert.assertEquals(words.getPOS(1), POSUtil.POS_V)
+    Assert.assertEquals(words.getPOS(2), POSUtil.POS_N)
   }
 
   @Test
