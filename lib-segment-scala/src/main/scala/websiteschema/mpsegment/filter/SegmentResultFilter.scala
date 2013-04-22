@@ -10,9 +10,6 @@ import websiteschema.mpsegment.core.SegmentResult
 import java.util.ArrayList
 import collection.mutable.ListBuffer
 
-/**
- * @author ray
- */
 class SegmentResultFilter(config: MPSegmentConfiguration) {
 
   private val filters = ListBuffer[ISegmentFilter]()
@@ -22,7 +19,7 @@ class SegmentResultFilter(config: MPSegmentConfiguration) {
   filters += (new ReduplicatingFilter())
   filters += (new QuerySyntaxFilter(config))
   if (config.is("segment.lang.en")) {
-    filters += (new EnglishStemFilter())
+    filters += (new EnglishStemFilter(config.is("segment.lang.en.stemming")))
   }
 
   if (config.isHalfShapeAll() || config.isUpperCaseAll()) {

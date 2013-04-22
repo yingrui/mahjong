@@ -7,6 +7,7 @@ corpusEditorServices.
         return {
             paramMap: {
                 isSupportEnglish: "segment.lang.en",
+                isEnglishStemming: "segment.lang.en.stemming",
                 isRecognizePinyin: "recognize.pinyin",
                 isSegmentMin: "minimize.word"
             },
@@ -14,7 +15,9 @@ corpusEditorServices.
                 var path = '/api/segment?';
                 var scope = this;
                 _.each(param, function(value, key) {
-                    path += '&' + scope.paramMap[key] + '=' + value
+                    if(value !== undefined && value !== null){
+                        path += '&' + scope.paramMap[key] + '=' + value
+                    }
                 });
                 $http.post(path, data).success(callback);
             }
