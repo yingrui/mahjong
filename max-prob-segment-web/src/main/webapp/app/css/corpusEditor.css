@@ -21,3 +21,7 @@
     width: 90%;
     height: 200px;
 }
+
+.word-index { cursor:pointer; }
+
+.word-index.selected { font-size:30pt; }

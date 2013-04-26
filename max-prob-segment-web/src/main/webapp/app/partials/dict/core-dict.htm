@@ -1,0 +1,28 @@
+<div class="word-index-area">
+    <ul class="inline">
+        <li my-word-index ng-repeat="wordIndex in wordIndexes" class="word-index"><span ng-click="switchIndex(wordIndex)">{{wordIndex}}</span></li>
+    </ul>
+</div>
+
+<div class="word-head-area">
+    <ul class="inline">
+        <li my-word-index ng-repeat="wordHead in wordHeads" class="word-index"><span ng-click="switchHead(wordHead)">{{wordHead}}</span></li>
+    </ul>
+</div>
+
+<div class='basic-dict'>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <td>#</td>
+                <td>词</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="wordItem in wordItems" my-word-item=""></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="pull-request">
+</div>

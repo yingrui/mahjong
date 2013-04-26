@@ -16,6 +16,9 @@ angular.module('corpusEditor', ['ui','corpusEditorFilters', 'corpusEditorService
         when('/download', {
             templateUrl: '/app/partials/download/main.htm',
             controller: function(){}}).
+        when('/dictionary', {
+            templateUrl: '/app/partials/dict/core-dict.htm',
+            controller: CoreDictionaryCtrl}).
         when('/contact', {
             templateUrl: '/app/partials/contact/main.htm',
             controller: function(){}}).
