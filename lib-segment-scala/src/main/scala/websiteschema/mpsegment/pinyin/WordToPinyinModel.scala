@@ -36,6 +36,7 @@ class WordToPinyinModel {
             val handler = SerializeHandler(new DataInputStream(is))
             observeBank.load(handler)
             stateBank.load(handler)
+            println(stateBank)
             pi.load(handler)
             emission.load(handler)
             ngram.load(handler)

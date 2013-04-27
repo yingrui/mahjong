@@ -61,4 +61,6 @@ class NodeRepository extends ISerialize {
       }
     }
   }
+
+  override def toString = indexMap.toString
 }

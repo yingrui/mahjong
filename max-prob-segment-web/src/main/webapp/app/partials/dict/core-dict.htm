@@ -1,17 +1,23 @@
 <div class="word-index-area">
     <ul class="inline">
-        <li my-word-index ng-repeat="wordIndex in wordIndexes" class="word-index"><span ng-click="switchIndex(wordIndex)">{{wordIndex}}</span></li>
+        <li my-word-index="selectedIndex" ng-model="wordIndex" ng-repeat="wordIndex in wordIndexes" class="word-index"><span ng-click="switchIndex(wordIndex)">{{wordIndex}}</span></li>
+    </ul>
+</div>
+
+<div class="pinyin-area">
+    <ul class="inline">
+        <li my-word-index="selectedPinyin" ng-model="pinyin" ng-repeat="pinyin in pinyinIndexes" class="word-index"><span ng-click="switchPinyin(pinyin)">{{pinyin}}</span></li>
     </ul>
 </div>
 
 <div class="word-head-area">
     <ul class="inline">
-        <li my-word-index ng-repeat="wordHead in wordHeads" class="word-index"><span ng-click="switchHead(wordHead)">{{wordHead}}</span></li>
+        <li my-word-index="selectedHead" ng-model="wordHead" ng-repeat="wordHead in wordHeads" class="word-index"><span ng-click="switchHead(wordHead)">{{wordHead}}</span></li>
     </ul>
 </div>
 
 <div class='basic-dict'>
-    <table class="table table-condensed">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <td>#</td>
@@ -19,7 +25,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="wordItem in wordItems" my-word-item=""></tr>
+            <tr ng-repeat="wordItem in wordItems">
+                <td>#</td>
+                <td>
+                    {{ wordItem.word }}
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
