@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping(value = "/dictionary/core")
 public class CoreDictionaryController {
 
-    @RequestMapping(value = "/index/{wordIndex}", method = RequestMethod.GET)
+    @RequestMapping(value = "/pinyin/{wordIndex}", method = RequestMethod.GET)
     @ResponseBody
     public List<String> getWordHeads(@PathVariable String wordIndex, HttpServletRequest request) throws UnsupportedEncodingException {
         List<String> wordHeads = new ArrayList<String>();

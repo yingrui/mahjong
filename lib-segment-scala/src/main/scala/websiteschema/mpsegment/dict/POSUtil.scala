@@ -116,7 +116,7 @@ object POSUtil {
   posTable += ("PRON" -> 8)
   posTable += ("V" -> 9)
   posTable += ("VERB" -> 9)
-  posTable += ("AUX" -> 9)
+  posTable += ("AUX" -> 39)
   posTable += ("A" -> 10)
   posTable += ("ADJ" -> 10)
   posTable += ("Z" -> 11)

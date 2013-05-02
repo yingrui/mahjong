@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import websiteschema.mpsegment.web.exception.NotFoundException;
 import websiteschema.mpsegment.web.ui.model.User;
 import websiteschema.mpsegment.web.ui.model.UserDto;
 import websiteschema.mpsegment.web.ui.service.UserService;
@@ -58,6 +59,6 @@ public class UserController {
                 return UserDto.toDto(userService.getUserById(userId));
             }
         }
-        throw new RuntimeException("NotFound");
+        throw new NotFoundException();
     }
 }
