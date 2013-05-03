@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import websiteschema.mpsegment.web.UsingFixtures;
+import websiteschema.mpsegment.web.api.model.Concept;
 import websiteschema.mpsegment.web.api.model.PartOfSpeech;
 import websiteschema.mpsegment.web.api.model.WordItem;
 import websiteschema.mpsegment.web.ui.model.User;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.when;
 public class WordItemServiceTest extends UsingFixtures {
 
     private WordItemService wordItemService = resolve("wordItemServiceImpl", WordItemService.class);
+    private ConceptService conceptService = resolve("conceptServiceImpl", ConceptService.class);
     private UserService userService = resolve("userServiceImpl", UserService.class);
     private String currentUserEmail = uniq("yingrui.f@gmail.com");
 
@@ -86,6 +88,28 @@ public class WordItemServiceTest extends UsingFixtures {
         assertTrue(actualPos.contains("T"));
     }
 
+    @Test
+    public void should_add_concepts_to_word() {
+        String wordName = uniq("WordName");
+        String c = uniq("Concept");
+
+        WordItem wordItem = new WordItem();
+        wordItem.setWord(wordName);
+        wordItem.getPinyinSet().add("pinyin");
+        wordItem.getPartOfSpeechSet().add(posN);
+        wordItem.getPartOfSpeechSet().add(posT);
+
+        Concept concept = addConcept(c, posN, null);
+        wordItem.getConceptSet().add(concept);
+
+        wordItemService.add(wordItem);
+
+        WordItem wordItemInDatabase = wordItemService.getById(wordItem.getId());
+        assertNotNull(wordItemInDatabase);
+        assertFalse(wordItemInDatabase.getConceptSet().isEmpty());
+        assertEquals(c, wordItemInDatabase.getConceptSet().iterator().next().getName());
+    }
+
     private WordItem addWord(String wordName, String pinyin) {
         WordItem wordItem = new WordItem();
         wordItem.setWord(wordName);
@@ -93,4 +117,15 @@ public class WordItemServiceTest extends UsingFixtures {
         wordItemService.add(wordItem);
         return wordItem;
     }
+
+    private Concept addConcept(String c, PartOfSpeech pos, Concept parent) {
+        Concept concept = new Concept();
+        concept.setName(c);
+        concept.setNote(uniq("Note"));
+        concept.setPartOfSpeech(pos);
+        concept.setParent(parent);
+        conceptService.add(concept);
+        return concept;
+    }
+
 }

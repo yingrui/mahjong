@@ -41,6 +41,10 @@ public class WordItem {
     @JoinTable(name = "WordPartOfSpeech", joinColumns = @JoinColumn(name = "WordId"), inverseJoinColumns = @JoinColumn(name = "PartOfSpeechId"))
     private Set<PartOfSpeech> partOfSpeechSet;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "WordConcept", joinColumns = @JoinColumn(name = "WordId"), inverseJoinColumns = @JoinColumn(name = "ConceptId"))
+    private Set<Concept> conceptSet;
+
     public int getId() {
         return id;
     }
@@ -93,5 +97,12 @@ public class WordItem {
             partOfSpeechSet = new HashSet<PartOfSpeech>();
         }
         return partOfSpeechSet;
+    }
+
+    public Set<Concept> getConceptSet() {
+        if (null == conceptSet) {
+            conceptSet = new HashSet<Concept>();
+        }
+        return conceptSet;
     }
 }
