@@ -37,7 +37,7 @@ public class WordItem {
     @Column(name = "Pinyin")
     private Set<String> pinyinSet;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "WordPartOfSpeech", joinColumns = @JoinColumn(name = "WordId"), inverseJoinColumns = @JoinColumn(name = "PartOfSpeechId"))
     private Set<PartOfSpeech> partOfSpeechSet;
 

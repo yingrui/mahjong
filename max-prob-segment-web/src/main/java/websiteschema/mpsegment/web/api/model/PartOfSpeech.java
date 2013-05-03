@@ -1,9 +1,6 @@
 package websiteschema.mpsegment.web.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -14,8 +11,8 @@ public class PartOfSpeech {
     @Id
     private int id;
 
-    @Column(name = "PartOfSpeech")
-    private String partOfSpeech;
+    @Column(name = "Name")
+    private String name;
 
     @Column(name = "Note")
     private String note;
@@ -31,12 +28,12 @@ public class PartOfSpeech {
         this.id = id;
     }
 
-    public String getPartOfSpeech() {
-        return partOfSpeech;
+    public String getName() {
+        return name;
     }
 
-    public void setPartOfSpeech(String partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getNote() {

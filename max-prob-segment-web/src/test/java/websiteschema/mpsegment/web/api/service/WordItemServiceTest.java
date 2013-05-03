@@ -12,8 +12,6 @@ import websiteschema.mpsegment.web.api.model.WordItem;
 import websiteschema.mpsegment.web.ui.model.User;
 import websiteschema.mpsegment.web.ui.service.UserService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.Iterator;
 
 import static org.junit.Assert.*;
@@ -26,25 +24,9 @@ public class WordItemServiceTest extends UsingFixtures {
     private UserService userService = resolve("userServiceImpl", UserService.class);
     private String currentUserEmail = uniq("yingrui.f@gmail.com");
 
-    private EntityManager em = resolve("entityManagerFactory", EntityManagerFactory.class).createEntityManager();
-
-    private PartOfSpeech posN;
-    private PartOfSpeech posT;
-
     @Before
     public void onSetUp() {
         setUpCurrentUser();
-        posN = addPartOfSpeech(1, "名词", "N");
-        posT = addPartOfSpeech(2, "时间词", "T");
-    }
-
-    private PartOfSpeech addPartOfSpeech(int id, String note, String pos) {
-        PartOfSpeech partOfSpeech = new PartOfSpeech();
-        partOfSpeech.setId(id);
-        partOfSpeech.setNote(note);
-        partOfSpeech.setPartOfSpeech(pos);
-        em.persist(partOfSpeech);
-        return partOfSpeech;
     }
 
     private void setUpCurrentUser() {
@@ -99,7 +81,7 @@ public class WordItemServiceTest extends UsingFixtures {
         assertNotNull(wordItemInDatabase);
         assertEquals(2, wordItemInDatabase.getPartOfSpeechSet().size());
         Iterator<PartOfSpeech> iterator = wordItemInDatabase.getPartOfSpeechSet().iterator();
-        String actualPos = iterator.next().getPartOfSpeech() + iterator.next().getPartOfSpeech();
+        String actualPos = iterator.next().getName() + iterator.next().getName();
         assertTrue(actualPos.contains("N"));
         assertTrue(actualPos.contains("T"));
     }

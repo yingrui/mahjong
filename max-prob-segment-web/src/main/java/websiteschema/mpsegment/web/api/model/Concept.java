@@ -13,7 +13,7 @@ public class Concept {
     @SequenceGenerator(name = "concepts_id_seq", sequenceName = "concepts_id_seq")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ParentId")
     private Concept parent;
 
@@ -23,7 +23,7 @@ public class Concept {
     @Column(name = "Note")
     private String note;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PartOfSpeech")
     private PartOfSpeech partOfSpeech;
 
@@ -62,11 +62,11 @@ public class Concept {
         this.name = name;
     }
 
-//    public Concept getParent() {
-//        return parent;
-//    }
-//
-//    public void setParent(Concept parent) {
-//        this.parent = parent;
-//    }
+    public Concept getParent() {
+        return parent;
+    }
+
+    public void setParent(Concept parent) {
+        this.parent = parent;
+    }
 }
