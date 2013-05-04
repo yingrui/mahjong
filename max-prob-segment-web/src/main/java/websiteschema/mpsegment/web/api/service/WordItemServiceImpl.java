@@ -33,8 +33,14 @@ public class WordItemServiceImpl implements WordItemService {
     }
 
     @Override
+    @Transactional
     public WordItem getById(int id) {
-        return em.find(WordItem.class, id);
+        WordItem wordItem = em.find(WordItem.class, id);
+        wordItem.getUser().getId();
+        wordItem.getConceptSet().size();
+        wordItem.getPinyinSet().size();
+        wordItem.getWordFreqSet().size();
+        return wordItem;
     }
 
     @Override
@@ -42,6 +48,36 @@ public class WordItemServiceImpl implements WordItemService {
         CriteriaQuery<WordItem> c = em.getCriteriaBuilder().createQuery(WordItem.class);
         c.from(WordItem.class);
         return em.createQuery(c).getResultList();
+    }
+
+    @Override
+    public List<WordItem> findAllByPinyin(String pinyin) {
+        return em.createQuery(
+                "SELECT DISTINCT w From WordItem w " +
+                        "LEFT OUTER JOIN FETCH w.pinyinSet pinyinSet " +
+                        "LEFT OUTER JOIN FETCH w.conceptSet conceptSet " +
+                        "LEFT OUTER JOIN FETCH w.wordFreqSet wordFreqSet " +
+                        "LEFT OUTER JOIN FETCH conceptSet.partOfSpeech partOfSpeech " +
+                        "LEFT OUTER JOIN FETCH wordFreqSet.partOfSpeech partOfSpeech2 " +
+                        "LEFT OUTER JOIN FETCH w.user user " +
+                        "WHERE pinyinSet.name = :pinyin")
+                .setParameter("pinyin", pinyin)
+                .getResultList();
+    }
+
+    @Override
+    public List<WordItem> findAllByWordHead(String wordHead) {
+        return em.createQuery(
+                "SELECT DISTINCT w From WordItem w " +
+                        "LEFT OUTER JOIN FETCH w.pinyinSet pinyinSet " +
+                        "LEFT OUTER JOIN FETCH w.conceptSet conceptSet " +
+                        "LEFT OUTER JOIN FETCH w.wordFreqSet wordFreqSet " +
+                        "LEFT OUTER JOIN FETCH conceptSet.partOfSpeech partOfSpeech " +
+                        "LEFT OUTER JOIN FETCH wordFreqSet.partOfSpeech partOfSpeech2 " +
+                        "LEFT OUTER JOIN FETCH w.user user " +
+                        "WHERE w.name like :wordHead")
+                .setParameter("wordHead", wordHead.trim() + "%")
+                .getResultList();
     }
 
     @Override

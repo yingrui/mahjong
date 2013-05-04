@@ -10,5 +10,9 @@ public interface WordItemService {
     public WordItem getById(int id);
     public List<WordItem> list();
     public void remove(int id);
+
+    public List<WordItem> findAllByPinyin(String pinyin);
+
+    List<WordItem> findAllByWordHead(String pinyin);
 }
 

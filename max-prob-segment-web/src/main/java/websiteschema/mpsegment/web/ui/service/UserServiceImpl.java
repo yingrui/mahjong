@@ -3,7 +3,6 @@ package websiteschema.mpsegment.web.ui.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import websiteschema.mpsegment.web.ui.model.User;
-import websiteschema.mpsegment.web.ui.model.User_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> query = cb.createQuery(User.class);
         Root<User> user = query.from(User.class);
-        query.where(cb.equal(user.get(User_.email), email));
+        query.where(cb.equal(user.get("email"), email));
         return em.createQuery(query).getSingleResult();
     }
 

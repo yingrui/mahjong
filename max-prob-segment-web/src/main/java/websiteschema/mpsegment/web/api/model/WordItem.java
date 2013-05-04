@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(
         name = "WordItems",
-        uniqueConstraints = {@UniqueConstraint(name = "word_unique", columnNames = "word")}
+        uniqueConstraints = {@UniqueConstraint(name = "word_unique", columnNames = "name")}
 )
 public class WordItem {
 
@@ -19,29 +19,28 @@ public class WordItem {
     @SequenceGenerator(name = "words_id_seq", sequenceName = "words_id_seq")
     private int id;
 
-    @Column(name = "Word")
-    private String word;
+    @Column(name = "Name")
+    private String name;
 
     @Column(name = "Type")
     private String type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CreateBy")
     private User user;
 
     @Column(name = "CreateAt")
     private Date createAt;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @JoinTable(name = "Pinyin", joinColumns = @JoinColumn(name = "WordId"))
-    @Column(name = "Pinyin")
-    private Set<String> pinyinSet;
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "WordId")
+    private Set<Pinyin> pinyinSet;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "WordPartOfSpeech", joinColumns = @JoinColumn(name = "WordId"), inverseJoinColumns = @JoinColumn(name = "PartOfSpeechId"))
-    private Set<PartOfSpeech> partOfSpeechSet;
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "WordId")
+    private Set<WordFreq> wordFreqSet;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "WordConcept", joinColumns = @JoinColumn(name = "WordId"), inverseJoinColumns = @JoinColumn(name = "ConceptId"))
     private Set<Concept> conceptSet;
 
@@ -53,12 +52,12 @@ public class WordItem {
         this.id = id;
     }
 
-    public String getWord() {
-        return word;
+    public String getName() {
+        return name;
     }
 
-    public void setWord(String word) {
-        this.word = word;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
@@ -85,18 +84,18 @@ public class WordItem {
         this.createAt = createAt;
     }
 
-    public Set<String> getPinyinSet() {
+    public Set<Pinyin> getPinyinSet() {
         if (null == pinyinSet) {
-            pinyinSet = new HashSet<String>();
+            pinyinSet = new HashSet<Pinyin>();
         }
         return pinyinSet;
     }
 
-    public Set<PartOfSpeech> getPartOfSpeechSet() {
-        if (null == partOfSpeechSet) {
-            partOfSpeechSet = new HashSet<PartOfSpeech>();
+    public Set<WordFreq> getWordFreqSet() {
+        if (null == wordFreqSet) {
+            wordFreqSet = new HashSet<WordFreq>();
         }
-        return partOfSpeechSet;
+        return wordFreqSet;
     }
 
     public Set<Concept> getConceptSet() {
@@ -104,5 +103,10 @@ public class WordItem {
             conceptSet = new HashSet<Concept>();
         }
         return conceptSet;
+    }
+
+    public WordItemDto toDto() {
+        WordItemDto wordItemDto = new WordItemDto(name);
+        return wordItemDto;
     }
 }

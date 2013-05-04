@@ -1,5 +1,6 @@
 package websiteschema.mpsegment.web.api.model;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ public class Concept {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ParentId")
+    @Nullable
     private Concept parent;
 
     @Column(name = "Name")
