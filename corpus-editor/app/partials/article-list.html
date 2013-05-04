@@ -1,7 +1,0 @@
-<div class="actions-frame"></div>
-<ul class='articles'>
-    <li ng-repeat="article in articles | filter:query | orderBy:orderProp:sortReverse()" class="article">
-        <a href="#/article/{{article.id}}">{{article.name}}</a>  <span>{{article.date}}</span>
-        <p>{{article.snippet}}</p>
-    </li>
-</ul>

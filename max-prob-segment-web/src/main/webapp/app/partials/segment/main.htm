@@ -4,10 +4,10 @@
         <textarea class='segment-text' ng-model="inputText"
                   placeholder="{{i18n('SegmentInputPlaceholderText')}}"></textarea>
     </div>
-    <input class="btn btn-success" type="button" value="{{i18n('SegmentButtonText')}}" ng-click="segment()"/>
+    <input id="btn-segment" class="btn btn-success" type="button" value="{{i18n('SegmentButtonText')}}" ng-click="segment()"/>
     <hr/>
-    <label class="checkbox inline"><input type="checkbox" ng-checked="isSupportEnglish" ng-model="isSupportEnglish" value="true">英文词性</label>
-    <label class="checkbox inline"><input type="checkbox" ng-checked="isEnglishStemming" ng-model="isEnglishStemming" value="true">英文词干化</label>
+    <label class="checkbox inline"><input type="checkbox" ng-checked="isSupportEnglish" ng-model="isSupportEnglish">英文词性</label>
+    <label class="checkbox inline"><input type="checkbox" ng-checked="isEnglishStemming" ng-model="isEnglishStemming">英文词干化</label>
     <label class="checkbox inline"><input type="checkbox" ng-checked="isRecognizePinyin" ng-model="isRecognizePinyin">汉字转拼音</label>
     <label class="checkbox inline"><input type="checkbox" ng-checked="isSegmentMin" ng-model="isSegmentMin">最小化分词</label>
 </div>
