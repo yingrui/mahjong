@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.web.api.model;
+package websiteschema.mpsegment.web.api.model.dto;
 
 import websiteschema.mpsegment.core.WordAtom;
 import websiteschema.mpsegment.dict.POSUtil;

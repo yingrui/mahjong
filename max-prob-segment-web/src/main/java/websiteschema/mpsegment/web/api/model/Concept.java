@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.web.api.model;
 
+import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
+
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.Date;
@@ -70,5 +72,19 @@ public class Concept {
 
     public void setParent(Concept parent) {
         this.parent = parent;
+    }
+
+    public ConceptDto toDto() {
+        ConceptDto conceptDto = new ConceptDto();
+        conceptDto.id = id;
+        conceptDto.name = name;
+        conceptDto.note = note;
+        if (null != parent) {
+            conceptDto.parent = parent.getName();
+        }
+        if (null != partOfSpeech) {
+            conceptDto.partOfSpeech = partOfSpeech.toDto();
+        }
+        return conceptDto;
     }
 }

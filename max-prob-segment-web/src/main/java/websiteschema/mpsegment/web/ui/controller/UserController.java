@@ -56,7 +56,7 @@ public class UserController {
             if (principal instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) principal;
                 int userId = Integer.valueOf(userDetails.getUsername());
-                return UserDto.toDto(userService.getUserById(userId));
+                return userService.getUserById(userId).toDto();
             }
         }
         throw new NotFoundException();

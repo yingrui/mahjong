@@ -5,7 +5,7 @@ import websiteschema.mpsegment.core.SegmentEngine;
 import websiteschema.mpsegment.core.SegmentResult;
 import websiteschema.mpsegment.core.SegmentWorker;
 import websiteschema.mpsegment.core.WordAtom;
-import websiteschema.mpsegment.web.api.model.WordDto;
+import websiteschema.mpsegment.web.api.model.dto.WordDto;
 
 import java.util.ArrayList;
 import java.util.List;

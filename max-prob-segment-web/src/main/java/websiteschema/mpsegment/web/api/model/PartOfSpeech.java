@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.web.api.model;
 
+import websiteschema.mpsegment.web.api.model.dto.PartOfSpeechDto;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -46,5 +48,13 @@ public class PartOfSpeech {
 
     public Date getCreateAt() {
         return createAt;
+    }
+
+    public PartOfSpeechDto toDto() {
+        PartOfSpeechDto partOfSpeechDto = new PartOfSpeechDto();
+        partOfSpeechDto.id = id;
+        partOfSpeechDto.name = name;
+        partOfSpeechDto.note = note;
+        return partOfSpeechDto;
     }
 }

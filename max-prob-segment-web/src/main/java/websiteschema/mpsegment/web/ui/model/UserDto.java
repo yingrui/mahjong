@@ -6,12 +6,4 @@ public class UserDto {
     public String lastName;
     public String email;
 
-    public static UserDto toDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.id = user.getId();
-        userDto.firstName = user.getFirstName();
-        userDto.lastName = user.getLastName();
-        userDto.email = user.getEmail();
-        return userDto;
-    }
 }

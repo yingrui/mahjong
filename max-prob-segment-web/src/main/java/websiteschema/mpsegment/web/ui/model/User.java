@@ -69,6 +69,15 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
+
+    public UserDto toDto() {
+        UserDto userDto = new UserDto();
+        userDto.id = getId();
+        userDto.firstName = getFirstName();
+        userDto.lastName = getLastName();
+        userDto.email = getEmail();
+        return userDto;
+    }
 }
 
 

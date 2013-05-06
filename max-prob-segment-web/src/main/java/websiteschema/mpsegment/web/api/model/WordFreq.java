@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.web.api.model;
 
+import websiteschema.mpsegment.web.api.model.dto.WordFreqDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -42,5 +44,13 @@ public class WordFreq {
 
     public void setPartOfSpeech(PartOfSpeech partOfSpeech) {
         this.partOfSpeech = partOfSpeech;
+    }
+
+    public WordFreqDto toDto() {
+        WordFreqDto wordFreqDto = new WordFreqDto();
+        wordFreqDto.id = id;
+        wordFreqDto.freq = freq;
+        wordFreqDto.partOfSpeech = partOfSpeech.toDto();
+        return wordFreqDto;
     }
 }

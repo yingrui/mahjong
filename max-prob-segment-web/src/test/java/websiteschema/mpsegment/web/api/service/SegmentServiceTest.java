@@ -2,7 +2,7 @@ package websiteschema.mpsegment.web.api.service;
 
 import org.junit.Assert;
 import org.junit.Test;
-import websiteschema.mpsegment.web.api.model.WordDto;
+import websiteschema.mpsegment.web.api.model.dto.WordDto;
 
 import java.util.HashMap;
 import java.util.List;

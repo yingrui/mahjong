@@ -25,3 +25,5 @@
 .word-index { cursor:pointer; }
 
 .word-index.selected { font-size:30pt; }
+
+.dictionary-search-result-info { margin-top: -20px; position: relative; text-align: right; }

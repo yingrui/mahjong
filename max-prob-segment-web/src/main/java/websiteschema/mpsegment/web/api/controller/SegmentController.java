@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import websiteschema.mpsegment.web.api.service.SegmentService;
-import websiteschema.mpsegment.web.api.model.WordDto;
+import websiteschema.mpsegment.web.api.model.dto.WordDto;
 import websiteschema.mpsegment.web.util.PojoMapper;
 import websiteschema.mpsegment.web.util.RequestHelper;
 

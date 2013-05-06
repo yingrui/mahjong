@@ -20,7 +20,6 @@ function CoreDictionaryCtrl($scope, dictionaryService) {
     $scope.switchPinyin = function(pinyin) {
         dictionaryService.getWordHeads('core', pinyin, function(result) {
             $scope.wordHeads = result;
-            $scope.selectedHead = result[0];
             getWords(result[0]);
         });
     };
@@ -32,6 +31,7 @@ function CoreDictionaryCtrl($scope, dictionaryService) {
     };
 
     function getWords(wordHead) {
+        $scope.selectedHead = wordHead;
         dictionaryService.getWords('core', wordHead, function(result) {
             $scope.wordItems = result;
         });
