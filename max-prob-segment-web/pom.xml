@@ -136,6 +136,9 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
+                <configuration>
+                    <warSourceExcludes>test/**</warSourceExcludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
