@@ -4,6 +4,7 @@ import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
@@ -16,7 +17,7 @@ public class Concept {
     @SequenceGenerator(name = "concepts_id_seq", sequenceName = "concepts_id_seq")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "ParentId")
     @Nullable
     private Concept parent;
@@ -85,6 +86,8 @@ public class Concept {
         if (null != partOfSpeech) {
             conceptDto.partOfSpeech = partOfSpeech.toDto();
         }
+
+        conceptDto.children = new ArrayList<ConceptDto>();
         return conceptDto;
     }
 }
