@@ -20,6 +20,9 @@ angular.module('corpusEditor', ['ui','corpusEditorFilters', 'corpusEditorService
         when('/dictionary', {
             templateUrl: '/app/partials/dict/core-dict.htm',
             controller: CoreDictionaryCtrl}).
+        when('/concepts', {
+            templateUrl: '/app/partials/concept/main.htm',
+            controller: ConceptsCtrl}).
         when('/contact', {
             templateUrl: '/app/partials/contact/main.htm',
             controller: function(){}}).

@@ -71,24 +71,31 @@ public class ConceptServiceImpl implements ConceptService {
 
     public ConceptDto getConceptTreeRoot() {
         List<Concept> list = list();
-        Map<String, ConceptDto> indexOfConcepts = new LinkedHashMap<String, ConceptDto>(list.size());
+        Map<Integer, ConceptDto> indexOfConcepts = new LinkedHashMap<Integer, ConceptDto>(list.size());
         for (Concept concept : list) {
             ConceptDto dto = concept.toDto();
-            indexOfConcepts.put(concept.getName(), dto);
+            indexOfConcepts.put(concept.getId(), dto);
         }
         ConceptDto root = new ConceptDto();
         root.name = "root";
         root.children = new ArrayList<ConceptDto>();
 
-        for(String conceptName : indexOfConcepts.keySet()) {
-            ConceptDto dto = indexOfConcepts.get(conceptName);
-            ConceptDto parent = indexOfConcepts.get(dto.parent);
+        for(Integer id : indexOfConcepts.keySet()) {
+            ConceptDto dto = indexOfConcepts.get(id);
+            ConceptDto parent = indexOfConcepts.get(dto.parentId);
             if(null != parent) {
-                parent.children.add(dto);
+                addChild(parent, dto);
             } else {
-                root.children.add(dto);
+                addChild(root, dto);
             }
         }
         return root;
+    }
+
+    private void addChild(ConceptDto parent, ConceptDto child) {
+        if(null == parent.children) {
+            parent.children = new ArrayList<ConceptDto>();
+        }
+        parent.children.add(child);
     }
 }

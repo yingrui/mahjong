@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ConceptDto {
     public int id;
-    public String parent;
+    public int parentId;
     public String name;
     public String note;
     public PartOfSpeechDto partOfSpeech;

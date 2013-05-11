@@ -4,7 +4,6 @@ import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 
 @Entity
@@ -81,13 +80,13 @@ public class Concept {
         conceptDto.name = name;
         conceptDto.note = note;
         if (null != parent) {
-            conceptDto.parent = parent.getName();
+            conceptDto.parentId = parent.getId();
         }
         if (null != partOfSpeech) {
             conceptDto.partOfSpeech = partOfSpeech.toDto();
         }
 
-        conceptDto.children = new ArrayList<ConceptDto>();
+//        conceptDto.children = new ArrayList<ConceptDto>();
         return conceptDto;
     }
 }
