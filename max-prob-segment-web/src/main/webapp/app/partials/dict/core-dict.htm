@@ -33,17 +33,8 @@
             <td>提交人</td>
         </tr>
         </thead>
-        <tbody>
-        <tr ng-repeat="wordItem in wordItems">
-            <td>{{ wordItem.id }}</td>
-            <td>{{ wordItem.word }}</td>
-            <td>{{ wordItem.type }}</td>
-            <td>{{ wordItem.pinyinSet | showPinyin }}</td>
-            <td>{{ wordItem.partOfSpeeches | showPartOfSpeech }}</td>
-            <td>{{ wordItem.conceptSet | showConcept }}</td>
-            <td>{{ wordItem.createAt }}</td>
-            <td>{{ wordItem.user | showUsername }}</td>
-        </tr>
+        <tbody class="table-align-center">
+        <tr my-row-of-word ng-repeat="wordItem in wordItems" ng-model="wordItem"/>
         </tbody>
     </table>
 </div>
