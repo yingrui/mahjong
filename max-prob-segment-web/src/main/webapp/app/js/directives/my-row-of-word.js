@@ -21,6 +21,16 @@ corpusEditorDirectives.directive('myRowOfWord', function ($window) {
 
             }
             scope.setInViewMode();
+
+            scope.saveWordName = function(wordName) {
+//                console.log(wordName);
+            }
+            scope.saveWordType = function(wordType) {
+//                console.log(wordType);
+            }
+            scope.saveWordPinyin = function(pinyinSet) {
+//                console.log(pinyinSet);
+            }
         }
     };
 
@@ -29,7 +39,9 @@ corpusEditorDirectives.directive('myRowOfWord', function ($window) {
             id: origin.id,
             word: origin.word,
             type: origin.type,
-            pinyinSet: _.map(origin.pinyinSet, function(pinyin){ return pinyin;})
+            pinyinSet: _.map(origin.pinyinSet, function(pinyin){ return pinyin;}),
+            partOfSpeeches: _.map(origin.partOfSpeeches, function(wordFreq){ return wordFreq}),
+            conceptSet: _.map(origin.conceptSet, function(concept){ return concept})
         };
         return  newVar;
     }

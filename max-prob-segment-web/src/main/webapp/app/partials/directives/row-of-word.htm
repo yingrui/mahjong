@@ -4,19 +4,36 @@
 </td>
 <td>
     <span ui-if="!wordItem.isInEditMode">{{ wordItem.word }}</span>
-    <input ui-if="wordItem.isInEditMode" ng-model="wordItem.word" type="text" class="input-small"/>
+    <span class="input-prepend input-append" ui-if="wordItem.isInEditMode">
+        <input ng-model="wordItem.word" type="text" class="input-mini"/>
+        <button class="btn" type="button" ng-click="saveWordName(wordItem.word)"><i class="icon-ok"/></button>
+    </span>
 </td>
 <td>
     <span ui-if="!wordItem.isInEditMode">{{ wordItem.type }}</span>
-    <input ui-if="wordItem.isInEditMode" ng-model="wordCopy.type" type="text" class="input-small"/>
+    <span class="input-prepend input-append" ui-if="wordItem.isInEditMode">
+        <input ng-model="wordItem.type" type="text" class="input-mini"/>
+        <button class="btn" type="button" ng-click="saveWordType(wordItem.type)"><i class="icon-ok"/></button>
+    </span>
 </td>
 <td>
     <span ui-if="!wordItem.isInEditMode">{{ wordItem.pinyinSet | showPinyin }}</span>
-    <div ui-if="wordItem.isInEditMode">
-        <input ng-repeat="pinyin in wordCopy.pinyinSet" ng-model="pinyin" type="text" class="input-small"/>
+    <div ui-if="wordItem.isInEditMode" class="input-prepend input-append">
+        <input ng-repeat="pinyin in wordItem.pinyinSet" ng-model="wordItem.pinyinSet[$index]" type="text" class="input-mini"/>
+        <button class="btn" type="button" ng-click="saveWordPinyin(wordItem.pinyinSet)"><i class="icon-ok"/></button>
     </div>
 </td>
-<td>{{ wordItem.partOfSpeeches | showPartOfSpeech }}</td>
-<td>{{ wordItem.conceptSet | showConcept }}</td>
+<td>
+    <span ui-if="!wordItem.isInEditMode">{{ wordItem.partOfSpeeches | showPartOfSpeech }}</span>
+    <div ui-if="wordItem.isInEditMode">
+        <my-word-freq-editor ng-repeat="wordFreq in wordItem.partOfSpeeches"/>
+    </div>
+</td>
+<td>
+    <span ui-if="!wordItem.isInEditMode">{{ wordItem.conceptSet | showConcept }}</span>
+    <div ui-if="wordItem.isInEditMode">
+        <my-concept-editor ng-repeat="concept in wordItem.conceptSet"/>
+    </div>
+</td>
 <td>{{ wordItem.createAt }}</td>
 <td>{{ wordItem.user | showUsername }}</td>
