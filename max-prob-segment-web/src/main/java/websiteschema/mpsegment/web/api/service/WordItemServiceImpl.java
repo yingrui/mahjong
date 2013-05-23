@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import websiteschema.mpsegment.web.api.model.WordItem;
+import websiteschema.mpsegment.web.api.model.dto.WordItemDto;
 import websiteschema.mpsegment.web.ui.model.User;
 import websiteschema.mpsegment.web.ui.service.UserService;
 
@@ -34,13 +35,25 @@ public class WordItemServiceImpl implements WordItemService {
 
     @Override
     @Transactional
+    public void update(WordItemDto word) {
+        WordItem wordItem = getById(word.id);
+        WordItemUpdateRequestMerger merger = new WordItemUpdateRequestMerger();
+        merger.merge(word).to(wordItem);
+    }
+
+    @Override
     public WordItem getById(int id) {
-        WordItem wordItem = em.find(WordItem.class, id);
-        wordItem.getUser().getId();
-        wordItem.getConceptSet().size();
-        wordItem.getPinyinSet().size();
-        wordItem.getWordFreqSet().size();
-        return wordItem;
+        return (WordItem)em.createQuery(
+                "SELECT DISTINCT w From WordItem w " +
+                        "LEFT OUTER JOIN FETCH w.pinyinSet pinyinSet " +
+                        "LEFT OUTER JOIN FETCH w.conceptSet conceptSet " +
+                        "LEFT OUTER JOIN FETCH w.wordFreqSet wordFreqSet " +
+                        "LEFT OUTER JOIN FETCH conceptSet.partOfSpeech partOfSpeech " +
+                        "LEFT OUTER JOIN FETCH wordFreqSet.partOfSpeech partOfSpeech2 " +
+                        "LEFT OUTER JOIN FETCH w.user user " +
+                        "WHERE w.id = :id")
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     @Override

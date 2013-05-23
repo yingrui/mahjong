@@ -15,6 +15,10 @@ public class WordItemDto {
     public Set<ConceptDto> conceptSet = new HashSet<ConceptDto>();
     public Set<WordFreqDto> partOfSpeeches = new HashSet<WordFreqDto>();
 
+    public WordItemDto() {
+
+    }
+
     public WordItemDto(String word) {
         this.word = word;
     }

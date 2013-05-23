@@ -15,5 +15,10 @@
     <context:component-scan base-package="websiteschema.mpsegment.web.api" />
 
     <mvc:annotation-driven />
+    <tx:annotation-driven />
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
 </beans>

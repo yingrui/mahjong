@@ -21,6 +21,10 @@ corpusEditorServices.
                     });
                     callback(data);
                 });
+            },
+            save: function(word) {
+                var path = '/api/dictionary/words/' + word.id;
+                $http.put(path, word).success()
             }
         };
     });

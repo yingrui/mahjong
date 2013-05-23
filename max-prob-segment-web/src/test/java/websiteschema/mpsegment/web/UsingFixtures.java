@@ -11,10 +11,7 @@ import javax.persistence.EntityTransaction;
 public class UsingFixtures extends UsingTestUtils {
 
     static ApplicationContext ctx = new ClassPathXmlApplicationContext("testContext.xml");
-    protected static PartOfSpeech posN;
-    protected static PartOfSpeech posT;
     protected static EntityManager em = resolve("entityManagerFactory", EntityManagerFactory.class).createEntityManager();
-
     static {
         initPartOfSpeech();
     }
@@ -22,6 +19,9 @@ public class UsingFixtures extends UsingTestUtils {
     public static <T> T resolve(String bean, Class<T> clazz) {
         return ctx.getBean(bean, clazz);
     }
+
+    protected static PartOfSpeech posN;
+    protected static PartOfSpeech posT;
 
     private static void initPartOfSpeech() {
         posN = addPartOfSpeech(1, "名词", "N");

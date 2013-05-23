@@ -4,10 +4,11 @@ import websiteschema.mpsegment.web.api.model.dto.WordItemDto;
 import websiteschema.mpsegment.web.ui.model.User;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static websiteschema.mpsegment.web.util.DateUtil.toDateString;
 
 @Entity
 @Table(
@@ -112,8 +113,7 @@ public class WordItem {
         wordItemDto.type = type;
         wordItemDto.id = id;
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        wordItemDto.createAt = dateFormat.format(createAt);
+        wordItemDto.createAt = toDateString(createAt);
 
         wordItemDto.user = user.toDto();
 
