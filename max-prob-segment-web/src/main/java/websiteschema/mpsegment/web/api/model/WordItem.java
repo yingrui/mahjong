@@ -35,11 +35,11 @@ public class WordItem {
     @Column(name = "CreateAt")
     private Date createAt;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "WordId")
     private Set<Pinyin> pinyinSet;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "WordId")
     private Set<WordFreq> wordFreqSet;
 

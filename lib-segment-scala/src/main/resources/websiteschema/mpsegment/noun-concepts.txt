@@ -69,7 +69,7 @@
 1.1.2.1.2.2 物性 n-nature-of-things
 1.1.2.1.2.3 事性 n-things-attribute
 1.1.2.1.3 颜色 n-color
-1.1.2.2 信息 n-infomation
+1.1.2.2 信息 n-infom  ation
 1.1.2.3 领域 n-domain
 1.1.2.4 法规 n-law
 1.1.2.5 生理 n-physiology

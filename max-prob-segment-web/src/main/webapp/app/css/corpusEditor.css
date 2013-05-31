@@ -44,3 +44,7 @@
 .input-append, .input-prepend span {
     margin-bottom: 0px;
 }
+
+.pinyin-editor {
+    display: block;
+}

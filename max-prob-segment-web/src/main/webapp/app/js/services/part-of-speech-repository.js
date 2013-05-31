@@ -1,8 +1,12 @@
 corpusEditorServices.
     factory('PartOfSpeechRepository', function ($http) {
 
+        var unknwonPos = {id:44, name:'UN', note:'未登录词', $$hashKey:44};
+        var nounPos = {id:1, name:'N', note:'名词', $$hashKey:1};
+        var verbPos = {id:9, name:'V', note:'动词', $$hashKey:9};
+        var adjPos = {id:10, name:'A', note:'形容词', $$hashKey:10};
         var allPartOfSpeeches = [
-            {id:1, name:'N', note:'名词', $$hashKey:1},
+            nounPos,
             {id:2, name:'T', note:'时间词', $$hashKey:2},
             {id:3, name:'S', note:'处所词', $$hashKey:3},
             {id:4, name:'F', note:'方位词', $$hashKey:4},
@@ -10,8 +14,8 @@ corpusEditorServices.
             {id:6, name:'Q', note:'量词', $$hashKey:6},
             {id:7, name:'B', note:'区别词', $$hashKey:7},
             {id:8, name:'R', note:'代词', $$hashKey:8},
-            {id:9, name:'V', note:'动词', $$hashKey:9},
-            {id:10, name:'A', note:'形容词', $$hashKey:10},
+            verbPos,
+            adjPos,
             {id:11, name:'Z', note:'状态词', $$hashKey:11},
             {id:12, name:'D', note:'副词', $$hashKey:12},
             {id:13, name:'P', note:'介词', $$hashKey:13},
@@ -44,12 +48,18 @@ corpusEditorServices.
             {id:41, name:'AN', note:'名形词', $$hashKey:41},
             {id:42, name:'VD', note:'副动词', $$hashKey:42},
             {id:43, name:'AD', note:'副形词', $$hashKey:43},
-            {id:44, name:'UN', note:'未登录词', $$hashKey:44}
+            unknwonPos
         ];
 
         return {
             getAll: function() {
                 return allPartOfSpeeches;
-            }
+            },
+            getUnknownPos: function() {
+                return unknwonPos;
+            },
+            getNounPos: function() {return nounPos;},
+            getVerbPos: function() {return verbPos;},
+            getAdjPos: function() {return adjPos;}
         };
     });

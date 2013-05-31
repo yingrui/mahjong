@@ -23,6 +23,8 @@ public class WordItemServiceImpl implements WordItemService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private WordItemUpdateRequestMerger merger;
 
     @Override
     @Transactional
@@ -37,7 +39,6 @@ public class WordItemServiceImpl implements WordItemService {
     @Transactional
     public void update(WordItemDto word) {
         WordItem wordItem = getById(word.id);
-        WordItemUpdateRequestMerger merger = new WordItemUpdateRequestMerger();
         merger.merge(word).to(wordItem);
     }
 

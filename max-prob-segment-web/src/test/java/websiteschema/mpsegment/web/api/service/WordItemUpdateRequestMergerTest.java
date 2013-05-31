@@ -2,14 +2,16 @@ package websiteschema.mpsegment.web.api.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import websiteschema.mpsegment.dict.POSUtil;
 import websiteschema.mpsegment.web.UsingUserFixtures;
 import websiteschema.mpsegment.web.api.model.PartOfSpeech;
 import websiteschema.mpsegment.web.api.model.Pinyin;
 import websiteschema.mpsegment.web.api.model.WordFreq;
 import websiteschema.mpsegment.web.api.model.WordItem;
+import websiteschema.mpsegment.web.api.model.dto.PartOfSpeechDto;
+import websiteschema.mpsegment.web.api.model.dto.WordFreqDto;
 import websiteschema.mpsegment.web.api.model.dto.WordItemDto;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
@@ -33,17 +35,33 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         WordItemDto dto = new WordItemDto(expectedWord);
         dto.type = "core1";
         dto.pinyinSet.clear();
-        dto.pinyinSet.add("expected'word1");
-        dto.pinyinSet.add("expected'word2");
+        dto.pinyinSet.add("expected'word");
 
-        WordItemUpdateRequestMerger merger = new WordItemUpdateRequestMerger();
+        dto.partOfSpeeches.clear();
+        WordFreqDto wordFreqDto = createPosUnknown();
+        dto.partOfSpeeches.add(wordFreqDto);
+
+        WordItemUpdateRequestMerger merger = resolve("wordItemUpdateRequestMerger", WordItemUpdateRequestMerger.class);
 
         merger.merge(dto).to(wordItem);
 
         assertEquals(expectedWord, wordItem.getName());
         assertEquals("core1", wordItem.getType());
-        assertTrue(wordItem.getPinyinSet().contains("expected'word1"));
-        assertTrue(wordItem.getPinyinSet().contains("expected'word2"));
+        assertEquals(1, wordItem.getPinyinSet().size());
+        assertEquals("expected'word", wordItem.getPinyinSet().iterator().next().getName());
+        assertEquals(1, wordItem.getWordFreqSet().size());
+        assertEquals(POSUtil.POS_UNKOWN(), wordItem.getWordFreqSet().iterator().next().getPartOfSpeech().getId());
+    }
+
+    private WordFreqDto createPosUnknown() {
+        WordFreqDto wordFreqDto = new WordFreqDto();
+        wordFreqDto.freq = 100;
+        PartOfSpeechDto partOfSpeechDto = new PartOfSpeechDto();
+        partOfSpeechDto.id = POSUtil.POS_UNKOWN();
+        partOfSpeechDto.name = POSUtil.getPOSString(partOfSpeechDto.id);
+        partOfSpeechDto.note = "未登录词";
+        wordFreqDto.partOfSpeech = partOfSpeechDto;
+        return wordFreqDto;
     }
 
     private WordItem addWord(String wordName, String pinyin, PartOfSpeech... pos) {

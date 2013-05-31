@@ -22,10 +22,12 @@ public class UsingFixtures extends UsingTestUtils {
 
     protected static PartOfSpeech posN;
     protected static PartOfSpeech posT;
+    protected static PartOfSpeech posUN;
 
     private static void initPartOfSpeech() {
         posN = addPartOfSpeech(1, "名词", "N");
         posT = addPartOfSpeech(2, "时间词", "T");
+        posUN = addPartOfSpeech(44, "未登录词", "UN");
     }
 
     private static PartOfSpeech addPartOfSpeech(int id, String note, String pos) {

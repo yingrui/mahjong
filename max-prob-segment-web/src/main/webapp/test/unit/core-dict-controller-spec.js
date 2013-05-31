@@ -15,7 +15,7 @@ describe('Core Dictionary Controller', function() {
     describe('CoreDictionaryCtrl', function(){
         var scope, ctrl, $httpBackend;
 
-        beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, DictionaryService) {
+        beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, DictionaryService, PartOfSpeechRepository) {
             $httpBackend = _$httpBackend_;
             $httpBackend.expectGET('/api/dictionary/core/pinyin/a').
                 respond(["啊","擀","炝","阿"]);
@@ -23,7 +23,7 @@ describe('Core Dictionary Controller', function() {
                 respond([{"word":"啊哈"},{"word":"啊"},{"word":"啊哟"},{"word":"啊呀"}]);
 
             scope = $rootScope.$new();
-            ctrl = $controller(CoreDictionaryCtrl, {"$scope": scope, "dictionaryService": DictionaryService});
+            ctrl = $controller(CoreDictionaryCtrl, {"$scope": scope, "dictionaryService": DictionaryService, "partOfSpeechRepository": PartOfSpeechRepository});
         }));
 
         it('should init core dictionary controller', function(){

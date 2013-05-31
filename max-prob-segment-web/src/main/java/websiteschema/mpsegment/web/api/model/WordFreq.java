@@ -11,8 +11,8 @@ import javax.persistence.*;
 public class WordFreq {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "word_freq_id_seq")
-    @SequenceGenerator(name = "word_freq_id_seq", sequenceName = "word_freq_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wordfreq_id_seq")
+    @SequenceGenerator(name = "wordfreq_id_seq", sequenceName = "wordfreq_id_seq")
     private int id;
 
     @Column(name = "Freq")

@@ -50,6 +50,7 @@ public class CoreDictionaryController {
             throw new NotFoundException("Can not find specified word with id: " + wordId);
         }
         updateRequestDto.id = wordId; // confirm word id
+        System.out.println(updateRequestDto.word);
         wordItemService.update(updateRequestDto);
     }
 

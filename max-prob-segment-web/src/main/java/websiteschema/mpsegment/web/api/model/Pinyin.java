@@ -9,8 +9,8 @@ import javax.persistence.*;
 public class Pinyin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pinyin_id_seq")
-    @SequenceGenerator(name = "pinyin_id_seq", sequenceName = "pinyin_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pinyins_id_seq")
+    @SequenceGenerator(name = "pinyins_id_seq", sequenceName = "pinyins_id_seq")
     private int id;
 
     @Column(name = "Name")
