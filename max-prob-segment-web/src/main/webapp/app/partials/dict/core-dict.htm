@@ -1,21 +1,21 @@
 <div class="word-index-area">
     <ul class="inline">
         <li my-word-index="selectedIndex" ng-model="wordIndex" ng-repeat="wordIndex in wordIndexes" class="word-index">
-            <span ng-click="switchIndex(wordIndex)">{{wordIndex}}</span></li>
+            <a href="#/dictionary/core/{{wordIndex}}">{{wordIndex}}</a></li>
     </ul>
 </div>
 
 <div class="pinyin-area">
     <ul class="inline">
         <li my-word-index="selectedPinyin" ng-model="pinyin" ng-repeat="pinyin in pinyinIndexes" class="word-index">
-            <span ng-click="switchPinyin(pinyin)">{{pinyin}}</span></li>
+            <a href="#/dictionary/core/{{alphabetical+'/'+pinyin}}">{{pinyin}}</a></li>
     </ul>
 </div>
 
 <div class="word-head-area">
     <ul class="inline">
-        <li my-word-index="selectedHead" ng-model="wordHead" ng-repeat="wordHead in wordHeads" class="word-index word-head"><span
-                ng-click="switchHead(wordHead)">{{wordHead}}</span></li>
+        <li my-word-index="selectedHead" ng-model="wordHead" ng-repeat="wordHead in wordHeads" class="word-index word-head">
+            <a href="#/dictionary/core/{{alphabetical+'/'+selectedPinyin+'/'+wordHead}}">{{wordHead}}</a></li>
     </ul>
 </div>
 <div class="dictionary-search-result-info">有{{ wordItems.length }}个词以'{{ selectedHead }}'开头</div>

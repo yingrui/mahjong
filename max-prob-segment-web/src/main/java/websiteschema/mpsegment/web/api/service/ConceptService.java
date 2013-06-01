@@ -13,4 +13,6 @@ public interface ConceptService {
     public ConceptDto getConceptTree();
     public void remove(int id);
     public List<Concept> getChildren(int id);
+
+    public Concept getByName(String name);
 }

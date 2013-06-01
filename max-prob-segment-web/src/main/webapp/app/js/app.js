@@ -17,9 +17,20 @@ angular.module('corpusEditor', ['ui','corpusEditorFilters', 'corpusEditorService
         when('/download', {
             templateUrl: '/app/partials/download/main.htm',
             controller: function(){}}).
+
         when('/dictionary', {
             templateUrl: '/app/partials/dict/core-dict.htm',
             controller: CoreDictionaryCtrl}).
+        when('/dictionary/:type/:index', {
+            templateUrl: '/app/partials/dict/core-dict.htm',
+            controller: CoreDictionaryCtrl}).
+        when('/dictionary/:type/:index/:pinyin', {
+            templateUrl: '/app/partials/dict/core-dict.htm',
+            controller: CoreDictionaryCtrl}).
+        when('/dictionary/:type/:index/:pinyin/:wordHead', {
+            templateUrl: '/app/partials/dict/core-dict.htm',
+            controller: CoreDictionaryCtrl}).
+
         when('/concepts', {
             templateUrl: '/app/partials/concept/main.htm',
             controller: ConceptsCtrl}).

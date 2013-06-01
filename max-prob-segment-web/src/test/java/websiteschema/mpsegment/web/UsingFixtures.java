@@ -22,11 +22,17 @@ public class UsingFixtures extends UsingTestUtils {
 
     protected static PartOfSpeech posN;
     protected static PartOfSpeech posT;
+    protected static PartOfSpeech posV;
+    protected static PartOfSpeech posA;
     protected static PartOfSpeech posUN;
+
+
 
     private static void initPartOfSpeech() {
         posN = addPartOfSpeech(1, "名词", "N");
         posT = addPartOfSpeech(2, "时间词", "T");
+        posV = addPartOfSpeech(9, "动词", "V");
+        posA = addPartOfSpeech(10, "形容词", "A");
         posUN = addPartOfSpeech(44, "未登录词", "UN");
     }
 

@@ -62,7 +62,7 @@
     <div>
         <my-concept-editor ng-repeat="concept in wordItem.conceptSet" ng-model="concept"/>
     </div>
-    <div ui-if="wordItem.conceptSet.length > 0">
+    <div ui-if="(wordItem.conceptSet.length > 0) || couldAddConcept()">
         <i class="icon-plus" ng-click="addConcept()"/>
         <i class="icon-ok" ng-click="saveWord()"/>
     </div>

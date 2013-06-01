@@ -69,6 +69,16 @@ public class ConceptServiceImpl implements ConceptService {
                 .getResultList();
     }
 
+    public Concept getByName(String name) {
+        System.out.println("GetByName: " + name);
+        return (Concept)em.createQuery(
+                "SELECT c From Concept c " +
+                        "LEFT OUTER JOIN FETCH c.partOfSpeech partOfSpeech " +
+                        "WHERE c.name = :name")
+                .setParameter("name", name)
+                .getSingleResult();
+    }
+
     public ConceptDto getConceptTreeRoot() {
         List<Concept> list = list();
         Map<Integer, ConceptDto> indexOfConcepts = new LinkedHashMap<Integer, ConceptDto>(list.size());

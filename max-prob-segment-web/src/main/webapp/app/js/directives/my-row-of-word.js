@@ -37,6 +37,14 @@ corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService',
                         return wordFreq.partOfSpeech.id != partOfSpeech.id;
                     });
                 };
+                this.couldAddConcept = function() {
+                    var wordFreq = _.find(wordItem.partOfSpeeches, function(wordFreq) {
+                        return wordFreq.partOfSpeech.name.charAt(0) == 'N' ||
+                            wordFreq.partOfSpeech.name.charAt(0) == 'A' ||
+                            wordFreq.partOfSpeech.name.charAt(0) == 'V'
+                    });
+                    return wordFreq != null && wordFreq != undefined;
+                };
                 this.addConcept = function() {
                     var wordFreq = _.find(wordItem.partOfSpeeches, function(wordFreq) {
                         return wordFreq.partOfSpeech.name.charAt(0) == 'N' ||

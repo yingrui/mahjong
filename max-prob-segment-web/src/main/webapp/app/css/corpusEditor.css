@@ -23,6 +23,7 @@
 }
 
 .word-index { cursor:pointer; }
+.word-index a { color: #000000; }
 
 .word-index.selected { font-size:30pt; }
 

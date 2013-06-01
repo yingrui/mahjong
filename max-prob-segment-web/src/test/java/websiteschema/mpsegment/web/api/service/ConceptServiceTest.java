@@ -97,8 +97,6 @@ public class ConceptServiceTest extends UsingFixtures {
 
     @Test
     public void should_return_children_of_concept() {
-        clearDatabase();
-
         String c1 = uniq("Concept");
         String c2 = uniq("Concept");
         String c3 = uniq("Concept");

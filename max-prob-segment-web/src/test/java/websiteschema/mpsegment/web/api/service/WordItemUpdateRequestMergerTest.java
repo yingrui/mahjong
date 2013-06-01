@@ -4,13 +4,16 @@ import org.junit.Before;
 import org.junit.Test;
 import websiteschema.mpsegment.dict.POSUtil;
 import websiteschema.mpsegment.web.UsingUserFixtures;
-import websiteschema.mpsegment.web.api.model.PartOfSpeech;
-import websiteschema.mpsegment.web.api.model.Pinyin;
-import websiteschema.mpsegment.web.api.model.WordFreq;
-import websiteschema.mpsegment.web.api.model.WordItem;
+import websiteschema.mpsegment.web.api.model.*;
+import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
 import websiteschema.mpsegment.web.api.model.dto.PartOfSpeechDto;
 import websiteschema.mpsegment.web.api.model.dto.WordFreqDto;
 import websiteschema.mpsegment.web.api.model.dto.WordItemDto;
+
+import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,6 +22,9 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
     private WordItemService wordItemService = resolve("wordItemServiceImpl", WordItemService.class);
     private String currentUserEmail = uniq("yingrui.f@gmail.com");
     private WordItem wordItem = null;
+    protected Concept adj;
+    protected Concept noun;
+    protected Concept verb;
 
     @Before
     public void onSetUp() {
@@ -26,6 +32,7 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
 
         String wordName = uniq("WordName");
         wordItem = addWord(wordName, "pinyin", posN);
+        initConcepts();
     }
 
     @Test
@@ -41,6 +48,14 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         WordFreqDto wordFreqDto = createPosUnknown();
         dto.partOfSpeeches.add(wordFreqDto);
 
+        dto.conceptSet.clear();
+        ConceptDto adj = new ConceptDto();
+        adj.name = "a-adj";
+        ConceptDto verb = new ConceptDto();
+        verb.name = "v-verb";
+        dto.conceptSet.add(adj);
+        dto.conceptSet.add(verb);
+
         WordItemUpdateRequestMerger merger = resolve("wordItemUpdateRequestMerger", WordItemUpdateRequestMerger.class);
 
         merger.merge(dto).to(wordItem);
@@ -51,6 +66,15 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         assertEquals("expected'word", wordItem.getPinyinSet().iterator().next().getName());
         assertEquals(1, wordItem.getWordFreqSet().size());
         assertEquals(POSUtil.POS_UNKOWN(), wordItem.getWordFreqSet().iterator().next().getPartOfSpeech().getId());
+        assertEquals(2, wordItem.getConceptSet().size());
+        Concept[] concepts = new ArrayList<Concept>(wordItem.getConceptSet()).toArray(new Concept[0]);
+        Arrays.sort(concepts, new Comparator<Concept>() {
+            public int compare(Concept o1, Concept o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        assertEquals("形容词", concepts[0].getNote());
+        assertEquals("动词", concepts[1].getNote());
     }
 
     private WordFreqDto createPosUnknown() {
@@ -81,5 +105,23 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
 
         wordItemService.add(wordItem);
         return wordItem;
+    }
+
+    private void initConcepts() {
+        adj = addConcept("a-adj", "形容词", posA);
+        verb = addConcept("v-verb", "动词", posV);
+        noun = addConcept("n-noun", "名词", posN);
+    }
+
+    private Concept addConcept(String name, String note, PartOfSpeech partOfSpeech) {
+        Concept concept = new Concept();
+        concept.setName(name);
+        concept.setNote(note);
+        concept.setPartOfSpeech(partOfSpeech);
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(concept);
+        transaction.commit();
+        return concept;
     }
 }

@@ -89,7 +89,7 @@ public class WordItemServiceImpl implements WordItemService {
                         "LEFT OUTER JOIN FETCH conceptSet.partOfSpeech partOfSpeech " +
                         "LEFT OUTER JOIN FETCH wordFreqSet.partOfSpeech partOfSpeech2 " +
                         "LEFT OUTER JOIN FETCH w.user user " +
-                        "WHERE w.name like :wordHead")
+                        "WHERE w.name like :wordHead ORDER BY w.id")
                 .setParameter("wordHead", wordHead.trim() + "%")
                 .getResultList();
     }

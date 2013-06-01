@@ -2,10 +2,8 @@ package websiteschema.mpsegment.web.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import websiteschema.mpsegment.web.api.model.PartOfSpeech;
-import websiteschema.mpsegment.web.api.model.Pinyin;
-import websiteschema.mpsegment.web.api.model.WordFreq;
-import websiteschema.mpsegment.web.api.model.WordItem;
+import websiteschema.mpsegment.web.api.model.*;
+import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
 import websiteschema.mpsegment.web.api.model.dto.WordFreqDto;
 import websiteschema.mpsegment.web.api.model.dto.WordItemDto;
 
@@ -15,6 +13,8 @@ public class WordItemUpdateRequestMerger {
 
     @Autowired
     private PartOfSpeechRepository partOfSpeechRepository;
+    @Autowired
+    private ConceptService conceptService;
 
     public WordItemUpdateRequestMerger merge(WordItemDto dto) {
         this.dto = dto;
@@ -26,6 +26,15 @@ public class WordItemUpdateRequestMerger {
         wordItem.setType(dto.type);
         mergePinyin(wordItem);
         mergeWordFreq(wordItem);
+        mergeConcept(wordItem);
+    }
+
+    private void mergeConcept(WordItem wordItem) {
+        wordItem.getConceptSet().clear();
+        for(ConceptDto conceptDto: dto.conceptSet) {
+            Concept concept = conceptService.getByName(conceptDto.name);
+            wordItem.getConceptSet().add(concept);
+        }
     }
 
     private void mergeWordFreq(WordItem wordItem) {
@@ -34,7 +43,6 @@ public class WordItemUpdateRequestMerger {
             WordFreq wordFreq = new WordFreq();
             wordFreq.setFreq(wordFreqDto.freq);
             PartOfSpeech partOfSpeech = partOfSpeechRepository.get(wordFreqDto.partOfSpeech.id);
-            System.out.println("id:" + partOfSpeech.getId());
             wordFreq.setPartOfSpeech(partOfSpeech);
             wordItem.getWordFreqSet().add(wordFreq);
         }
