@@ -30,7 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
             Set<GrantedAuthority> auth = new HashSet<GrantedAuthority>();
 
-                auth.add(new GrantedAuthorityImpl("Admin"));
+                auth.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
 
             return new org.springframework.security.core.userdetails.User(
                     String.valueOf(user.getId()),

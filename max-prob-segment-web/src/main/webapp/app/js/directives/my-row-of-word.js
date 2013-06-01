@@ -1,4 +1,4 @@
-corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService', 'PartOfSpeechRepository', 'ConceptRepository', function ($window, dictionaryService, partOfSpeechRepository, conceptRepository) {
+corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService', 'PartOfSpeechRepository', 'ConceptRepository', 'MessageBox', function ($window, dictionaryService, partOfSpeechRepository, conceptRepository, messageBox) {
 
     return {
         priority:0,

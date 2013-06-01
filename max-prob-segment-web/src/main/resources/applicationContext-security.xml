@@ -14,9 +14,6 @@
     </global-method-security>
 
     <http use-expressions="true">
-        <intercept-url pattern="/views/metadata/user" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/views/**" access="isAuthenticated()" />
-
         <intercept-url pattern="/app/**" access="permitAll" />
         <form-login
                 login-page="/login.jsp"

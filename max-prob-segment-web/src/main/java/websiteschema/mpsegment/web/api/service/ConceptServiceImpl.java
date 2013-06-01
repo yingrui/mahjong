@@ -70,7 +70,6 @@ public class ConceptServiceImpl implements ConceptService {
     }
 
     public Concept getByName(String name) {
-        System.out.println("GetByName: " + name);
         return (Concept)em.createQuery(
                 "SELECT c From Concept c " +
                         "LEFT OUTER JOIN FETCH c.partOfSpeech partOfSpeech " +

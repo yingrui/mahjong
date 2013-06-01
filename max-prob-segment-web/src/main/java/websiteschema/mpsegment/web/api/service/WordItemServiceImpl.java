@@ -38,6 +38,7 @@ public class WordItemServiceImpl implements WordItemService {
     @Override
     @Transactional
     public void update(WordItemDto word) {
+        System.out.println("username: "+SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         WordItem wordItem = getById(word.id);
         merger.merge(word).to(wordItem);
     }

@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.web.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import websiteschema.mpsegment.web.api.model.WordItem;
@@ -42,6 +43,7 @@ public class CoreDictionaryController {
         return words;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/words/{wordId}", method = RequestMethod.PUT)
     @ResponseBody
     public void updateWord(@PathVariable int wordId, @RequestBody WordItemDto updateRequestDto) throws UnsupportedEncodingException {
@@ -50,7 +52,6 @@ public class CoreDictionaryController {
             throw new NotFoundException("Can not find specified word with id: " + wordId);
         }
         updateRequestDto.id = wordId; // confirm word id
-        System.out.println(updateRequestDto.word);
         wordItemService.update(updateRequestDto);
     }
 
