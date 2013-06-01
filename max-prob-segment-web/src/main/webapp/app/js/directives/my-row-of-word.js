@@ -8,7 +8,7 @@ corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService',
         link:function ($scope, iElement, iAttrs) {
             var wordItem = $scope[iAttrs.ngModel];
 
-            function RowOfWord() {
+            function RowOfWord(wordItem) {
                 this.setInViewMode = function () {
                     $scope.isInEditMode = false;
                     this.wordCopy = cloneWordItem(wordItem);
@@ -54,6 +54,11 @@ corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService',
                             wordItem.conceptSet.push(conceptRepository.getByName('a-adj'));
                         }
                     }
+                };
+                this.deleteConcept = function(targetConcept) {
+                    wordItem.conceptSet = _.filter(wordItem.conceptSet, function(concept){
+                        return concept.name != targetConcept.name;
+                    });
                 }
             }
 
@@ -75,7 +80,7 @@ corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService',
                 return  newVar;
             }
 
-            var rowOfWord = new RowOfWord();
+            var rowOfWord = new RowOfWord(wordItem);
             $.extend($scope, rowOfWord);
             $scope.setInViewMode();
         }
