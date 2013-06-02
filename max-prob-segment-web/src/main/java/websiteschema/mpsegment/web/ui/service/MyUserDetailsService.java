@@ -24,6 +24,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public UserDetails loadUserByUsername(String username)
             throws DataAccessException {
+        System.out.println(username);
         User user = userService.getUserByEmail(username);
         if (null != user) {
             System.out.println(user.getId() + " " + user.getEmail());

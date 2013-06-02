@@ -3,7 +3,7 @@
 /* Services */
 
 corpusEditorServices.
-    factory('DictionaryService', function ($http, PartOfSpeechRepository) {
+    factory('DictionaryService', function ($http, PartOfSpeechRepository, MessageBox) {
         function extendWord(word) {
             _.each(word.partOfSpeeches, function (wordFreq) {
                 wordFreq.partOfSpeech = _.find(PartOfSpeechRepository.getAll(), function (pos) {
@@ -28,9 +28,12 @@ corpusEditorServices.
             },
             save: function(word, onSuccess) {
                 var path = '/api/dictionary/core/words/' + word.id;
-                $http.put(path, word).success(function(data){
-                    onSuccess(data);
-                });
+                $http.put(path, word)
+                    .success(function(data){
+                        onSuccess(data);
+                    }).error(function(data, status){
+                        MessageBox.showWarning("Error", data);
+                    });
             }
         };
     });

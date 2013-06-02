@@ -17,13 +17,18 @@ describe('Core Dictionary Controller', function() {
 
         beforeEach(inject(function(_$httpBackend_, $rootScope, $controller, DictionaryService, PartOfSpeechRepository) {
             $httpBackend = _$httpBackend_;
+            $httpBackend.expectGET('/api/concept').
+                respond([]);
             $httpBackend.expectGET('/api/dictionary/core/pinyin/a').
                 respond(["啊","擀","炝","阿"]);
+            // TODO: remove this redundant call.
+            $httpBackend.expectGET('/api/concept').
+                respond([]);
             $httpBackend.expectGET('/api/dictionary/core/heads/啊').
                 respond([{"word":"啊哈"},{"word":"啊"},{"word":"啊哟"},{"word":"啊呀"}]);
 
             scope = $rootScope.$new();
-            ctrl = $controller(CoreDictionaryCtrl, {"$scope": scope, "dictionaryService": DictionaryService, "partOfSpeechRepository": PartOfSpeechRepository});
+            ctrl = $controller(CoreDictionaryCtrl, {"$scope": scope, "dictionaryService": DictionaryService, "partOfSpeechRepository": PartOfSpeechRepository, "$routeParams": {type:"core",index:"a",pinyin:"a",wordHead:"啊"}});
         }));
 
         it('should init core dictionary controller', function(){

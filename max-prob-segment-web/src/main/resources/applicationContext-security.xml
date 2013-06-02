@@ -13,7 +13,11 @@
         -->
     </global-method-security>
 
-    <http use-expressions="true">
+    <beans:bean id="authEntryPoint" class="websiteschema.mpsegment.web.ui.service.AjaxAwareLoginUrlAuthenticationEntryPoint" scope="singleton">
+        <beans:property name="loginFormUrl" value="/login.jsp" />
+    </beans:bean>
+
+    <http use-expressions="true" entry-point-ref="authEntryPoint">
         <intercept-url pattern="/app/**" access="permitAll" />
         <form-login
                 login-page="/login.jsp"
@@ -27,8 +31,12 @@
         <session-management invalid-session-url="/login.jsp">
             <concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
         </session-management>
-
+        <access-denied-handler ref="myAccessDeniedHandler"/>
     </http>
+
+    <beans:bean id="myAccessDeniedHandler"
+          class="websiteschema.mpsegment.web.exception.AccessDeniedExceptionHandler">
+    </beans:bean>
 
     <authentication-manager>
         <authentication-provider user-service-ref='myUserDetailsService'>

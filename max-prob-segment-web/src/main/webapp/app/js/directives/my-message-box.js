@@ -1,5 +1,11 @@
 
 corpusEditorDirectives.directive('myMessageBox', ['MessageBox',function (messageBox) {
+    var updateId = 0;
+
+    function updated() {
+        var hasUpdated = messageBox.getMessage().id > updateId;
+        return hasUpdated ? 1 : 0;
+    }
 
     return {
         priority:0,
@@ -13,10 +19,13 @@ corpusEditorDirectives.directive('myMessageBox', ['MessageBox',function (message
                 ele.css("display", "");
             }
 
-            scope.$watch(function(){return messageBox.getMessage().id}, function(){
-                scope.content = messageBox.getMessage().content;
-                if(!_.isEmpty(scope.content)) {
-                    scope.show();
+            scope.$watch(updated, function(){
+                if(updateId != messageBox.getMessage().id) {
+                    updateId = messageBox.getMessage().id;
+                    scope.content = messageBox.getMessage().content;
+                    if(!_.isEmpty(scope.content)) {
+                        scope.show();
+                    }
                 }
             });
 
