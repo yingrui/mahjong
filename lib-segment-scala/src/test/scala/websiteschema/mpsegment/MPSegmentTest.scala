@@ -230,7 +230,9 @@ class MPSegmentTest {
     val engine = SegmentEngine()
     val worker = engine.getSegmentWorker(
       "segment.lang.en = true",
-      "convert.touppercase = false")
+      "segment.lang.en.stemming = true",
+      "convert.touppercase = false"
+    )
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "She")
