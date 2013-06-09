@@ -35,6 +35,10 @@
     vertical-align: middle;
     text-align: center;
 }
+.table .table-align-center th {
+    vertical-align: middle;
+    text-align: center;
+}
 
 .table .table-align-center td input {
     vertical-align: middle;
@@ -48,4 +52,11 @@
 
 .pinyin-editor {
     display: block;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .table .table-align-center td:nth-child(8),
+    .table .table-align-center th:nth-child(8),
+    .table .table-align-center td:nth-child(7),
+    .table .table-align-center th:nth-child(7) {display: none;}
 }
