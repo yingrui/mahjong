@@ -29,7 +29,7 @@
 
         <!-- Uncomment to limit the number of sessions a user can have -->
         <session-management invalid-session-url="/login.jsp">
-            <concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
+            <concurrency-control max-sessions="3" error-if-maximum-exceeded="false" />
         </session-management>
         <access-denied-handler ref="myAccessDeniedHandler"/>
     </http>

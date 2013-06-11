@@ -1,6 +1,6 @@
 <div class="hero-unit">
-    <h1>恭/喜/发/财</h1>
-    <p class="lead">最大概率分词是一种简单高效的中文分词算法，这正是此算法的Java实现</p>
+    <h1>最大概率分词</h1>
+    <p class="lead">是一种简单高效的中文分词算法，这正是此算法的Java实现</p>
     <a class="btn btn-large btn-success" ng-href="/#/segment">试一试吧</a>
 </div>
 
@@ -11,9 +11,14 @@
     <div class="span4">
         <h2>项目简介</h2>
         <p>
-            Max-Prob-Segment是最大概率分词的Java实现，不仅是分词，同时支持词性标注、中文拼音识别、层次概念标注等。
-            同时这是一个Open Source项目，期待您参与贡献。
+            Max-Prob-Segment是最大概率分词的Java实现，不仅是分词，还包括：
         </p>
+        <ul>
+            <li>词性标注</li>
+            <li>拼音标注</li>
+            <li>词义标注</li>
+        </ul>
+        <p>同时这是一个Open Source项目，代码、词典和概念网络都由大众维护，期待您参与贡献。</p>
         <p><a class="btn" href="http://yingrui.github.com/nlp/2013/02/15/What-Chinese-Breaking-Suppose-to-Be/">更多 &raquo;</a></p>
     </div>
     <div class="span4">
@@ -23,13 +28,16 @@
             <li>完整的测试</li>
             <li>易于使用和扩展</li>
             <li>良好的设计</li>
-            <li>超乎您的想象…</li>
         </ul>
+        <p>超乎您的想象…</p>
         <p><a class="btn" ng-href="/#/download">下载 &raquo;</a></p>
     </div>
     <div class="span4">
         <h2>中文分词Web Api</h2>
-        <p><b>Max-Prob-Segment-Web</b>是一个Web Api: <a href="/api/segment?sentence=分词测试">http://max-prob-segment.herokuapp.com/api/segment</a></p>
+        <p>
+            <b>Max-Prob-Segment</b>含有一个Web Api: <br/>
+            <a href="/api/segment?sentence=分词测试">http://max-prob-segment.herokuapp.com/api/segment</a><br/>
+        </p>
         <p>其支持GET和POST方法访问，使用时请添加Header content-type:"application/json;charset=utf-8"和accept:"application/json"</p>
         <p>GET /api/segment?sentence={分词测试}</p>
         <p>POST /api/segment?params...\n\n<br/>
