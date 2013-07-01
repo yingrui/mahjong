@@ -58,4 +58,9 @@ class WordToPinyinTest {
     Assert.assertEquals("xing", result(3))
   }
 
+  @Test
+  def should_load_specified_pinyin() {
+    model loadDictionary "pinyin.txt"
+    Assert.assertEquals("nan", classifier.classify("囡")(0))
+  }
 }

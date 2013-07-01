@@ -115,8 +115,7 @@ class ChNameDictionary {
   }
 
   private def getNameWordProb(d2: Double, d3: Double): Double = {
-    val d = d2 * (d3 / 1000000D)
-    return d
+    return d2 * (d3 / 1000000D)
   }
 
   def toText(): String = {

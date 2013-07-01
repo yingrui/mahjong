@@ -17,7 +17,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
   private var wrong: Int = 0
   private var accuracyRate: Double = 0D
 
-  private var allWordsAndFreqInCorpus = HashMap[String, Int]()
+  private val allWordsAndFreqInCorpus = HashMap[String, Int]()
   private var allErrorAnalyzer: Map[SegmentErrorType, ErrorAnalyzer] = null
 
   initialErrorAnalyzer()
