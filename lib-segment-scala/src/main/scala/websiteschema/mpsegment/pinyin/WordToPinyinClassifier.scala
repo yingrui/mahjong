@@ -86,7 +86,6 @@ class WordToPinyinClassifier {
       val ch = o(i)
       val knownObserveNode = model.containsObserve(ch)
       if (!knownObserveNode) {
-        println(ch)
         val section = new Section(o, lastSectorPos, i)
         sections += (section)
         lastSectorPos = i + 1
