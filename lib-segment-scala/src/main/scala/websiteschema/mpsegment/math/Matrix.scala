@@ -36,7 +36,7 @@ trait Matrix {
 }
 
 object Matrix {
-  def apply(row: Int, col: Int) = new DenseMatrix(row, col, new Array[Double](row * col))
+  def apply(row: Int, col: Int): Matrix = new DenseMatrix(row, col, new Array[Double](row * col))
 
   def apply(size: Int, identity: Boolean = false) = {
     val m = new DenseMatrix(size, size, new Array[Double](size * size))
@@ -48,12 +48,33 @@ object Matrix {
 
   def apply(data: Array[Double]) = new DenseMatrix(1, data.length, data)
 
+  def apply(data: Seq[Double]) = new DenseMatrix(1, data.length, data.toArray)
+
   def apply(row: Int, col: Int, data: Array[Double]) = new DenseMatrix(row, col, data)
 
   def apply(row: Int, col: Int, data: Array[Boolean]) = new DenseMatrix(row, col, data.map(b => if (b) 1D else -1D))
 
   def arithmetic(data: Array[Double], other: Array[Double], op: (Double, Double) => Double): Array[Double] =
     (for (i <- 0 until data.length) yield op(data(i), other(i))).toArray
+
+  def map(m: Matrix, compute: (Double) => Double): Matrix = apply(m.row, m.col, m.flatten.map(compute))
+
+  def ramdomize(row: Int, col: Int, min: Double, max: Double) = {
+    val data = new Array[Double](row * col)
+    for (i <- 0 until data.length) {
+        data(i) = (Math.random() * (max - min)) + min
+    }
+    apply(row, col, data)
+  }
+
+  def doubleArrayEquals(data: Array[Double], other: Array[Double]): Boolean = {
+    if (data.length == other.length) {
+      val index = (0 until data.length).find(i => data(i) - other(i) > 0.000000001D && data(i) - other(i) < -0.000000001D)
+      index == None
+    } else {
+      false
+    }
+  }
 }
 
 class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matrix {
@@ -121,4 +142,11 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
   override def toString: String = (for (i <- 0 until row) yield {
     row(i) mkString ", "
   }) mkString "\n"
+
+  override def equals(that: Any): Boolean = {
+    that match {
+      case other: DenseMatrix => other != null && row == other.row && col == other.col && Matrix.doubleArrayEquals(data, other.flatten)
+      case _ => false
+    }
+  }
 }

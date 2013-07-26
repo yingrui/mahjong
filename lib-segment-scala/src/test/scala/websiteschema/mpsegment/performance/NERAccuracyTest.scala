@@ -13,6 +13,7 @@ import io.Source
 import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 import websiteschema.mpsegment.dict.POSUtil
 
+@Ignore
 class NERAccuracyTest {
 
   val segmentWorker =

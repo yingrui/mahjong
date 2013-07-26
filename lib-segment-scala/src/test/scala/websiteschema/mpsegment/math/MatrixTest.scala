@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.math
 
 import org.junit.{Assert, Test}
+import websiteschema.mpsegment.Assertion._
 
 class MatrixTest {
 
@@ -8,37 +9,37 @@ class MatrixTest {
   def should_return_matrix_size() {
     val m = Matrix(2, 2)
     Assert.assertEquals(4, m.flatten.length)
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, 0D)))
+    shouldBeEqual(0D, m.flatten)
   }
 
   @Test
   def should_return_right_value_when_add_number_to_matrix() {
     val m = Matrix(2, 2) + 1
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, 1D)))
+    shouldBeEqual(1D, m.flatten)
   }
 
   @Test
   def should_return_right_value_when_add_other_matrix() {
     val m = Matrix(2, 2, Array(1D, 2D, 1D, 2D)) + Matrix(2, 2, Array(2D, 1D, 2D, 1D))
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, 3D)))
+    shouldBeEqual(3D, m.flatten)
   }
 
   @Test
   def should_return_right_value_when_subtract_number_to_matrix() {
     val m = Matrix(2, 2) - 1
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, -1D)))
+    shouldBeEqual(-1D, m.flatten)
   }
 
   @Test
   def should_return_right_value_when_subtract_other_matrix() {
     val m = Matrix(2, 2, Array(3D, 2D, 3D, 2D)) - Matrix(2, 2, Array(2D, 1D, 2D, 1D))
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, 1D)))
+    shouldBeEqual(1D, m.flatten)
   }
 
   @Test
   def should_return_right_value_when_divide_number_to_matrix() {
     val m = Matrix(2, 2, Array(10D, 10D, 10D, 10D)) / 10
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, 1D)))
+    shouldBeEqual(1D, m.flatten)
   }
 
   @Test
@@ -56,7 +57,7 @@ class MatrixTest {
   def should_return_all_elements_in_specified_row() {
     val m = Matrix(2, 3, Array(1D, 1D, 1D, 2D, 2D, 2D))
     Assert.assertEquals(3, m.row(0).length)
-    Assert.assertTrue(m.row(0).forall(doubleEqual(_, 1D)))
+    shouldBeEqual(1D, m.row(0))
   }
 
   @Test
@@ -64,13 +65,13 @@ class MatrixTest {
     val m = Matrix(2, 3, Array(1D, 2D, 3D, 1D, 2D, 3D))
     val col: Array[Double] = m.col(0)
     Assert.assertEquals(2, col.length)
-    Assert.assertTrue(col.forall(doubleEqual(_, 1D)))
+    shouldBeEqual(1D, col)
   }
 
   @Test
   def should_return_right_value_when_multiply_number() {
     val m = Matrix(2, 2, Array(1D, 1D, 1D, 1D)) x 4D
-    Assert.assertTrue(m.flatten.forall(doubleEqual(_, 4D)))
+    shouldBeEqual(4D, m.flatten)
   }
 
   @Test
@@ -119,10 +120,18 @@ class MatrixTest {
     Assert.assertFalse(n.isVector)
   }
 
-  private def shouldBeEqual(d1: Double, d2: Double) {
-    Assert.assertTrue(doubleEqual(d1, d2))
+  @Test
+  def should_return_mapped_matrix() {
+    val m = Matrix(1,2, Array(2D, 2D))
+    val n = Matrix.map(m, d => d + 1D)
+    shouldBeEqual(3D, n.flatten)
   }
 
-  def doubleEqual(d: Double, other: Double) = (d - other) < 0.00000001D && (d - other) > -0.00000001D
+  @Test
+  def should_return_true_when_compare_two_matrix {
+    val m = Matrix(2, 2, Array(2D,2D,3D,3D))
+    val n = Matrix(2, 2, Array(2D,2D,3D,3D))
+    Assert.assertTrue(m == n)
+  }
 }
 
