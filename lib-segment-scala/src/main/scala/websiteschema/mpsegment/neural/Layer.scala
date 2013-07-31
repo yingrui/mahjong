@@ -11,7 +11,8 @@ class Layer(val weight: Matrix, val activation: (Double) => Double) {
   def size = weight.col
 
   def computeOutput(input: Matrix) = {
-    assert(input.isVector && input.col == weight.row)
-    Matrix.map(input x weight, activation)
+    assert(input.isVector && input.col == (weight.row - 1))
+    val i = Matrix(input.flatten ++ Array(1D))
+    Matrix.map(i x weight, activation)
   }
 }

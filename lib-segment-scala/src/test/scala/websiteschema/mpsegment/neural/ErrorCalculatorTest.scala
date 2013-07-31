@@ -3,14 +3,14 @@ package websiteschema.mpsegment.neural
 import org.junit.Assert
 import org.junit.Test
 
-class ErrorCaculatorTest {
+class ErrorCalculatorTest {
 
   @Test
   def should_return_root_mean_square_error() {
     val actual = Array(1D, 2D, 3D, 5D)
     val ideal = Array(1D, 2D, 3D, 4D)
 
-    val error = new ErrorCaculator()
+    val error = new ErrorCalculator()
     error.updateError(actual, ideal)
     val rms = error.getRootMeanSquare
 

@@ -15,5 +15,7 @@ class TangentActivationTest {
   @Test
   def should_return_derivative() {
     shouldBeEqual(1D, Tangent.derivative(0D))
+    shouldBeEqual(0D, Tangent.derivative(Double.MaxValue))
+    shouldBeEqual(0D, Tangent.derivative(Double.MinValue))
   }
 }

@@ -2,7 +2,7 @@ package websiteschema.mpsegment.neural
 
 import websiteschema.mpsegment.math.Matrix
 
-class ErrorCaculator {
+class ErrorCalculator {
 
   var setSize = 0D
   var globalError = 0D

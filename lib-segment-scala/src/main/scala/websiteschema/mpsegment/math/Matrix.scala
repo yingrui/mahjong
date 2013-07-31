@@ -30,15 +30,20 @@ trait Matrix {
 
   def isVector: Boolean
 
+  def clear: Unit
+
   def apply(i: Int, j: Int): Double
 
   def update(i: Int, j: Int, value: Double)
 }
 
 object Matrix {
+
+  def vector(d: Double*): Matrix = new DenseMatrix(1, d.length, d.toArray)
+
   def apply(row: Int, col: Int): Matrix = new DenseMatrix(row, col, new Array[Double](row * col))
 
-  def apply(size: Int, identity: Boolean = false) = {
+  def apply(size: Int, identity: Boolean = false): Matrix = {
     val m = new DenseMatrix(size, size, new Array[Double](size * size))
     if (identity) {
       0 until size foreach ((i: Int) => { m(i, i) = 1D })
@@ -46,13 +51,13 @@ object Matrix {
     m
   }
 
-  def apply(data: Array[Double]) = new DenseMatrix(1, data.length, data)
+  def apply(data: Array[Double]): Matrix = new DenseMatrix(1, data.length, data)
 
-  def apply(data: Seq[Double]) = new DenseMatrix(1, data.length, data.toArray)
+  def apply(data: Seq[Double]): Matrix = new DenseMatrix(1, data.length, data.toArray)
 
-  def apply(row: Int, col: Int, data: Array[Double]) = new DenseMatrix(row, col, data)
+  def apply(row: Int, col: Int, data: Array[Double]): Matrix = new DenseMatrix(row, col, data)
 
-  def apply(row: Int, col: Int, data: Array[Boolean]) = new DenseMatrix(row, col, data.map(b => if (b) 1D else -1D))
+  def apply(row: Int, col: Int, data: Array[Boolean]): Matrix = new DenseMatrix(row, col, data.map(b => if (b) 1D else -1D))
 
   def arithmetic(data: Array[Double], other: Array[Double], op: (Double, Double) => Double): Array[Double] =
     (for (i <- 0 until data.length) yield op(data(i), other(i))).toArray
@@ -69,8 +74,11 @@ object Matrix {
 
   def doubleArrayEquals(data: Array[Double], other: Array[Double]): Boolean = {
     if (data.length == other.length) {
-      val index = (0 until data.length).find(i => data(i) - other(i) > 0.000000001D && data(i) - other(i) < -0.000000001D)
-      index == None
+      val index = (0 until data.length).find(i => data(i) - other(i) > 0.000000001D || data(i) - other(i) < -0.000000001D)
+      index match {
+        case None => true
+        case _ => false
+      }
     } else {
       false
     }
@@ -138,6 +146,10 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
   def flatten = data
 
   def isVector = row == 1
+
+  def clear {
+    (0 until data.length).foreach(data(_) = 0D)
+  }
 
   override def toString: String = (for (i <- 0 until row) yield {
     row(i) mkString ", "

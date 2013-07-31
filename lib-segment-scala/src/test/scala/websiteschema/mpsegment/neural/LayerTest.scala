@@ -14,12 +14,12 @@ class LayerTest {
 
   @Test
   def should_return_output {
-    val weight = Matrix(2, 2, Array(1D, 1D, 1D, 1D))
+    val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
     val layer = new Layer(weight, x => x + 1D)
 
-    val output = layer.computeOutput(Matrix(1, 2, Array(1D, 1D)))
-
-    Assertion.shouldBeEqual(3D, output.flatten)
+    val output = layer.computeOutput(Matrix(Array(1D, 1D)))
+    println(output)
+    Assertion.shouldBeEqual(4D, output.flatten)
   }
 
 

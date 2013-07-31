@@ -133,5 +133,19 @@ class MatrixTest {
     val n = Matrix(2, 2, Array(2D,2D,3D,3D))
     Assert.assertTrue(m == n)
   }
+
+  @Test
+  def should_return_false_when_compare_two_matrix {
+    val m = Matrix(2, 2, Array(2D,2D,3D,3D))
+    val n = Matrix(2, 2, Array(2D,2D,3D,4D))
+    Assert.assertFalse(m == n)
+  }
+
+  @Test
+  def should_clear_matrix {
+    val m = Matrix(2, 2, Array(2D,2D,3D,3D))
+    m.clear
+    shouldBeEqual(0D, m.flatten)
+  }
 }
 
