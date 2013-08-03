@@ -19,7 +19,6 @@
     </scm>
 
     <modules>
-        <module>./lib-segment</module>
         <module>./lib-segment-scala</module>
         <module>./max-prob-segment-web</module>
     </modules>
