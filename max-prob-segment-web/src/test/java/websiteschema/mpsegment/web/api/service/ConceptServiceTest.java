@@ -114,6 +114,11 @@ public class ConceptServiceTest extends UsingFixtures {
     private void clearDatabase() {
         List<Concept> conceptList = conceptService.list();
         for(Concept concept : conceptList) {
+            if(null != concept.getParent()) {
+                System.out.println("concept id: " + concept.getId() + ", parent: " + concept.getParent().getId());
+            } else {
+                System.out.println("concept id: " + concept.getId() + ", parent is root");
+            }
             conceptService.remove(concept.getId());
         }
     }

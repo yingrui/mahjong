@@ -16,7 +16,7 @@ public class Concept {
     @SequenceGenerator(name = "concepts_id_seq", sequenceName = "concepts_id_seq")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ParentId")
     @Nullable
     private Concept parent;
