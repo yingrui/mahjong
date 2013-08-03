@@ -86,7 +86,6 @@ public class Concept {
             conceptDto.partOfSpeech = partOfSpeech.toDto();
         }
 
-//        conceptDto.children = new ArrayList<ConceptDto>();
         return conceptDto;
     }
 }
