@@ -7,6 +7,7 @@ import websiteschema.mpsegment.web.api.model.Concept;
 import websiteschema.mpsegment.web.api.model.PartOfSpeech;
 import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
 
+import javax.persistence.EntityTransaction;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -112,15 +113,11 @@ public class ConceptServiceTest extends UsingFixtures {
     }
 
     private void clearDatabase() {
-        List<Concept> conceptList = conceptService.list();
-        for(Concept concept : conceptList) {
-            if(null != concept.getParent()) {
-                System.out.println("concept id: " + concept.getId() + ", parent: " + concept.getParent().getId());
-            } else {
-                System.out.println("concept id: " + concept.getId() + ", parent is root");
-            }
-            conceptService.remove(concept.getId());
-        }
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.createQuery("DELETE from Concept Where Id > 0")
+                .executeUpdate();
+        tx.commit();
     }
 
     private Concept addConcept(String c, PartOfSpeech pos, Concept parent) {
