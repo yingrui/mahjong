@@ -12,7 +12,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="/app/css/bootstrap.css" rel="stylesheet">
+    <link href="/app/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 40px;
@@ -46,8 +46,9 @@
       }
 
     </style>
-    <link href="/app/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/app/lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="/app/lib/html5shiv.js"></script>
@@ -73,8 +74,6 @@
 
 
     </div> <!-- /container -->
-
-    <script src="/app/lib/jquery-1.8.2.js"></script>
 
   </body>
 </html>
