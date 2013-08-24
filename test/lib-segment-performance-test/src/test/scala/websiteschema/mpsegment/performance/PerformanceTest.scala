@@ -41,7 +41,7 @@ class PerformanceTest {
     println("should_segment_Sophies_World_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + ", the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 3000)
+    Assert.assertTrue(milSeconds < 1000)
   }
 
   @Test
@@ -64,7 +64,7 @@ class PerformanceTest {
     println("should_segment_Sophies_World_with_POS_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + " with POS recognition, the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 3000)
+    Assert.assertTrue(milSeconds < 2500)
   }
 
   @Test
@@ -89,7 +89,7 @@ class PerformanceTest {
     println("should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + " with POS recognition and without Domain dictionary, the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 3000)
+    Assert.assertTrue(milSeconds < 2500)
   }
 
   @Test
@@ -114,7 +114,7 @@ class PerformanceTest {
     println("should_segment_Sophies_World_with_POS_and_Context_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + " with POS recognition and context, the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 4000)
+    Assert.assertTrue(milSeconds < 2500)
   }
 
   @Test
