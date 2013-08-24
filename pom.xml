@@ -21,6 +21,7 @@
     <modules>
         <module>./lib-segment-scala</module>
         <module>./max-prob-segment-web</module>
+        <module>./test/lib-segment-performance-test</module>
     </modules>
 
 </project>
