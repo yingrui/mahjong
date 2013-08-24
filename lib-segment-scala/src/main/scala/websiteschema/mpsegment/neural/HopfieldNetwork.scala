@@ -10,9 +10,7 @@ class HopfieldNetwork(val size: Int) {
     assert(pattern.length == size)
     val input = Matrix(1, size, pattern)
     (for (i <- 0 until size) yield {
-      val colMatrix = Matrix(weightMatrix.col(i))
-      val product = colMatrix * input
-      product > 0
+      weightMatrix.col(i) * input > 0
     }).toArray
   }
 

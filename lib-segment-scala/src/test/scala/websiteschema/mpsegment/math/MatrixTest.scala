@@ -56,16 +56,15 @@ class MatrixTest {
   @Test
   def should_return_all_elements_in_specified_row() {
     val m = Matrix(2, 3, Array(1D, 1D, 1D, 2D, 2D, 2D))
-    Assert.assertEquals(3, m.row(0).length)
-    shouldBeEqual(1D, m.row(0))
+    Assert.assertEquals(3, m.row(0).col)
+    shouldBeEqual(1D, m.row(0).flatten)
   }
 
   @Test
   def should_return_all_elements_in_specified_col() {
     val m = Matrix(2, 3, Array(1D, 2D, 3D, 1D, 2D, 3D))
-    val col: Array[Double] = m.col(0)
-    Assert.assertEquals(2, col.length)
-    shouldBeEqual(1D, col)
+    Assert.assertEquals(2, m.col(0).col)
+    shouldBeEqual(1D, m.col(0).flatten)
   }
 
   @Test
