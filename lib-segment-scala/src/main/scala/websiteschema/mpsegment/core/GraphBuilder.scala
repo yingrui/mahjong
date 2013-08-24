@@ -28,7 +28,7 @@ class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmen
   loadDomainDictionary = config.isLoadDomainDictionary()
   loadUserDictionary = config.isLoadUserDictionary()
   maxWordLength = config.getMaxWordLength()
-  dictionaryService = new DictionaryService(useDomainDictionary, loadDomainDictionary, loadUserDictionary)
+  dictionaryService = new DictionaryService(useDomainDictionary, loadDomainDictionary, loadUserDictionary, config.isLoadEnglishDictionary())
 
   private def doUpperCaseAndHalfShape(word: String): String = {
     if (upperCaseOrHalfShapeAll) {

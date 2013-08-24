@@ -5,7 +5,7 @@ import websiteschema.mpsegment.dict.domain.DomainDictionary
 import websiteschema.mpsegment.lang.en.PorterStemmer
 import websiteschema.mpsegment.util.StringUtil
 
-class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Boolean, loadUserDictionary: Boolean) {
+class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Boolean, loadUserDictionary: Boolean, loadEnglishDictionary: Boolean) {
   private var the2ndMatchWord: IWord = null
   private var the3rdMatchWord: IWord = null
   private var matchedWordCount = 0
@@ -26,7 +26,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
   private def startWithAlphabetical(str: String): Boolean = StringUtil.isCharAlphabetical(str(0))
 
   private def lookupEnglishWords(candidateWord: String): DictionaryLookupResult = {
-    val word = findWordInEnglishDictionary(candidateWord)
+    val word = if (loadEnglishDictionary) findWordInEnglishDictionary(candidateWord) else null
     createResult(word, null, null, if(null != word) 1 else 0)
   }
 
