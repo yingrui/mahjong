@@ -1,13 +1,17 @@
 package websiteschema.mpsegment.filter
 
-import org.junit.{Ignore, Assert, Test}
+import org.junit.{Assert, Test}
+import websiteschema.mpsegment.Assertion
 
-@Ignore
-class NameEntityRecognizerBuilderTest {
-
-  val builder = NameEntityRecognizerBuilder()
+object NameEntityRecognizerBuilderSingleton {
+  val builder = new NameEntityRecognizerBuilder()
   builder.load("PFR-199801-utf-8.txt")
   val result = builder.analysis
+}
+
+class NameEntityRecognizerBuilderTest {
+
+  val result = NameEntityRecognizerBuilderSingleton.result
 
   @Test
   def should_load_pfr_corpus_and_analysis_frequency() {
@@ -37,6 +41,13 @@ class NameEntityRecognizerBuilderTest {
   }
 
   @Test
+  def should_get_right_boundary_word_of_name_entity_tmp() {
+    println(result.freqAsRightBoundary("："))
+    println(result.rightBoundaryDiff("："))
+    println(result.rightBoundaryMutualInformation("："))
+  }
+
+  @Test
   def should_get_left_boundary_word_of_name_entity() {
     val boundaryWord = "和"
     Assert.assertEquals(508, result.freqAsLeftBoundary(boundaryWord))
@@ -59,10 +70,18 @@ class NameEntityRecognizerBuilderTest {
   }
 
   @Test
+  def should_get_mutual_information_between_word_and_sentence_start_or_end {
+    println(result.rightBoundaryMutualInformation("\0"))
+    println(result.leftBoundaryMutualInformation("\0"))
+    Assert.assertFalse(result.leftBoundaryMutualInformation("\0").isInfinity)
+    Assert.assertFalse(result.rightBoundaryMutualInformation("\0").isInfinity)
+  }
+
+  @Test
   def should_get_condition_probability_of_name_entity() {
     val log2Prob = result.conditionProbability(List("邓", "小", "平"))
     println(log2Prob)
-    Assert.assertTrue(-6.84396 - log2Prob < 0.00001D && -6.84396 - log2Prob > -0.00001D)
+    Assertion.shouldBeEqual(-6.843965276915578, log2Prob)
 
     println(result.conditionProbability(List("毛", "泽", "东")))
     println(result.conditionProbability(List("毛", "泽")))

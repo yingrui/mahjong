@@ -2,7 +2,6 @@ package websiteschema.mpsegment.core
 
 import websiteschema.mpsegment.dict.POSUtil
 import websiteschema.mpsegment.util.CharCheckUtil
-import collection.mutable.ListBuffer
 
 class SegmentResult(size: Int) {
 
@@ -108,7 +107,7 @@ class SegmentResult(size: Int) {
   }
 
   def merge(start: Int, end: Int, pos: Int) {
-    var wordAtom = mergedWordAtom(start, end, pos)
+    val wordAtom = mergedWordAtom(start, end, pos)
     if (null != wordAtom) {
       for (i <- start + 1 to end) {
         markWordToBeDeleted(i)
@@ -131,6 +130,8 @@ class SegmentResult(size: Int) {
     }
     return stringBuilder.toString()
   }
+
+  def indexWhere(p : (WordAtom) => Boolean, from: Int): Int = wordAtoms.indexWhere(p, from)
 
   override def toString(): String = {
     val retString = new StringBuilder()

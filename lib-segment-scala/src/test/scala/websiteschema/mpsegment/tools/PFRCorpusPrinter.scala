@@ -6,7 +6,7 @@ import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 
 import java.io._
 
-class PFRCorpusPrinter extends App {
+object PFRCorpusPrinter extends App {
 
   var inputStream = getInputStream(args)
   var out = new PrintStream(new File("corpus.txt"))
