@@ -8,6 +8,7 @@ import java.io.FileOutputStream
 
 import scala.collection.mutable.Map
 import scala.collection.mutable.OpenHashMap
+import websiteschema.mpsegment.math.Matrix
 
 object SerializeHandler {
   val MODE_READ_ONLY = 0
@@ -150,6 +151,19 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
       }
     }
     return array
+  }
+
+  def deserializeMatrix(): Matrix = {
+    val row = deserializeInt()
+    val col = deserializeInt()
+    val data = deserializeArrayDouble()
+    Matrix(row, col, data)
+  }
+
+  def serializeMatrix(matrix: Matrix) {
+    serializeInt(matrix.row)
+    serializeInt(matrix.col)
+    serializeArrayDouble(matrix.flatten)
   }
 
   def serialize2DArrayInt(array: Array[Array[Int]]) {

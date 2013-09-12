@@ -1,4 +1,6 @@
-import io.{Source}
+package websiteschema.mpsegment.tools.ner
+
+import io.Source
 import java.io.{File, InputStream}
 import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 import websiteschema.mpsegment.util.FileUtil._

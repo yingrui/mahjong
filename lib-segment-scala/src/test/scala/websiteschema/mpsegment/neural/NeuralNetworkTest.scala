@@ -32,7 +32,11 @@ class NeuralNetworkTest {
   @Test
   def should_return_output {
     val network = NeuralNetwork()
-    network.add(layer)
+
+    network.add {
+      val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
+      new Layer(weight, x => x + 1D)
+    }
 
     val output = network.computeOutput(Matrix(1, 2, Array(1D, 1D)))
 
@@ -82,9 +86,6 @@ class NeuralNetworkTest {
     println(network.computeOutput(Matrix(Array(0D, 0D))))
   }
 
-  def layer = {
-    val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
-    new Layer(weight, x => x + 1D)
-  }
+
 }
 

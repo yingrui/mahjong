@@ -1,4 +1,4 @@
-package websiteschema.mpsegment.tools
+package websiteschema.mpsegment.tools.ner
 
 import websiteschema.mpsegment.filter.NameEntityRecognizerBuilder
 import websiteschema.mpsegment.util.FileUtil._
@@ -8,6 +8,7 @@ import websiteschema.mpsegment.util.SerializeHandler
 import java.io.{PrintWriter, File}
 import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
+import websiteschema.mpsegment.tools.PFRCorpusLoader
 
 object NameEntityTrainingDataGenerator extends App {
   val resource = "./src/test/resources/PFR-199801-utf-8.txt"

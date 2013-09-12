@@ -2,11 +2,12 @@ package websiteschema.mpsegment.neural
 
 import org.junit.{Assert, Test}
 import websiteschema.mpsegment.math.Matrix
+import websiteschema.mpsegment.Assertion
 
 class BackPropagationTest {
 
   @Test
-  def should_add_sample {
+  def should_train_a_xor_classifier {
     BackPropagation.debug = true;
     val trainer = createBackPropagationTrainer
     trainer.addLayer(3)
@@ -26,6 +27,8 @@ class BackPropagationTest {
     Assert.assertTrue((1D - computeOutput(network, Matrix.vector(0D, 0D))) < 0.1)
     Assert.assertTrue((computeOutput(network, Matrix.vector(1D, 0D)) - 0D) < 0.1)
     Assert.assertTrue((computeOutput(network, Matrix.vector(0D, 1D)) - 0D) < 0.1)
+    println("Precision rate: " + trainer.testWithTrainSet)
+    Assertion.shouldBeEqual(1.0, trainer.testWithTrainSet)
   }
 
   private def computeOutput(network: NeuralNetwork, input: Matrix): Double = network.computeOutput(input)(0, 0)

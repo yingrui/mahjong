@@ -17,8 +17,6 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
   private var error = 0D
   private var network = new NeuralNetwork()
-  private val inputArray = ListBuffer[Matrix]()
-  private val idealArray = ListBuffer[Matrix]()
   private var layers = List[BackPropagationLayer]()
   private var neuronSizePerLayer = List[Int](inputSize)
 
@@ -39,28 +37,33 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
   def takeARound(iteration: Int): Unit = {
     initLayers
+    println("init layers completion.")
 
     for (it <- 1 to iteration) {
-      for (i <- 0 until inputArray.length) {
+      val outputs = for (i <- 0 until inputArray.length) yield {
+        print("\r" + i)
         val output = network.computeOutput(inputArray(i))
         computeError(output, idealArray(i))
         layers.foreach(_.learn(rate, momentum))
+        output
       }
-      error = recalculateError
-      if (BackPropagation.debug && it % 100 == 0) {
-        println("Cycles Left: " + (iteration - it) + ", Error: " + error);
+      error = recalculateError(outputs)
+      if (BackPropagation.debug && it % 1 == 0) {
+        println("\nCycles Left: " + (iteration - it) + ", Error: " + error);
       }
     }
   }
 
-  def recalculateError: Double = {
+  def recalculateError(outputs: Seq[Matrix]): Double = {
     val network = new NeuralNetwork
     layers.foreach(network.add)
 
     val errorCalculator = new ErrorCalculator
-    for(i <- 0 until idealArray.length) {
-      val actual = network.computeOutput(inputArray(i))
+    var i = 0
+    while(i < idealArray.length) {
+      val actual = outputs(i)
       errorCalculator.updateError(actual.flatten, idealArray(i).flatten)
+      i += 1
     }
     errorCalculator.getRootMeanSquare
   }
