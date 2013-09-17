@@ -11,6 +11,7 @@ object ChineseNameSpellStudy extends App {
   var wordCount = 0
   val pinyinFreq = new java.util.HashMap[String,Int]()
   val wordFreq = new java.util.HashMap[String,Int]()
+  val xingSet = new java.util.HashSet[String]()
   val namePattern = "([FM]) (.+)".r
 
   val resourceCnNames: InputStream = getResourceAsStream("chinese_names_all.txt")
@@ -29,10 +30,12 @@ object ChineseNameSpellStudy extends App {
   dumper.serializeInt(wordCount)
   dumper.serializeMapStringInt(pinyinFreq)
   dumper.serializeMapStringInt(wordFreq)
+  dumper.serializeArrayString(xingSet.toArray(new Array[String](0)))
 
   def statistic(name: String, gender: String) {
     wordCount += name.length()
     statisticPinyin(name)
+    xingSet.add(name.substring(0, 1))
     name.foreach { ch =>
       mapPlusOne(wordFreq, ch.toString)
     }

@@ -2,6 +2,7 @@ package websiteschema.mpsegment.filter
 
 import websiteschema.mpsegment.tools.PFRCorpusLoader
 import websiteschema.mpsegment.util.FileUtil._
+import websiteschema.mpsegment.util.CharCheckUtil._
 import websiteschema.mpsegment.core.{WordAtom, SegmentResult}
 import websiteschema.mpsegment.dict.POSUtil
 
@@ -37,11 +38,36 @@ class NameEntityRecognizerBuilder {
 
     val sentenceString = sentence.toOriginalString()
     for (i <- 0 until sentenceString.length) {
-      result.charOccurTotal += 1.0D
-      if (i < sentenceString.length - 1) {
-        result.charBigramPlusOne(sentenceString.substring(i, i + 2))
+      val ch = sentenceString.charAt(i)
+      if(isChinese(ch)) {
+        result.charOccurTotal += 1.0D
+        if (i < sentenceString.length - 1) {
+          val bigram = sentenceString.substring(i, i + 2)
+          val wordIndex = getWordIndex(sentence, i)
+
+          if(isChinese(bigram) && !isNameEntity(sentence, wordIndex) && !isNameEntity(sentence, wordIndex + 1)) {
+            result.charBigramPlusOne(bigram)
+          }
+        }
       }
     }
+  }
+
+  private def isNameEntity(sentence: SegmentResult, index: Int): Boolean = {
+    index < sentence.length() && sentence.getPOS(index) == POSUtil.POS_NR
+  }
+
+  private def getWordIndex(sentence: SegmentResult, index: Int): Int = {
+    var i = 0
+    var charCount = 0
+    while(charCount < index) {
+      charCount += sentence.getWord(i).length
+      i += 1
+    }
+    if (charCount > index) {
+      i -= 1
+    }
+    i
   }
 
   private def statisticBoundary(i: Int, sentence: SegmentResult) {

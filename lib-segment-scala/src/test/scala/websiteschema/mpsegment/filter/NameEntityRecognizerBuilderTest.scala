@@ -97,7 +97,7 @@ class NameEntityRecognizerBuilderTest {
     println(mutualInformation)
 
     println(result.mutualInformation(List("毛", "泽", "东")))
-    println(result.mutualInformation(List("毛", "泽")))
+    println(result.mutualInformation(List("张", "飞")))
     println(result.mutualInformation(List("冯", "仁", "代")))
     println(result.mutualInformation(List("明", "代")))
     println(result.mutualInformation(List("青", "简")))

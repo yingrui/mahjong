@@ -109,6 +109,28 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
     }
   }
 
+  def serializeArrayString(array: Array[String]) {
+    if (null != array) {
+      output.writeInt(array.length)
+      for (str <- array) {
+        serializeString(str)
+      }
+      output.flush()
+    }
+  }
+
+  def deserializeArrayString(): Array[String] = {
+    val size = input.readInt()
+    val array = new Array[String](size)
+    if (size > 0) {
+      for (i <- 0 until size) {
+        val value = deserializeString()
+        array(i) = value
+      }
+    }
+    return array
+  }
+
   def serializeArrayInt(array: Array[Int]) {
     if (null != array) {
       output.writeInt(array.length)
@@ -120,11 +142,11 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
   }
 
   def deserializeArrayInt(): Array[Int] = {
-    var size = input.readInt()
-    var array = new Array[Int](size)
+    val size = input.readInt()
+    val array = new Array[Int](size)
     if (size > 0) {
       for (i <- 0 until size) {
-        var value = input.readInt()
+        val value = input.readInt()
         array(i) = value
       }
     }

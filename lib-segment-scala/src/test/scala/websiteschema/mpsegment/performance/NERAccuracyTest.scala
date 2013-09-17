@@ -23,7 +23,7 @@ class NERAccuracyTest {
     )
 
   @Test
-  def should_be_higher_than_93_percent_with_segment_minimum() {
+  def should_be_higher_than_79_percent_when_recognize_chinese_name() {
     val resourceCnNames: InputStream = getResourceAsStream("chinese_names_all.txt")
     var total, accurate = 1
 

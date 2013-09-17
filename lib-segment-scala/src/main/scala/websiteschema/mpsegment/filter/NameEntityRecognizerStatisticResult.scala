@@ -1,5 +1,8 @@
 package websiteschema.mpsegment.filter
 
+import websiteschema.mpsegment.util.{FileUtil, SerializeHandler}
+import java.io.{DataInputStream, File}
+
 class NameEntityRecognizerStatisticResult {
   val mapNormalWordFreq: java.util.Map[String, Int] = new java.util.HashMap[String, Int]()
   val mapNameWordFreq: java.util.Map[String, Int] = new java.util.HashMap[String, Int]()
@@ -41,6 +44,8 @@ class NameEntityRecognizerStatisticResult {
     Math.log(p)/Math.log(2)
   }
 
+  def diffLog(han: String) = Math.log(diff(han)) / Math.log(2)
+
   def rightBoundaryMutualInformation(word: String) = {
     val pxy = freqAsRightBoundary(word).toDouble / wordOccurTotal
     val px = wordFreq(word).toDouble / wordOccurTotal
@@ -58,6 +63,16 @@ class NameEntityRecognizerStatisticResult {
     }
 
     (freqAsName - freq) / Math.log(2)
+  }
+
+  def probability(name: List[String]) = {
+    var sigma = 0.0D
+    var count = 0.0D
+    for (i <- 0 until name.length - 1) {
+      sigma += (bigram(name(i) + name(i + 1)) + 1).toDouble / charOccurTotal
+      count += 1.0D
+    }
+    Math.log(sigma / count) / Math.log(2)
   }
 
   def mutualInformation(name: List[String]) = {
@@ -94,4 +109,33 @@ class NameEntityRecognizerStatisticResult {
     if (!map.containsKey(key)) map.put(key, 0)
     map.put(key, map.get(key) + 1)
   }
+
+  def save(file: String) {
+    val serializeHandle = SerializeHandler(new File(file), SerializeHandler.MODE_WRITE_ONLY)
+    serializeHandle.serializeDouble(charOccurTotal)
+    serializeHandle.serializeDouble(wordOccurTotal)
+    serializeHandle.serializeDouble(nameOccurTotal)
+
+    serializeHandle.serializeMapStringInt(mapNormalWordFreq)
+    serializeHandle.serializeMapStringInt(mapNameWordFreq)
+    serializeHandle.serializeMapStringInt(mapWordFreq)
+    serializeHandle.serializeMapStringInt(mapCharBigram)
+    serializeHandle.serializeMapStringInt(mapRightBoundaryWordFreq)
+    serializeHandle.serializeMapStringInt(mapLeftBoundaryWordFreq)
+  }
+
+  def load(file: String) {
+    val serializeHandle = new SerializeHandler(new DataInputStream(FileUtil.getResourceAsStream(file)), null)
+    charOccurTotal = serializeHandle.deserializeDouble()
+    wordOccurTotal = serializeHandle.deserializeDouble()
+    nameOccurTotal = serializeHandle.deserializeDouble()
+
+    mapNormalWordFreq.putAll(serializeHandle.deserializeMapStringInt())
+    mapNameWordFreq.putAll(serializeHandle.deserializeMapStringInt())
+    mapWordFreq.putAll(serializeHandle.deserializeMapStringInt())
+    mapCharBigram.putAll(serializeHandle.deserializeMapStringInt())
+    mapRightBoundaryWordFreq.putAll(serializeHandle.deserializeMapStringInt())
+    mapLeftBoundaryWordFreq.putAll(serializeHandle.deserializeMapStringInt())
+  }
+
 }

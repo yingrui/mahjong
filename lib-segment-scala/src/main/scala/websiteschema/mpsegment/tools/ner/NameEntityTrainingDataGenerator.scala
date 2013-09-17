@@ -15,6 +15,8 @@ object NameEntityTrainingDataGenerator extends App {
   val builder = new NameEntityRecognizerBuilder()
   builder.load(resource)
   val result = builder.analysis
+  result.save("cn_name_feature.dat")
+
   val nameDistribution = new NameProbDistribution()
   val chNameDict = new ChNameDictionary()
   chNameDict.loadNameDict(MPSegmentConfiguration().getChNameDict())
@@ -31,7 +33,7 @@ object NameEntityTrainingDataGenerator extends App {
           val features = new NERFeatures(sentence, i)
           printer.println(i + " " + features.name.mkString + " " +features.getFeatures)
           i = features.nameEntityEndAt
-        }else if(sentence.getWord(i).length == 1 && chNameDict.isXing(sentence.getWord(i))) {
+        }else if(sentence.getWord(i).length == 1 && nameDistribution.xingSet.contains(sentence.getWord(i))) {
           val features = new NERFeatures(sentence, i)
           printer.println(i + " " + features.name.mkString + " " +features.getFeatures)
           i = features.nameEntityEndAt
@@ -48,6 +50,7 @@ object NameEntityTrainingDataGenerator extends App {
     val wordCount = loader.deserializeInt()
     val pinyinFreq = loader.deserializeMapStringInt()
     val wordFreq = loader.deserializeMapStringInt()
+    val xingSet = loader.deserializeArrayString().toSet
 
     def getProbAsName(words: List[String]): Double = {
       val prob = (words.map(word => if(wordFreq.containsKey(word)) wordFreq.get(word) else 1).sum.toDouble) / wordCount.toDouble
@@ -71,6 +74,8 @@ object NameEntityTrainingDataGenerator extends App {
       List[Double](
         result.leftBoundaryMutualInformation(leftBound),
         result.rightBoundaryMutualInformation(rightBound),
+        result.diffLog(name(0)),
+        result.probability(name),
         result.conditionProbability(name),
         result.mutualInformation(name),
         nameDistribution.getProbAsName(name),
