@@ -9,10 +9,13 @@ import websiteschema.mpsegment.neural.{Normalizer, Sigmoid, Layer, NeuralNetwork
 import websiteschema.mpsegment.math.Matrix
 import websiteschema.mpsegment.dict.POSUtil
 
-class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult, featureExtractor: NERFeatures, network: NeuralNetwork, normalizer: Normalizer) extends NameEntityRecognizer {
+class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) extends NameEntityRecognizer {
 
   def recognizeNameWordBetween(begin: Int, end: Int): Int = {
     val nameWordLength = recognizeName(begin, end)
+//    if (nameWordLength > 0) {
+//      println(for (i <- begin to (begin + nameWordLength - 1)) yield segmentResult.getWord(i))
+//    }
     if (nameWordLength < 0 && end - begin == 2) {
       recognizeNameWordBetween(begin, end - 1)
     } else {
@@ -20,32 +23,36 @@ class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult, featu
     }
   }
 
+  private def wordLetters(begin: Int, end: Int) = (for (i <- begin to end) yield segmentResult.getWord(i).length).sum
 
   def recognizeName(begin: Int, end: Int): Int = {
     val name = (for (i <- begin to end) yield segmentResult.getWord(i)).mkString("")
-    val len = end - begin + 1
-    if (len <= 1) {
+//    println(name)
+    val possibleNameWordCount = end - begin + 1
+    if (possibleNameWordCount <= 1) {
       -1
     } else {
-      if (len >= 3) {
-        if (isAllSingleWord(begin, end) && isAllForeignName(begin, end)) {
+      if (possibleNameWordCount > 2 && wordLetters(begin, end) > 3) {
+        if (isForeignName(begin, end)) {
 //          println(name)
-          calculateByNeuralNetwork(begin, end)
+          computeNameWordLength(begin, end)
         } else {
           val newEnd = begin + 2
           if (startWithXing(begin) && isAllSingleWord(begin, newEnd)) {
 //            println(name)
-            calculateByNeuralNetwork(begin, newEnd)
+            computeNameWordLength(begin, newEnd)
           } else -1
         }
       } else {
         if (segmentResult.getWord(end).length <= 2 && startWithXing(begin) && isAllSingleWord(begin, end)) {
 //          println(name)
-          calculateByNeuralNetwork(begin, end)
+          computeNameWordLength(begin, end)
         } else -1
       }
     }
   }
+
+  def isForeignName(begin: Int, end: Int) = isAllSingleWord(begin, end) && isAllForeignName(begin, end)
 
   def startWithXing(begin: Int): Boolean = NeuralNetworkChineseNameRecognizer.nameDistribution.xingSet.contains(segmentResult.getWord(begin))
 
@@ -65,16 +72,37 @@ class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult, featu
     isForeignName
   }
 
-  def calculateByNeuralNetwork(begin: Int, end: Int): Int = {
-    val feature = featureExtractor.getFeatures(segmentResult, begin, end)
-    val input = normalizer.normalize(Matrix(feature))
-    val actual = network.computeOutput(input)
-//    println(actual)
-    if (actual(0, 0) > actual(0, 1) && actual(0, 0) > 0.6)
-      end - begin + 1
-    else
+  def computeNameWordLength(begin: Int, end: Int): Int = {
+    val nameWordCount = end - begin + 1
+    val classifier = NeuralNetworkChineseNameRecognizer.getClassifier(segmentResult, begin, end)
+    val feature = classifier.extractedFeatures
+    val result = classifier.classify(feature)
+//    println(result + " --- " + Matrix(feature))
+    val isNER = isName(result)
+    if (isNER) {
+      if(nameWordCount < 3) {
+        nameWordCount
+      } else {
+        val classifier2WordName = NeuralNetworkChineseNameRecognizer.getClassifier(segmentResult, begin, begin + 1)
+        val feature2WordName = classifier2WordName.extractedFeatures
+        val result2WordName = classifier2WordName.classify(feature2WordName)
+        //      println(result2WordName + " --- " + classifier2WordName.rightBoundaryFreq)
+        val isNameEither = isName(result2WordName)
+        if(isNameEither && getError(result) > getError(result2WordName) && classifier.rightBoundaryFreq < classifier2WordName.rightBoundaryFreq && classifier2WordName.rightBoundaryFreq > 150) {
+          2
+        } else {
+          nameWordCount
+        }
+      }
+    } else {
       -1
+    }
   }
+
+  private def getError(actual: Matrix): Double = Matrix.arithmetic(actual.flatten, Array(1.0, 0.0), (a, i) => Math.pow(i - a, 2D)).sum
+
+  private def isName(result: Matrix) = result(0, 0) > result(0, 1) && result(0, 0) > 0.6
+
 }
 
 object NeuralNetworkChineseNameRecognizer {
@@ -108,19 +136,14 @@ object NeuralNetworkChineseNameRecognizer {
     8.357440761465732  , -8.357440761465755
   )), Sigmoid.activation))
 
-  var errorCount = 0
-  var totalCount = 0
-
   val normalizer = new Normalizer(
     Array(-0.40833712865470995,-0.3687956385749418,-5.947379414241624,-14.519856665016288,-38.20810986099769,-13.210378045650687),
     Array(5.39923590055081,5.359694410471041,5.931437870372603,5.095529607265829,38.16063368541203,9.704275789273217))
 
-  def apply(segmentResult: SegmentResult): NeuralNetworkChineseNameRecognizer = {
-    new NeuralNetworkChineseNameRecognizer(
-      segmentResult,
-      new NERFeatures(nameEntityRecognizerStatisticResult, nameDistribution),
-      network,
-      normalizer)
+  def apply(segmentResult: SegmentResult): NeuralNetworkChineseNameRecognizer = new NeuralNetworkChineseNameRecognizer(segmentResult)
+
+  def getClassifier(sentence: SegmentResult, begin: Int, end: Int) = {
+    new NeuralNetworkClassifier(sentence, begin, end, nameEntityRecognizerStatisticResult, nameDistribution, network, normalizer)
   }
 }
 
@@ -144,25 +167,33 @@ class NameProbDistribution {
   }
 }
 
-class NERFeatures(result: NameEntityRecognizerStatisticResult, nameDistribution: NameProbDistribution) {
+class NeuralNetworkClassifier(sentence: SegmentResult, index: Int, end: Int, statisticResult: NameEntityRecognizerStatisticResult, nameDistribution: NameProbDistribution, network: NeuralNetwork, normalizer: Normalizer) {
 
-  def getFeatures(sentence: SegmentResult, index: Int, end: Int) = {
-    val name = {
-      val words = for (i <- index to end) yield sentence.getWord(i)
-      words.mkString.toList.map(ch => ch.toString)
-    }
+  val name = {
+    val words = for (i <- index to end) yield sentence.getWord(i)
+    words.mkString.toList.map(ch => ch.toString)
+  }
 
-    val leftBound = if (index == 0) "\0" else sentence.getWord(index - 1)
-    val rightBound = if (end + 1 < sentence.length()) sentence.getWord(end + 1) else "\0"
+  val leftBound = if (index == 0) "\0" else sentence.getWord(index - 1)
+  val rightBound = if (end + 1 < sentence.length()) sentence.getWord(end + 1) else "\0"
+
+  val extractedFeatures = {
 //    println("------" + name)
     List[Double](
-      result.leftBoundaryMutualInformation(leftBound),
-      result.rightBoundaryMutualInformation(rightBound),
-      result.diffLog(name(0)),
-      result.probability(name),
-      result.conditionProbability(name),
-//      result.mutualInformation(name),
+      statisticResult.leftBoundaryMutualInformation(leftBound),
+      statisticResult.rightBoundaryMutualInformation(rightBound),
+      statisticResult.diffLog(name(0)),
+      statisticResult.probability(name),
+      statisticResult.conditionProbability(name),
+//      statisticResult.mutualInformation(name),
       nameDistribution.getProbAsName(name)
     )
+  }
+
+  def rightBoundaryFreq = statisticResult.freqAsRightBoundary(rightBound)
+
+  def classify(feature: Seq[Double]): Matrix = {
+    val input = normalizer.normalize(Matrix(feature))
+    network.computeOutput(input)
   }
 }
