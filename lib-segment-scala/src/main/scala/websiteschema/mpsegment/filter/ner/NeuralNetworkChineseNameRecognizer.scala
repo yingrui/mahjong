@@ -11,45 +11,52 @@ import websiteschema.mpsegment.dict.POSUtil
 
 class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) extends NameEntityRecognizer {
 
-  def recognizeNameWordBetween(begin: Int, end: Int): Int = {
-    val nameWordLength = recognizeName(begin, end)
+  def recognizeNameWordBetween(begin: Int, end: Int): NameEntityRecognizeResult = {
+    val result = recognizeName(begin, end)
 //    if (nameWordLength > 0) {
 //      println(for (i <- begin to (begin + nameWordLength - 1)) yield segmentResult.getWord(i))
 //    }
-    if (nameWordLength < 0 && end - begin == 2) {
+    if (result.nameWordCount < 0 && end - begin >= 2) {
       recognizeNameWordBetween(begin, end - 1)
     } else {
-      nameWordLength
+      result
     }
   }
 
-  private def wordLetters(begin: Int, end: Int) = (for (i <- begin to end) yield segmentResult.getWord(i).length).sum
-
-  def recognizeName(begin: Int, end: Int): Int = {
+  def recognizeName(begin: Int, end: Int): NameEntityRecognizeResult = {
     val name = (for (i <- begin to end) yield segmentResult.getWord(i)).mkString("")
 //    println(name)
     val possibleNameWordCount = end - begin + 1
     if (possibleNameWordCount <= 1) {
-      -1
+      new NameEntityRecognizeResult(-1, false, false)
     } else {
-      if (possibleNameWordCount > 2 && wordLetters(begin, end) > 3) {
-        if (isForeignName(begin, end)) {
-//          println(name)
-          computeNameWordLength(begin, end)
+      if (possibleNameWordCount > 2 && startWithXing(begin)) {
+        if (name.length > 3 && isForeignName(begin, end)){
+          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, true)
         } else {
           val newEnd = begin + 2
-          if (startWithXing(begin) && isAllSingleWord(begin, newEnd)) {
+          if (isAllSingleWord(begin, newEnd)) {
 //            println(name)
-            computeNameWordLength(begin, newEnd)
-          } else -1
+            new NameEntityRecognizeResult(computeNameWordLength(begin, newEnd), true, false)
+          } else new NameEntityRecognizeResult(-1, false, false)
         }
       } else {
-        if (segmentResult.getWord(end).length <= 2 && startWithXing(begin) && isAllSingleWord(begin, end)) {
+        if (matchTypicalShortName(name)){
+          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, false)
+        } else if (segmentResult.getWord(end).length <= 2 && startWithXing(begin) && isAllSingleWord(begin, end)) {
 //          println(name)
-          computeNameWordLength(begin, end)
-        } else -1
+          new NameEntityRecognizeResult(computeNameWordLength(begin, end), true, false)
+        }
+//        else if (isForeignName(begin, end)){
+//          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, true)
+//        }
+        else new NameEntityRecognizeResult(-1, false, false)
       }
     }
+  }
+
+  def matchTypicalShortName(name: String): Boolean = {
+    name.matches("(阿.|大.|小.|老.|.妹|.姐|.叔|.婶|.哥|.兄|.弟|.子|.嫂|.婆|.公|.伯|.氏)")
   }
 
   def isForeignName(begin: Int, end: Int) = isAllSingleWord(begin, end) && isAllForeignName(begin, end)

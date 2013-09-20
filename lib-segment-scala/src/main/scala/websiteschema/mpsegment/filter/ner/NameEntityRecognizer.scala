@@ -5,10 +5,12 @@ import websiteschema.mpsegment.util.WordUtil
 import websiteschema.mpsegment.dict.ChNameDictionary
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 
+class NameEntityRecognizeResult(val nameWordCount: Int, val startWithXing: Boolean, val isForeignName: Boolean) {}
+
 trait NameEntityRecognizer {
 
   val segmentResult: SegmentResult
-  def recognizeNameWordBetween(begin: Int, end: Int): Int
+  def recognizeNameWordBetween(begin: Int, end: Int): NameEntityRecognizeResult
 }
 
 object ProbChineseNameRecognizer {
@@ -24,7 +26,11 @@ class ProbChineseNameRecognizer(val segmentResult: SegmentResult) extends NameEn
   private val factor3 = 1.6299999999999999D
   private val chNameDict = ProbChineseNameRecognizer.chNameDict
 
-  def recognizeNameWordBetween(begin: Int, end: Int): Int = {
+  def recognizeNameWordBetween(begin: Int, end: Int): NameEntityRecognizeResult = {
+    new NameEntityRecognizeResult(recognizeNameWord(begin, end), chNameDict.isXing(segmentResult.getWord(begin)), false)
+  }
+
+  def recognizeNameWord(begin: Int, end: Int): Int = {
     val gap = (end - begin) + 1
     var numOfNameWordItem = -1
     if (segmentResult.getWord(begin).length() > 2 || segmentResult.getWord(begin + 1).length() > 2) {

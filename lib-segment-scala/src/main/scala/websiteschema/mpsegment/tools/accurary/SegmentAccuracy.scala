@@ -47,7 +47,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
       while (expectResult != null) {
         val sentence = expectResult.toOriginalString()
         val actualResult = segmentWorker.segment(sentence)
-
+//        println(actualResult)
         totalWords += expectResult.length()
 
         compare(expectResult, actualResult)

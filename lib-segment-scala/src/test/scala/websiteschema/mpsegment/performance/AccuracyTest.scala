@@ -1,7 +1,7 @@
 package websiteschema.mpsegment.performance
 
 import junit.framework.Assert
-import org.junit.Test
+import org.junit.{Ignore, Test}
 import websiteschema.mpsegment.core.SegmentEngine
 import websiteschema.mpsegment.tools.accurary.ErrorAnalyzer
 import websiteschema.mpsegment.tools.accurary.SegmentAccuracy
@@ -17,6 +17,7 @@ class AccuracyTest {
         "minimize.word -> true"
       )
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)
+//    val segmentAccuracy = new SegmentAccuracy("test-pfr-corpus.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
     println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
@@ -35,6 +36,31 @@ class AccuracyTest {
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() <= 3282 * 1.05)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() <= 35317 * 1.05)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() <= 3610 * 1.05)
+  }
+
+  @Ignore
+  @Test
+  def should_recognize_all_the_name_entities() {
+    val segmentWorker =
+      SegmentEngine().getSegmentWorker(
+        "separate.xingming -> true",
+        "minimize.word -> true"
+      )
+
+    val segmentAccuracy = new SegmentAccuracy("test-pfr-corpus.txt", segmentWorker)
+    segmentAccuracy.checkSegmentAccuracy()
+    println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
+    println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
+
+    println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() + " errors because of name recognition.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() + " errors because of place name recognition.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
+
+    //    printDetails(segmentAccuracy)
+
+    Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() == 0)
   }
 
   @Test
