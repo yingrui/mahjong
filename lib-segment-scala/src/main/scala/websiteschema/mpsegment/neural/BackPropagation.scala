@@ -41,15 +41,14 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
     for (it <- 1 to iteration) {
       val outputs = for (i <- 0 until inputArray.length) yield {
-        print("\r" + i)
         val output = network.computeOutput(inputArray(i))
         computeError(output, idealArray(i))
         layers.foreach(_.learn(rate, momentum))
         output
       }
       error = recalculateError(outputs)
-      if (BackPropagation.debug && it % 1 == 0) {
-        println("\nCycles Left: " + (iteration - it) + ", Error: " + error);
+      if (BackPropagation.debug && it % 100 == 0) {
+        println("Cycles Left: " + (iteration - it) + ", Error: " + error);
       }
     }
   }
