@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.filter
 
-import ner.{NeuralNetworkChineseNameRecognizer, ProbChineseNameRecognizer}
+import ner.{NameEntityRecognizer, NeuralNetworkChineseNameRecognizer, ProbChineseNameRecognizer}
 import websiteschema.mpsegment.concept.Concept
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.dict.POSUtil
@@ -13,13 +13,14 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   private val useChNameDict: Boolean = true
   private val useForeignNameDict = false
   private var segmentResultLength: Int = 0
-  private val maxNameWordLength = 5
+  private val maxNameWordLength = 6
   private var nameStartIndex = -1
   private var nameEndIndex = -1
   private var hasPossibleFoundName: Boolean = false
   private var wordIndex = 0
   private var numOfNameWordItem: Int = -1
   private var startWithXing = false
+  private var nameEntityRecognizer: NameEntityRecognizer = null
 
   if (useChNameDict) {
     if (useForeignNameDict && foreignName == null) {
@@ -48,6 +49,8 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   }
 
   override def doFilter() {
+    nameEntityRecognizer = new ProbChineseNameRecognizer(segmentResult)
+//    nameEntityRecognizer = NeuralNetworkChineseNameRecognizer(segmentResult)
     if (useChNameDict && config.isChineseNameIdentify()) {
       segmentResultLength = segmentResult.length()
       markPositionImpossibleToBeName()
@@ -68,11 +71,12 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
           if (segmentResult.getPOS(wordIndex) == POSUtil.POS_NR) {
             markPositionMaybeName()
           } else {
-            val _isPos_P_C_U_W_UN = isPos_P_C_U_W_UN(segmentResult.getPOS(wordIndex))
+            val _isPos_P_C_U_W_UN = isPos_P_C_U_W_UN(segmentResult.getPOS(wordIndex), segmentResult.getWord(wordIndex))
             val _isChinesePreposition = isChinesePreposition(segmentResult.getWord(wordIndex))
             if (hasPossibleFoundName) {
               if ((_isPos_P_C_U_W_UN && !_isChinesePreposition)
-                || segmentResult.getWord(wordIndex).length() > 2) {
+                || segmentResult.getWord(wordIndex).length() > 2
+                || (segmentResult.getWord(wordIndex).length > 1 && wordIndex - nameStartIndex >= 1)) {
                 processPotentialName
               } else {
                 nameEndIndex = wordIndex
@@ -128,7 +132,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   private def separateXingMing {
     val isChineseName = numOfNameWordItem <= 3
     if (isChineseName && startWithXing) {
-      if (numOfNameWordItem >= 3) {
+      if (numOfNameWordItem >= 2) {
         val numOfMingWord = numOfNameWordItem - 1
         setWordIndexesAndPOSForMerge(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR)
       }
@@ -142,8 +146,8 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   }
 
   private def recognizeNameWordBetween(begin: Int, end: Int): Int = {
-    val result = new ProbChineseNameRecognizer(segmentResult).recognizeNameWordBetween(begin, end)
-//    val result = NeuralNetworkChineseNameRecognizer(segmentResult).recognizeNameWordBetween(begin, end)
+//    val result = nameEntityRecognizer.recognizeNameWordBetween(begin, end)
+    val result = nameEntityRecognizer.recognizeNameWordBetween(begin, end)
     numOfNameWordItem = result.nameWordCount
     startWithXing = result.startWithXing
     numOfNameWordItem
@@ -152,7 +156,7 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   private def processForeignName(i1: Int, j1: Int): Int = {
     var wordCount = -1
     for (i2 <- i1 to j1) {
-      if (!foreignName.isForiegnName(segmentResult.getWord(i2))) {
+      if (!foreignName.isForeignName(segmentResult.getWord(i2))) {
         return wordCount
       }
       wordCount = i2

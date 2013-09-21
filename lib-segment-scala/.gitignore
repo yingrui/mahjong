@@ -9,3 +9,5 @@ google-bigram.dat
 dict-en*.dat
 dict-en*.txt
 chinese*.txt
+xing.txt
+*.arff

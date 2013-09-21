@@ -12,8 +12,6 @@ class ChineseNameDictionaryTest {
     def should_load_Chinese_name_dictionary_correctly() {
         val dict = new ChNameDictionary()
         dict.loadNameDict("ChName.dict")
-        println(dict.toText())
-        dict.outSummary()
         testChineseName(dict, "张学友")
     }
 
