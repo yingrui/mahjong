@@ -19,19 +19,16 @@ class ChineseNameFilter(config: MPSegmentConfiguration, recognizerCreator: Recog
   private var startWithXing = false
   private var nameEntityRecognizer: NameEntityRecognizer = null
 
-  private def processPotentialName: Boolean = {
-    val found = if (nameEndIndex - nameStartIndex >= 1) {
+  private def processPotentialName {
+    if (nameEndIndex - nameStartIndex >= 1) {
       val recognizedNameLength = recognizeNameWord()
       if (recognizedNameLength > 0) {
         wordIndex = nameStartIndex + recognizedNameLength - 1
-        true
       } else {
         wordIndex = nameStartIndex
-        false
       }
-    } else false
+    }
     resetStatus()
-    found
   }
 
   override def doFilter() {
@@ -44,11 +41,11 @@ class ChineseNameFilter(config: MPSegmentConfiguration, recognizerCreator: Recog
         if (!isWordConfirmed(wordIndex)) {
           if (hasFoundPossibleName && (upToMaximumNameLength || reachTheEnd)) {
             nameEndIndex = wordIndex
-            val found = processPotentialName
+            processPotentialName
             if (reachTheEnd) {
               return
             }
-            if(!found) wordIndex += 1
+            wordIndex += 1
           }
 
           if (segmentResult.getPOS(wordIndex) == POSUtil.POS_NR) {
