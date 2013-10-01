@@ -6,6 +6,7 @@ import websiteschema.mpsegment.neural.{Normalizer, Sigmoid, Layer, NeuralNetwork
 import websiteschema.mpsegment.math.Matrix
 import websiteschema.mpsegment.dict.POSUtil
 import collection.mutable
+import websiteschema.mpsegment.util.WordUtil
 
 trait RecognizerCreator {
   def create(segmentResult: SegmentResult): NameEntityRecognizer
@@ -71,6 +72,8 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
     } else {
       if (matchTypicalShortName(name)) {
         new NameEntityRecognizeResult(computeNameWordLength(begin, end, false), false, false)
+      } else if (matchTypicalChineseName(name)) {
+        new NameEntityRecognizeResult(computeNameWordLength(begin, end, false), true, false)
       } else if (segmentResult.getWord(end).length <= 2 && startWithXing(begin) && isAllSingleWord(begin, end)) {
         new NameEntityRecognizeResult(computeNameWordLength(begin, end, false), true, false)
       } else if (isRecognizedMing(begin, end)) {
@@ -81,9 +84,14 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
     }
   }
 
-  private def matchTypicalShortName(name: String): Boolean = {
-    name.matches("(阿.|大.|小.|老.|.妹|.姐|.叔|.婶|.哥|.兄|.弟|.嫂|.婆|.公|.伯)") || (name.length == 2 && isXing(name.charAt(0).toString) && name.matches("(.子|.氏|.老|.总|.局|.工|.某)"))
-  }
+  private def matchTypicalShortName(name: String): Boolean = (
+    name.matches("(阿.|大.|.妹|.姐|.叔|.婶|.哥|.兄|.弟|.嫂|.婆|.公|.伯)")
+    || (name.length == 2 && isXing(name.charAt(0).toString) && name.matches("(.子|.氏|.老|.总|.局|.工|.某)"))
+    || (name.length == 2 && isXing(name.charAt(1).toString) && name.matches("(小.|老.)"))
+  )
+
+  private def matchTypicalChineseName(name: String): Boolean =
+    (name.length == 3 && isXing(name.charAt(0).toString) && name.matches(".(.)\\1"))
 
   private def isRecognizedMing(begin: Int, end: Int): Boolean = {
     val name = getName(begin, end)
@@ -99,7 +107,7 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
   private def isAllSingleWord(begin: Int, end: Int): Boolean = {
     var isSingleWord = true
     for (i <- begin to end) {
-      isSingleWord = isSingleWord && segmentResult.getWord(i).length == 1 && (segmentResult.getPOS(i) != POSUtil.POS_W) && (segmentResult.getPOS(i) != POSUtil.POS_UNKOWN)
+      isSingleWord = isSingleWord && segmentResult.getWord(i).length == 1 && (segmentResult.getPOS(i) != POSUtil.POS_W || (segmentResult.getWord(i).equals("·") && i > begin && i < end)) && (segmentResult.getPOS(i) != POSUtil.POS_UNKOWN)
     }
     isSingleWord
   }
@@ -131,14 +139,17 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
         val result2WordName = classifier2WordName.classify(feature2WordName)
 //        println(result2WordName + " --- " + Matrix(feature2WordName))
         val isNameEither = isName(result2WordName)
-        if(isNameEither && getError(result) > getError(result2WordName)
-          && (classifier.rightBoundaryFreq < classifier2WordName.rightBoundaryFreq && classifier2WordName.rightBoundaryFreq > 100)) {
-          nameWordCount = 2
+        if(isNameEither && getError(result) > getError(result2WordName)) {
+          val isEndBoundaryWord = classifier.rightBoundaryFreq < classifier2WordName.rightBoundaryFreq && classifier2WordName.rightBoundaryFreq > 150
+          val isEndConjunctionWord = WordUtil.isPos_P_C_U_W_UN(segmentResult.getPOS(end), segmentResult.getWord(end))
+          if(isEndBoundaryWord || isEndConjunctionWord) {
+            nameWordCount = 2
+          }
         }
       }
 
       if (nameWordCount == 3) {
-        if (isXing(segmentResult.getWord(end)) && end < segmentResult.length() - 3) {
+        if (isXing(segmentResult.getWord(end))) {
           if (computeNameWord(segmentResult, end, end + 1) || computeNameWord(segmentResult, end, end + 2)) {
             nameWordCount = 2
           }
@@ -153,7 +164,7 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
   }
 
   private def computeNameWord(sentence: SegmentResult, begin: Int, end: Int): Boolean = {
-    if (isAllSingleWord(begin, end)) {
+    if (end < sentence.length() && isAllSingleWord(begin, end)) {
       val classifier = NeuralNetworkNameRecognizer.getClassifier(segmentResult, begin, end)
       val feature = classifier.extractedFeatures
       val result = classifier.classify(feature)

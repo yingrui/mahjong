@@ -12,7 +12,7 @@ class SegmentResultFilter(config: MPSegmentConfiguration) {
   filters += (new UnknownPlaceFilter())
   filters += (new NumberAndTimeFilter())
 //  filters += (new UnknownNameFilter(config))
-  filters += (new ChineseNameFilter(config, new ChineseNameRecognizerCreator(), 7))
+  filters += (new ChineseNameFilter(config, new ChineseNameRecognizerCreator(), 10))
   filters += (new ReduplicatingFilter())
   filters += (new QuerySyntaxFilter(config))
   if (config.is("segment.lang.en")) {

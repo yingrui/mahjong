@@ -40,7 +40,7 @@ object WordUtil {
     }
 
   def isPos_P_C_U_W_UN(POS: Int, word: String): Boolean = {
-    POS == POSUtil.POS_P || POS == POSUtil.POS_C || POS == POSUtil.POS_U || POS == POSUtil.POS_W || (POS == POSUtil.POS_UNKOWN && !isChinese(word))
+    POS == POSUtil.POS_P || POS == POSUtil.POS_C || POS == POSUtil.POS_U || (POS == POSUtil.POS_W && !word.equals("·")) || (POS == POSUtil.POS_UNKOWN && !isChinese(word))
   }
 
   def isChinesePreposition(wordString: String): Boolean = {

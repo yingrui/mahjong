@@ -50,7 +50,7 @@ class NameEntityRecognizerBuilderTest {
   @Test
   def should_get_left_boundary_word_of_name_entity() {
     val boundaryWord = "和"
-    Assert.assertEquals(508, result.freqAsLeftBoundary(boundaryWord))
+    Assert.assertEquals(505, result.freqAsLeftBoundary(boundaryWord))
     println(result.leftBoundaryDiff(boundaryWord))
     Assert.assertTrue(result.leftBoundaryDiff(boundaryWord) > 0.04D)
   }
@@ -59,7 +59,7 @@ class NameEntityRecognizerBuilderTest {
   def should_get_mutual_information_between_left_boundary_and_name_entity() {
     val boundaryWord = "和"
     println(result.leftBoundaryMutualInformation(boundaryWord))
-    Assert.assertTrue(result.leftBoundaryMutualInformation(boundaryWord) > 0.56D)
+    Assert.assertTrue(result.leftBoundaryMutualInformation(boundaryWord) > 0.556D)
   }
 
   @Test

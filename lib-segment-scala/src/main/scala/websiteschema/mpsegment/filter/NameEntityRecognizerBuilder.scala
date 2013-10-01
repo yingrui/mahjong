@@ -70,14 +70,18 @@ class NameEntityRecognizerBuilder {
     i
   }
 
+  private def isWordName(sentence: SegmentResult, index: Int) = {
+    (isWordPosNR(sentence.getWordAtom(index)) || isWordPosR(sentence.getWordAtom(index)))
+  }
+
   private def statisticBoundary(i: Int, sentence: SegmentResult) {
     val word = sentence.getWordAtom(i)
     result.wordFreqPlusOne(word.word)
-    if (i > 0 && (isWordPosNR(sentence.getWordAtom(i - 1)) || isWordPosR(sentence.getWordAtom(i - 1)))) {
+    if (i > 0 && isWordName(sentence, i - 1) && !isWordName(sentence, i)) {
       result.wordRightBoundaryFreqPlusOne(word.word)
     }
 
-    if (i < sentence.length() - 1 && (isWordPosNR(sentence.getWordAtom(i + 1)) || isWordPosR(sentence.getWordAtom(i + 1)))) {
+    if (i < sentence.length() - 1 && (isWordName(sentence, i + 1)) && !isWordName(sentence, i)) {
       result.wordLeftBoundaryFreqPlusOne(word.word)
     }
 

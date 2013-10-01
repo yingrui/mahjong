@@ -45,7 +45,7 @@ class PerformanceTest {
   }
 
   @Test
-  def should_segment_Sophies_World_with_POS_within_2_seconds() {
+  def should_segment_Sophies_World_with_POS_within_2500_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentEngine().getSegmentWorker()
     segmentWorker.setRecognizePOS(true)
@@ -68,7 +68,7 @@ class PerformanceTest {
   }
 
   @Test
-  def should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_2_seconds() {
+  def should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentEngine().getSegmentWorker()
     segmentWorker.setRecognizePOS(true)
@@ -89,11 +89,11 @@ class PerformanceTest {
     println("should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + " with POS recognition and without Domain dictionary, the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 2500)
+    Assert.assertTrue(milSeconds < 3000)
   }
 
   @Test
-  def should_segment_Sophies_World_with_POS_and_Context_within_2_seconds() {
+  def should_segment_Sophies_World_with_POS_and_Context_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentEngine().getSegmentWorker()
     segmentWorker.setRecognizePOS(true)
@@ -114,7 +114,7 @@ class PerformanceTest {
     println("should_segment_Sophies_World_with_POS_and_Context_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + " with POS recognition and context, the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 2500)
+    Assert.assertTrue(milSeconds < 3000)
   }
 
   @Test
