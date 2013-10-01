@@ -19,7 +19,7 @@ corpusEditorServices.
                         path += '&' + scope.paramMap[key] + '=' + value
                     }
                 });
-                $http.post(path, data).success(callback);
+                return $http.post(path, data).success(callback);
             }
         };
     });

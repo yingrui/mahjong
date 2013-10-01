@@ -27,19 +27,26 @@ describe('Segment Controller', function() {
         it('should init segment controller', function(){
             expect(scope.inputText).toBe("");
             expect(scope.segmentResult.length).toBe(0);
-            expect(scope.isSupportEnglish).toBe(true);
-            expect(scope.isEnglishStemming).toBe(false);
-            expect(scope.isRecognizePinyin).toBe(true);
-            expect(scope.isSegmentMin).toBe(true);
+            expect(scope.isSupportEnglish).toBeTruthy();
+            expect(scope.isEnglishStemming).toBeFalsy();
+            expect(scope.isRecognizePinyin).toBeTruthy();
+            expect(scope.isSegmentMin).toBeTruthy();
         });
 
 
-        it('should get segment result when call segment method', function() {
+        it('should send segment request and receive result', function() {
             scope.segment();
             $httpBackend.flush();
 
             expect(scope.segmentResult).toEqualData(
                 [{name: 'word1'}, {name: 'word2'}]);
+        });
+
+        it('should disable segment button when send segment request', function(){
+            scope.segment();
+            expect(scope.sendingSegmentRequest).toBeTruthy()
+            $httpBackend.flush();
+            expect(scope.sendingSegmentRequest).toBeFalsy()
         });
     });
 });

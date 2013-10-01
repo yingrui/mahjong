@@ -5,11 +5,13 @@
 function SegmentCtrl($scope, segmentService, i18n) {
     $scope.inputText = "";
     $scope.segmentResult = [];
-    $scope.isSupportEnglish = true
-    $scope.isEnglishStemming = false
-    $scope.isRecognizePinyin = true
-    $scope.isSegmentMin = true
+    $scope.isSupportEnglish = true;
+    $scope.isEnglishStemming = false;
+    $scope.isRecognizePinyin = true;
+    $scope.isSegmentMin = true;
+    $scope.sendingSegmentRequest = false;
     $scope.segment = function() {
+        $scope.sendingSegmentRequest = true;
         var scope = this;
         var param = {
             isSupportEnglish: scope.isSupportEnglish,
@@ -19,9 +21,13 @@ function SegmentCtrl($scope, segmentService, i18n) {
             };
         segmentService.segment(scope.inputText, param, function(result){
             scope.segmentResult = result;
-        });
+        }).then(markReceivedResponse, markReceivedResponse);
     }
     $scope.i18n = i18n;
+
+    function markReceivedResponse() {
+        $scope.sendingSegmentRequest = false;
+    }
 }
 
 SegmentCtrl.$inject = ['$scope', 'SegmentService', 'i18n'];

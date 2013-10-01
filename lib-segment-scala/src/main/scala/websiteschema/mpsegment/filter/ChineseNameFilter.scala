@@ -22,8 +22,8 @@ class ChineseNameFilter(config: MPSegmentConfiguration, recognizerCreator: Recog
   private def processPotentialName: Boolean = {
     val found = if (nameEndIndex - nameStartIndex >= 1) {
       val recognizedNameLength = recognizeNameWord()
-      if (numOfNameWordItem >= 2) {
-        wordIndex = nameStartIndex + recognizedNameLength
+      if (recognizedNameLength > 0) {
+        wordIndex = nameStartIndex + recognizedNameLength - 1
         true
       } else {
         wordIndex = nameStartIndex
