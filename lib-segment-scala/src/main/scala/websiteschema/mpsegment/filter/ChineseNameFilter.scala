@@ -1,37 +1,23 @@
 package websiteschema.mpsegment.filter
 
-import ner.{NameEntityRecognizer, NeuralNetworkNameRecognizer, ProbChineseNameRecognizer}
+import ner.{RecognizerCreator, NameEntityRecognizer}
 import websiteschema.mpsegment.concept.Concept
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.dict.POSUtil
 
 import websiteschema.mpsegment.util.WordUtil._
 
-class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentFilter {
+class ChineseNameFilter(config: MPSegmentConfiguration, recognizerCreator: RecognizerCreator, maxNameWordLength: Int) extends AbstractSegmentFilter {
 
-  private var foreignName: ForeignName = null
-  private val useChNameDict: Boolean = true
-  private val useForeignNameDict = false
-  private var segmentResultLength: Int = 0
-  private val maxNameWordLength = 6
-  private var nameStartIndex = -1
-  private var nameEndIndex = -1
-  private var hasPossibleFoundName: Boolean = false
-  private var wordIndex = 0
-  private var numOfNameWordItem: Int = -1
+  private val useChNameDict = true
+  private var segmentResultLength = 0
+  protected var nameStartIndex = -1
+  protected var nameEndIndex = -1
+  protected var hasFoundPossibleName = false
+  protected var wordIndex = 0
+  protected var numOfNameWordItem = -1
   private var startWithXing = false
   private var nameEntityRecognizer: NameEntityRecognizer = null
-
-  if (useChNameDict) {
-    if (useForeignNameDict && foreignName == null) {
-      foreignName = new ForeignName()
-      foreignName.loadNameWord()
-    }
-  }
-
-  private def reachTheEnd(wordIndex: Int): Boolean = {
-    return (wordIndex + 1) >= segmentResultLength
-  }
 
   private def processPotentialName: Boolean = {
     val found = if (nameEndIndex - nameStartIndex >= 1) {
@@ -44,50 +30,41 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
         false
       }
     } else false
-    markPositionImpossibleToBeName()
+    resetStatus()
     found
   }
 
   override def doFilter() {
-    nameEntityRecognizer = new ProbChineseNameRecognizer(segmentResult)
-//    nameEntityRecognizer = NeuralNetworkNameRecognizer(segmentResult)
+    nameEntityRecognizer = recognizerCreator.create(segmentResult)
     if (useChNameDict && config.isChineseNameIdentify()) {
       segmentResultLength = segmentResult.length()
-      markPositionImpossibleToBeName()
+      resetStatus()
       wordIndex = 0
       while (wordIndex < segmentResultLength) {
         if (!isWordConfirmed(wordIndex)) {
-          if (hasPossibleFoundName && (nameEndIndex - nameStartIndex >= maxNameWordLength || reachTheEnd(wordIndex))) {
-            if (reachTheEnd(wordIndex)) {
-              nameEndIndex = wordIndex
-            }
+          if (hasFoundPossibleName && (upToMaximumNameLength || reachTheEnd)) {
+            nameEndIndex = wordIndex
             val found = processPotentialName
-            if (reachTheEnd(wordIndex)) {
+            if (reachTheEnd) {
               return
             }
             if(!found) wordIndex += 1
           }
 
           if (segmentResult.getPOS(wordIndex) == POSUtil.POS_NR) {
-            markPositionMaybeName()
+            markPositionMaybeName
           } else {
             val _isPos_P_C_U_W_UN = isPos_P_C_U_W_UN(segmentResult.getPOS(wordIndex), segmentResult.getWord(wordIndex))
             val _isChinesePreposition = isChinesePreposition(segmentResult.getWord(wordIndex))
-            if (hasPossibleFoundName) {
-              if ((_isPos_P_C_U_W_UN && !_isChinesePreposition)
-                || segmentResult.getWord(wordIndex).length() > 2
-                || (segmentResult.getWord(wordIndex).length > 1 && wordIndex - nameStartIndex >= 1)) {
+            val _isSingleWord = segmentResult.getWord(wordIndex).length() == 1
+            if (hasFoundPossibleName) {
+              if (isEndOfName(_isPos_P_C_U_W_UN, _isChinesePreposition)) {
                 processPotentialName
               } else {
-                nameEndIndex = wordIndex
-                if (wordIndex + 1 == segmentResultLength && nameEndIndex - nameStartIndex >= 1) {
-                  assert(false)
-                  recognizeNameWord()
-                }
+                markPositionMaybeName
               }
-            } else if (segmentResult.getWord(wordIndex).length() == 1
-              && !_isPos_P_C_U_W_UN || _isChinesePreposition) {
-              markPositionMaybeName()
+            } else if (_isSingleWord && (!_isPos_P_C_U_W_UN || _isChinesePreposition)) {
+              markPositionMaybeName
             }
           }
         }
@@ -96,17 +73,28 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
     }
   }
 
+
+  def isEndOfName(_isPos_P_C_U_W_UN: Boolean, _isChinesePreposition: Boolean): Boolean = {
+    val isBigWord = segmentResult.getWord(wordIndex).length() > 2
+    val isNotSingleWordSinceSecondWord = segmentResult.getWord(wordIndex).length > 1 && wordIndex - nameStartIndex >= 1
+    (_isPos_P_C_U_W_UN && !_isChinesePreposition) || isBigWord || isNotSingleWordSinceSecondWord
+  }
+
+  private def reachTheEnd: Boolean = (wordIndex + 1) >= segmentResultLength
+
+  private def upToMaximumNameLength: Boolean = wordIndex - nameStartIndex >= maxNameWordLength - 1
+
   private def markPositionMaybeName() {
     if (nameStartIndex < 0) {
       nameStartIndex = wordIndex
-      hasPossibleFoundName = true
+      hasFoundPossibleName = true
     } else {
       nameEndIndex = wordIndex
     }
   }
 
-  private def markPositionImpossibleToBeName() {
-    hasPossibleFoundName = false
+  private def resetStatus() {
+    hasFoundPossibleName = false
     nameStartIndex = -1
     nameEndIndex = -1
   }
@@ -123,8 +111,6 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
         setWordIndexesAndPOSForMerge(nameStartIndex, (nameStartIndex + numOfNameWordItem) - 1, POSUtil.POS_NR)
         segmentResult.setConcept(nameStartIndex, Concept.UNKNOWN.getName())
       }
-    } else if (useForeignNameDict) {
-      numOfNameWordItem = processForeignName(nameStartIndex, nameEndIndex)
     }
     numOfNameWordItem
   }
@@ -146,22 +132,10 @@ class UnknownNameFilter(config: MPSegmentConfiguration) extends AbstractSegmentF
   }
 
   private def recognizeNameWordBetween(begin: Int, end: Int): Int = {
-//    val result = nameEntityRecognizer.recognizeNameWordBetween(begin, end)
     val result = nameEntityRecognizer.recognizeNameWordBetween(begin, end)
     numOfNameWordItem = result.nameWordCount
     startWithXing = result.startWithXing
     numOfNameWordItem
-  }
-
-  private def processForeignName(i1: Int, j1: Int): Int = {
-    var wordCount = -1
-    for (i2 <- i1 to j1) {
-      if (!foreignName.isForeignName(segmentResult.getWord(i2))) {
-        return wordCount
-      }
-      wordCount = i2
-    }
-    wordCount
   }
 
 }

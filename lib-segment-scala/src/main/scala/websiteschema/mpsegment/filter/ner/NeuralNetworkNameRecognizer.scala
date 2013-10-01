@@ -2,23 +2,33 @@ package websiteschema.mpsegment.filter.ner
 
 import websiteschema.mpsegment.core.SegmentResult
 import websiteschema.mpsegment.filter.{ForeignName, NameEntityRecognizerStatisticResult}
-import websiteschema.mpsegment.util.SerializeHandler
-import java.io.File
-import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 import websiteschema.mpsegment.neural.{Normalizer, Sigmoid, Layer, NeuralNetwork}
 import websiteschema.mpsegment.math.Matrix
 import websiteschema.mpsegment.dict.POSUtil
 import collection.mutable
 
-class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) extends NameEntityRecognizer {
+trait RecognizerCreator {
+  def create(segmentResult: SegmentResult): NameEntityRecognizer
+}
+
+class ChineseNameRecognizerCreator extends RecognizerCreator {
+
+  def create(segmentResult: SegmentResult): NameEntityRecognizer = NeuralNetworkNameRecognizer(segmentResult)
+
+}
+
+class ForeignNameRecognizerCreator extends RecognizerCreator {
+
+  def create(segmentResult: SegmentResult): NameEntityRecognizer = NeuralNetworkNameRecognizer(segmentResult)
+
+}
+
+class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends NameEntityRecognizer {
 
   val cache = mutable.HashSet[String]()
 
   def recognizeNameWordBetween(begin: Int, end: Int): NameEntityRecognizeResult = {
     val result = recognizeName(begin, end)
-//    if (nameWordLength > 0) {
-//      println(for (i <- begin to (begin + nameWordLength - 1)) yield segmentResult.getWord(i))
-//    }
     if (result.nameWordCount < 0 && end - begin >= 2) {
       recognizeNameWordBetween(begin, end - 1)
     } else {
@@ -38,31 +48,41 @@ class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) exten
     if (possibleNameWordCount <= 1) {
       new NameEntityRecognizeResult(-1, false, false)
     } else {
-      if (possibleNameWordCount > 2 && startWithXing(begin)) {
-        if (name.length > 3 && isForeignName(begin, end)){
-          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, true)
-        } else {
-          val newEnd = begin + 2
-          if (isAllSingleWord(begin, newEnd)) {
-            new NameEntityRecognizeResult(computeNameWordLength(begin, newEnd), true, false)
-          } else new NameEntityRecognizeResult(-1, false, false)
-        }
+      if (possibleNameWordCount > 3) {
+        computeForeignName(possibleNameWordCount, begin, end, name)
       } else {
-        if (matchTypicalShortName(name)){
-          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, false)
-        } else if (segmentResult.getWord(end).length <= 2 && startWithXing(begin) && isAllSingleWord(begin, end)) {
-          new NameEntityRecognizeResult(computeNameWordLength(begin, end), true, false)
-        } else if (isRecognizedMing(begin, end)) {
-          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, false)
-        } else if (isForeignName(begin, end)){
-          new NameEntityRecognizeResult(computeNameWordLength(begin, end), false, true)
-        } else new NameEntityRecognizeResult(-1, false, false)
+        compute(possibleNameWordCount, begin, end, name)
       }
     }
   }
 
+  def computeForeignName(possibleNameWordCount: Int, begin: Int, end: Int, name: String): NameEntityRecognizeResult = {
+    if (isForeignName(begin, end)) {
+      new NameEntityRecognizeResult(computeNameWordLength(begin, end, true), false, true)
+    } else new NameEntityRecognizeResult(-1, false, false)
+  }
+
+  def compute(possibleNameWordCount: Int, begin: Int, end: Int, name: String): NameEntityRecognizeResult = {
+    if (possibleNameWordCount > 2 && startWithXing(begin)) {
+      val newEnd = begin + 2
+      if (isAllSingleWord(begin, newEnd)) {
+        new NameEntityRecognizeResult(computeNameWordLength(begin, newEnd, false), true, false)
+      } else new NameEntityRecognizeResult(-1, false, false)
+    } else {
+      if (matchTypicalShortName(name)) {
+        new NameEntityRecognizeResult(computeNameWordLength(begin, end, false), false, false)
+      } else if (segmentResult.getWord(end).length <= 2 && startWithXing(begin) && isAllSingleWord(begin, end)) {
+        new NameEntityRecognizeResult(computeNameWordLength(begin, end, false), true, false)
+      } else if (isRecognizedMing(begin, end)) {
+        new NameEntityRecognizeResult(computeNameWordLength(begin, end, false), false, false)
+      } else if (isForeignName(begin, end)) {
+        new NameEntityRecognizeResult(computeNameWordLength(begin, end, true), false, true)
+      } else new NameEntityRecognizeResult(-1, false, false)
+    }
+  }
+
   private def matchTypicalShortName(name: String): Boolean = {
-    name.matches("(阿.|大.|小.|老.|.妹|.姐|.叔|.婶|.哥|.兄|.弟|.子|.嫂|.婆|.公|.伯|.氏|.老)")
+    name.matches("(阿.|大.|小.|老.|.妹|.姐|.叔|.婶|.哥|.兄|.弟|.嫂|.婆|.公|.伯)") || (name.length == 2 && isXing(name.charAt(0).toString) && name.matches("(.子|.氏|.老|.总|.局|.工|.某)"))
   }
 
   private def isRecognizedMing(begin: Int, end: Int): Boolean = {
@@ -74,7 +94,7 @@ class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) exten
 
   private def startWithXing(begin: Int): Boolean = isXing(segmentResult.getWord(begin))
 
-  private def isXing(word: String) = NeuralNetworkChineseNameRecognizer.nameDistribution.xingSet.contains(word)
+  private def isXing(word: String) = NeuralNetworkNameRecognizer.nameDistribution.xingSet.contains(word)
 
   private def isAllSingleWord(begin: Int, end: Int): Boolean = {
     var isSingleWord = true
@@ -87,40 +107,59 @@ class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) exten
   private def isAllForeignName(begin: Int, end: Int): Boolean = {
     var isForeignName = true
     for (i <- begin to end) {
-      isForeignName = isForeignName && NeuralNetworkChineseNameRecognizer.foreignName.isForeignName(segmentResult.getWord(i))
+      isForeignName = isForeignName && NeuralNetworkNameRecognizer.foreignName.isForeignName(segmentResult.getWord(i))
     }
 
     if (end - begin <= 2) {
-      isForeignName = isForeignName && NeuralNetworkChineseNameRecognizer.foreignName.isForeignNameStartChar(segmentResult.getWord(begin))
+      isForeignName = isForeignName && NeuralNetworkNameRecognizer.foreignName.isForeignNameStartChar(segmentResult.getWord(begin))
     }
     isForeignName
   }
 
-  private def computeNameWordLength(begin: Int, end: Int): Int = {
-    val nameWordCount = end - begin + 1
-    val classifier = NeuralNetworkChineseNameRecognizer.getClassifier(segmentResult, begin, end)
+  private def computeNameWordLength(begin: Int, end: Int, recognizeForeignName: Boolean): Int = {
+    var nameWordCount = end - begin + 1
+    val classifier = NeuralNetworkNameRecognizer.getClassifier(segmentResult, begin, end)
     val feature = classifier.extractedFeatures
     val result = classifier.classify(feature)
 //    println(result + " --- " + Matrix(feature))
     val isNER = isName(result)
-    if (isNER) {
-      if(nameWordCount < 3) {
-        nameWordCount
-      } else {
-        val classifier2WordName = NeuralNetworkChineseNameRecognizer.getClassifier(segmentResult, begin, begin + 1)
+    if (isNER && !recognizeForeignName) {
+
+      if(nameWordCount == 3) {
+        val classifier2WordName = NeuralNetworkNameRecognizer.getClassifier(segmentResult, begin, begin + 1)
         val feature2WordName = classifier2WordName.extractedFeatures
         val result2WordName = classifier2WordName.classify(feature2WordName)
-        //      println(result2WordName + " --- " + classifier2WordName.rightBoundaryFreq)
+//        println(result2WordName + " --- " + Matrix(feature2WordName))
         val isNameEither = isName(result2WordName)
         if(isNameEither && getError(result) > getError(result2WordName)
-          && classifier.rightBoundaryFreq < classifier2WordName.rightBoundaryFreq && classifier2WordName.rightBoundaryFreq > 150) {
-          2
-        } else {
-          nameWordCount
+          && (classifier.rightBoundaryFreq < classifier2WordName.rightBoundaryFreq && classifier2WordName.rightBoundaryFreq > 100)) {
+          nameWordCount = 2
         }
       }
+
+      if (nameWordCount == 3) {
+        if (isXing(segmentResult.getWord(end)) && end < segmentResult.length() - 3) {
+          if (computeNameWord(segmentResult, end, end + 1) || computeNameWord(segmentResult, end, end + 2)) {
+            nameWordCount = 2
+          }
+        }
+      }
+
+    } else if (!isNER) {
+      nameWordCount = -1
+    }
+
+    nameWordCount
+  }
+
+  private def computeNameWord(sentence: SegmentResult, begin: Int, end: Int): Boolean = {
+    if (isAllSingleWord(begin, end)) {
+      val classifier = NeuralNetworkNameRecognizer.getClassifier(segmentResult, begin, end)
+      val feature = classifier.extractedFeatures
+      val result = classifier.classify(feature)
+      isName(result) && getError(result) < 1E-6
     } else {
-      -1
+      false
     }
   }
 
@@ -130,7 +169,7 @@ class NeuralNetworkChineseNameRecognizer(val segmentResult: SegmentResult) exten
 
 }
 
-object NeuralNetworkChineseNameRecognizer {
+object NeuralNetworkNameRecognizer {
 
   val nameEntityRecognizerStatisticResult = new NameEntityRecognizerStatisticResult()
   nameEntityRecognizerStatisticResult.load("cn_name_feature.dat")
@@ -165,60 +204,9 @@ object NeuralNetworkChineseNameRecognizer {
     Array(-0.40833712865470995,-0.3687956385749418,-5.947379414241624,-14.519856665016288,-38.20810986099769,-13.210378045650687),
     Array(5.39923590055081,5.359694410471041,5.931437870372603,5.095529607265829,38.16063368541203,9.704275789273217))
 
-  def apply(segmentResult: SegmentResult): NeuralNetworkChineseNameRecognizer = new NeuralNetworkChineseNameRecognizer(segmentResult)
+  def apply(segmentResult: SegmentResult) = new NeuralNetworkNameRecognizer(segmentResult)
 
   def getClassifier(sentence: SegmentResult, begin: Int, end: Int) = {
     new NeuralNetworkClassifier(sentence, begin, end, nameEntityRecognizerStatisticResult, nameDistribution, network, normalizer)
-  }
-}
-
-class NameProbDistribution {
-
-  val loader = SerializeHandler(new File("ner_cn.dat"), SerializeHandler.MODE_READ_ONLY)
-  val wordCount = loader.deserializeInt()
-  val pinyinFreq = loader.deserializeMapStringInt()
-  val wordFreq = loader.deserializeMapStringInt()
-  val xingSet = loader.deserializeArrayString().toSet
-
-  def getProbAsName(words: List[String]): Double = {
-    val prob = (words.map(word => if (wordFreq.containsKey(word)) wordFreq.get(word) else 1).sum.toDouble) / wordCount.toDouble
-    Math.log(prob) / Math.log(2)
-  }
-
-  def getPinyinProbAsName(words: List[String]): Double = {
-    val pinyinList = WordToPinyinClassfierFactory().getClassifier().classify(words.mkString)
-    val prob = (pinyinList.map(pinyin => if (pinyinFreq.containsKey(pinyin)) pinyinFreq.get(pinyin) else pinyinFreq.get("unknown")).sum.toDouble) / wordCount.toDouble
-    Math.log(prob) / Math.log(2)
-  }
-}
-
-class NeuralNetworkClassifier(sentence: SegmentResult, index: Int, end: Int, statisticResult: NameEntityRecognizerStatisticResult, nameDistribution: NameProbDistribution, network: NeuralNetwork, normalizer: Normalizer) {
-
-  val name = {
-    val words = for (i <- index to end) yield sentence.getWord(i)
-    words.mkString.toList.map(ch => ch.toString)
-  }
-
-  val leftBound = if (index == 0) "\0" else sentence.getWord(index - 1)
-  val rightBound = if (end + 1 < sentence.length()) sentence.getWord(end + 1) else "\0"
-
-  val extractedFeatures = {
-//    println("------" + name)
-    List[Double](
-      statisticResult.leftBoundaryMutualInformation(leftBound),
-      statisticResult.rightBoundaryMutualInformation(rightBound),
-      statisticResult.diffLog(name(0)),
-      statisticResult.probability(name),
-      statisticResult.conditionProbability(name),
-//      statisticResult.mutualInformation(name),
-      nameDistribution.getProbAsName(name)
-    )
-  }
-
-  def rightBoundaryFreq = statisticResult.freqAsRightBoundary(rightBound)
-
-  def classify(feature: Seq[Double]): Matrix = {
-    val input = normalizer.normalize(Matrix(feature))
-    network.computeOutput(input)
   }
 }

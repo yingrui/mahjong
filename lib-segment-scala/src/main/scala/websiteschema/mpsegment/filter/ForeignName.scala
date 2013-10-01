@@ -24,3 +24,9 @@ class ForeignName {
   private val foreignNameCharSet = mutable.HashSet[Char]()
   private val foreignNameStartCharSet = mutable.HashSet[Char]()
 }
+
+object ForeignName {
+  val instance = new ForeignName()
+  instance.loadNameWord()
+  def apply() = instance
+}

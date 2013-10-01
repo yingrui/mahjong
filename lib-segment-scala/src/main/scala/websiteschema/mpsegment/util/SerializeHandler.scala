@@ -1,10 +1,6 @@
 package websiteschema.mpsegment.util
 
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io._
 
 import scala.collection.mutable.Map
 import scala.collection.mutable.OpenHashMap
@@ -29,7 +25,11 @@ object SerializeHandler {
 
   def apply(input: DataInputStream) = new SerializeHandler(input, null)
 
+  def apply(input: InputStream) = new SerializeHandler(new DataInputStream(input), null)
+
   def apply(output: DataOutputStream) = new SerializeHandler(null, output)
+
+  def apply(output: OutputStream) = new SerializeHandler(null, new DataOutputStream(output))
 }
 
 class SerializeHandler(input: DataInputStream, output: DataOutputStream) {

@@ -11,13 +11,13 @@ class ContainErrorAnalyzer extends AbstractErrorAnalyzer {
             // Bigger word contains the littler words.
             // Should remove the word from dictionary.
             increaseOccur()
-//            println(expect.word + " in " + errorSegment)
+//            println(expect.word + " in " + possibleErrorWord)
             foundError = true
         } else if (!possibleErrorWord.replaceAll(" ", "").equals(expect.word)
                 && possibleErrorWord.contains(expect.word)) {
             increaseOccur()
             addErrorWord(possibleErrorWord)
-//            println(expect.word + " in " + errorSegment)
+//            println(expect.word + " in " + possibleErrorWord)
             foundError = true
         }
         return foundError

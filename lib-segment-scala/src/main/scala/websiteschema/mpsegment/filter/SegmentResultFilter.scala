@@ -1,13 +1,9 @@
-/*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
 package websiteschema.mpsegment.filter
 
+import ner.{ForeignNameRecognizerCreator, ChineseNameRecognizerCreator}
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.core.SegmentResult
 
-import java.util.ArrayList
 import collection.mutable.ListBuffer
 
 class SegmentResultFilter(config: MPSegmentConfiguration) {
@@ -15,7 +11,8 @@ class SegmentResultFilter(config: MPSegmentConfiguration) {
   private val filters = ListBuffer[ISegmentFilter]()
   filters += (new UnknownPlaceFilter())
   filters += (new NumberAndTimeFilter())
-  filters += (new UnknownNameFilter(config))
+//  filters += (new UnknownNameFilter(config))
+  filters += (new ChineseNameFilter(config, new ChineseNameRecognizerCreator(), 7))
   filters += (new ReduplicatingFilter())
   filters += (new QuerySyntaxFilter(config))
   if (config.is("segment.lang.en")) {

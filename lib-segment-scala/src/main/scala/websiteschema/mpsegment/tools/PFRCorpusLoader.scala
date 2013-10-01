@@ -35,7 +35,7 @@ class PFRCorpusLoader {
     return buildSegmentResult(line)
   }
 
-  private def buildSegmentResult(line: String): SegmentResult = {
+  def buildSegmentResult(line: String): SegmentResult = {
     val elements = line.split("\\s+")
 
     val words = ListBuffer[String]()
@@ -110,8 +110,15 @@ object PFRCorpusLoader {
   def apply(inputStream: InputStream, encoding: String) = createCorpusLoader(inputStream, encoding)
 
   def createCorpusLoader(inputStream: InputStream, encoding: String): PFRCorpusLoader = {
-    val loader = new PFRCorpusLoader()
+    val loader = createCorpusLoader
     loader.reader = new BufferedReader(new InputStreamReader(inputStream, encoding))
+    loader
+  }
+
+  def apply() = createCorpusLoader
+
+  def createCorpusLoader: PFRCorpusLoader = {
+    val loader = new PFRCorpusLoader()
     loader.dictionary = DictionaryFactory().getCoreDictionary()
     if (loader.dictionary == null) {
       DictionaryFactory().loadDictionary()

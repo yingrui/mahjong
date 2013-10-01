@@ -54,6 +54,11 @@ class NameEntityRecognizerStatisticResult {
     Math.log(p)/Math.log(2)
   }
 
+  def rightBoundary(word: String) = {
+    val pxy = (freqAsRightBoundary(word).toDouble + 1.0) / (wordFreq(word).toDouble + 1.0D)
+    if (wordFreq(word).toDouble > 0.0D) pxy else 1.0 / wordOccurTotal
+  }
+
   def conditionProbability(name: List[String]) = {
     var freqAsName = 0.0D
     var freq = 0.0D
