@@ -9,6 +9,8 @@ import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
 
 class AccuracyTest {
 
+  val debug = false
+
   @Test
   def should_be_higher_than_93_percent_with_segment_minimum() {
     val segmentWorker =
@@ -27,7 +29,7 @@ class AccuracyTest {
     println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
     println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
 
-//    printDetails(segmentAccuracy)
+    printDetails(segmentAccuracy)
 
     Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94021 * 0.99)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() <= 23000 * 1.05)
@@ -37,7 +39,6 @@ class AccuracyTest {
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() <= 3800 * 1.05)
   }
 
-  @Ignore
   @Test
   def should_recognize_all_the_name_entities() {
     val segmentWorker =
@@ -57,9 +58,9 @@ class AccuracyTest {
     println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
     println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
 
-//    printDetails(segmentAccuracy)
+    printDetails(segmentAccuracy)
 
-    Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() == 0)
+    Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() <= 4)
   }
 
   @Test
@@ -76,7 +77,7 @@ class AccuracyTest {
     println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
     println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
 
-//    printDetails(segmentAccuracy)
+    printDetails(segmentAccuracy)
 
     Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94000 * 0.99)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() <= 23000 * 1.05)
@@ -87,12 +88,14 @@ class AccuracyTest {
   }
 
   private def printDetails(segmentAccuracy: SegmentAccuracy) {
-    println("Possible " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getWords().size + " new words")
-    println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(UnknownWord)) + ", they are:")
-    println(segmentAccuracy.getErrorAnalyzer(UnknownWord).getWords())
-    println("Those " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getWords().size + " words maybe could delete from dictionary")
-    println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate)) + ", they are:")
-    println(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getWords())
+    if (debug) {
+      println("Possible " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getWords().size + " new words")
+      println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(UnknownWord)) + ", they are:")
+      println(segmentAccuracy.getErrorAnalyzer(UnknownWord).getWords())
+      println("Those " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getWords().size + " words maybe could delete from dictionary")
+      println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate)) + ", they are:")
+      println(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getWords())
+    }
   }
 
   private def getWordsCount(errorAnalyzer: ErrorAnalyzer): Int = {

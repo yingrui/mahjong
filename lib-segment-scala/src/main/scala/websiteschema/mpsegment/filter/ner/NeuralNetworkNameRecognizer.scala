@@ -168,7 +168,7 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
       val classifier = NeuralNetworkNameRecognizer.getClassifier(segmentResult, begin, end)
       val feature = classifier.extractedFeatures
       val result = classifier.classify(feature)
-      isName(result) && getError(result) < 1E-6
+      isName(result) && getError(result) < 1E-4
     } else {
       false
     }
