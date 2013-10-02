@@ -30,8 +30,6 @@ class DelegateWord(word: IWord, wordName: String) extends IWord {
 
   def getWordMaxPOS() : Int = word.getWordMaxPOS()
 
-  def toDBFString() : String = word.toDBFString()
-
   def getConcepts() : Array[Concept] = word.getConcepts()
 
 }

@@ -136,12 +136,6 @@ class WordImpl(wordName: String) extends IWord with Comparable[Object] {
     return stringBuilder.toString()
   }
 
-  override def toDBFString(): String = {
-    val stringBuilder = new StringBuilder()
-    stringBuilder.append(getPOSArray().toDBFString(getWordName()))
-    return stringBuilder.toString()
-  }
-
   override def getConcepts(): Array[Concept] =
     if (null != concepts) {
       concepts

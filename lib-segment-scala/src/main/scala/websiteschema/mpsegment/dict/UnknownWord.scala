@@ -64,13 +64,7 @@ class UnknownWord extends IWord {
         return POSUtil.POS_UNKOWN
     }
 
-    override def toDBFString() : String = {
-        val stringBuilder = new StringBuilder()
-        stringBuilder.append(getPOSArray().toDBFString(getWordName()))
-        return stringBuilder.toString()
-    }
-
-    override def getConcepts() : Array[Concept] = {
+  override def getConcepts() : Array[Concept] = {
       val array = new Array[Concept](1)
       array(0) = Concept.UNKNOWN
       array

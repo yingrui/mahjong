@@ -99,12 +99,6 @@ class DomainWordItem extends IWord with Comparable[Object] {
     return stringBuilder.toString()
   }
 
-  override def toDBFString(): String = {
-    val stringBuilder = new StringBuilder()
-    stringBuilder.append(getPOSArray().toDBFString(getWordName()))
-    return stringBuilder.toString()
-  }
-
   override def getConcepts(): Array[Concept] = {
     val array = new Array[Concept](1)
     array(0) = Concept.UNKNOWN
