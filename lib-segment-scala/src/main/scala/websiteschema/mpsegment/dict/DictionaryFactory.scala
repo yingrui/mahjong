@@ -38,12 +38,12 @@ class DictionaryFactory {
 
       val converter = new StringWordConverter()
       converter.setConceptRepository(ConceptRepository())
-      for (wordStr <- list) {
+      list.foreach(wordStr => {
         val word = converter.convert(wordStr)
         if (word != null) {
           coreDict.addWord(word)
         }
-      }
+      })
     } catch {
       case e: Throwable =>
         e.printStackTrace()

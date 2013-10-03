@@ -113,7 +113,7 @@ class NeuralNetworkNameRecognizer(val segmentResult: SegmentResult) extends Name
   }
 
   private def isAllForeignName(begin: Int, end: Int): Boolean = {
-    var isForeignName = true
+    var isForeignName = !WordUtil.isPos_P_C_U_W_UN(segmentResult.getPOS(begin), segmentResult.getWord(begin))
     for (i <- begin to end) {
       isForeignName = isForeignName && NeuralNetworkNameRecognizer.foreignName.isForeignName(segmentResult.getWord(i))
     }
