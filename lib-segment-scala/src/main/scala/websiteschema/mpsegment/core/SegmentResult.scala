@@ -133,6 +133,8 @@ class SegmentResult(size: Int) {
 
   def indexWhere(p : (WordAtom) => Boolean, from: Int): Int = wordAtoms.indexWhere(p, from)
 
+  def foreach(fn: (WordAtom) => Unit) {wordAtoms.foreach(fn)}
+
   override def toString(): String = {
     val retString = new StringBuilder()
     for (j <- 0 until length()) {

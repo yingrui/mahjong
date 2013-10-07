@@ -3,8 +3,7 @@ package websiteschema.mpsegment.performance
 import junit.framework.Assert
 import org.junit.{Ignore, Test}
 import websiteschema.mpsegment.core.SegmentEngine
-import websiteschema.mpsegment.tools.accurary.ErrorAnalyzer
-import websiteschema.mpsegment.tools.accurary.SegmentAccuracy
+import websiteschema.mpsegment.tools.accurary.{NerNameStatisticData, ErrorAnalyzer, SegmentAccuracy}
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
 
 class AccuracyTest {
@@ -96,6 +95,7 @@ class AccuracyTest {
       println("Total count: " + getWordsCount(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate)) + ", they are:")
       println(segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getWords())
     }
+    NerNameStatisticData.print
   }
 
   private def getWordsCount(errorAnalyzer: ErrorAnalyzer): Int = {

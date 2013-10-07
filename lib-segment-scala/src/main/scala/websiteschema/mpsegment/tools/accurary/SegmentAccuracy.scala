@@ -8,6 +8,7 @@ import websiteschema.mpsegment.util.NumberUtil
 import websiteschema.mpsegment.util.StringUtil
 import collection.mutable._
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
+import websiteschema.mpsegment.dict.POSUtil
 
 class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
 
@@ -47,6 +48,9 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
       while (expectResult != null) {
         val sentence = expectResult.toOriginalString()
         val actualResult = segmentWorker.segment(sentence)
+
+        NerNameStatisticData.scanNameWordCount(expectResult)
+        NerNameStatisticData.scanRecognizedNameWordCount(actualResult)
 //        println(actualResult)
         totalWords += expectResult.length()
 
@@ -81,11 +85,18 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
       val indexInOriginalString = expectResult.getWordIndexInOriginalString(i)
       val matches = lookupMatch(actualResult, expectWord, lastMatchIndex + 1, indexInOriginalString)
       if (matches >= 0) {
+        segmentCorrect(expectWord, actualResult.getWordAtom(matches))
         lastMatchIndex = matches
         correct += 1
       } else {
         wrong += 1
       }
+    }
+  }
+
+  private def segmentCorrect(expect: WordAtom, actual: WordAtom) {
+    if (actual.pos == POSUtil.POS_NR) {
+      NerNameStatisticData.correctRecognizedNameCount += 1
     }
   }
 
@@ -156,3 +167,25 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
   }
 }
 
+object NerNameStatisticData {
+
+  var nameCount = 0.0
+  var recognizedNameCount = 0.0
+  var correctRecognizedNameCount = 0.0
+
+  def scanNameWordCount(segmentResult: SegmentResult) {
+    segmentResult.foreach(wordAtom => {
+      if (wordAtom.pos == POSUtil.POS_NR) nameCount += 1.0
+    })
+  }
+
+  def scanRecognizedNameWordCount(segmentResult: SegmentResult) {
+    segmentResult.foreach(wordAtom => {
+      if (wordAtom.pos == POSUtil.POS_NR) recognizedNameCount += 1.0
+    })
+  }
+
+  def print {
+    println("Chinese name recognition precise rate: " + (correctRecognizedNameCount / recognizedNameCount) + " recall rate: " + (correctRecognizedNameCount / nameCount))
+  }
+}

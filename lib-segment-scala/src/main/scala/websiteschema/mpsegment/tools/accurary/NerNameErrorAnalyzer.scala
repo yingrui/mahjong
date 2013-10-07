@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.tools.accurary
 
-import websiteschema.mpsegment.core.WordAtom
+import websiteschema.mpsegment.core.{SegmentResult, WordAtom}
 import websiteschema.mpsegment.dict.POSUtil
 
 class NerNameErrorAnalyzer extends AbstractErrorAnalyzer {
