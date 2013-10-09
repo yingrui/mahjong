@@ -10,7 +10,7 @@ import collection.mutable._
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
 import websiteschema.mpsegment.dict.POSUtil
 
-class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
+class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends SegmentResultCompareHook {
 
   private var loader: PFRCorpusLoader = null
   private var totalWords: Int = 0
@@ -20,6 +20,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
 
   private val allWordsAndFreqInCorpus = HashMap[String, Int]()
   private var allErrorAnalyzer: Map[SegmentErrorType, ErrorAnalyzer] = null
+  private val comparator = new SegmentResultComparator(this)
 
   initialErrorAnalyzer()
   loader = PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus))
@@ -54,7 +55,9 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
 //        println(actualResult)
         totalWords += expectResult.length()
 
-        compare(expectResult, actualResult)
+        recordWordFreqInCorpus(expectResult)
+
+        comparator.compare(expectResult, actualResult)
         expectResult = loader.readLine()
       }
     } catch {
@@ -77,21 +80,26 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
     allErrorAnalyzer.put(SegmentErrorType.Other, new OtherErrorAnalyzer())
   }
 
-  private def compare(expectResult: SegmentResult, actualResult: SegmentResult) {
-    var lastMatchIndex = -1
-    for (i <- 0 until expectResult.length) {
-      val expectWord = expectResult.getWordAtom(i)
-      recordWordFreqInCorpus(expectWord)
-      val indexInOriginalString = expectResult.getWordIndexInOriginalString(i)
-      val matches = lookupMatch(actualResult, expectWord, lastMatchIndex + 1, indexInOriginalString)
-      if (matches >= 0) {
-        segmentCorrect(expectWord, actualResult.getWordAtom(matches))
-        lastMatchIndex = matches
-        correct += 1
-      } else {
-        wrong += 1
-      }
+  private def recordWordFreqInCorpus(expectResult: SegmentResult) {
+    expectResult.foreach(word => {
+      val freq = if (allWordsAndFreqInCorpus.contains(word.word)) allWordsAndFreqInCorpus(word.word) + 1 else 1
+      allWordsAndFreqInCorpus.put(word.word, freq)
+    })
+  }
+
+  private def postAnalysis() {
+    for (errorType <- allErrorAnalyzer.keys) {
+      getErrorAnalyzer(errorType).postAnalysis(allWordsAndFreqInCorpus)
     }
+  }
+
+  override def errorWordHook {
+    wrong += 1
+  }
+
+  override def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom) {
+    segmentCorrect(expectWord, matchedWord)
+    correct += 1
   }
 
   private def segmentCorrect(expect: WordAtom, actual: WordAtom) {
@@ -100,9 +108,42 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
     }
   }
 
-  private def recordWordFreqInCorpus(word: WordAtom) {
-    val freq = if (allWordsAndFreqInCorpus.contains(word.word)) allWordsAndFreqInCorpus(word.word) + 1 else 1
-    allWordsAndFreqInCorpus.put(word.word, freq)
+  override def analyzeReason(expect: WordAtom, possibleErrorWord: String) {
+    for (errorType <- allErrorAnalyzer.keys) {
+      val analyzer = allErrorAnalyzer(errorType)
+      val isErrorWord = analyzer.analysis(expect, possibleErrorWord)
+      if (isErrorWord) {
+        return
+      }
+    }
+  }
+}
+
+trait SegmentResultCompareHook {
+
+  def errorWordHook: Unit
+
+  def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom): Unit
+
+  def analyzeReason(expect: WordAtom, possibleErrorWord: String): Unit
+}
+
+class SegmentResultComparator(hooker: SegmentResultCompareHook) {
+
+  def compare(expectResult: SegmentResult, actualResult: SegmentResult) {
+    var lastMatchIndex = -1
+    for (i <- 0 until expectResult.length) {
+      val indexInOriginalString = expectResult.getWordIndexInOriginalString(i)
+      val matches = lookupMatch(actualResult, expectResult.getWordAtom(i), lastMatchIndex + 1, indexInOriginalString)
+      if (matches >= 0) {
+        lastMatchIndex = matches
+        val expectWord = expectResult.getWordAtom(i)
+        val matchedWord = actualResult.getWordAtom(matches)
+        hooker.correctWordHook(expectWord, matchedWord)
+      } else {
+        hooker.errorWordHook
+      }
+    }
   }
 
   private def lookupMatch(actualResult: SegmentResult, expectWord: WordAtom, start: Int, indexInOriginalString: Int): Int = {
@@ -118,19 +159,9 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
     return -1
   }
 
-  private def analyzeErrorReason(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int) {
+  def analyzeErrorReason(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int) {
     val possibleErrorWord = lookupErrorWord(actualResult, expect, start, from)
-    analyzeReason(expect, possibleErrorWord)
-  }
-
-  private def analyzeReason(expect: WordAtom, possibleErrorWord: String) {
-    for (errorType <- allErrorAnalyzer.keys) {
-      val analyzer = allErrorAnalyzer(errorType)
-      val isErrorWord = analyzer.analysis(expect, possibleErrorWord)
-      if (isErrorWord) {
-        return
-      }
-    }
+    hooker.analyzeReason(expect, possibleErrorWord)
   }
 
   private def lookupErrorWord(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int): String = {
@@ -142,9 +173,9 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
         stringBuilder.append(actualResult.getWord(i)).append(" ")
       }
     }
-
-    return stringBuilder.toString().trim()
+    stringBuilder.toString().trim()
   }
+
 
   private def isSameWord(expect: String, actual: String): Boolean = {
     val expectWord = StringUtil.doUpperCaseAndHalfShape(expect)
@@ -160,32 +191,6 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) {
     return false
   }
 
-  private def postAnalysis() {
-    for (errorType <- allErrorAnalyzer.keys) {
-      getErrorAnalyzer(errorType).postAnalysis(allWordsAndFreqInCorpus)
-    }
-  }
+
 }
 
-object NerNameStatisticData {
-
-  var nameCount = 0.0
-  var recognizedNameCount = 0.0
-  var correctRecognizedNameCount = 0.0
-
-  def scanNameWordCount(segmentResult: SegmentResult) {
-    segmentResult.foreach(wordAtom => {
-      if (wordAtom.pos == POSUtil.POS_NR) nameCount += 1.0
-    })
-  }
-
-  def scanRecognizedNameWordCount(segmentResult: SegmentResult) {
-    segmentResult.foreach(wordAtom => {
-      if (wordAtom.pos == POSUtil.POS_NR) recognizedNameCount += 1.0
-    })
-  }
-
-  def print {
-    println("Chinese name recognition precise rate: " + (correctRecognizedNameCount / recognizedNameCount) + " recall rate: " + (correctRecognizedNameCount / nameCount))
-  }
-}
