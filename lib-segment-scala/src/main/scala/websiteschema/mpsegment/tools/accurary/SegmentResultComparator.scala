@@ -6,24 +6,25 @@ import websiteschema.mpsegment.util.{StringUtil, NumberUtil}
 class SegmentResultComparator(hooker: SegmentResultCompareHook) {
 
   var foundError = Set[Int]()
+  var indexInOriginalString = -1
 
   def compare(expectResult: SegmentResult, actualResult: SegmentResult) {
     var lastMatchIndex = -1
-    for (i <- 0 until expectResult.length) {
-      val indexInOriginalString = expectResult.getWordIndexInOriginalString(i)
-      val matches = lookupMatch(actualResult, expectResult(i), lastMatchIndex + 1, indexInOriginalString)
-      if (matches >= 0) {
-        lastMatchIndex = matches
-        val expectWord = expectResult(i)
-        val matchedWord = actualResult(matches)
-        hooker.correctWordHook(expectWord, matchedWord)
+    for (wordIndex <- 0 until expectResult.length) {
+      indexInOriginalString = expectResult.getWordIndexInOriginalString(wordIndex)
+      val matchIndex = lookupMatch(actualResult, expectResult(wordIndex), lastMatchIndex + 1, wordIndex)
+      if (matchIndex >= 0) {
+        lastMatchIndex = matchIndex
+        val expectWord = expectResult(wordIndex)
+        val matchedWord = actualResult(matchIndex)
+        hooker.correctWordHook(expectWord, matchedWord, wordIndex, matchIndex)
       } else {
         hooker.errorWordHook
       }
     }
   }
 
-  private def lookupMatch(actualResult: SegmentResult, expectWord: WordAtom, start: Int, indexInOriginalString: Int): Int = {
+  private def lookupMatch(actualResult: SegmentResult, expectWord: WordAtom, start: Int, expectWordIndex: Int): Int = {
     for (wordIndex <- start until actualResult.length) {
       val actualWord = actualResult.getWord(wordIndex)
       if (isSameWord(expectWord.word, actualWord)) {
@@ -33,29 +34,29 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
       }
 
     }
-    analyzeErrorReason(actualResult, expectWord, start, indexInOriginalString)
+    analyzeErrorReason(actualResult, expectWord, start, expectWordIndex)
     return -1
   }
 
-  private def recordError(index: Int, actual: WordAtom, expect: WordAtom) {
-    if (!(foundError contains index)) {
-      hooker.foundError(actual, expect)
-      foundError += index
+  private def recordError(errorWordIndex: Int, actual: WordAtom, expect: WordAtom, expectWordIndex: Int) {
+    if (!(foundError contains errorWordIndex)) {
+      hooker.foundError(expect, actual, expectWordIndex, errorWordIndex)
+      foundError += errorWordIndex
     }
   }
 
-  private def analyzeErrorReason(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int) {
-    val possibleErrorWord = lookupErrorWord(actualResult, expect, start, from)
+  private def analyzeErrorReason(actualResult: SegmentResult, expect: WordAtom, start: Int, expectWordIndex: Int) {
+    val possibleErrorWord = lookupErrorWord(actualResult, expect, start, expectWordIndex)
     hooker.analyzeReason(expect, possibleErrorWord)
   }
 
-  private def lookupErrorWord(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int): String = {
-    val to = from + expect.length
+  private def lookupErrorWord(actualResult: SegmentResult, expect: WordAtom, start: Int, expectWordIndex: Int) = {
+    val to = indexInOriginalString + expect.length
     val stringBuilder = new StringBuilder()
     for (wordIndex <- start until actualResult.length) {
-      val indexInOriginalString = actualResult.getWordIndexInOriginalString(wordIndex)
-      if (indexInOriginalString >= from && indexInOriginalString < to) {
-        recordError(wordIndex, actualResult(wordIndex), expect)
+      val indexInActualResult = actualResult.getWordIndexInOriginalString(wordIndex)
+      if (indexInActualResult >= indexInOriginalString && indexInActualResult < to) {
+        recordError(wordIndex, actualResult(wordIndex), expect, expectWordIndex)
         stringBuilder.append(actualResult.getWord(wordIndex)).append(" ")
       }
     }

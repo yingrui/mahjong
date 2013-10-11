@@ -1,17 +1,12 @@
-/*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
 package websiteschema.mpsegment.tools.accuracy
 
 import org.junit.Assert
 import org.junit.Test
-import websiteschema.mpsegment.dict.POSUtil
 
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import websiteschema.mpsegment.tools.PFRCorpusLoader
-import websiteschema.mpsegment.core.{WordAtom, SegmentEngine}
+import websiteschema.mpsegment.core.WordAtom
 import websiteschema.mpsegment.tools.accurary.{SegmentResultComparator, SegmentResultCompareHook}
 
 class SegmentResultComparatorTest {
@@ -22,14 +17,13 @@ class SegmentResultComparatorTest {
 
     override def errorWordHook = errorCount += 1
 
-    override def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom) {
+    override def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom, expectWordIndex: Int, matchedWordIndex: Int) {
       words = words :+ matchedWord
     }
 
-    override def foundError(word: WordAtom, expect: WordAtom) {
+    override def foundError(expect: WordAtom, word: WordAtom, expectWordIndex: Int, errorWordIndex: Int) {
       words = words :+ word
     }
-
   }
 
   @Test
