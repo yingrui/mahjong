@@ -20,7 +20,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
 
   private val allWordsAndFreqInCorpus = HashMap[String, Int]()
   private var allErrorAnalyzer: Map[SegmentErrorType, ErrorAnalyzer] = null
-  private val comparator = new SegmentResultComparator(this)
+
 
   initialErrorAnalyzer()
   loader = PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus))
@@ -57,6 +57,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
 
         recordWordFreqInCorpus(expectResult)
 
+        val comparator = new SegmentResultComparator(this)
         comparator.compare(expectResult, actualResult)
         expectResult = loader.readLine()
       }
@@ -119,78 +120,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   }
 }
 
-trait SegmentResultCompareHook {
-
-  def errorWordHook: Unit
-
-  def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom): Unit
-
-  def analyzeReason(expect: WordAtom, possibleErrorWord: String): Unit
-}
-
-class SegmentResultComparator(hooker: SegmentResultCompareHook) {
-
-  def compare(expectResult: SegmentResult, actualResult: SegmentResult) {
-    var lastMatchIndex = -1
-    for (i <- 0 until expectResult.length) {
-      val indexInOriginalString = expectResult.getWordIndexInOriginalString(i)
-      val matches = lookupMatch(actualResult, expectResult.getWordAtom(i), lastMatchIndex + 1, indexInOriginalString)
-      if (matches >= 0) {
-        lastMatchIndex = matches
-        val expectWord = expectResult.getWordAtom(i)
-        val matchedWord = actualResult.getWordAtom(matches)
-        hooker.correctWordHook(expectWord, matchedWord)
-      } else {
-        hooker.errorWordHook
-      }
-    }
-  }
-
-  private def lookupMatch(actualResult: SegmentResult, expectWord: WordAtom, start: Int, indexInOriginalString: Int): Int = {
-    for (i <- start until actualResult.length) {
-      val actualWord = actualResult.getWord(i)
-      if (isSameWord(expectWord.word, actualWord)) {
-        if (actualResult.getWordIndexInOriginalString(i) == indexInOriginalString) {
-          return i
-        }
-      }
-    }
-    analyzeErrorReason(actualResult, expectWord, start, indexInOriginalString)
-    return -1
-  }
-
-  def analyzeErrorReason(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int) {
-    val possibleErrorWord = lookupErrorWord(actualResult, expect, start, from)
-    hooker.analyzeReason(expect, possibleErrorWord)
-  }
-
-  private def lookupErrorWord(actualResult: SegmentResult, expect: WordAtom, start: Int, from: Int): String = {
-    val to = from + expect.length
-    val stringBuilder = new StringBuilder()
-    for (i <- start until actualResult.length) {
-      val indexInOriginalString = actualResult.getWordIndexInOriginalString(i)
-      if (indexInOriginalString >= from && indexInOriginalString < to) {
-        stringBuilder.append(actualResult.getWord(i)).append(" ")
-      }
-    }
-    stringBuilder.toString().trim()
-  }
 
 
-  private def isSameWord(expect: String, actual: String): Boolean = {
-    val expectWord = StringUtil.doUpperCaseAndHalfShape(expect)
-    if (expectWord.equalsIgnoreCase(actual)) {
-      return true
-    }
-    if (Character.isDigit(actual.charAt(0))) {
-      val number = NumberUtil.chineseToEnglishNumberStr(expect)
-      if (actual.equals(number)) {
-        return true
-      }
-    }
-    return false
-  }
 
-
-}
 

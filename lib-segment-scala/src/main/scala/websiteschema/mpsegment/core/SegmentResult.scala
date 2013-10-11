@@ -82,9 +82,7 @@ class SegmentResult(size: Int) {
     }
   }
 
-  def getWordAtom(i: Int): WordAtom = {
-    return wordAtoms(i)
-  }
+  def apply(i: Int) = wordAtoms(i)
 
   def setWord(index: Int, word: String) {
     wordAtoms(index).word = word
@@ -176,7 +174,7 @@ class SegmentResult(size: Int) {
   }
 
   private def getStartWordAtom(index: Int): WordAtom = {
-    val wordAtom = getWordAtom(index)
+    val wordAtom = apply(index)
     if (null != wordAtom) {
       return wordAtom
     } else {
@@ -187,7 +185,7 @@ class SegmentResult(size: Int) {
   private def lookupWordAtomBefore(index: Int): WordAtom = {
     var i = index - 1
     while (i >= 0) {
-      val wordAtom = getWordAtom(i)
+      val wordAtom = apply(i)
       if (null != wordAtom) {
         return wordAtom
       }

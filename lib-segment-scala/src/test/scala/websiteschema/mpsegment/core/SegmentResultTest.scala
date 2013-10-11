@@ -16,11 +16,11 @@ class SegmentResultTest {
 
         segmentResult.merge(1, 2, POSUtil.POS_M)
         Assert.assertEquals("几十万", segmentResult.getWord(1))
-        Assert.assertNull(segmentResult.getWordAtom(2))
+        Assert.assertNull(segmentResult(2))
         Assert.assertEquals(6, segmentResult.length())
         segmentResult.compact()
         Assert.assertEquals(5, segmentResult.length())
-        Assert.assertNotNull(segmentResult.getWordAtom(2))
+        Assert.assertNotNull(segmentResult(2))
         Assert.assertEquals("人口", segmentResult.getWord(2))
     }
 
@@ -74,12 +74,12 @@ class SegmentResultTest {
         segmentResult.merge(0, 1, POSUtil.POS_M)
         segmentResult.merge(1, 2, POSUtil.POS_M)
         Assert.assertEquals("一个几十万", segmentResult.getWord(0))
-        Assert.assertNull(segmentResult.getWordAtom(1))
-        Assert.assertNull(segmentResult.getWordAtom(2))
+        Assert.assertNull(segmentResult(1))
+        Assert.assertNull(segmentResult(2))
         Assert.assertEquals(6, segmentResult.length())
         segmentResult.compact()
         Assert.assertEquals(4, segmentResult.length())
-        Assert.assertNotNull(segmentResult.getWordAtom(1))
+        Assert.assertNotNull(segmentResult(1))
         Assert.assertEquals("人口", segmentResult.getWord(1))
     }
 
