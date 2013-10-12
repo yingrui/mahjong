@@ -61,10 +61,10 @@ class PerformanceTest {
     reader.close()
     val endTime = System.currentTimeMillis()
     val milSeconds = endTime - beginTime
-    println("should_segment_Sophies_World_with_POS_within_2500_milliseconds")
+    println("should_segment_Sophies_World_with_POS_within_3000_milliseconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + " with POS recognition, the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 2500 * 1.05)
+    Assert.assertTrue(milSeconds < 3000 * 1.05)
   }
 
   @Test
