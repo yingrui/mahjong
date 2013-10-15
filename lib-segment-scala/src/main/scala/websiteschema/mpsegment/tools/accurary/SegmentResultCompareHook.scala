@@ -6,6 +6,8 @@ trait SegmentResultCompareHook {
 
   def errorWordHook {}
 
+  def compeleted {}
+
   def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom, expectWordIndex: Int, matchedWordIndex: Int) {}
 
   def analyzeReason(expect: WordAtom, possibleErrorWord: String) {}

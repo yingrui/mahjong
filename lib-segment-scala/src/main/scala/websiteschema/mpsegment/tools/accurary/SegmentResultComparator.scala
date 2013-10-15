@@ -22,6 +22,7 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
         hooker.errorWordHook
       }
     }
+    hooker.compeleted
   }
 
   private def lookupMatch(actualResult: SegmentResult, expectWord: WordAtom, start: Int, expectWordIndex: Int): Int = {
