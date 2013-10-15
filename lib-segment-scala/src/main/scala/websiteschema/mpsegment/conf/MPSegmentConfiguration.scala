@@ -24,6 +24,8 @@ class MPSegmentConfiguration {
     return defaultFileEncoding
   }
 
+  def getNameRecognizer = properties.getOrElse("name.recognizer", "NameUnknownFilter")
+
   def getPOSMatrix(): String = {
     return new StringBuilder(getHomePath()).
       append(properties.getOrElse("resource.pos", "pos.dat")).toString()
