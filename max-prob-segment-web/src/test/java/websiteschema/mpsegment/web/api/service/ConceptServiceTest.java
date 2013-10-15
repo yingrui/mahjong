@@ -1,5 +1,6 @@
 package websiteschema.mpsegment.web.api.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 import websiteschema.mpsegment.web.UsingFixtures;
@@ -17,6 +18,15 @@ import static org.junit.Assert.assertNotNull;
 public class ConceptServiceTest extends UsingFixtures {
 
     private ConceptService conceptService = resolve("conceptServiceImpl", ConceptService.class);
+
+    @Before
+    public void clearDatabase() {
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.createQuery("DELETE from Concept Where Id > 0")
+                .executeUpdate();
+        tx.commit();
+    }
 
     @Test
     public void should_add_concept_in_database() {
@@ -75,8 +85,6 @@ public class ConceptServiceTest extends UsingFixtures {
 
     @Test
     public void should_build_concept_tree() {
-        clearDatabase();
-
         String c1 = uniq("Concept");
         String c2 = uniq("Concept");
         String c3 = uniq("Concept");
@@ -112,13 +120,6 @@ public class ConceptServiceTest extends UsingFixtures {
         assertEquals(c3, children.get(1).getName());
     }
 
-    private void clearDatabase() {
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        em.createQuery("DELETE from Concept Where Id > 0")
-                .executeUpdate();
-        tx.commit();
-    }
 
     private Concept addConcept(String c, PartOfSpeech pos, Concept parent) {
         Concept concept = new Concept();
