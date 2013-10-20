@@ -88,6 +88,20 @@ class PFRCorpusToSerialLabelTest {
   }
 
   @Test
+  def should_label_error_as_u() {
+    val expect = convertToSegmentResult("19980101-01-003-002/m  现任/v 主席/n 为/v 何/nr 鲁丽/nr")
+    val actual = convertToSegmentResult("19980101-01-003-002/m  现任/v 主席/n 为何/r 鲁/nr 丽/nr")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("U", hooker.serialLabels(2)._2)
+    Assert.assertEquals("C", hooker.serialLabels(3)._2)
+    Assert.assertEquals("D", hooker.serialLabels(4)._2)
+  }
+
+  @Test
   def should_label_xing_prefix_as_f() {
     val expect = convertToSegmentResult("19980107-09-003-005/m  老刘/nr 小李/nr 如此/r  境遇/n  ，/w ")
     val actual = convertToSegmentResult("19980107-09-003-005/m  老/a 刘/nr 小/a 李/nr 如此/r  境遇/n  ，/w")
@@ -128,6 +142,36 @@ class PFRCorpusToSerialLabelTest {
 
     Assert.assertEquals("K", hooker.serialLabels(1)._2)
     Assert.assertEquals("B", hooker.serialLabels(2)._2)
+  }
+
+  @Test
+  def should_label_right_boundary_as_l() {
+    val expect = convertToSegmentResult("19980106-12-001-012/m  老/a  队长/n  丁/nr  安庆/nr  说/v")
+    val actual = convertToSegmentResult("19980106-12-001-012/m  老/a  队长/n  丁/nr  安/nr 庆/nr  说/v")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("K", hooker.serialLabels(1)._2)
+    Assert.assertEquals("B", hooker.serialLabels(2)._2)
+    Assert.assertEquals("C", hooker.serialLabels(3)._2)
+    Assert.assertEquals("D", hooker.serialLabels(4)._2)
+    Assert.assertEquals("L", hooker.serialLabels(5)._2)
+  }
+
+  @Test
+  def should_label_middle_of_names_as_m() {
+    val expect = convertToSegmentResult("19980107-05-006-006/m  赵/nr  天衡/nr  和/c  赵/nr  素瑶/nr  兄妹/n  俩/m  。/w")
+    val actual = convertToSegmentResult("19980107-05-006-006/m  赵/nr  天/n 衡/n  和/c  赵/nr  素/a 瑶/n  兄妹/n  俩/m  。/w")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("D", hooker.serialLabels(2)._2)
+    Assert.assertEquals("M", hooker.serialLabels(3)._2)
+    Assert.assertEquals("B", hooker.serialLabels(4)._2)
   }
 
   private def convertToSegmentResult(text: String) = PFRCorpusLoader(convertToInputStream(text)).readLine()
