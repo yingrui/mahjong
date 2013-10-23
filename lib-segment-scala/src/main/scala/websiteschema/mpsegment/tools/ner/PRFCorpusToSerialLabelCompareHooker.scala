@@ -9,6 +9,7 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
 
   var serialLabels = List[(String, String)]()
   var isContainError = false
+  var isOtherError = false
 
   override def compeleted {
     serialLabels = scanTheSerialLabels
@@ -36,6 +37,7 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
 
   private def analysisError(expectWord: WordAtom, actualWord: WordAtom, expectWordIndex: Int, actualWordIndex: Int) {
     isContainError = startWith(actualWord, expectWord) && expectWordIndex < expect.length() - 1 && endWith(actualWord, expect(expectWordIndex + 1))
+    isOtherError = startWith(actualWord, expectWord) && !isContainError
   }
 
   override def foundError(expectWord: WordAtom, actualWord: WordAtom, expectWordIndex: Int, actualWordIndex: Int) {
@@ -57,14 +59,23 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
     if (isName(expectWord) && isSingleWord(expectWord) && lastLabel == "B")
       label = "E"
 
-    if (isName(expectWord) && !isSingleWord(expectWord) && isSingleWord(actualWord) && lastLabel == "C")
+    if (isName(expectWord) && !isSingleWord(expectWord) && isSingleWord(actualWord) && (lastLabel == "C" || lastLabel == "X"))
       label = "D"
 
-    if (isName(expectWord) && !isSingleWord(expectWord) && !isSingleWord(actualWord) && overlap(expectWord, actualWord))
+    if (isName(expectWord) && (expectWordIndex + 1 < expect.length() && isName(expect(expectWordIndex + 1)) )&& !isSingleWord(expectWord) && !isSingleWord(actualWord) && overlap(expectWord, actualWord))
       label = "U"
 
     if (isContainError && isName(expect(expectWordIndex + 1)) && isXing(expect(expectWordIndex + 1)))
       label = "U"
+
+    if (isName(expectWord) && (expectWordIndex + 1 < expect.length() && !isName(expect(expectWordIndex + 1)) )&& !isSingleWord(expectWord) && !isSingleWord(actualWord) && overlap(expectWord, actualWord))
+      label = "V"
+
+    if (isContainError && isName(expectWord) && isSingleWord(expectWord) && !isSingleWord(actualWord))
+      label = "V"
+
+    if (isOtherError && isName(expectWord) && isXing(expectWord) && isName(expect(expectWordIndex + 1)) && isSingleWord(expectWord) && !isSingleWord(actualWord))
+      label = "X"
 
     if (isName(expectWord) && !isSingleWord(expectWord) && isSingleWord(actualWord) && (lastLabel == "B" || lastLabel == "U")
         && startWith(expectWord, actualWord))

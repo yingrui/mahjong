@@ -6,8 +6,7 @@ import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import websiteschema.mpsegment.tools.PFRCorpusLoader
-import websiteschema.mpsegment.core.WordAtom
-import websiteschema.mpsegment.tools.accurary.{SegmentResultComparator, SegmentResultCompareHook}
+import websiteschema.mpsegment.tools.accurary.SegmentResultComparator
 
 class PFRCorpusToSerialLabelTest {
 
@@ -102,6 +101,33 @@ class PFRCorpusToSerialLabelTest {
   }
 
   @Test
+  def should_label_error_as_v_when_overlap_with_next_word() {
+    val expect = convertToSegmentResult("19980102-02-007-002/m  上海/ns  市委/n  副/b  书记/n  龚/nr  学平/nr  等/u")
+    val actual = convertToSegmentResult("19980102-02-007-002/m  上海/ns  市委/n  副/b  书记/n  龚/nr  学/nr 平等/n")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("B", hooker.serialLabels(4)._2)
+    Assert.assertEquals("C", hooker.serialLabels(5)._2)
+    Assert.assertEquals("V", hooker.serialLabels(6)._2)
+  }
+
+  @Test
+  def should_label_error_as_v_when_contain_next_word() {
+    val expect = convertToSegmentResult("19980102-02-007-002/m  上海/ns  市委/n  副/b  书记/n  龚/nr  平/nr  等/u")
+    val actual = convertToSegmentResult("19980102-02-007-002/m  上海/ns  市委/n  副/b  书记/n  龚/nr  平等/n")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("B", hooker.serialLabels(4)._2)
+    Assert.assertEquals("V", hooker.serialLabels(5)._2)
+  }
+
+  @Test
   def should_label_xing_prefix_as_f() {
     val expect = convertToSegmentResult("19980107-09-003-005/m  老刘/nr 小李/nr 如此/r  境遇/n  ，/w ")
     val actual = convertToSegmentResult("19980107-09-003-005/m  老/a 刘/nr 小/a 李/nr 如此/r  境遇/n  ，/w")
@@ -172,6 +198,19 @@ class PFRCorpusToSerialLabelTest {
     Assert.assertEquals("D", hooker.serialLabels(2)._2)
     Assert.assertEquals("M", hooker.serialLabels(3)._2)
     Assert.assertEquals("B", hooker.serialLabels(4)._2)
+  }
+
+  @Test
+  def should_label_error_as_x() {
+    val expect = convertToSegmentResult("19980107-05-006-006/m  王/nr  国维/nr  先生/n  二十/m  年代/n")
+    val actual = convertToSegmentResult("19980107-05-006-006/m  王国/n 维/nr  先生/n  二十/m  年代/n")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("X", hooker.serialLabels(0)._2)
+    Assert.assertEquals("D", hooker.serialLabels(1)._2)
   }
 
   private def convertToSegmentResult(text: String) = PFRCorpusLoader(convertToInputStream(text)).readLine()
