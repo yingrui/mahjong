@@ -213,6 +213,31 @@ class PFRCorpusToSerialLabelTest {
     Assert.assertEquals("D", hooker.serialLabels(1)._2)
   }
 
+  @Test
+  def should_label_error_as_y() {
+    val expect = convertToSegmentResult("19980125-01-005-002/m  汪/nr  洋/nr  、/w  王/nr  昭耀/nr  、/w  杨/nr  多良/nr  （/w  回/j  ）/w  、/w  张/nr  平/nr  、/w  黄/nr  岳忠/nr  、/w  蒋/nr  作君/nr  、/w  卢/nr  家丰/nr  为/v  副/b  省长/n  ；/w  选举/v  韩/nr  云萍/nr  （/w  女/b  ）/w  为/v  省/n  高级/a  人民法院/l  院长/n  。/w")
+    val actual = convertToSegmentResult("19980125-01-005-002/m  汪洋/n  、/w  王/nr  昭耀/nr  、/w  杨/nr  多良/nr  （/w  回/j  ）/w  、/w  张/nr  平/nr  、/w  黄/nr  岳忠/nr  、/w  蒋/nr  作君/nr  、/w  卢/nr  家丰/nr  为/v  副/b  省长/n  ；/w  选举/v  韩/nr  云萍/nr  （/w  女/b  ）/w  为/v  省/n  高级/a  人民法院/l  院长/n  。/w")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("Y", hooker.serialLabels(0)._2)
+  }
+
+  @Test
+  def should_label_error_as_z() {
+    val expect = convertToSegmentResult("19980112-08-009-002/m  李/nr  朝阳/nr  于/p  第五十一/m  分钟/q  时/Ng  攻/v  进/v  的/u  。/w")
+    val actual = convertToSegmentResult("19980112-08-009-002/m  李/nr  朝阳/nr  于/p  第五十一/m  分钟/q  时/Ng  攻/v  进/v  的/u  。/w")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("B", hooker.serialLabels(0)._2)
+    Assert.assertEquals("Z", hooker.serialLabels(1)._2)
+  }
+
   private def convertToSegmentResult(text: String) = PFRCorpusLoader(convertToInputStream(text)).readLine()
 
   private def convertToInputStream(text: String): InputStream = new ByteArrayInputStream(text.getBytes("utf-8"))

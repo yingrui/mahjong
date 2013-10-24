@@ -100,7 +100,7 @@ class WordToPinyinModel {
     viterbi.setObserveBank(observeBank)
     viterbi.setStateBank(stateBank)
     viterbi.setPi(pi)
-    var tran = Transition(ngram, stateBank)
+    val tran = Transition(ngram, stateBank)
     viterbi.setTran(tran)
     viterbi.setE(emission)
   }

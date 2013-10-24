@@ -55,7 +55,7 @@ class WordToPinyinClassifier {
     return classify(observeList)
   }
 
-  private def classify(o: List[String]): List[String] = {
+  def classify(o: List[String]): List[String] = {
     assert(null != o && o.size > 0)
     val sections = findSectionsByUnknownCharacter(o)
     return classifySectionList(sections)
