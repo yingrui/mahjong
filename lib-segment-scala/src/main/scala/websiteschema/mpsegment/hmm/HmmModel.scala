@@ -1,14 +1,13 @@
-package websiteschema.mpsegment.pinyin
+package websiteschema.mpsegment.hmm
 
-import websiteschema.mpsegment.hmm._
 import websiteschema.mpsegment.util.SerializeHandler
 
 import collection.mutable.Map
-import java.io.{DataInputStream, InputStream, FileInputStream, File}
+import java.io.{DataInputStream, InputStream, File}
 import websiteschema.mpsegment.util.FileUtil._
 import io.Source
 
-class WordToPinyinModel {
+class HmmModel {
 
   private val viterbi = new Viterbi()
   private val stateBank = new NodeRepository()
@@ -46,16 +45,16 @@ class WordToPinyinModel {
     for (line <- source.getLines()) {
       val regex = "([^ ]+) *= *([^ ]+)".r
       regex findFirstIn line match {
-        case Some(regex(han, pinyin)) => addPinyin(han, pinyin)
+        case Some(regex(han, pinyin)) => add(han, pinyin)
         case None =>
       }
     }
   }
 
 
-  def addPinyin(han: String, pinyin: String) {
-    val observe = observeBank.add(Node(han))
-    val state = stateBank.get(pinyin)
+  def add(observeStr: String, stateStr: String) {
+    val observe = observeBank.add(Node(observeStr))
+    val state = stateBank.get(stateStr)
     if (state != null) {
       emission.setProb(state.getIndex, observe.getIndex, 0.5D)
     }

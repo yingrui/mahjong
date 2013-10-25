@@ -3,14 +3,14 @@ package websiteschema.mpsegment.hmm
 import collection.mutable.HashMap
 import collection.mutable.Map
 import java.io.{FileInputStream, InputStreamReader, BufferedReader, File}
-import websiteschema.mpsegment.pinyin.{Window, WordToPinyinModel, Pair}
+import websiteschema.mpsegment.pinyin.{Window, Pair}
 
 object ModelTrainer extends App {
 
   private val ngramLength = 2
   private var pii = HashMap[Int,Int]()
   private var emisMatrix = HashMap[Int, Map[Int,Int]]()
-  private val model = new WordToPinyinModel()
+  private val model = new HmmModel()
 
   val filename = "ner-corpus.txt"
 

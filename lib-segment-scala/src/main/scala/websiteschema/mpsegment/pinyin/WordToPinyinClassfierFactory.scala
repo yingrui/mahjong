@@ -1,13 +1,14 @@
 package websiteschema.mpsegment.pinyin
 
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
+import websiteschema.mpsegment.hmm.HmmModel
 
 class WordToPinyinClassfierFactory {
 
   private val classifier: WordToPinyinClassifier = new WordToPinyinClassifier()
 
   try {
-    val model = new WordToPinyinModel()
+    val model = new HmmModel()
     model.load(MPSegmentConfiguration().getPinyinModel())
     classifier.setModel(model)
   } catch {

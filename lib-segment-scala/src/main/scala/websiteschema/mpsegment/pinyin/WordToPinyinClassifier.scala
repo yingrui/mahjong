@@ -1,16 +1,16 @@
 package websiteschema.mpsegment.pinyin
 
 import websiteschema.mpsegment.core.SegmentResult
-import websiteschema.mpsegment.hmm.Node
+import websiteschema.mpsegment.hmm.{HmmModel, Node}
 import websiteschema.mpsegment.util.CharCheckUtil
 
 import collection.mutable.ListBuffer
 
 class WordToPinyinClassifier {
 
-  var model: WordToPinyinModel = null
+  var model: HmmModel = null
 
-  def setModel(model: WordToPinyinModel) {
+  def setModel(model: HmmModel) {
     this.model = model
   }
 
