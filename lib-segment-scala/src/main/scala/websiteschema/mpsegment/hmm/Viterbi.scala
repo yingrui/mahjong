@@ -64,7 +64,7 @@ class Viterbi {
     ret
   }
 
-  private def calculateHmmResult(listObserve: List[String]): HmmResult = {
+  private def calculateHmmResult(listObserve: Seq[String]): HmmResult = {
     val ret = new HmmResult()
 
     if (listObserve.isEmpty) {
@@ -151,7 +151,7 @@ class Viterbi {
     return ret
   }
 
-  def calculateWithLog(listObserve: List[String]): List[Node] = {
+  def calculateWithLog(listObserve: Seq[String]): List[Node] = {
     if (listObserve.isEmpty) return List[Node]()
 
     val ret = calculateHmmResult(listObserve)

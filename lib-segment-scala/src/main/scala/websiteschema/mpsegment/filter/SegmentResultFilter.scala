@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.filter
 
-import ner.{ForeignNameRecognizerCreator, ChineseNameRecognizerCreator}
+import ner.{HmmNameFilter, ForeignNameRecognizerCreator, ChineseNameRecognizerCreator}
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.core.SegmentResult
 
@@ -17,6 +17,8 @@ class SegmentResultFilter(config: MPSegmentConfiguration) {
       filters += (new UnknownNameFilter(config))
     if (config.getNameRecognizer == "ChineseNameFilter")
       filters += (new ChineseNameFilter(config, new ChineseNameRecognizerCreator(), 10))
+    if (config.getNameRecognizer == "HmmNameFilter")
+      filters += HmmNameFilter(config)
   }
 
   filters += (new ReduplicatingFilter())

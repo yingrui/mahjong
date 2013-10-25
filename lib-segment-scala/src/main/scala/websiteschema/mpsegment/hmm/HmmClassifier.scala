@@ -9,17 +9,17 @@ class HmmClassifier {
     this.model = model
   }
 
-  def classify(o: List[String]): List[String] = {
+  def classify(o: Seq[String]): List[String] = {
     assert(null != o && o.size > 0)
     val sections = findSectionsByUnknownCharacter(o)
     classifySectionList(sections)
   }
 
-  private def classifySectionList(sections: List[Section]): List[String] = {
+  private def classifySectionList(sections: Seq[Section]): List[String] = {
     val result = ListBuffer[String]()
     for (section <- sections) {
       if (section.hasKnownCharacters()) {
-        val observeCharacters = section.characters.toList
+        val observeCharacters = section.characters
         result ++= convert(classifyOberveList(observeCharacters))
       }
       if (section.hasUnknwonCharacter()) {
@@ -29,11 +29,11 @@ class HmmClassifier {
     result.toList
   }
 
-  private def classifyOberveList(observeCharacters: List[String]): List[Node] = {
+  private def classifyOberveList(observeCharacters: Seq[String]): Seq[Node] = {
     model.getViterbi().calculateWithLog(observeCharacters)
   }
 
-  private def findSectionsByUnknownCharacter(o: List[String]): List[Section] = {
+  private def findSectionsByUnknownCharacter(o: Seq[String]): List[Section] = {
     var lastSectorPos = 0
     val sections = ListBuffer[Section]()
     for (i <- 0 until o.size) {
@@ -50,7 +50,7 @@ class HmmClassifier {
     sections.toList
   }
 
-  private def convert(nodeList: List[Node]): List[String] = {
+  private def convert(nodeList: Seq[Node]): List[String] = {
     val result = ListBuffer[String]()
     for (node <- nodeList) {
       result += (node.getName())
@@ -58,7 +58,7 @@ class HmmClassifier {
     result.toList
   }
 
-  class Section(o: List[String], start: Int, end: Int) {
+  class Section(o: Seq[String], start: Int, end: Int) {
     var characters = ListBuffer[String]()
     var unknownChar: String = null
 
