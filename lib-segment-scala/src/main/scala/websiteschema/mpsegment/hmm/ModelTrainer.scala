@@ -53,7 +53,7 @@ object ModelTrainer extends App {
   private def train(filename: String) {
     val file = new File(filename)
     if (file.exists()) {
-      println("[WordToPinyinModelBuilder] train file " + file.getAbsolutePath())
+      println("[ModelBuilder] train file " + file.getAbsolutePath())
       try {
         val br = new BufferedReader(
           new InputStreamReader(
@@ -89,18 +89,16 @@ object ModelTrainer extends App {
         //Pii
         if (isHeadOfWord)
         {
-          var index = state.getIndex()
-          var c = if(pii.contains(index)) pii(index) + 1 else 1
+          val index = state.getIndex()
+          val c = if(pii.contains(index)) pii(index) + 1 else 1
           pii += (index -> c)
         }
 
-        //Transition
-        var array = window.toArray()
-        statisticNGram(array)
+        statisticNGram(window.toArray())
 
         //Emission
-        var si = state.getIndex()
-        var o1 = observe.getIndex()
+        val si = state.getIndex()
+        val o1 = observe.getIndex()
         var row: Map[Int,Int] = null
         if (emisMatrix.contains(si)) {
           row = emisMatrix(si)

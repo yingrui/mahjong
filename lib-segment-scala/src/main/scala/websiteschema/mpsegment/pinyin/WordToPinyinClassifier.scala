@@ -1,17 +1,17 @@
 package websiteschema.mpsegment.pinyin
 
 import websiteschema.mpsegment.core.SegmentResult
-import websiteschema.mpsegment.hmm.{HmmModel, Node}
+import websiteschema.mpsegment.hmm.{HmmClassifier, HmmModel, Node}
 import websiteschema.mpsegment.util.CharCheckUtil
 
 import collection.mutable.ListBuffer
 
 class WordToPinyinClassifier {
 
-  var model: HmmModel = null
+  var classifier = new HmmClassifier()
 
   def setModel(model: HmmModel) {
-    this.model = model
+    classifier setModel model
   }
 
   def classify(result: SegmentResult) {
@@ -32,7 +32,7 @@ class WordToPinyinClassifier {
   }
 
   private def subList(list: List[String], start: Int, end: Int): List[String] = {
-    return list.drop(start).dropRight(list.size - end)
+    list.drop(start).dropRight(list.size - end)
   }
 
   private def join(list: List[String], sep: String, word: String): String = {
@@ -44,88 +44,15 @@ class WordToPinyinClassifier {
         stringBuilder.append(sep)
       }
     }
-    return stringBuilder.toString()
+    stringBuilder.toString()
   }
 
-  def classify(o: String): List[String] = {
+  def classify(o: String) = {
     var observeList = List[String]()
     for (i <- 0 until o.length) {
       observeList = observeList ++ List[String](o.charAt(i).toString)
     }
-    return classify(observeList)
+    classifier.classify(observeList)
   }
-
-  def classify(o: List[String]): List[String] = {
-    assert(null != o && o.size > 0)
-    val sections = findSectionsByUnknownCharacter(o)
-    return classifySectionList(sections)
-  }
-
-  private def classifySectionList(sections: List[Section]): List[String] = {
-    val result = ListBuffer[String]()
-    for (section <- sections) {
-      if (section.hasKnownCharacters()) {
-        val observeCharacters = section.characters.toList
-        result ++= convert(classifyOberveList(observeCharacters))
-      }
-      if (section.hasUnknwonCharacter()) {
-        result += (section.unknownChar)
-      }
-    }
-    return result.toList
-  }
-
-  private def classifyOberveList(observeCharacters: List[String]): List[Node] = {
-    return model.getViterbi().calculateWithLog(observeCharacters)
-  }
-
-  private def findSectionsByUnknownCharacter(o: List[String]): List[Section] = {
-    var lastSectorPos = 0
-    val sections = ListBuffer[Section]()
-    for (i <- 0 until o.size) {
-      val ch = o(i)
-      val knownObserveNode = model.containsObserve(ch)
-      if (!knownObserveNode) {
-        val section = new Section(o, lastSectorPos, i)
-        sections += (section)
-        lastSectorPos = i + 1
-      }
-    }
-    val sec = new Section(o, lastSectorPos, o.size)
-    sections += (sec)
-    return sections.toList
-  }
-
-  private def convert(nodeList: List[Node]): List[String] = {
-    val result = ListBuffer[String]()
-    for (node <- nodeList) {
-      result += (node.getName())
-    }
-    return result.toList
-  }
-
-  class Section(o: List[String], start: Int, end: Int) {
-    var characters = ListBuffer[String]()
-    var unknownChar: String = null
-
-    if (end > start && start < o.size) {
-      characters = ListBuffer[String]()
-      for (i <- 0 until end - start) {
-        characters += o(i + start)
-      }
-      unknownChar = if (end < o.size) o(end) else null
-    } else if (end == start) {
-      unknownChar = if (end < o.size) o(end) else null
-    }
-
-    def hasKnownCharacters(): Boolean = {
-      null != characters
-    }
-
-    def hasUnknwonCharacter(): Boolean = {
-      null != unknownChar
-    }
-  }
-
 }
 

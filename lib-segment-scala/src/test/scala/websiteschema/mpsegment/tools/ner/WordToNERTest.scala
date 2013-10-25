@@ -2,12 +2,11 @@ package websiteschema.mpsegment.tools.ner
 
 import org.junit.{Before, Ignore, Test}
 import websiteschema.mpsegment.pinyin.{WordToPinyinClassifier}
-import websiteschema.mpsegment.hmm.HmmModel
-
+import websiteschema.mpsegment.hmm.{HmmClassifier, HmmModel}
 
 class WordToNERTest {
 
-  private val classifier = new WordToPinyinClassifier()
+  private val classifier = new HmmClassifier()
 
   val model = new HmmModel()
 
