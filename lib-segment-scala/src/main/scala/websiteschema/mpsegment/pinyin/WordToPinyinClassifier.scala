@@ -8,11 +8,13 @@ import collection.mutable.ListBuffer
 
 class WordToPinyinClassifier {
 
-  var classifier = new HmmClassifier()
+  private val classifier = new HmmClassifier()
 
   def setModel(model: HmmModel) {
     classifier setModel model
   }
+
+  def getModel() = classifier.model
 
   def classify(result: SegmentResult) {
     try {

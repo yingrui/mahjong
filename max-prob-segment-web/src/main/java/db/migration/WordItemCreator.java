@@ -48,13 +48,13 @@ public class WordItemCreator {
 
     private void createWordPinyinRelation(JdbcTemplate jdbcTemplate, int wordId, String wordName) {
         if (wordName.length() == 1) {
-            NodeRepository observeBank = WordToPinyinClassfierFactory.apply().getClassifier().model().getObserveBank();
+            NodeRepository observeBank = WordToPinyinClassfierFactory.apply().getClassifier().getModel().getObserveBank();
             Node o = observeBank.get(wordName);
             if (o != null) {
-                Emission emission = WordToPinyinClassfierFactory.apply().getClassifier().model().getViterbi().getE();
+                Emission emission = WordToPinyinClassfierFactory.apply().getClassifier().getModel().getViterbi().getE();
                 Collection stateProbByObserve = emission.getStateProbByObserve(o.getIndex());
                 if (null != stateProbByObserve) {
-                    NodeRepository stateBank = WordToPinyinClassfierFactory.apply().getClassifier().model().getStateBank();
+                    NodeRepository stateBank = WordToPinyinClassfierFactory.apply().getClassifier().getModel().getStateBank();
                     for (Object i : stateProbByObserve) {
                         Node state = stateBank.get(Integer.parseInt(i.toString()));
                         jdbcTemplate.execute("INSERT INTO Pinyins (WordId, Name) VALUES (" +
