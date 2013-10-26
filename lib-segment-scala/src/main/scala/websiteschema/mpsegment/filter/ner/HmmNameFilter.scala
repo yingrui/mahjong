@@ -12,22 +12,73 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
   private var nameStartIndex = -1
   private var nameEndIndex = -1
   private var numOfNameWordItem = -1
-  private var startWithXing = false
+  private var shouldSeparateXing = false
+  private var labels: Seq[String] = null
+  private var curIndex = 0
 
   override def doFilter() {
     val words = segmentResult.getWordAtoms().map(wordAtom => wordAtom.word)
-    val result = classifier.classify(words)
-    for (index <- 0 until result.length; label = result(index)) {
-      if (label == "B") {
-        startWithXing = true
-        nameStartIndex = index
-      }
-      if (label == "D") {
-        nameEndIndex = index
-        processPotentialName
+    labels = classifier.classify(words)
+    for (index <- 0 until labels.length; label = labels(index)) {
+      curIndex = index
+      if (label != "A") {
+        if (label == "B" && (nextLabel == "E" || nextLabel == "Z")) {
+          processXingAndSingleName
+        } else if (label == "B" && nextLabel == "C" && nextNextLabel == "D") {
+          processXingAndDoubleName
+        } else if (label == "B" && nextLabel == "G") {
+          processXingAndSuffix
+        } else if (label == "F" && nextLabel == "B") {
+          processXingAndPrefix
+        } else if (label == "X" && nextLabel == "D") {
+          processWordContainsXingAndOtherName
+        }
       }
     }
   }
+
+  private def processWordContainsXingAndOtherName {
+    nameStartIndex = curIndex
+    nameEndIndex = curIndex + 1
+    shouldSeparateXing = true
+
+    val word = segmentResult(nameStartIndex).word
+    segmentResult(nameStartIndex).word = word.charAt(0).toString
+    segmentResult(nameEndIndex).word = word.substring(1) + segmentResult(nameEndIndex).word
+
+    processPotentialName
+  }
+
+  private def processXingAndSuffix {
+    nameStartIndex = curIndex
+    nameEndIndex = curIndex + 1
+    shouldSeparateXing = false
+    processPotentialName
+  }
+
+  private def processXingAndPrefix {
+    nameStartIndex = curIndex
+    nameEndIndex = curIndex + 1
+    shouldSeparateXing = false
+    processPotentialName
+  }
+
+  private def processXingAndDoubleName {
+    nameStartIndex = curIndex
+    nameEndIndex = curIndex + 2
+    shouldSeparateXing = true
+    processPotentialName
+  }
+
+  private def processXingAndSingleName {
+    nameStartIndex = curIndex
+    nameEndIndex = curIndex + 1
+    shouldSeparateXing = true
+    processPotentialName
+  }
+
+  private def nextLabel = if (labels.length > curIndex + 1) labels(curIndex + 1) else ""
+  private def nextNextLabel = if (labels.length > curIndex + 2) labels(curIndex + 2) else ""
 
   private def processPotentialName {
     if (nameEndIndex - nameStartIndex >= 1) {
@@ -37,7 +88,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
   }
 
   private def resetStatus() {
-    startWithXing = false
+    shouldSeparateXing = false
     nameStartIndex = -1
     nameEndIndex = -1
   }
@@ -57,7 +108,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
 
   private def separateXingMing {
     val isChineseName = numOfNameWordItem <= 3
-    if (isChineseName && startWithXing) {
+    if (isChineseName && shouldSeparateXing) {
       if (numOfNameWordItem >= 2) {
         val numOfMingWord = numOfNameWordItem - 1
         setWordIndexesAndPOSForMerge(nameStartIndex + 1, nameStartIndex + numOfMingWord, POSUtil.POS_NR)
@@ -75,7 +126,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
 
 object HmmNameFilter {
   val model = new HmmModel()
-  model.load(FileUtil.getResourceAsStream("ner.m"))
+  model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
 
   def apply(config: MPSegmentConfiguration): HmmNameFilter = {
     val classifier = new HmmClassifier
