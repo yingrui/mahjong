@@ -113,6 +113,25 @@ class SegmentResult(size: Int) {
     }
   }
 
+  def separate(index: Int, indexAtWord: Int, firstPOS: Int, secondPOS: Int) {
+    val _wordAtoms = new Array[WordAtom](length() + 1)
+    var offset = 0
+    for (i <- 0 until length()) {
+      _wordAtoms(i + offset) = wordAtoms(i)
+      if (i == index) {
+        offset = 1
+        val wordAtom = new WordAtom()
+        wordAtom.word = wordAtoms(i).word.substring(indexAtWord)
+        wordAtom.pos = secondPOS
+        wordAtom.concept = "N/A"
+        _wordAtoms(i + offset) = wordAtom
+        _wordAtoms(i).word = wordAtoms(i).word.substring(0, indexAtWord)
+        _wordAtoms(i).pos = firstPOS
+      }
+    }
+    wordAtoms = _wordAtoms
+  }
+
   def markWordToBeDeleted(i: Int) {
     wordAtoms(i) = null
   }

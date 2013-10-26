@@ -2,6 +2,7 @@ package websiteschema.mpsegment.filter
 
 import websiteschema.mpsegment.core.SegmentResult
 import collection.mutable.ListBuffer
+import websiteschema.mpsegment.dict.{POSUtil, DictionaryFactory}
 
 abstract class AbstractSegmentFilter extends ISegmentFilter {
 
@@ -20,6 +21,19 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
 
     def modify(segmentResult: SegmentResult) {
       segmentResult.merge(start, end, pos)
+    }
+  }
+
+  class SeparateOperation(index: Int, pos: Int) extends Operation {
+
+    def modify(segmentResult: SegmentResult) {
+      val rest = segmentResult(index).word.substring(1)
+      val word = DictionaryFactory().getCoreDictionary().getWord(rest)
+      if (word != null) {
+        segmentResult.separate(index, 1, pos, word.getWordPOSTable()(0)(0))
+      } else {
+        segmentResult.separate(index, 1, pos, POSUtil.POS_UNKOWN)
+      }
     }
   }
 
@@ -46,6 +60,10 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
 
   def deleteWordAt(index: Int) {
     operationSettings += (new DeleteOperation(index))
+  }
+
+  def separateWordAt(index: Int, partOfSpeech: Int) {
+    operationSettings += (new SeparateOperation(index, partOfSpeech))
   }
 
   def compactSegmentResult() {
