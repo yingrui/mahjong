@@ -40,19 +40,39 @@ class AbstractSegmentFilterTest {
     val filter = new Filter()
     val result = getSegmentResult()
     filter.setSegmentResult(result)
-    filter.separateWordAt(4, POSUtil.POS_NR)
+    filter.separateWordAt(4, POSUtil.POS_NR, POSUtil.POS_NR)
     filter.filtering()
     Assert.assertEquals("霸", result.getWord(4))
     Assert.assertEquals("天", result.getWord(5))
     Assert.assertEquals(POSUtil.POS_NR, result.getPOS(4))
+    Assert.assertEquals(POSUtil.POS_NR, result.getPOS(5))
+  }
+
+
+
+  @Test
+  def should_separate_word_and_then_merge_other_word() {
+    val filter = new Filter()
+    val result = getSegmentResult()
+    filter.setSegmentResult(result)
+    filter.separateWordAt(4, POSUtil.POS_NR, POSUtil.POS_NR)
+    filter.setWordIndexesAndPOSForMerge(5, 6, POSUtil.POS_NR)
+    filter.filtering()
+    Assert.assertEquals("霸", result.getWord(4))
+    Assert.assertEquals("天", result.getWord(5))
+    Assert.assertEquals(POSUtil.POS_NR, result.getPOS(4))
+    Assert.assertEquals(POSUtil.POS_NR, result.getPOS(5))
+
+    Assert.assertEquals("高峰", result.getWord(6))
+    Assert.assertEquals(POSUtil.POS_NR, result.getPOS(6))
   }
 
   private def getSegmentResult(): SegmentResult = {
-    val result = new SegmentResult(5)
-    result.setWords(List[String]("张", "三", "丰", "南", "霸天").toArray)
-    result.setPOSArray(List[Int](POSUtil.POS_V, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_N, POSUtil.POS_N).toArray)
-    result.setDomainTypes(List[Int](0, 0, 0, 0, 0).toArray)
-    result.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A").toArray)
+    val result = new SegmentResult(7)
+    result.setWords(List[String]("张", "三", "丰", "南", "霸天", "高", "峰").toArray)
+    result.setPOSArray(List[Int](POSUtil.POS_V, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_N, POSUtil.POS_N, POSUtil.POS_N, POSUtil.POS_N).toArray)
+    result.setDomainTypes(List[Int](0, 0, 0, 0, 0, 0, 0).toArray)
+    result.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A", "N/A", "N/A").toArray)
     result
   }
 

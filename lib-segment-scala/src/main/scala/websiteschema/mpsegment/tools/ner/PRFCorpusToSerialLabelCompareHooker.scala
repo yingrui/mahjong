@@ -19,7 +19,7 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
 
   def scanTheSerialLabels: List[(String, String)] = {
     (for (i <- 0 until serialLabels.length) yield {
-      val nextIsXing = i < serialLabels.length - 1 && serialLabels(i + 1)._2 == "B"
+      val nextIsXing = i < serialLabels.length - 1 && ("BXY" contains serialLabels(i + 1)._2)
       val nextIsName = i < serialLabels.length - 1 && isLabeledAsName(serialLabels(i + 1)._2)
       if (nextIsXing && serialLabels(i)._2 == "A") {
         (serialLabels(i)._1, "K")

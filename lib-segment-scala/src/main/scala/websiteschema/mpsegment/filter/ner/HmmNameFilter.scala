@@ -32,6 +32,8 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
           processXingAndPrefix
         } else if (label == "X" && nextLabel == "D") {
           processWordContainsXingAndOtherName
+        } else if (label == "Y") {
+          separateWordAt(index, POSUtil.POS_NR, POSUtil.POS_NR)
         }
       }
     }

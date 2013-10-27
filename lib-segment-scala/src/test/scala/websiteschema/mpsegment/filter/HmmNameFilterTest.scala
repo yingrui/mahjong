@@ -102,4 +102,20 @@ class HmmNameFilterTest {
     Assert.assertEquals("国维", segmentResult.getWord(1))
     Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(1))
   }
+
+  @Test
+  def should_recognize_normal_word_composite_of_xing_and_name() {
+    val segmentResult = new SegmentResult(5)
+    segmentResult.setWords(List[String]("主席", "汪洋", "发表", "了", "社区").toArray)
+    segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_U, POSUtil.POS_N).toArray)
+    segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0).toArray)
+    segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A").toArray)
+
+    filter.setSegmentResult(segmentResult)
+    filter.filtering()
+    Assert.assertEquals("汪", segmentResult.getWord(1))
+    Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(1))
+    Assert.assertEquals("洋", segmentResult.getWord(2))
+    Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(2))
+  }
 }

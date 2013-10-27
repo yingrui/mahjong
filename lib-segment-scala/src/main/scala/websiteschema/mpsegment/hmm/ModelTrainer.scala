@@ -16,7 +16,7 @@ object ModelTrainer extends App {
 
   train(filename)
   build()
-  save("ner.m")
+  save("ner-hmm.m")
 
   def build() {
     getNgram().buildIndex(1)

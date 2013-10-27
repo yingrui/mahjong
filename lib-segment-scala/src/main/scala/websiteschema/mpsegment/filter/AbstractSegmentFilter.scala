@@ -2,7 +2,7 @@ package websiteschema.mpsegment.filter
 
 import websiteschema.mpsegment.core.SegmentResult
 import collection.mutable.ListBuffer
-import websiteschema.mpsegment.dict.{POSUtil, DictionaryFactory}
+import websiteschema.mpsegment.dict.{HashDictionary, POSUtil, DictionaryFactory}
 
 abstract class AbstractSegmentFilter extends ISegmentFilter {
 
@@ -24,22 +24,27 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
     }
   }
 
-  class SeparateOperation(index: Int, pos: Int) extends Operation {
+  class SeparateOperation(index: Int, pos: Int, secondPos: Int) extends Operation {
 
     def modify(segmentResult: SegmentResult) {
       val rest = segmentResult(index).word.substring(1)
-      val word = DictionaryFactory().getCoreDictionary().getWord(rest)
-      if (word != null) {
-        segmentResult.separate(index, 1, pos, word.getWordPOSTable()(0)(0))
-      } else {
-        segmentResult.separate(index, 1, pos, POSUtil.POS_UNKOWN)
-      }
+      val secondPartOfSpeech = getPartOfSpeechForSecondWord(secondPos, rest)
+      segmentResult.separate(index, 1, pos, secondPartOfSpeech)
     }
+  }
+
+  private def getPartOfSpeechForSecondWord(secondPos: Int, rest: String): Int = {
+    if (secondPos == POSUtil.POS_UNKOWN) {
+      val dict = DictionaryFactory().getCoreDictionary()
+      val word = if (dict != null) dict.getWord(rest) else null
+      if (null != word) word.getWordPOSTable()(0)(0) else POSUtil.POS_UNKOWN
+    } else secondPos
   }
 
   var segmentResult: SegmentResult = null
   private var wordPosIndexes: Array[Int] = null
   private val operationSettings = ListBuffer[Operation]()
+  private var separateTimes = 0
 
   def doFilter()
 
@@ -54,16 +59,17 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
   }
 
   def setWordIndexesAndPOSForMerge(startWordIndex: Int, endWordIndex: Int, POS: Int) {
-    operationSettings += (new MergeOperation(startWordIndex, endWordIndex, POS))
+    operationSettings += (new MergeOperation(startWordIndex + separateTimes, endWordIndex + separateTimes, POS))
     markWordsHasBeenRecognized(startWordIndex, endWordIndex, POS)
   }
 
   def deleteWordAt(index: Int) {
-    operationSettings += (new DeleteOperation(index))
+    operationSettings += (new DeleteOperation(index + separateTimes))
   }
 
-  def separateWordAt(index: Int, partOfSpeech: Int) {
-    operationSettings += (new SeparateOperation(index, partOfSpeech))
+  def separateWordAt(index: Int, partOfSpeech: Int, secondPartOfSpeech: Int = POSUtil.POS_UNKOWN) {
+    operationSettings += (new SeparateOperation(index + separateTimes, partOfSpeech, secondPartOfSpeech))
+    separateTimes += 1
   }
 
   def compactSegmentResult() {
