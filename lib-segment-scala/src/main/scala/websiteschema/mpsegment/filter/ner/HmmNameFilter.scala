@@ -33,7 +33,20 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
         } else if (label == "X" && nextLabel == "D") {
           processWordContainsXingAndOtherName
         } else if (label == "Y") {
-          separateWordAt(index, POSUtil.POS_NR, POSUtil.POS_NR)
+          separateWordAt(curIndex, POSUtil.POS_NR, POSUtil.POS_NR)
+        } else if (label == "U" && (nextLabel == "E" || nextLabel == "Z")) {
+          separateWordAt(curIndex, POSUtil.POS_UNKOWN, POSUtil.POS_NR)
+          processXingAndSingleName
+        } else if (label == "U" && nextLabel == "C" && nextNextLabel == "D") {
+          separateWordAt(curIndex, POSUtil.POS_UNKOWN, POSUtil.POS_NR)
+          processXingAndDoubleName
+        } else if (label == "B" && nextLabel == "C" && nextNextLabel == "V") {
+          processXingAndSingleName
+          separateWordAt(curIndex + 2, POSUtil.POS_NR, POSUtil.POS_UNKOWN)
+          setWordIndexesAndPOSForMerge(curIndex, curIndex + 1, POSUtil.POS_NR)
+        } else if (label == "B" && nextLabel == "V") {
+          processXingAndSingleName
+          separateWordAt(curIndex + 1, POSUtil.POS_NR, POSUtil.POS_UNKOWN)
         }
       }
     }

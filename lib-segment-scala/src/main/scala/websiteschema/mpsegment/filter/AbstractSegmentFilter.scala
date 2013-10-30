@@ -49,8 +49,14 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
   def doFilter()
 
   override def filtering() {
+    resetStatus
     doFilter()
     compactSegmentResult()
+  }
+
+
+  private def resetStatus {
+    separateTimes = 0
   }
 
   override def setSegmentResult(segmentResult: SegmentResult) {
