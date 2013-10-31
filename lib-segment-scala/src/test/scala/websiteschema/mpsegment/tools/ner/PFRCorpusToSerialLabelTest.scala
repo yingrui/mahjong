@@ -238,6 +238,20 @@ class PFRCorpusToSerialLabelTest {
     Assert.assertEquals("Z", hooker.serialLabels(1)._2)
   }
 
+  @Test
+  def should_label_foreign_names() {
+    val expect = convertToSegmentResult("19980101-03-007-003/m  福诺斯/nr  在/p  该所/r  举行/v")
+    val actual = convertToSegmentResult("19980101-03-007-003/m  福/nr  诺/nr  斯/nr  在/p  该所/r  举行/v")
+
+    val hooker = new PRFCorpusToSerialLabelCompareHooker(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals("H", hooker.serialLabels(0)._2)
+    Assert.assertEquals("I", hooker.serialLabels(1)._2)
+    Assert.assertEquals("J", hooker.serialLabels(2)._2)
+  }
+
   private def convertToSegmentResult(text: String) = PFRCorpusLoader(convertToInputStream(text)).readLine()
 
   private def convertToInputStream(text: String): InputStream = new ByteArrayInputStream(text.getBytes("utf-8"))

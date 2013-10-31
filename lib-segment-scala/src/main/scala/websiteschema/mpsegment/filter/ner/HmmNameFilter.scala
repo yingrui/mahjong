@@ -47,9 +47,19 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
         } else if (label == "B" && nextLabel == "V") {
           processXingAndSingleName
           separateWordAt(curIndex + 1, POSUtil.POS_NR, POSUtil.POS_UNKOWN)
+        } else if (label == "H" && "IJ".contains(nextLabel)) {
+          processForeignName
         }
       }
     }
+  }
+
+  def processForeignName {
+    nameStartIndex = curIndex
+    nameEndIndex = labels.indexWhere(l => !"IJ".contains(l), curIndex + 1) - 1
+    nameEndIndex = if (nameEndIndex > 0) nameEndIndex else segmentResult.length - 1
+    shouldSeparateXing = false
+    processPotentialName
   }
 
   private def processWordContainsXingAndOtherName {
@@ -93,6 +103,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
   }
 
   private def nextLabel = if (labels.length > curIndex + 1) labels(curIndex + 1) else ""
+
   private def nextNextLabel = if (labels.length > curIndex + 2) labels(curIndex + 2) else ""
 
   private def processPotentialName {

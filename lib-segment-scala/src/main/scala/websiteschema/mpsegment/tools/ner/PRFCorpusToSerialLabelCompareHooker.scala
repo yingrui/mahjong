@@ -4,6 +4,7 @@ import websiteschema.mpsegment.tools.accurary.SegmentResultCompareHook
 import websiteschema.mpsegment.core.{WordAtom, SegmentResult}
 import websiteschema.mpsegment.filter.ner.NeuralNetworkNameRecognizer
 import websiteschema.mpsegment.dict.POSUtil
+import websiteschema.mpsegment.filter.ForeignName
 
 class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: SegmentResult) extends SegmentResultCompareHook {
 
@@ -92,33 +93,43 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
         && startWith(expectWord, actualWord))
       label = "C"
 
-    if (isName(expectWord) && !isSingleWord(expectWord) && isSingleWord(actualWord) && !isXing(actualWord)
+    if (isName(expectWord) && expectWord.length == 2 && isSingleWord(actualWord) && !isXing(actualWord) && matchedWordIndex < actual.length() - 1 && isXing(actual(matchedWordIndex + 1))
         && startWith(expectWord, actualWord) && (lastLabel == "A" || lastLabel == "" || !isXing(lastExpectWord(expectWordIndex))))
       label = "F"
 
     if (isName(expectWord) && !isSingleWord(expectWord) && isSingleWord(actualWord) && !isXing(actualWord)
-        && endWith(expectWord, actualWord) && lastLabel == "B")
+        && endWith(expectWord, actualWord) && lastLabel == "B" && isSuffix(actualWord))
       label = "G"
 
     if (!isName(expectWord) && label == "A" && isLabeledAsName(lastLabel))
       label = "L"
 
+    if (startWith(expectWord, actualWord) && isName(expectWord) && isError && label == "A" && isForeignName(expectWord))
+      label = "H"
+
+    if (isName(expectWord) && endWith(expectWord, actualWord) && isError && label == "A" && isForeignName(expectWord))
+      label = "J"
+
+    if (isName(expectWord) && isError && label == "A" && isForeignName(expectWord))
+      label = "I"
+
     label
   }
 
 
-  private def isLabeledAsName(label: String): Boolean = !label.isEmpty && "BCDEYZ".contains(label)
+  private def isLabeledAsName(label: String): Boolean = !label.isEmpty && "BCDEYZIJ".contains(label)
 
   private def lastLabel = if(serialLabels.length > 0) serialLabels.last._2 else ""
   private def lastExpectWord(expectWordIndex: Int) = if(expectWordIndex > 0) expect(expectWordIndex - 1) else new WordAtom
 
   private def isXing(word: WordAtom): Boolean = NeuralNetworkNameRecognizer.nameDistribution.xingSet.contains(word.word)
+  private def isForeignName(word: WordAtom): Boolean = word.word.length >= 4 || ForeignName().isForeignName(word.word)
 
   private def isName(word: WordAtom) = word.pos == POSUtil.POS_NR
   private def isSingleWord(word: WordAtom) = word.length == 1
   private def startWith(expectWord: WordAtom, actualWord: WordAtom) = expectWord.word.startsWith(actualWord.word)
   private def endWith(expectWord: WordAtom, actualWord: WordAtom) = expectWord.word.endsWith(actualWord.word)
-
+  private def isSuffix(word: WordAtom): Boolean = "子氏老总局工队某妹姐叔婶哥兄弟嫂婆公伯".contains(word.word)
   private def overlap(expectWord: WordAtom, actualWord: WordAtom) = expectWord.word.last == actualWord.word.head
 
   private def add(word: String, label: String) {

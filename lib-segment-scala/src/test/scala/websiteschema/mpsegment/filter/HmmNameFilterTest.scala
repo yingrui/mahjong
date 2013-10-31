@@ -14,14 +14,14 @@ class HmmNameFilterTest {
   @Test
   def should_recognize_xing_with_prefix() {
     val segmentResult = new SegmentResult(6)
-    segmentResult.setWords(List[String]("老", "邱", "来", "到", "了", "社区").toArray)
+    segmentResult.setWords(List[String]("老", "张", "来", "到", "了", "社区").toArray)
     segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_N, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_U, POSUtil.POS_N).toArray)
     segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0, 0).toArray)
     segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A", "N/A").toArray)
 
     filter.setSegmentResult(segmentResult)
     filter.filtering()
-    Assert.assertEquals("老邱", segmentResult.getWord(0))
+    Assert.assertEquals("老张", segmentResult.getWord(0))
     Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(0))
   }
 
@@ -182,5 +182,33 @@ class HmmNameFilterTest {
     Assert.assertEquals("家", segmentResult.getWord(2))
     Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(0))
     Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(1))
+  }
+
+  @Test
+  def should_recognize_foreign_name() {
+    val segmentResult = new SegmentResult(5)
+    segmentResult.setWords(List[String]("福", "诺", "斯", "在", "该所").toArray)
+    segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_U, POSUtil.POS_N).toArray)
+    segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0).toArray)
+    segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A").toArray)
+
+    filter.setSegmentResult(segmentResult)
+    filter.filtering()
+    Assert.assertEquals("福诺斯", segmentResult.getWord(0))
+    Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(0))
+  }
+
+  @Test
+  def should_recognize_foreign_name_1() {
+    val segmentResult = new SegmentResult(2)
+    segmentResult.setWords(List[String]("塞", "夫").toArray)
+    segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_M).toArray)
+    segmentResult.setDomainTypes(List[Int](0, 0).toArray)
+    segmentResult.setConcepts(List[String]("N/A", "N/A").toArray)
+
+    filter.setSegmentResult(segmentResult)
+    filter.filtering()
+    Assert.assertEquals("塞夫", segmentResult.getWord(0))
+    Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(0))
   }
 }
