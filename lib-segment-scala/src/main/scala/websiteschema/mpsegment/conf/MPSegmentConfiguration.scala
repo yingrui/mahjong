@@ -24,7 +24,7 @@ class MPSegmentConfiguration {
     return defaultFileEncoding
   }
 
-  def getNameRecognizer = properties.getOrElse("name.recognizer", "NameUnknownFilter")
+  def getNameRecognizer = properties.getOrElse("name.recognizer", "HmmNameFilter")
 
   def getPOSMatrix(): String = {
     return new StringBuilder(getHomePath()).
