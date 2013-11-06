@@ -23,7 +23,9 @@ public class ConceptServiceTest extends UsingFixtures {
     public void clearDatabase() {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        em.createQuery("DELETE from Concept Where Id > 0")
+        em.createNativeQuery("DELETE from WordConcept")
+                .executeUpdate();
+        em.createNativeQuery("DELETE from Concepts")
                 .executeUpdate();
         tx.commit();
     }
