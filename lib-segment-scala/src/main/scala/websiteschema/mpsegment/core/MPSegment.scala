@@ -41,9 +41,11 @@ class MPSegment(config: MPSegmentConfiguration) {
 
   private def initializeGraph(size: Int) {
     graph = new Graph(size)
-    //        dijk = new BigramDijkstra(WordBigram.getInstance("word-bigram.dat"))
-    //        dijk = new BigramDijkstra(WordBigram.getInstance("google-bigram.dat"))
-    dijk = new DijkstraImpl(size)
+    if (config.get("segment.bigram") != "") {
+      dijk = new BigramDijkstra(size, WordBigram(config.get("segment.bigram")))
+    } else {
+      dijk = new DijkstraImpl(size)
+    }
   }
 
   private def initializePOSTagging() {

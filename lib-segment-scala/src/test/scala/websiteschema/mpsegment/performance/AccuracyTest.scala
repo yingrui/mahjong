@@ -15,6 +15,7 @@ class AccuracyTest {
     val segmentWorker =
       SegmentEngine().getSegmentWorker(
         "separate.xingming -> true",
+//        "segment.bigram -> word-bigram.dat",
         "minimize.word -> true"
       )
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)

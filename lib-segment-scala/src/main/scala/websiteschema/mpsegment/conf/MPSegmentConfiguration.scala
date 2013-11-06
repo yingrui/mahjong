@@ -17,8 +17,8 @@ class MPSegmentConfiguration {
     }
   }
 
-  def is(property: String): Boolean =
-    if(properties.contains(property)) properties(property).toBoolean else false
+  def is(property: String) = if (properties.contains(property)) properties(property).toBoolean else false
+  def get(property: String) = if (properties.contains(property)) properties(property) else ""
 
   def getDefaultFileEncoding(): String = {
     return defaultFileEncoding
@@ -159,23 +159,22 @@ class MPSegmentConfiguration {
 object MPSegmentConfiguration {
 
   private val defaultProperties = collection.mutable.Map[String, String](
-    "filter.stopword " -> " true",
+    "filter.stopword" -> "true",
     "filter.wordbypos" -> "r,a,z,d,p,c,u,y,e,o,w",
-    "load.stopwordfile " -> " stopword.txt",
-    "recognize.pinyin " -> " false",
-    "pinyin.model " -> " websiteschema/mpsegment/wtp.m",
-    "separate.xingming " -> " false",
-    "minimize.word " -> " true",
+    "load.stopwordfile" -> "stopword.txt",
+    "recognize.pinyin" -> "false",
+    "pinyin.model" -> "websiteschema/mpsegment/wtp.m",
+    "separate.xingming" -> "false",
+    "minimize.word" -> "true",
     "maximum.wordlength" -> "25",
-    "support.querysyntax " -> " false",
-    "maximum.querylength " -> " 512",
-    "glue.queryoperater " -> " *?~/_[]:",
-    "load.userdictionary " -> " true",
-    "user.dictionaryfile " -> " userdict.txt",
-    "load.domaindictionary " -> " false",
-    "convert.tohalfshape " -> " false",
-    "convert.touppercase " -> " false")
-
+    "support.querysyntax" -> "false",
+    "maximum.querylength" -> "512",
+    "glue.queryoperater" -> "*?~/_[]:",
+    "load.userdictionary" -> "true",
+    "user.dictionaryfile" -> "userdict.txt",
+    "load.domaindictionary" -> "false",
+    "convert.tohalfshape" -> "false",
+    "convert.touppercase" -> "false")
 
 
   private val instance = new MPSegmentConfiguration()

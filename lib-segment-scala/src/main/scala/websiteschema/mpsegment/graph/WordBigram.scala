@@ -64,16 +64,13 @@ object WordBigram {
   }
 
   private def createWordBigram(corpusName: String): WordBigram = {
-    var instance: WordBigram = null
-
     if (!mapWordBigram.contains(corpusName)) {
-      instance = new WordBigram()
+      val instance = new WordBigram()
       instance.load(corpusName)
       mapWordBigram += (corpusName -> instance)
+      instance
     } else {
-      instance = mapWordBigram(corpusName)
+      mapWordBigram(corpusName)
     }
-
-    return instance
   }
 }
