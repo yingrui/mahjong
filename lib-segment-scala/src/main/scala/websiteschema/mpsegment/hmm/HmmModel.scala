@@ -9,7 +9,7 @@ import io.Source
 
 class HmmModel {
 
-  private val viterbi = new Viterbi()
+  private val viterbi = new ViterbiImpl()
   private val stateBank = new NodeRepository()
   private val observeBank = new NodeRepository()
   private val ngram = new Trie()
@@ -71,21 +71,13 @@ class HmmModel {
   }
 
 
-  def getViterbi(): Viterbi = {
-    return viterbi
-  }
+  def getViterbi = viterbi
 
-  def getNgram(): Trie = {
-    return ngram
-  }
+  def getNgram = ngram
 
-  def getStateBank(): NodeRepository = {
-    return stateBank
-  }
+  def getStateBank = stateBank
 
-  def getObserveBank(): NodeRepository = {
-    return observeBank
-  }
+  def getObserveBank = observeBank
 
   def buildPi(pii: Map[Int, Int]) {
     pi = Pi(pii)

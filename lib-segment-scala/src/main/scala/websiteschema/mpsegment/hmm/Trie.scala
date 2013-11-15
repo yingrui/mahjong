@@ -190,7 +190,7 @@ class Trie extends ISerialize {
     key = readHandler.deserializeInt()
     count = readHandler.deserializeInt()
     prob = readHandler.deserializeDouble()
-    var numberOfDescendant = readHandler.deserializeInt()
+    val numberOfDescendant = readHandler.deserializeInt()
     if (numberOfDescendant > 0) {
       descendant = new Array[Trie](numberOfDescendant)
       for (i <- 0 until numberOfDescendant)

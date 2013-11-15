@@ -13,15 +13,15 @@ class WordToPinyinModelBuilder {
     private var model = new HmmModel()
 
     private def getStateBank() : NodeRepository = {
-        return model.getStateBank()
+        return model.getStateBank
     }
 
     private def getObserveBank() : NodeRepository = {
-        return model.getObserveBank()
+        return model.getObserveBank
     }
 
     private def getNgram() : Trie = {
-        return model.getNgram()
+        return model.getNgram
     }
 
     def main( args: Array[String]) {

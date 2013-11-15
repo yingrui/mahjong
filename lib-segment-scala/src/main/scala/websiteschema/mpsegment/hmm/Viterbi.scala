@@ -1,9 +1,24 @@
 package websiteschema.mpsegment.hmm
 
+
 /**
  * reference: http://www.cs.umb.edu/~srevilak/viterbi/
  */
-class Viterbi {
+
+trait Viterbi {
+
+  def getConditionProb(statePath: Array[Int], state: Int): Double
+
+  def getProb(state: Int, observe: Node): Double
+
+  def getPi(state: Int): Double
+
+  def getStateProbBy(observe: Node): java.util.Collection[Int]
+
+  def calculateWithLog(listObserve: Seq[String]): Seq[Node]
+}
+
+class ViterbiImpl extends Viterbi {
 
   var stateBank = new NodeRepository()
   var observeBank = new NodeRepository()
@@ -78,7 +93,7 @@ class Viterbi {
       observeBank.add(o1)
     }
 
-    val relatedStates = e.getStateProbByObserve(o1.getIndex())
+    val relatedStates = getStateProbBy(o1)
     if (null == relatedStates || relatedStates.isEmpty) {
       throw new ObserveListException("UNKNOWN observe object " + o + ".")
     }
@@ -94,7 +109,7 @@ class Viterbi {
     while (iterRlatedStates.hasNext) {
       val s = iterRlatedStates.next()
       ret.states(0)(index) = s
-      ret.delta(0)(index) = Math.log(pi.getPi(s)) + Math.log(e.getProb(s, o1.getIndex()))
+      ret.delta(0)(index) = Math.log(getPi(s)) + Math.log(getProb(s, o1))
       ret.psai(0)(index) = 0
       index += 1
     }
@@ -108,7 +123,7 @@ class Viterbi {
         observeBank.add(oi)
       }
 
-      val stateSet = e.getStateProbByObserve(oi.getIndex())
+      val stateSet = getStateProbBy(oi)
       if (stateSet.isEmpty) {
         throw new ObserveListException("UNKNOWN observe object " + o + ".")
       }
@@ -126,8 +141,8 @@ class Viterbi {
         var j = 0
         while (j < ret.states(p - 1).length) {
           val statePath = getStatePath(ret.states, ret.psai, p - 1, n - 1, j)
-          val b = Math.log(e.getProb(state, oi.getIndex()))
-          val Aij = Math.log(tran.getConditionProb(statePath, state))
+          val b = Math.log(getProb(state, oi))
+          val Aij = Math.log(getConditionProb(statePath, state))
           val psai_j = ret.delta(p - 1)(j) + Aij
           val delta_j = psai_j + b
           if (delta_j > maxDelta) {
@@ -151,7 +166,16 @@ class Viterbi {
     return ret
   }
 
-  def calculateWithLog(listObserve: Seq[String]): List[Node] = {
+
+  override def getConditionProb(statePath: Array[Int], state: Int) = tran.getConditionProb(statePath, state)
+
+  override def getProb(state: Int, observe: Node) = e.getProb(state, observe.getIndex())
+
+  override def getPi(state: Int) = pi.getPi(state)
+
+  override def getStateProbBy(observe: Node) = e.getStateProbByObserve(observe.getIndex())
+
+  override def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
     if (listObserve.isEmpty) return List[Node]()
 
     val ret = calculateHmmResult(listObserve)
@@ -166,7 +190,6 @@ class Viterbi {
     }
 
     val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
-    val path = statePath.toList.map(stateBank.get(_))
-    return path
+    statePath.map(stateBank.get(_))
   }
 }

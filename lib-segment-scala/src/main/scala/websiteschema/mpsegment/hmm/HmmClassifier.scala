@@ -30,7 +30,7 @@ class HmmClassifier {
   }
 
   private def classifyOberveList(observeCharacters: Seq[String]): Seq[Node] = {
-    model.getViterbi().calculateWithLog(observeCharacters)
+    model.getViterbi.calculateWithLog(observeCharacters)
   }
 
   private def findSectionsByUnknownCharacter(o: Seq[String]): List[Section] = {

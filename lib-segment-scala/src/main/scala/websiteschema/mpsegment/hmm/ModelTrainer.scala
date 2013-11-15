@@ -28,15 +28,15 @@ object ModelTrainer extends App {
   }
 
   private def getStateBank() : NodeRepository = {
-    return model.getStateBank()
+    return model.getStateBank
   }
 
   private def getObserveBank() : NodeRepository = {
-    return model.getObserveBank()
+    return model.getObserveBank
   }
 
   private def getNgram() : Trie = {
-    return model.getNgram()
+    return model.getNgram
   }
 
   private def clear() {

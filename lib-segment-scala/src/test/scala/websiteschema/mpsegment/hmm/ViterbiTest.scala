@@ -8,10 +8,7 @@ class ViterbiTest {
   @Test
   def should_return_status_333332_with_giving_observes_THTHTH() {
     Trie.setTreeNodeSorter(new TrieNodeBinarySort())
-    val viterbi = new Viterbi()
-
-    initTestData(viterbi)
-    viterbi.setN(2)
+    val viterbi = initTestData
 
     val o = List("T", "H", "T", "H", "T", "H")
     try {
@@ -31,13 +28,7 @@ class ViterbiTest {
   @Test
   def should_handle_unknown_State() {
     val o = List("A", "H")
-    val viterbi = new Viterbi()
-    val sortor = new TrieNodeBinarySort()
-
-    Trie.setTreeNodeSorter(sortor)
-
-    initTestData(viterbi)
-    viterbi.setN(2)
+    val viterbi = initTestData
 
     try {
       val s = viterbi.calculateWithLog(o)
@@ -54,7 +45,8 @@ class ViterbiTest {
 
   }
 
-  def initTestData(v: Viterbi) {
+  def initTestData: Viterbi = {
+    val v = new ViterbiImpl
     val stateBank: NodeRepository = new NodeRepository()
     stateBank.add(Node("one"))
     stateBank.add(Node("two"))
@@ -104,5 +96,8 @@ class ViterbiTest {
     pi.setPi(stateBank.get("two").getIndex(), 0.4)
     pi.setPi(stateBank.get("three").getIndex(), 0.4)
     v.setPi(pi)
+
+    v.setN(2)
+    v
   }
 }
