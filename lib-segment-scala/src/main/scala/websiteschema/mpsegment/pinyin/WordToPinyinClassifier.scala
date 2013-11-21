@@ -1,10 +1,12 @@
 package websiteschema.mpsegment.pinyin
 
 import websiteschema.mpsegment.core.SegmentResult
-import websiteschema.mpsegment.hmm.{HmmClassifier, HmmModel, Node}
+import websiteschema.mpsegment.hmm.{HmmClassifier, HmmModel}
 import websiteschema.mpsegment.util.CharCheckUtil
 
-import collection.mutable.ListBuffer
+import io.Source
+import websiteschema.mpsegment.util.FileUtil._
+import scala.Some
 
 class WordToPinyinClassifier {
 
@@ -55,6 +57,17 @@ class WordToPinyinClassifier {
       observeList = observeList ++ List[String](o.charAt(i).toString)
     }
     classifier.classify(observeList)
+  }
+
+  def loadDictionary(dictFile : String) {
+    val source = Source.fromInputStream(getResourceAsStream(dictFile))
+    for (line <- source.getLines()) {
+      val regex = "([^ ]+) *= *([^ ]+)".r
+      regex findFirstIn line match {
+        case Some(regex(han, pinyin)) => getModel().add(han, pinyin)
+        case None =>
+      }
+    }
   }
 }
 

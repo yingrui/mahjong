@@ -61,7 +61,7 @@ class WordToPinyinTest {
 
   @Test
   def should_load_specified_pinyin() {
-    model loadDictionary "pinyin.txt"
+    classifier loadDictionary "pinyin.txt"
     Assert.assertEquals("nan", classifier.classify("囡")(0))
   }
 }

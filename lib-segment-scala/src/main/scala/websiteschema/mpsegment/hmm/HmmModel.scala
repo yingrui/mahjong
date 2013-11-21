@@ -40,18 +40,6 @@ class HmmModel {
     }
   }
 
-  def loadDictionary(dictFile : String) {
-    val source = Source.fromInputStream(getResourceAsStream(dictFile))
-    for (line <- source.getLines()) {
-      val regex = "([^ ]+) *= *([^ ]+)".r
-      regex findFirstIn line match {
-        case Some(regex(han, pinyin)) => add(han, pinyin)
-        case None =>
-      }
-    }
-  }
-
-
   def add(observeStr: String, stateStr: String) {
     val observe = observeBank.add(Node(observeStr))
     val state = stateBank.get(stateStr)
