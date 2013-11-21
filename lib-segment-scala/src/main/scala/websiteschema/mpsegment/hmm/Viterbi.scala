@@ -176,20 +176,22 @@ class ViterbiImpl extends Viterbi {
   override def getStateProbBy(observe: Node) = e.getStateProbByObserve(observe.getIndex())
 
   override def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
-    if (listObserve.isEmpty) return List[Node]()
-
-    val ret = calculateHmmResult(listObserve)
-    var maxProb = Double.NegativeInfinity
-    var pos = 0
-    for (j <- 0 until ret.delta(listObserve.size - 1).length) {
-      val p = ret.delta(listObserve.size - 1)(j)
-      if (p > maxProb) {
-        maxProb = p
-        pos = j
+    if (listObserve.isEmpty) {
+      List[Node]()
+    } else {
+      val ret = calculateHmmResult(listObserve)
+      var maxProb = Double.NegativeInfinity
+      var pos = 0
+      for (j <- 0 until ret.delta(listObserve.size - 1).length) {
+        val p = ret.delta(listObserve.size - 1)(j)
+        if (p > maxProb) {
+          maxProb = p
+          pos = j
+        }
       }
-    }
 
-    val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
-    statePath.map(stateBank.get(_))
+      val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
+      statePath.map(stateBank.get(_))
+    }
   }
 }
