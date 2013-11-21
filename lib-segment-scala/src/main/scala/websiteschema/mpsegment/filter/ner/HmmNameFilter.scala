@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.filter.ner
 
-import websiteschema.mpsegment.hmm.{HmmClassifier, HmmModel}
+import websiteschema.mpsegment.hmm.{ViterbiImpl, HmmClassifier, HmmModel}
 import websiteschema.mpsegment.util.FileUtil
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.filter.AbstractSegmentFilter
@@ -151,7 +151,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
 }
 
 object HmmNameFilter {
-  val model = new HmmModel()
+  val model = new HmmModel(new ViterbiImpl)
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
 
   def apply(config: MPSegmentConfiguration): HmmNameFilter = {

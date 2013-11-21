@@ -10,7 +10,7 @@ class WordToPinyinModelBuilder {
     private var ngramLength = 2
     private var pii = HashMap[Int,Int]()
     private var emisMatrix = HashMap[Int, Map[Int,Int]]()
-    private var model = new HmmModel()
+    private val model = new HmmModel(new ViterbiImpl)
 
     private def getStateBank() : NodeRepository = {
         return model.getStateBank

@@ -10,7 +10,7 @@ object ModelTrainer extends App {
   private val ngramLength = 2
   private var pii = HashMap[Int,Int]()
   private var emisMatrix = HashMap[Int, Map[Int,Int]]()
-  private val model = new HmmModel()
+  private val model = new HmmModel(new ViterbiImpl)
 
   val filename = "ner-corpus.txt"
 
