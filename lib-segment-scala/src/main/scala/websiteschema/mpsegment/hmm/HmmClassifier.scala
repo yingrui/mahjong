@@ -2,12 +2,7 @@ package websiteschema.mpsegment.hmm
 
 import collection.mutable.ListBuffer
 
-class HmmClassifier {
-  var model: HmmModel = null
-
-  def setModel(model: HmmModel) {
-    this.model = model
-  }
+class HmmClassifier(val model: HmmModel) {
 
   def classify(o: Seq[String]): List[String] = {
     assert(null != o && o.size > 0)

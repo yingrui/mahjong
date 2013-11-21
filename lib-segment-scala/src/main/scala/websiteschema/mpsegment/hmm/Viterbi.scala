@@ -16,6 +16,12 @@ trait Viterbi {
   def getStateProbBy(observe: Node): java.util.Collection[Int]
 
   def calculateWithLog(listObserve: Seq[String]): Seq[Node]
+
+  def setObserveBank(observeBank: NodeRepository)
+  def setStateBank(stateBank: NodeRepository)
+  def setTran(tran: ITransition)
+  def setE(e: Emission)
+  def setPi(pi: Pi)
 }
 
 class ViterbiImpl extends Viterbi {

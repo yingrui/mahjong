@@ -5,16 +5,9 @@ import websiteschema.mpsegment.hmm.HmmModel
 
 class WordToPinyinClassfierFactory {
 
-  private val classifier: WordToPinyinClassifier = new WordToPinyinClassifier()
-
-  try {
-    val model = new HmmModel()
-    model.load(MPSegmentConfiguration().getPinyinModel())
-    classifier.setModel(model)
-  } catch {
-    case ex: Throwable =>
-      ex.printStackTrace()
-  }
+  val model = new HmmModel()
+  model.load(MPSegmentConfiguration().getPinyinModel())
+  private val classifier = new WordToPinyinClassifier(model)
 
   def getClassifier(): WordToPinyinClassifier = {
     return classifier

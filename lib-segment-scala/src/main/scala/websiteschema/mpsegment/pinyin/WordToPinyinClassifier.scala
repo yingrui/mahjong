@@ -8,15 +8,9 @@ import io.Source
 import websiteschema.mpsegment.util.FileUtil._
 import scala.Some
 
-class WordToPinyinClassifier {
+class WordToPinyinClassifier(val model: HmmModel) {
 
-  private val classifier = new HmmClassifier()
-
-  def setModel(model: HmmModel) {
-    classifier setModel model
-  }
-
-  def getModel() = classifier.model
+  private val classifier = new HmmClassifier(model)
 
   def classify(result: SegmentResult) {
     try {
@@ -64,7 +58,7 @@ class WordToPinyinClassifier {
     for (line <- source.getLines()) {
       val regex = "([^ ]+) *= *([^ ]+)".r
       regex findFirstIn line match {
-        case Some(regex(han, pinyin)) => getModel().add(han, pinyin)
+        case Some(regex(han, pinyin)) => model.add(han, pinyin)
         case None =>
       }
     }

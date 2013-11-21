@@ -7,11 +7,9 @@ import websiteschema.mpsegment.hmm.HmmModel
 
 class WordToPinyinTest {
 
-  private val classifier = new WordToPinyinClassifier()
-
   val model = new HmmModel()
   model.load("websiteschema/mpsegment/wtp.m")
-  classifier.setModel(model)
+  private val classifier = new WordToPinyinClassifier(model)
 
   @Test
   def should_return_pinyin_with_given_Chinese_characters() {

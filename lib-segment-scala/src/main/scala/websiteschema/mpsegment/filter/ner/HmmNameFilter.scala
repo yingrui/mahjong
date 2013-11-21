@@ -155,8 +155,7 @@ object HmmNameFilter {
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
 
   def apply(config: MPSegmentConfiguration): HmmNameFilter = {
-    val classifier = new HmmClassifier
-    classifier.setModel(model)
+    val classifier = new HmmClassifier(model)
     new HmmNameFilter(config, classifier)
   }
 }
