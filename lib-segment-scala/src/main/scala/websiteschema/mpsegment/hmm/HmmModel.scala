@@ -60,6 +60,8 @@ class HmmModel(val viterbi: Viterbi) {
 
   def getViterbi = viterbi
 
+  def getEmission = emission
+
   def getNgram = ngram
 
   def getStateBank = stateBank
