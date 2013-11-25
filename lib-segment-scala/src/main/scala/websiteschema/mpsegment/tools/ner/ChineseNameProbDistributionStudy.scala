@@ -7,7 +7,7 @@ import websiteschema.mpsegment.util.FileUtil._
 import websiteschema.mpsegment.util.CharCheckUtil._
 import websiteschema.mpsegment.util.SerializeHandler
 
-object ChineseNameSpellStudy extends App {
+object ChineseNameProbDistributionStudy extends App {
   var wordCount = 0
   val pinyinFreq = new java.util.HashMap[String,Int]()
   val wordFreq = new java.util.HashMap[String,Int]()
