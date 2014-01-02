@@ -2,19 +2,15 @@ package websiteschema.mpsegment.dict
 
 import org.junit.Assert
 import org.junit.Test
-import websiteschema.mpsegment.core.SegmentEngine
-import websiteschema.mpsegment.core.SegmentResult
 import websiteschema.mpsegment.core.SegmentWorker
 import websiteschema.mpsegment.dict.domain.DomainDictFactory
-import websiteschema.mpsegment.dict.domain.DomainDictionary
 
 class UserDictionaryTest {
 
   @Test
   def should_Loaded_Some_Words_from_User_Dictionary() {
     val str = "贝因美是中国品牌"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     worker.setUseDomainDictionary(true)
     val words = worker.segment(str)
     println(words)

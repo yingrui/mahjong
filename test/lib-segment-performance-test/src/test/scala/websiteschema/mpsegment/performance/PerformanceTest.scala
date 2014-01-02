@@ -2,7 +2,7 @@ package websiteschema.mpsegment.performance
 
 import org.junit.{Ignore, Assert, Test}
 
-import websiteschema.mpsegment.core.SegmentEngine
+import websiteschema.mpsegment.core.SegmentWorker
 import io.Source
 
 class PerformanceTest {
@@ -11,7 +11,7 @@ class PerformanceTest {
 
   def warmUp() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentEngine().getSegmentWorker()
+    val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(true)
     for (line <- reader.getLines()) {
       if (line.trim().length > 0) {
@@ -24,7 +24,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_within_1_seconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentEngine().getSegmentWorker()
+    val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(false)
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
@@ -48,7 +48,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentEngine().getSegmentWorker()
+    val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(true)
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
@@ -72,7 +72,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentEngine().getSegmentWorker()
+    val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(true)
     segmentWorker.setUseDomainDictionary(false)
     segmentWorker.segment("世界您好！")
@@ -98,7 +98,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_and_Context_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentEngine().getSegmentWorker()
+    val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(true)
     segmentWorker.setUseContextFreqSegment(true)
     segmentWorker.segment("世界您好！")
@@ -123,7 +123,7 @@ class PerformanceTest {
   @Test
   def should_spend_memory_within_80_MB() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentEngine().getSegmentWorker()
+    val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(true)
     segmentWorker.setUseContextFreqSegment(true)
     segmentWorker.segment("世界您好！")

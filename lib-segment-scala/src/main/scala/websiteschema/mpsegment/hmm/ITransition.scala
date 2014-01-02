@@ -26,7 +26,7 @@ class BigramTransition(N: Int) extends ITransition {
   }
 
   def getConditionProb(condition: Array[Int], state: Int): Double = {
-    getConditionProb(condition(0), state)
+    getConditionProb(condition.last, state)
   }
 
 }

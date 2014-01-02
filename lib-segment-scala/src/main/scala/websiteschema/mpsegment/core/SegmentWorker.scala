@@ -2,6 +2,10 @@ package websiteschema.mpsegment.core
 
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.filter.SegmentResultFilter
+import java.util
+import scala.collection.mutable
+import scala.collection.mutable.Map
+import websiteschema.mpsegment.dict.DictionaryFactory
 
 class SegmentWorker(config: MPSegmentConfiguration) {
 
@@ -18,7 +22,7 @@ class SegmentWorker(config: MPSegmentConfiguration) {
   }
 
   def isUseDomainDictionary(): Boolean = {
-    return mpSegment.isUseDomainDictionary()
+    mpSegment.isUseDomainDictionary()
   }
 
   def segment(sen: String): SegmentResult = {
@@ -35,22 +39,54 @@ class SegmentWorker(config: MPSegmentConfiguration) {
     } else {
       result = new SegmentResult(0)
     }
-    return result
+    result
   }
 
-  def isUseContextFreqSegment(): Boolean = {
-    return mpSegment.isUseContextFreqSegment()
-  }
+  def isUseContextFreqSegment() = mpSegment.isUseContextFreqSegment()
 
   def setUseContextFreqSegment(useContextFreqSegment: Boolean) {
     mpSegment.setUseContextFreqSegment(useContextFreqSegment)
   }
 
-  def isRecognizePOS(): Boolean = {
-    return recognizePOS
-  }
+  def isRecognizePOS() = recognizePOS
 
   def setRecognizePOS(recognizePOS: Boolean) {
     this.recognizePOS = recognizePOS
+  }
+}
+
+object SegmentWorker {
+
+  DictionaryFactory().loadDictionary()
+  DictionaryFactory().loadDomainDictionary()
+  DictionaryFactory().loadUserDictionary()
+  DictionaryFactory().loadEnglishDictionary()
+
+  implicit def javaMapToScalaMap(javaMap: java.util.Map[String, String]) = {
+    val map = mutable.HashMap[String, String]()
+    val iterator = javaMap.entrySet().iterator()
+    while (iterator.hasNext) {
+      val entry = iterator.next()
+      map += (entry.getKey -> entry.getValue)
+    }
+    map
+  }
+
+  def apply = new SegmentWorker(MPSegmentConfiguration())
+
+  def apply(config: java.util.Map[String, String]) = new SegmentWorker(MPSegmentConfiguration(config))
+
+  def apply(props: String*) = {
+    var map: Map[String, String] = null
+    if (null != props) {
+      map = mutable.HashMap[String, String]()
+      for (p <- props) {
+        val keyAndValue = p.split("(=|->)")
+        if (null != keyAndValue && keyAndValue.length == 2) {
+          map += (keyAndValue(0).trim() -> keyAndValue(1).trim())
+        }
+      }
+    }
+    new SegmentWorker(MPSegmentConfiguration(map))
   }
 }

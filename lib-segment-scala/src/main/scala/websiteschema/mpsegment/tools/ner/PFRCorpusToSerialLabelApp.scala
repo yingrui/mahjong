@@ -2,7 +2,7 @@ package websiteschema.mpsegment.tools.ner
 
 import websiteschema.mpsegment.tools.PFRCorpusLoader
 import websiteschema.mpsegment.util.FileUtil._
-import websiteschema.mpsegment.core.SegmentEngine
+import websiteschema.mpsegment.core.SegmentWorker
 import websiteschema.mpsegment.tools.accurary.SegmentResultComparator
 import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
 
@@ -11,7 +11,7 @@ object PFRCorpusToSerialLabelApp extends App {
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("ner-corpus.txt"), "utf-8"))
   val loader = PFRCorpusLoader(getResourceAsStream(resource))
 
-  val segmenter = SegmentEngine.apply().getSegmentWorker("recognize.chinesename = false")
+  val segmenter = SegmentWorker("recognize.chinesename = false")
   loader.load(expect => {
     val originalString = expect.toOriginalString()
     val actual = segmenter.segment(originalString)

@@ -1,7 +1,7 @@
 package websiteschema.mpsegment
 
-import org.junit.{Ignore, Assert, Test}
-import websiteschema.mpsegment.core.SegmentEngine
+import org.junit.{Assert, Test}
+import websiteschema.mpsegment.core.SegmentWorker
 import websiteschema.mpsegment.dict.POSUtil
 
 class MPSegmentTest {
@@ -9,8 +9,7 @@ class MPSegmentTest {
   @Test
   def should_Know_How_to_Break_ChinaGreatWall() {
     val str = "中国长城"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.length(), 2)
@@ -23,8 +22,7 @@ class MPSegmentTest {
   @Test
   def should_Know_Some_Chinese_Names() {
     var str = "张三丰创造了太极拳。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("张三丰", words.getWord(0))
@@ -43,8 +41,7 @@ class MPSegmentTest {
   @Test
   def should_seperate_Chinese_Name_into_xing_and_ming() {
     val str = "张三丰创造了太极拳。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker("separate.xingming -> true")
+    val worker = SegmentWorker("separate.xingming -> true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("张", words.getWord(0))
@@ -56,8 +53,7 @@ class MPSegmentTest {
   @Test
   def should_Support_Query_Syntax() {
     var str = "中国~[250]"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker("support.querysyntax -> true")
+    val worker = SegmentWorker("support.querysyntax -> true")
     var words = worker.segment(str)
     print(words + " ")
     Assert.assertEquals(words.getWord(0), "中国~[250]")
@@ -81,8 +77,7 @@ class MPSegmentTest {
   @Test
   def should_Recognize_Some_Chinese_Place_Names() {
     val str = "7月去了德江县。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("德江县", words.getWord(3))
@@ -91,8 +86,7 @@ class MPSegmentTest {
   @Test
   def should_Recognize_Date_and_Time() {
     val str = "7月1日10时计划开始。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("7月", words.getWord(0))
@@ -104,22 +98,21 @@ class MPSegmentTest {
   }
 
   @Test
-  def should_Recognize_Date_and_Time_2() {
+  def should_recognize_year() {
     val str = "１２月３１日，中共中央总书记、国家主席江泽民发表１９９８年新年讲话《迈向充满希望的新世纪》。（新华社记者兰红光摄）"
     val worker =
-      SegmentEngine().getSegmentWorker(
+      SegmentWorker(
         "separate.xingming -> true",
         "minimize.word -> true"
       )
-    val words = worker.segment(str)
-    println(words)
+    val words = worker segment str
+    Assert.assertEquals("1998年", words.getWord(11))
   }
 
   @Test
   def should_recognize_reduplicating_word() {
     val str = "谱写下了一曲曲惊天地泣鬼神的英雄壮歌。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("一曲曲", words.getWord(3))
@@ -128,8 +121,7 @@ class MPSegmentTest {
   @Test
   def should_merge_adjacent_numbers() {
     val str = "一个几十万人口的社区"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("一个", words.getWord(0))
@@ -139,10 +131,9 @@ class MPSegmentTest {
   }
 
   @Test
-  def should_Know_How_to_Do_UpperCase_And_HalfShape() {
+  def should_uppercase_and_halfShape_the_segment_result() {
     val str = "Ａ计划和b计划"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "A")
@@ -150,10 +141,9 @@ class MPSegmentTest {
   }
 
   @Test
-  def should_Know_How_to_Handle_English_Words() {
+  def should_recognize_English_words() {
     val str = "张三丰created太极拳。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(1), "CREATED")
@@ -161,10 +151,9 @@ class MPSegmentTest {
   }
 
   @Test
-  def should_Know_How_to_Handle_Date() {
+  def should_recognize_date() {
     val str = "中华人民共和国在1949年10月1日正式宣布成立。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(2), "1949年")
@@ -178,8 +167,7 @@ class MPSegmentTest {
   @Test
   def should_segment_big_word_to_litter_words() {
     val str = "中华人民共和国在1949年10月1日正式宣布成立。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker("minimize.word -> true")
+    val worker = SegmentWorker("minimize.word -> true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "中华")
@@ -188,10 +176,9 @@ class MPSegmentTest {
   }
 
   @Test
-  def should_segment_big_word_to_litter_words_except_POS_I_L() {
+  def should_not_separate_idiom() {
     val str = "习惯成自然是一句俗语。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker("minimize.word = true")
+    val worker = SegmentWorker("minimize.word = true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "习惯成自然")
@@ -201,8 +188,7 @@ class MPSegmentTest {
   @Test
   def should_return_concept_info_when_segment() {
     val str = "麦片是一种食物。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
+    val worker = SegmentWorker()
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getConcept(0), "n-food")
@@ -215,8 +201,7 @@ class MPSegmentTest {
   @Test
   def should_return_pinyin_when_segment() {
     val str = "中文分词。"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker("recognize.pinyin = true")
+    val worker = SegmentWorker("recognize.pinyin = true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getPinyin(0), "zhong'wen")
@@ -227,8 +212,7 @@ class MPSegmentTest {
   @Test
   def should_stem_english_words() {
     val str = "She likes hunting"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker(
+    val worker = SegmentWorker(
       "segment.lang.en = true",
       "segment.lang.en.stemming = true",
       "convert.touppercase = false"
@@ -243,8 +227,7 @@ class MPSegmentTest {
   @Test
   def should_recognize_pos_of_english_words() {
     val str = "She has food"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker(
+    val worker = SegmentWorker(
       "segment.lang.en = true",
       "convert.touppercase = false")
     val words = worker.segment(str)
@@ -257,8 +240,7 @@ class MPSegmentTest {
   @Test
   def should_recognize_numbers() {
     val str = "２飞亚达Ａ３５．５５"
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker(
+    val worker = SegmentWorker(
       "segment.lang.en = true",
       "convert.touppercase = false")
     val words = worker.segment(str)
@@ -268,7 +250,7 @@ class MPSegmentTest {
   }
 
   @Test
-  def should_know_stop_vertex_in_multi_sections_situation() {
+  def should_segment_sentence_longer_than_1023_correctly() {
     val str =
       "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
@@ -281,16 +263,12 @@ class MPSegmentTest {
         "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
         "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111," +
         "中华人民共和国在1949年10月1日正式宣布成立，从此中国人民走上了繁荣富强的正确道路。"
-    println(str.length())
-    val engine = SegmentEngine()
-    val worker = engine.getSegmentWorker()
-    val words = worker.segment(str)
+    assert(str.length() > 1024)
+    val words = SegmentWorker().segment(str)
     var containsPRC = false
-    for (i <- 0 until words.length) {
-      if (words.getWord(i).equals("中华人民共和国")) {
-        containsPRC = true
-      }
-    }
-    assert(containsPRC)
+    words.foreach(word => if(word.word.equals("中华人民共和国")) {
+      containsPRC = true
+    })
+    assert(containsPRC, "should know stop vertex when input sentence is too long")
   }
 }

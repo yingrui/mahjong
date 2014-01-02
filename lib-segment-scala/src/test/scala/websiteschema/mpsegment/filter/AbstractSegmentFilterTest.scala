@@ -2,12 +2,12 @@ package websiteschema.mpsegment.filter
 
 import org.junit.Assert
 import org.junit.Test
-import websiteschema.mpsegment.core.{SegmentEngine, SegmentResult}
+import websiteschema.mpsegment.core.{SegmentWorker, SegmentResult}
 import websiteschema.mpsegment.dict.POSUtil
 
 class AbstractSegmentFilterTest {
 
-  val engine = SegmentEngine()
+  SegmentWorker()
 
   @Test
   def should_merge_two_word_with_POS_NR() {

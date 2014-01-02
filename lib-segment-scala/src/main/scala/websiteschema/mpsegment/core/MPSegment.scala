@@ -19,7 +19,7 @@ class MPSegment(config: MPSegmentConfiguration) {
   initialize()
 
   def isUseDomainDictionary(): Boolean = {
-    return useDomainDictionary
+    useDomainDictionary
   }
 
   def setUseDomainDictionary(flag: Boolean) {
@@ -27,7 +27,7 @@ class MPSegment(config: MPSegmentConfiguration) {
   }
 
   def isUseContextFreqSegment(): Boolean = {
-    return useContextFreqSegment
+    useContextFreqSegment
   }
 
   def setUseContextFreqSegment(useContextFreqSegment: Boolean) {
@@ -77,7 +77,7 @@ class MPSegment(config: MPSegmentConfiguration) {
         }
       }
     }
-    return result
+    result
   }
 
   private def buildGraph(sen: String, startPos: Int) {
@@ -110,7 +110,7 @@ class MPSegment(config: MPSegmentConfiguration) {
 
     segmentResult.setWords(wordNames)
     segmentResult.setDomainTypes(domainTypes)
-    return segmentResult
+    segmentResult
   }
 
   private def getSection(sentence: String, startIndex: Int): String = {
@@ -120,7 +120,7 @@ class MPSegment(config: MPSegmentConfiguration) {
     } else {
       sectionedSentence = sentence.substring(startIndex)
     }
-    return sectionedSentence
+    sectionedSentence
   }
 
   private def lookupStopVertex(sentence: String): Int = {
@@ -138,7 +138,7 @@ class MPSegment(config: MPSegmentConfiguration) {
     } else {
       endVertex = length + 1
     }
-    return endVertex
+    endVertex
   }
 
   private def getShortestPathToStopVertex(sentence: String, sectionSegment: Boolean): Path = {
@@ -156,7 +156,7 @@ class MPSegment(config: MPSegmentConfiguration) {
         p = dijk.getShortestPath(1, sentenceLength + 1)
       }
     }
-    return p
+    p
   }
 
   private def segment(sentence: String, withPOS: Boolean, sectionSegment: Boolean): SegmentResult = {
@@ -170,7 +170,7 @@ class MPSegment(config: MPSegmentConfiguration) {
       result.setPOSArray(posTagging.findPOS(path, graph))
       setConcepts(result, path)
     }
-    return result
+    result
   }
 
   private def setConcepts(result: SegmentResult, path: Path) {

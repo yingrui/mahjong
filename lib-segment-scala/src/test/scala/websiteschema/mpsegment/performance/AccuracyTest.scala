@@ -1,8 +1,8 @@
 package websiteschema.mpsegment.performance
 
 import junit.framework.Assert
-import org.junit.{Ignore, Test}
-import websiteschema.mpsegment.core.SegmentEngine
+import org.junit.Test
+import websiteschema.mpsegment.core.SegmentWorker
 import websiteschema.mpsegment.tools.accurary.{NerNameStatisticData, ErrorAnalyzer, SegmentAccuracy}
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
 
@@ -12,8 +12,7 @@ class AccuracyTest {
 
   @Test
   def should_be_higher_than_93_percent_with_segment_minimum() {
-    val segmentWorker =
-      SegmentEngine().getSegmentWorker(
+    val segmentWorker = SegmentWorker(
         "separate.xingming -> true",
 //        "segment.bigram -> word-bigram.dat",
         "minimize.word -> true"
@@ -41,8 +40,7 @@ class AccuracyTest {
 
   @Test
   def should_recognize_all_the_name_entities() {
-    val segmentWorker =
-      SegmentEngine().getSegmentWorker(
+    val segmentWorker = SegmentWorker(
         "separate.xingming -> true",
         "minimize.word -> true"
       )
@@ -65,7 +63,7 @@ class AccuracyTest {
 
   @Test
   def should_be_higher_than_93_percent() {
-    val segmentWorker = SegmentEngine().getSegmentWorker("separate.xingming -> true")
+    val segmentWorker = SegmentWorker("separate.xingming -> true")
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
     println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())

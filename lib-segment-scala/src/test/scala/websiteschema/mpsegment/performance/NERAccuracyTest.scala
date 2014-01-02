@@ -2,22 +2,17 @@ package websiteschema.mpsegment.performance
 
 import junit.framework.Assert
 import org.junit.{Ignore, Test}
-import websiteschema.mpsegment.core.{SegmentResult, SegmentEngine}
-import websiteschema.mpsegment.tools.accurary.ErrorAnalyzer
-import websiteschema.mpsegment.tools.accurary.SegmentAccuracy
-import websiteschema.mpsegment.tools.accurary.SegmentErrorType
+import websiteschema.mpsegment.core.SegmentWorker
 import java.io.InputStream
 import websiteschema.mpsegment.util.FileUtil._
 import scala.Some
 import io.Source
-import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 import websiteschema.mpsegment.dict.POSUtil
 
 @Ignore
 class NERAccuracyTest {
 
-  val segmentWorker =
-    SegmentEngine().getSegmentWorker(
+  val segmentWorker = SegmentWorker(
       "separate.xingming -> false",
       "minimize.word -> true"
     )
