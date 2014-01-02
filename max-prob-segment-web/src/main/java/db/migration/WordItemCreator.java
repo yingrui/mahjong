@@ -3,7 +3,7 @@ package db.migration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import scala.collection.immutable.List;
 import websiteschema.mpsegment.concept.Concept;
-import websiteschema.mpsegment.core.SegmentEngine;
+import websiteschema.mpsegment.core.SegmentWorker;
 import websiteschema.mpsegment.dict.DictionaryFactory;
 import websiteschema.mpsegment.dict.IDictionary;
 import websiteschema.mpsegment.dict.IWord;
@@ -18,7 +18,7 @@ import java.util.Collection;
 public class WordItemCreator {
 
     public void createWordItems(JdbcTemplate jdbcTemplate) {
-        SegmentEngine.apply();
+        SegmentWorker.apply();
         IDictionary dict = DictionaryFactory.apply().getCoreDictionary();
         try {
             createWordItemsByDictionary(jdbcTemplate, dict);
