@@ -1,13 +1,13 @@
 package websiteschema.mpsegment.performance
 
-import websiteschema.mpsegment.core.SegmentEngine
+import websiteschema.mpsegment.core.SegmentWorker
 import io.Source
 
 object PerformanceTestRunner extends App {
 
   println("In case you want to run for performance profile.")
   println("This program would not stop unless you kill it.")
-  var segmentWorker = SegmentEngine().getSegmentWorker()
+  var segmentWorker = SegmentWorker()
   segmentWorker.setRecognizePOS(true)
   segmentWorker.segment("世界您好！")
   while (true) {
