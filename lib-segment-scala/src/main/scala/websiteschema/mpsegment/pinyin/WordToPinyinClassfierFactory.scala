@@ -7,6 +7,7 @@ class WordToPinyinClassfierFactory {
 
   val model = new HmmModel(new ViterbiImpl)
   model.load(MPSegmentConfiguration().getPinyinModel())
+  model.buildViterbi
   private val classifier = new WordToPinyinClassifier(model)
 
   def getClassifier(): WordToPinyinClassifier = {

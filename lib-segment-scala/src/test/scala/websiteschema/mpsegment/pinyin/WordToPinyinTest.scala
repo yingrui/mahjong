@@ -9,6 +9,7 @@ class WordToPinyinTest {
 
   val model = new HmmModel(new ViterbiImpl)
   model.load("websiteschema/mpsegment/wtp.m")
+  model.buildViterbi
   private val classifier = new WordToPinyinClassifier(model)
 
   @Test

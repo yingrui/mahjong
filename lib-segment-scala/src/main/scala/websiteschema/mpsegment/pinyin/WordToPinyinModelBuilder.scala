@@ -54,7 +54,7 @@ class WordToPinyinModelBuilder {
         model.buildEmission(emisMatrix)
         model.buildPi(pii)
 
-        model.buildViterbi()
+        model.buildViterbi
         clear()
     }
 

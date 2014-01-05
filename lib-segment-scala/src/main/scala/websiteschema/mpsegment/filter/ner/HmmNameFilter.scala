@@ -153,6 +153,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
 object HmmNameFilter {
   val model = new HmmModel(new ViterbiImpl)
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
+  model.buildViterbi
 
   def apply(config: MPSegmentConfiguration): HmmNameFilter = {
     val classifier = new HmmClassifier(model)

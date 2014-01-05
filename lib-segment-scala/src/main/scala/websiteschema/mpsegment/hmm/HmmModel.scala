@@ -15,9 +15,7 @@ class HmmModel(val viterbi: Viterbi) {
   private var pi = Pi()
   private var emission: Emission = new Emission()
 
-  def containsObserve(ch: String): Boolean = {
-    return observeBank.get(ch) != null
-  }
+  def containsObserve(observed: String) = observeBank.get(observed) != null
 
   def load(filename: String) {
     load(getResourceAsStream(filename))
@@ -31,7 +29,6 @@ class HmmModel(val viterbi: Viterbi) {
       pi.load(handler)
       emission.load(handler)
       ngram.load(handler)
-      buildViterbi()
       handler.close()
     } catch {
       case ex: Throwable =>
@@ -76,7 +73,7 @@ class HmmModel(val viterbi: Viterbi) {
     emission = Emission(emisMatrix)
   }
 
-  def buildViterbi() {
+  def buildViterbi {
     viterbi.setObserveBank(observeBank)
     viterbi.setStateBank(stateBank)
     viterbi.setPi(pi)

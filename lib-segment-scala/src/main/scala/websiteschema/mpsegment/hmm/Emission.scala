@@ -2,7 +2,6 @@ package websiteschema.mpsegment.hmm
 
 import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
-import collection.mutable.Map
 
 class Emission extends ISerialize {
 
@@ -63,7 +62,8 @@ class Emission extends ISerialize {
 }
 
 object Emission {
-  def apply(emisMatrix: Map[Int, Map[Int, Int]]) = {
+
+  def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]]) = {
     val emission = new Emission()
     for (state <- emisMatrix.keys) {
       val mapO = emisMatrix(state)

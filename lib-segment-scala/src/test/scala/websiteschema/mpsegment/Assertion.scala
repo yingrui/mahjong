@@ -5,7 +5,7 @@ import org.junit.Assert
 object Assertion {
 
   def shouldBeEqual(expect: Double, actual: Double) {
-    Assert.assertTrue(doubleEqual(expect, actual))
+    Assert.assertTrue(s"$expect is not equals to $actual", doubleEqual(expect, actual))
   }
 
   def shouldBeEqual(expect: Double, array: Array[Double]) {
