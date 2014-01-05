@@ -2,6 +2,7 @@ package websiteschema.mpsegment.hmm
 
 import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
+import java.util
 
 class Emission extends ISerialize {
 
@@ -10,7 +11,7 @@ class Emission extends ISerialize {
   private var total = 0
 
   def getProb(s: Int, o: Int): Double = {
-    val emission = matrix.get(o);
+    val emission = matrix.get(o)
     if (emission!= null) {
       if (emission.containsKey(s)) {
         return emission.get(s)
@@ -21,7 +22,7 @@ class Emission extends ISerialize {
 
   def getStateProbByObserve(observe: Int): java.util.Collection[Int] = {
     val map = matrix.get(observe)
-    return if (null != map) map.keySet() else null
+    return if (null != map) map.keySet() else new util.ArrayList[Int]()
   }
 
   def setProb(s: Int, o: Int, prob: Double) {
@@ -61,6 +62,21 @@ class Emission extends ISerialize {
   }
 }
 
+class DelegatedEmission(val emission: Emission, defaultStates: () => java.util.Collection[Int]) extends Emission {
+
+  override def load(readHandler: SerializeHandler) = emission.load(readHandler)
+  override def save(writeHandler: SerializeHandler) = emission.save(writeHandler)
+  override def getProb(s: Int, o: Int): Double = emission.getProb(s, o)
+  override def getStateProbByObserve(observe: Int): java.util.Collection[Int] = {
+    val states = emission.getStateProbByObserve(observe)
+    if(states.isEmpty) {
+      states.addAll(defaultStates())
+    }
+    states
+  }
+  override def setProb(s: Int, o: Int, prob: Double) = emission.setProb(s, o , prob)
+}
+
 object Emission {
 
   def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]]) = {
@@ -80,5 +96,10 @@ object Emission {
       emission.total += sum
     }
     emission
+  }
+
+  def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]],
+            defaultStates: () => java.util.Collection[Int]): Emission = {
+    new DelegatedEmission(apply(emisMatrix), defaultStates)
   }
 }
