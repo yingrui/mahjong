@@ -13,7 +13,7 @@ trait Viterbi {
 
   def getPi(state: Int): Double
 
-  def getStateProbBy(observe: Node): java.util.Collection[Int]
+  def getStatesBy(observe: Node): java.util.Collection[Int]
 
   def calculateWithLog(listObserve: Seq[String]): Seq[Node]
 
@@ -30,7 +30,7 @@ class ViterbiImpl extends Viterbi {
   var observeBank = new NodeRepository()
   var tran: ITransition = Transition()
   var pi = Pi()
-  var e = new Emission()
+  var e = Emission()
   var n = 2
 
   def setN(n: Int) {
@@ -99,7 +99,7 @@ class ViterbiImpl extends Viterbi {
       observeBank.add(o1)
     }
 
-    val relatedStates = getStateProbBy(o1)
+    val relatedStates = getStatesBy(o1)
     if (null == relatedStates || relatedStates.isEmpty) {
       throw new ObserveListException("UNKNOWN observe object " + o + ".")
     }
@@ -129,7 +129,7 @@ class ViterbiImpl extends Viterbi {
         observeBank.add(oi)
       }
 
-      val stateSet = getStateProbBy(oi)
+      val stateSet = getStatesBy(oi)
       if (stateSet.isEmpty) {
         throw new ObserveListException("UNKNOWN observe object " + o + ".")
       }
@@ -179,7 +179,7 @@ class ViterbiImpl extends Viterbi {
 
   override def getPi(state: Int) = pi.getPi(state)
 
-  override def getStateProbBy(observe: Node) = e.getStateProbByObserve(observe.getIndex())
+  override def getStatesBy(observe: Node) = e.getStatesBy(observe.getIndex())
 
   override def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
     if (listObserve.isEmpty) {

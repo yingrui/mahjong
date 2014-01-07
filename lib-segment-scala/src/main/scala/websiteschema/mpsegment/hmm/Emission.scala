@@ -4,11 +4,20 @@ import websiteschema.mpsegment.util.ISerialize
 import websiteschema.mpsegment.util.SerializeHandler
 import java.util
 
-class Emission extends ISerialize {
+trait Emission extends ISerialize {
+
+  def getProb(s: Int, o: Int): Double
+
+  def getStatesBy(observe: Int): java.util.Collection[Int]
+
+  def setProb(s: Int, o: Int, prob: Double): Unit
+}
+
+class EmissionImpl extends Emission {
 
   //observe -> states
   private val matrix: java.util.Map[Int, java.util.Map[Int, Double]] = new java.util.HashMap[Int, java.util.Map[Int, Double]]()
-  private var total = 0
+  var total = 0
 
   def getProb(s: Int, o: Int): Double = {
     val emission = matrix.get(o)
@@ -20,7 +29,7 @@ class Emission extends ISerialize {
     return 1.0D / total.toDouble
   }
 
-  def getStateProbByObserve(observe: Int): java.util.Collection[Int] = {
+  def getStatesBy(observe: Int): java.util.Collection[Int] = {
     val map = matrix.get(observe)
     return if (null != map) map.keySet() else new util.ArrayList[Int]()
   }
@@ -39,7 +48,7 @@ class Emission extends ISerialize {
     val size = if (null != matrix) matrix.size else 0
     writeHandler.serializeInt(size)
     val keys = new java.util.ArrayList[Int](matrix.keySet())
-    var i = 0;
+    var i = 0
     while (i < keys.size())
     {
       val key = keys.get(i)
@@ -62,25 +71,41 @@ class Emission extends ISerialize {
   }
 }
 
-class DelegatedEmission(val emission: Emission, defaultStates: () => java.util.Collection[Int]) extends Emission {
+class DelegatedEmission(val emission: Emission,
+                        defaultStates: () => java.util.Collection[Int],
+                        appendixStates: (Int) => java.util.Collection[Int]) extends Emission {
 
-  override def load(readHandler: SerializeHandler) = emission.load(readHandler)
-  override def save(writeHandler: SerializeHandler) = emission.save(writeHandler)
-  override def getProb(s: Int, o: Int): Double = emission.getProb(s, o)
-  override def getStateProbByObserve(observe: Int): java.util.Collection[Int] = {
-    val states = emission.getStateProbByObserve(observe)
-    if(states.isEmpty) {
-      states.addAll(defaultStates())
+  def load(readHandler: SerializeHandler) {
+    throw new NotImplementedError()
+  }
+
+  def save(writeHandler: SerializeHandler) {
+    throw new NotImplementedError()
+  }
+
+  def getProb(s: Int, o: Int): Double = emission.getProb(s, o)
+
+  def getStatesBy(observe: Int): java.util.Collection[Int] = {
+    val states = new util.LinkedList[Int](emission getStatesBy observe)
+    states addAll appendixStates(observe)
+
+    if (states.isEmpty) {
+      states addAll defaultStates()
     }
     states
   }
-  override def setProb(s: Int, o: Int, prob: Double) = emission.setProb(s, o , prob)
+
+  def setProb(s: Int, o: Int, prob: Double) {
+    throw new NotImplementedError()
+  }
 }
 
 object Emission {
 
-  def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]]) = {
-    val emission = new Emission()
+  def apply():Emission = new EmissionImpl
+
+  def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]]): Emission = {
+    val emission = new EmissionImpl
     for (state <- emisMatrix.keys) {
       val mapO = emisMatrix(state)
       var sum = 1
@@ -100,6 +125,13 @@ object Emission {
 
   def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]],
             defaultStates: () => java.util.Collection[Int]): Emission = {
-    new DelegatedEmission(apply(emisMatrix), defaultStates)
+    val emptyList = new util.ArrayList[Int]()
+    new DelegatedEmission(apply(emisMatrix), defaultStates, (o: Int) => emptyList)
+  }
+
+  def apply(emisMatrix: collection.Map[Int, collection.Map[Int, Int]],
+            defaultStates: () => java.util.Collection[Int],
+            appendixStates: (Int) => java.util.Collection[Int]): Emission = {
+    new DelegatedEmission(apply(emisMatrix), defaultStates, appendixStates)
   }
 }

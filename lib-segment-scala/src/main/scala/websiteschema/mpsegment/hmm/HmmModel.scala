@@ -13,7 +13,7 @@ class HmmModel(val viterbi: Viterbi) {
   private val observeBank = new NodeRepository()
   private val ngram = new Trie()
   private var pi = Pi()
-  private var emission: Emission = new Emission()
+  private var emission = Emission()
 
   def containsObserve(observed: String) = observeBank.get(observed) != null
 

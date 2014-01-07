@@ -21,7 +21,7 @@ class POSRecognizer extends IPOSRecognizer {
 
   private def initViterbiWithEmissionAndObserve() {
     observeList.clear()
-    viterbi.setE(new Emission())
+    viterbi.setE(Emission())
     viterbi.setObserveBank(new NodeRepository())
     for (i <- 0 until path.getLength())
     {
