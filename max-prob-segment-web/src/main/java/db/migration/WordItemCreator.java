@@ -52,7 +52,7 @@ public class WordItemCreator {
             Node o = observeBank.get(wordName);
             if (o != null) {
                 Emission emission = WordToPinyinClassfierFactory.apply().getClassifier().model().getEmission();
-                Collection stateProbByObserve = emission.getStateProbByObserve(o.getIndex());
+                Collection stateProbByObserve = emission.getStatesBy(o.getIndex());
                 if (null != stateProbByObserve) {
                     NodeRepository stateBank = WordToPinyinClassfierFactory.apply().getClassifier().model().getStateBank();
                     for (Object i : stateProbByObserve) {
