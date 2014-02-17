@@ -122,7 +122,7 @@ class HmmNameFilterTest {
   @Test
   def should_recognize_last_word_overlap_with_xing {
     val segmentResult = new SegmentResult(5)
-    segmentResult.setWords(List[String]("昨天","同江", "泽民", "主席", "进行").toArray)
+    segmentResult.setWords(List[String]("昨天", "同江", "泽民", "主席", "进行").toArray)
     segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_U, POSUtil.POS_N).toArray)
     segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0).toArray)
     segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A").toArray)
@@ -137,7 +137,7 @@ class HmmNameFilterTest {
   @Test
   def should_recognize_last_word_overlap_with_xing_and_have_double_names {
     val segmentResult = new SegmentResult(5)
-    segmentResult.setWords(List[String]("对白","晓", "燕", "绑架", "案").toArray)
+    segmentResult.setWords(List[String]("对白", "晓", "燕", "绑架", "案").toArray)
     segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_U, POSUtil.POS_N).toArray)
     segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0).toArray)
     segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A").toArray)
@@ -153,7 +153,7 @@ class HmmNameFilterTest {
   @Test
   def should_recognize_overlap_with_next_word {
     val segmentResult = new SegmentResult(5)
-    segmentResult.setWords(List[String]("石","宝", "良家", "的", "炕上").toArray)
+    segmentResult.setWords(List[String]("石", "宝", "良家", "的", "炕上").toArray)
     segmentResult.setPOSArray(List[Int](POSUtil.POS_N, POSUtil.POS_M, POSUtil.POS_N, POSUtil.POS_U, POSUtil.POS_N).toArray)
     segmentResult.setDomainTypes(List[Int](0, 0, 0, 0, 0).toArray)
     segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A", "N/A", "N/A").toArray)
