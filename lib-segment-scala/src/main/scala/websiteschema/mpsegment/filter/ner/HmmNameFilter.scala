@@ -159,8 +159,7 @@ object HmmNameFilter {
   val nameDistribution = new NameProbDistribution()
   val model = new HmmModel(new ViterbiImpl)
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
-  private val emission = model.getEmission
-  model.buildViterbi(Emission(emission, () => getDefaultState, (stateIndex: Int) => getAppendixStates(stateIndex)))
+  model.buildViterbi(Emission(model.getEmission, () => getDefaultState, (stateIndex: Int) => getAppendixStates(stateIndex)))
 
   def apply(config: MPSegmentConfiguration): HmmNameFilter = {
     val classifier = new HmmClassifier(model)

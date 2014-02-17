@@ -211,23 +211,4 @@ class HmmNameFilterTest {
     Assert.assertEquals("塞夫", segmentResult.getWord(0))
     Assert.assertEquals(POSUtil.POS_NR, segmentResult.getPOS(0))
   }
-
-  @Test
-  def should_recognize_foreign_name_sai_fu_1 {
-    val segmentResult = new SegmentResult(3)
-    segmentResult.setWords(List[String]("冯", "英", "睿").toArray)
-    segmentResult.setPOSArray(List[Int](POSUtil.POS_NR, POSUtil.POS_NR, POSUtil.POS_NR).toArray)
-    segmentResult.setDomainTypes(List[Int](0, 0, 0).toArray)
-    segmentResult.setConcepts(List[String]("N/A", "N/A", "N/A").toArray)
-
-    filter.setSegmentResult(segmentResult)
-    filter.filtering()
-    println(segmentResult)
-  }
-
-  @Test
-  def should_return_possible_appendix_states {
-//    val appendixStates = HmmNameFilter.getAppendixStates("和")
-//    assert(appendixStates.contains("B"), "和 is one of xing")
-  }
 }
