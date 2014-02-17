@@ -141,7 +141,7 @@ class PerformanceTest {
     val memorySize = (totalMemory - freeMemory) / 1024 / 1024
     println("should_spend_memory_within_80_MB")
     println("    Current application has taken " + memorySize + "MB memory size.")
-    Assert.assertTrue(memorySize < 80)
+    Assert.assertTrue(memorySize <= 80)
   }
 }
 
