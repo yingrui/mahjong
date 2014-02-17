@@ -73,7 +73,11 @@ class HmmModel(val viterbi: Viterbi) {
     emission = Emission(emisMatrix)
   }
 
-  def buildViterbi {
+  def buildViterbi: Unit = {
+    buildViterbi(emission)
+  }
+
+  def buildViterbi(emission: Emission) {
     viterbi.setObserveBank(observeBank)
     viterbi.setStateBank(stateBank)
     viterbi.setPi(pi)

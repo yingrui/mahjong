@@ -86,13 +86,13 @@ class DelegatedEmission(val emission: Emission,
   def getProb(s: Int, o: Int): Double = emission.getProb(s, o)
 
   def getStatesBy(observe: Int): java.util.Collection[Int] = {
-    val states = new util.LinkedList[Int](emission getStatesBy observe)
+    val states = new util.HashSet[Int](emission getStatesBy observe)
     states addAll appendixStates(observe)
 
-    if (states.isEmpty) {
-      states addAll defaultStates()
-    }
-    states
+    if (states.isEmpty)
+      defaultStates()
+    else
+      new util.ArrayList[Int](states)
   }
 
   def setProb(s: Int, o: Int, prob: Double) {
@@ -133,5 +133,11 @@ object Emission {
             defaultStates: () => java.util.Collection[Int],
             appendixStates: (Int) => java.util.Collection[Int]): Emission = {
     new DelegatedEmission(apply(emisMatrix), defaultStates, appendixStates)
+  }
+
+  def apply(emission: Emission,
+            defaultStates: () => java.util.Collection[Int],
+            appendixStates: (Int) => java.util.Collection[Int]): Emission = {
+    new DelegatedEmission(emission, defaultStates, appendixStates)
   }
 }

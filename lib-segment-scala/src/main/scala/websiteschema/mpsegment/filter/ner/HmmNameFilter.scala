@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.filter.ner
 
-import websiteschema.mpsegment.hmm.{ViterbiImpl, HmmClassifier, HmmModel}
+import websiteschema.mpsegment.hmm.{Emission, ViterbiImpl, HmmClassifier, HmmModel}
 import websiteschema.mpsegment.util.FileUtil
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.filter.AbstractSegmentFilter
@@ -8,6 +8,8 @@ import websiteschema.mpsegment.dict.POSUtil
 import websiteschema.mpsegment.concept.Concept
 
 class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) extends AbstractSegmentFilter {
+
+  import HmmNameFilter._
 
   private var nameStartIndex = -1
   private var nameEndIndex = -1
@@ -22,13 +24,13 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
     for (index <- 0 until labels.length; label = labels(index)) {
       curIndex = index
       if (label != "A") {
-        if (label == "B" && (nextLabel == "E" || nextLabel == "Z")) {
+        if (label == Xing && (nextLabel == "E" || nextLabel == "Z")) {
           processXingAndSingleName
-        } else if (label == "B" && nextLabel == "C" && nextNextLabel == "D") {
+        } else if (label == Xing && nextLabel == "C" && nextNextLabel == "D") {
           processXingAndDoubleName
-        } else if (label == "B" && nextLabel == "G") {
+        } else if (label == Xing && nextLabel == "G") {
           processXingAndSuffix
-        } else if (label == "F" && nextLabel == "B") {
+        } else if (label == "F" && nextLabel == Xing) {
           processXingAndPrefix
         } else if (label == "X" && nextLabel == "D") {
           processWordContainsXingAndOtherName
@@ -40,11 +42,11 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
         } else if (label == "U" && nextLabel == "C" && nextNextLabel == "D") {
           separateWordAt(curIndex, POSUtil.POS_UNKOWN, POSUtil.POS_NR)
           processXingAndDoubleName
-        } else if (label == "B" && nextLabel == "C" && nextNextLabel == "V") {
+        } else if (label == Xing && nextLabel == "C" && nextNextLabel == "V") {
           processXingAndSingleName
           separateWordAt(curIndex + 2, POSUtil.POS_NR, POSUtil.POS_UNKOWN)
           setWordIndexesAndPOSForMerge(curIndex, curIndex + 1, POSUtil.POS_NR)
-        } else if (label == "B" && nextLabel == "V") {
+        } else if (label == Xing && nextLabel == "V") {
           processXingAndSingleName
           separateWordAt(curIndex + 1, POSUtil.POS_NR, POSUtil.POS_UNKOWN)
         } else if (label == "H" && "IJ".contains(nextLabel)) {
@@ -151,12 +153,33 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
 }
 
 object HmmNameFilter {
+
+  val Xing = "B"
+
+  val nameDistribution = new NameProbDistribution()
   val model = new HmmModel(new ViterbiImpl)
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
-  model.buildViterbi
+  private val emission = model.getEmission
+  model.buildViterbi(Emission(emission, () => getDefaultState, (stateIndex: Int) => getAppendixStates(stateIndex)))
 
   def apply(config: MPSegmentConfiguration): HmmNameFilter = {
     val classifier = new HmmClassifier(model)
     new HmmNameFilter(config, classifier)
+  }
+
+  private def getAppendixStates(stateIndex: Int): java.util.Collection[Int] = {
+    val ret = new java.util.ArrayList[Int]()
+    val name = model.getObserveBank.get(stateIndex).getName()
+    if (nameDistribution.nameLabels.containsKey(name)) {
+      nameDistribution.nameLabels.get(name).keySet().toArray(Array[String]())
+        .foreach(state => ret.add(model.getStateBank.get(state).getIndex()))
+    }
+    ret
+  }
+
+  private def getDefaultState(): java.util.Collection[Int] = {
+    val ret = new java.util.ArrayList[Int]()
+    ret.add(model.getStateBank.get("A").getIndex())
+    ret
   }
 }

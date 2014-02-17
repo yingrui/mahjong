@@ -10,6 +10,14 @@ class NameProbDistribution {
   val pinyinFreq = loader.deserializeMapStringInt()
   val wordFreq = loader.deserializeMapStringInt()
   val xingSet = loader.deserializeArrayString().toSet
+  val nameLabels = new java.util.HashMap[String, java.util.Map[String, Int]]()
+
+  private val size = loader.deserializeInt()
+  for(i <- 0 until size) {
+    val name = loader.deserializeString()
+    val map = loader.deserializeMapStringInt()
+    nameLabels.put(name, map)
+  }
 
   def getProbAsName(words: List[String]): Double = {
     val prob = (words.map(word => if (wordFreq.containsKey(word)) wordFreq.get(word) else 1).sum.toDouble) / wordCount.toDouble
