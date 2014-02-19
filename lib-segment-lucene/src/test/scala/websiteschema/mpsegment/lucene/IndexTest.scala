@@ -1,14 +1,13 @@
 package websiteschema.mpsegment.lucene
 
 import java.io.File
-import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.{TextField, Field, Document}
 import org.apache.lucene.index.{DirectoryReader, IndexWriter, IndexWriterConfig}
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.store.FSDirectory
-import org.junit.{After, Assert, Before, Test}
+import org.junit.{Assert, Before, Test}
 import org.apache.lucene.util.Version
 import org.apache.commons.io.FileUtils
 
