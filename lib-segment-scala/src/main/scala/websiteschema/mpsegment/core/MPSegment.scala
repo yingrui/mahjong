@@ -89,6 +89,8 @@ class MPSegment(config: MPSegmentConfiguration) {
 
   private def buildSegmentResult(path: Path): SegmentResult = {
     val length = path.getLength()
+    val wordStartAts = new Array[Int](length)
+    val wordEndAts = new Array[Int](length)
     val wordNames = new Array[String](length)
     val domainTypes = new Array[Int](length)
     if (length < 1) {
@@ -96,20 +98,17 @@ class MPSegment(config: MPSegmentConfiguration) {
     }
     val segmentResult = new SegmentResult(length)
     for (index <- 0 until length) {
-      val edgeWeight = graph.getEdgeWeight(path.iget(index), path.iget(index + 1))
-      if (edgeWeight == 0) {
-        val word = graph.getEdgeObject(path.iget(index), path.iget(index + 1))
-        wordNames(index) = word.getWordName()
-        domainTypes(index) = word.getDomainType()
-      } else {
-        val word = graph.getEdgeObject(path.iget(index), path.iget(index + 1))
-        wordNames(index) = word.getWordName()
-        domainTypes(index) = word.getDomainType()
-      }
+      wordStartAts(index) = path.iget(index) - 1
+      wordEndAts(index) = path.iget(index + 1) - 1
+      val word = graph.getEdgeObject(path.iget(index), path.iget(index + 1))
+      wordNames(index) = word.getWordName()
+      domainTypes(index) = word.getDomainType()
     }
 
     segmentResult.setWords(wordNames)
     segmentResult.setDomainTypes(domainTypes)
+    segmentResult.setWordStartAts(wordStartAts)
+    segmentResult.setWordEndAts(wordEndAts)
     segmentResult
   }
 

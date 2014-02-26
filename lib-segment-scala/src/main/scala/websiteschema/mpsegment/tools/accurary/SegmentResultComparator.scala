@@ -11,7 +11,7 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
   def compare(expectResult: SegmentResult, actualResult: SegmentResult) {
     var lastMatchIndex = -1
     for (wordIndex <- 0 until expectResult.length) {
-      indexInOriginalString = expectResult.getWordIndexInOriginalString(wordIndex)
+      indexInOriginalString = expectResult.getWordStartAt(wordIndex)
       val matchIndex = lookupMatch(actualResult, expectResult(wordIndex), lastMatchIndex + 1, wordIndex)
       if (matchIndex >= 0) {
         lastMatchIndex = matchIndex
@@ -29,7 +29,7 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
     for (wordIndex <- start until actualResult.length) {
       val actualWord = actualResult.getWord(wordIndex)
       if (isSameWord(expectWord.word, actualWord)) {
-        if (actualResult.getWordIndexInOriginalString(wordIndex) == indexInOriginalString) {
+        if (actualResult.getWordStartAt(wordIndex) == indexInOriginalString) {
           return wordIndex
         }
       }
@@ -55,7 +55,7 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
     val to = indexInOriginalString + expect.length
     val stringBuilder = new StringBuilder()
     for (wordIndex <- start until actualResult.length) {
-      val indexInActualResult = actualResult.getWordIndexInOriginalString(wordIndex)
+      val indexInActualResult = actualResult.getWordStartAt(wordIndex)
       if (indexInActualResult >= indexInOriginalString && indexInActualResult < to) {
         recordError(wordIndex, actualResult(wordIndex), expect, expectWordIndex)
         stringBuilder.append(actualResult.getWord(wordIndex)).append(" ")

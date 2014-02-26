@@ -12,13 +12,23 @@ class SegmentResult(size: Int) {
     wordAtoms(i) = new WordAtom()
   }
 
-  def getWordAtoms(): Array[WordAtom] = {
-    return wordAtoms
-  }
+  def getWordAtoms() = wordAtoms
 
   def setWords(words: Array[String]) {
     for (i <- 0 until words.length) {
       wordAtoms(i).word = words(i)
+    }
+  }
+
+  def setWordStartAts(wordStartAts: Array[Int]) {
+    for (i <- 0 until wordStartAts.length) {
+      wordAtoms(i).start = wordStartAts(i)
+    }
+  }
+
+  def setWordEndAts(wordEndAts: Array[Int]) {
+    for (i <- 0 until wordEndAts.length) {
+      wordAtoms(i).end = wordEndAts(i)
     }
   }
 
@@ -46,41 +56,21 @@ class SegmentResult(size: Int) {
     }
   }
 
-  def getWord(i: Int): String = {
-    return wordAtoms(i).word
-  }
+  def getWord(i: Int) = wordAtoms(i).word
 
-  def getWordIndexInOriginalString(index: Int): Int = {
-    var wordIndexInOriginalString = 0
-    for (i <- 0 until index) {
-      wordIndexInOriginalString += wordAtoms(i).word.length
-    }
-    return wordIndexInOriginalString
-  }
+  def getWordStartAt(index: Int) = wordAtoms(index).start
 
-  def getPinyin(i: Int): String = {
-    return wordAtoms(i).pinyin
-  }
+  def getWordEndAt(index: Int) = wordAtoms(index).end
 
-  def getPOS(i: Int): Int = {
-    return wordAtoms(i).pos
-  }
+  def getPinyin(i: Int) = wordAtoms(i).pinyin
 
-  def getConcept(i: Int): String = {
-    return wordAtoms(i).concept
-  }
+  def getPOS(i: Int) = wordAtoms(i).pos
 
-  def getDomainType(i: Int): Int = {
-    return wordAtoms(i).domainType
-  }
+  def getConcept(i: Int) = wordAtoms(i).concept
 
-  def length(): Int = {
-    if (wordAtoms != null) {
-      return wordAtoms.size
-    } else {
-      return 0
-    }
-  }
+  def getDomainType(i: Int) = wordAtoms(i).domainType
+
+  def length(): Int = if (wordAtoms != null) wordAtoms.size else 0
 
   def apply(i: Int) = wordAtoms(i)
 
@@ -120,13 +110,21 @@ class SegmentResult(size: Int) {
       _wordAtoms(i + offset) = wordAtoms(i)
       if (i == index) {
         offset = 1
+        val end = _wordAtoms(i).end
+        val word = wordAtoms(i).word
+
+        _wordAtoms(i).word = word.substring(0, indexAtWord)
+        _wordAtoms(i).pos = firstPOS
+        _wordAtoms(i).end = _wordAtoms(i).start + indexAtWord
+
         val wordAtom = new WordAtom()
-        wordAtom.word = wordAtoms(i).word.substring(indexAtWord)
+        wordAtom.word = word.substring(indexAtWord)
         wordAtom.pos = secondPOS
         wordAtom.concept = "N/A"
+        wordAtom.start = _wordAtoms(i).end
+        wordAtom.end = end
+
         _wordAtoms(i + offset) = wordAtom
-        _wordAtoms(i).word = wordAtoms(i).word.substring(0, indexAtWord)
-        _wordAtoms(i).pos = firstPOS
       }
     }
     wordAtoms = _wordAtoms
@@ -148,9 +146,11 @@ class SegmentResult(size: Int) {
     return stringBuilder.toString()
   }
 
-  def indexWhere(p : (WordAtom) => Boolean, from: Int): Int = wordAtoms.indexWhere(p, from)
+  def indexWhere(p: (WordAtom) => Boolean, from: Int): Int = wordAtoms.indexWhere(p, from)
 
-  def foreach(fn: (WordAtom) => Unit) {wordAtoms.foreach(fn)}
+  def foreach(fn: (WordAtom) => Unit) {
+    wordAtoms.foreach(fn)
+  }
 
   override def toString(): String = {
     val retString = new StringBuilder()
@@ -175,6 +175,7 @@ class SegmentResult(size: Int) {
     startWordAtom.word = wordName.toString()
     startWordAtom.pinyin = pinyin.toString()
     startWordAtom.pos = pos
+    startWordAtom.end = getStartWordAtom(end).end
     return startWordAtom
   }
 
@@ -212,6 +213,22 @@ class SegmentResult(size: Int) {
     }
     return null
   }
+}
 
+object SegmentResult {
 
+  def apply(words: Array[String], posArray: Array[Int]): SegmentResult = {
+    val length = words.length
+    val segmentResult = new SegmentResult(length)
+    segmentResult.setWords(words)
+    segmentResult.setPOSArray(posArray)
+    segmentResult.setDomainTypes((for (i <- 0 until length) yield 0).toArray)
+    segmentResult.setConcepts((for (i <- 0 until length) yield "N/A").toArray)
+    for (i <- 0 until length) {
+      val start = if (i == 0) 0 else segmentResult.getWordEndAt(i - 1)
+      segmentResult(i).start = start
+      segmentResult(i).end = start + words(i).length
+    }
+    segmentResult
+  }
 }

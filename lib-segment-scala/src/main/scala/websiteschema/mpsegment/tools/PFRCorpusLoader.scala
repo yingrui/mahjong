@@ -39,6 +39,8 @@ class PFRCorpusLoader {
     val elements = line.split("\\s+")
 
     val words = ListBuffer[String]()
+    val wordStartAts = new Array[Int](elements.length - 1)
+    val wordEndAts = new Array[Int](elements.length - 1)
     val posArray = new Array[Int](elements.length - 1)
     val domainTypes = new Array[Int](elements.length - 1)
     val concepts = new Array[String](elements.length - 1)
@@ -65,12 +67,16 @@ class PFRCorpusLoader {
         setDomainType(domainTypes, i, POSUtil.POS_NR)
       }
       concepts(i) = getConcept(wordStr, posStr)
+      wordStartAts(i) = words.foldLeft(0){(sum, word) => sum + word.length}
       words += (wordStr)
+      wordEndAts(i) = words.foldLeft(0){(sum, word) => sum + word.length}
       posArray(i) = POSUtil.getPOSIndex(posStr)
     }
 
     val result = new SegmentResult(words.size)
     result.setWords(words.toArray)
+    result.setWordStartAts(wordStartAts)
+    result.setWordEndAts(wordEndAts)
     result.setPOSArray(posArray)
     result.setDomainTypes(domainTypes)
     result.setConcepts(concepts)
