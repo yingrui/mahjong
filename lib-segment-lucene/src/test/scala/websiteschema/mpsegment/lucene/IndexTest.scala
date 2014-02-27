@@ -5,9 +5,10 @@ import org.apache.lucene.document.{TextField, Field, Document}
 import org.apache.lucene.index.{DirectoryReader, IndexWriter, IndexWriterConfig}
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
 import org.apache.lucene.queryparser.classic.QueryParser
-import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.{TopDocs, IndexSearcher}
 import org.apache.lucene.store.FSDirectory
-import org.junit.{Assert, Before, Test}
+import org.junit.{Before, Test}
+import org.junit.Assert._
 import org.apache.lucene.util.Version
 import org.apache.commons.io.FileUtils
 
@@ -16,6 +17,8 @@ class IndexTest {
   val version = Version.LUCENE_46
   val indexPath = "test_index_dir"
   val analyzer = new MPSegmentAnalyzer
+  var searcher: IndexSearcher = null
+  var results: TopDocs = null
 
   @Before
   def setup {
@@ -26,23 +29,27 @@ class IndexTest {
   def should_retrieve_document_by_keyword {
     val writer = createIndexWriter
 
-    writer addDocument createDocument("希尔伯特", "我们必须知道，我们将要知道！")
-    writer addDocument createDocument("Hilbert", "We must know, we will know!")
+    writer.addDocument(createDocument("希尔伯特", "我们必须知道，我们将要知道！"))
+    writer.addDocument(createDocument("Hilbert", "We must know, we will know!"))
     writer.close()
 
-    val searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(new File(indexPath))))
+    searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(new File(indexPath))))
 
-    val results = retrieve(searcher, "content", "知道")
+    results = retrieve("content", "知道")
+    verifySearchResult(0)
 
-    val numTotalHits = results.totalHits
-    Assert.assertEquals(1, numTotalHits)
-
-    val docId = results.scoreDocs(0).doc
-    println(searcher.doc(docId))
+    results = retrieve("content", "know")
+    verifySearchResult(1)
   }
 
+  def verifySearchResult(expectDocId: Int) {
+    val numTotalHits = results.totalHits
+    assertEquals(1, numTotalHits)
 
-  def retrieve(searcher: IndexSearcher, field: String, keyword: String) = {
+    assertEquals(expectDocId, results.scoreDocs(0).doc)
+  }
+
+  def retrieve(field: String, keyword: String) = {
     val parser = new QueryParser(version, field, analyzer)
     val query = parser parse keyword
     searcher.search(query, null, 100)

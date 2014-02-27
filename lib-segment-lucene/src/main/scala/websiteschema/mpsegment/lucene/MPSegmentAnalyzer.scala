@@ -6,15 +6,20 @@ import org.apache.lucene.analysis.Analyzer.TokenStreamComponents
 import java.io.{BufferedReader, Reader}
 import websiteschema.mpsegment.core.{WordAtom, SegmentResult, SegmentWorker}
 import websiteschema.mpsegment.dict.POSUtil
+import org.apache.lucene.analysis.core.StopFilter
+import org.apache.lucene.util.Version
+import org.apache.lucene.analysis.util.CharArraySet
 
 final class MPSegmentAnalyzer extends Analyzer {
 
-  val worker = SegmentWorker()
+  val worker = SegmentWorker("segment.lang.en = true", "convert.touppercase = true")
+  val charArraySet = new CharArraySet(Version.LUCENE_46, 1, true)
+  charArraySet.add(" ")
 
   @Override
   def createComponents(fieldName: String, reader: Reader): TokenStreamComponents = {
-    val source = new MPSegmentTokenizer(reader, worker)
-    return new TokenStreamComponents(source)
+    val tokenizer = new MPSegmentTokenizer(reader, worker)
+    new TokenStreamComponents(tokenizer)
   }
 
 
@@ -64,7 +69,7 @@ final class MPSegmentAnalyzer extends Analyzer {
     def addWord(word: WordAtom) {
       termAtt.append(word.word)
       termAtt.setLength(word.length)
-      offsetAtt.setOffset(offset, offset + word.length)
+      offsetAtt.setOffset(word.start, word.end)
       typeAtt.setType(POSUtil.getPOSString(word.pos))
       positionAttr.setPositionIncrement(index + 1)
     }
