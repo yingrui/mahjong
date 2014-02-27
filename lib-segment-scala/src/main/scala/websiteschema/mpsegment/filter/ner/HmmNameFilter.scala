@@ -69,11 +69,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
     nameEndIndex = curIndex + 1
     shouldSeparateXing = true
 
-    val word = segmentResult(nameStartIndex).word
-    segmentResult(nameStartIndex).word = word.charAt(0).toString
-    segmentResult(nameStartIndex).end = segmentResult(nameStartIndex).start + 1
-    segmentResult(nameEndIndex).word = word.substring(1) + segmentResult(nameEndIndex).word
-    segmentResult(nameEndIndex).start = segmentResult(nameStartIndex).end
+    segmentResult.adjustAdjacentWords(nameStartIndex, 1)
 
     processPotentialName
   }

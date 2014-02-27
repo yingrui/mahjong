@@ -9,6 +9,7 @@ import websiteschema.mpsegment.util.StringUtil
 import collection.mutable._
 import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
 import websiteschema.mpsegment.dict.POSUtil
+import scala.collection.mutable
 
 class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends SegmentResultCompareHook {
 
@@ -19,27 +20,19 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   private var accuracyRate: Double = 0D
 
   private val allWordsAndFreqInCorpus = HashMap[String, Int]()
-  private var allErrorAnalyzer: Map[SegmentErrorType, ErrorAnalyzer] = null
+  private var allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
 
 
   initialErrorAnalyzer()
   loader = PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus))
 
-  def getAccuracyRate(): Double = {
-    return accuracyRate
-  }
+  def getAccuracyRate() = accuracyRate
 
-  def getWrong(): Int = {
-    return wrong
-  }
+  def getWrong() = wrong
 
-  def getTotalWords(): Int = {
-    return totalWords
-  }
+  def getTotalWords() = totalWords
 
-  def getErrorAnalyzer(errorType: SegmentErrorType): ErrorAnalyzer = {
-    return allErrorAnalyzer(errorType)
-  }
+  def getErrorAnalyzer(errorType: SegmentErrorType) = allErrorAnalyzer(errorType)
 
   def checkSegmentAccuracy() {
     val isUseContextFreq = segmentWorker.isUseContextFreqSegment()
@@ -73,7 +66,6 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   }
 
   private def initialErrorAnalyzer() {
-    allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
     allErrorAnalyzer.put(SegmentErrorType.NER_NR, new NerNameErrorAnalyzer())
     allErrorAnalyzer.put(SegmentErrorType.NER_NS, new NerPlaceErrorAnalyzer())
     allErrorAnalyzer.put(SegmentErrorType.UnknownWord, new NewWordErrorAnalyzer())

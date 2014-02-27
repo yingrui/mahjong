@@ -52,6 +52,26 @@ class SegmentResultMergeTest {
   }
 
   @Test
+  def should_adjust_adjacent_words() {
+    val segmentResult = SegmentResult(
+      Array("王国", "维", "是", "名人"),
+      Array(POSUtil.POS_NR, POSUtil.POS_NR, POSUtil.POS_V, POSUtil.POS_N)
+    )
+    val wordIndex = 0
+    val from = 1
+    segmentResult.adjustAdjacentWords(wordIndex, from)
+    assertEquals(4, segmentResult.length())
+
+    assertEquals("王", segmentResult.getWord(0))
+    assertEquals(0, segmentResult.getWordStartAt(0))
+    assertEquals(1, segmentResult.getWordEndAt(0))
+
+    assertEquals("国维", segmentResult.getWord(1))
+    assertEquals(1, segmentResult.getWordStartAt(1))
+    assertEquals(3, segmentResult.getWordEndAt(1))
+  }
+
+  @Test
   def should_merge_pinyin_of_Chinese_words_correctly_when_merge_words() {
     val segmentResult = new SegmentResult(6)
     segmentResult.setWords(List("一个", "几十", "万", "人口", "的", "社区").toArray)

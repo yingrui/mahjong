@@ -138,12 +138,20 @@ class SegmentResult(size: Int) {
     wordAtoms = wordAtoms.filter(_ != null)
   }
 
+  def adjustAdjacentWords(wordIndex: Int, from: Int) {
+    val word = wordAtoms(wordIndex).word
+    wordAtoms(wordIndex).word = word.substring(0, from)
+    wordAtoms(wordIndex).end = wordAtoms(wordIndex).start + from
+    wordAtoms(wordIndex + 1).word = word.substring(from) + wordAtoms(wordIndex + 1).word
+    wordAtoms(wordIndex + 1).start = wordAtoms(wordIndex).end
+  }
+
   def toOriginalString(): String = {
     val stringBuilder = new StringBuilder()
     for (i <- 0 until length()) {
       stringBuilder.append(getWord(i))
     }
-    return stringBuilder.toString()
+    stringBuilder.toString()
   }
 
   def indexWhere(p: (WordAtom) => Boolean, from: Int): Int = wordAtoms.indexWhere(p, from)
@@ -158,7 +166,7 @@ class SegmentResult(size: Int) {
       retString.append(getWord(j)).append("/").append(POSUtil.getPOSString(getPOS(j))).append(" ")
     }
 
-    return retString.toString()
+    retString.toString()
   }
 
   private def mergedWordAtom(start: Int, end: Int, pos: Int): WordAtom = {
