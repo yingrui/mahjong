@@ -3,83 +3,43 @@ package websiteschema.mpsegment.tools
 import websiteschema.mpsegment.concept.Concept
 import websiteschema.mpsegment.dict.IWord
 import websiteschema.mpsegment.dict.POSUtil
+import scala.util.parsing.json.{JSONArray, JSONObject}
 
 class WordStringConverter(word: IWord) {
 
-    private val stringBuilder = new StringBuilder()
-
-    def convertToString() : String = {
-        buildHead()
-        buildBody()
-        return stringBuilder.toString()
+  def convertToString(): String = {
+    var map = Map[String, Any]("word" -> word.getWordName())
+    map += ("domainType" -> word.getDomainType())
+    getPOSTable() match {
+      case Some(posTable) => map += ("POSTable" -> posTable)
+      case _ =>
     }
-
-    private def buildBody() {
-        stringBuilder.append("{")
-        stringBuilder.append(buildDomainType()).append(",")
-        val posTable = buildPOSTable()
-        if (!posTable.isEmpty()) {
-            stringBuilder.append(posTable).append(",")
-        }
-        stringBuilder.append(buildConcepts())
-        if (endWith(',')) {
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1)
-        }
-        stringBuilder.append("}")
+    getConcepts() match {
+      case Some(concepts) => map += ("concepts" -> concepts)
+      case _ =>
     }
+    JSONObject(map).toString()
+  }
 
-    private def endWith(ch: Char) : Boolean = {
-        return stringBuilder.charAt(stringBuilder.length() - 1) == ch
+  private def getPOSTable(): Option[JSONObject] = {
+    var map = Map[String, Int]()
+    val POSTable = word.getWordPOSTable()
+    if (null != POSTable && POSTable.length > 0) {
+      for (POSAndFreq <- POSTable) {
+        map += (POSUtil.getPOSString(POSAndFreq(0)) -> POSAndFreq(1))
+      }
+      Some(JSONObject(map))
+    } else {
+      None
     }
+  }
 
-    private def buildPOSTable() : String = {
-        val stringBuilder = new StringBuilder()
-        val POSTable = word.getWordPOSTable()
-        if (null != POSTable && POSTable.length > 0) {
-            stringBuilder.append("POSTable:{")
-            for (POSAndFreq <- POSTable) {
-                val POS = POSUtil.getPOSString(POSAndFreq(0))
-                val freq = POSAndFreq(1)
-                stringBuilder.append(POS).append(":").append(freq).append(",")
-            }
-            stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length())
-            stringBuilder.append("}")
-        }
-        return stringBuilder.toString()
-    }
-
-    private def buildDomainType() : String = {
-        return "domainType:" + word.getDomainType()
-    }
-
-    private def buildConcepts() : String = {
-        return buildConceptArray(word.getConcepts())
-    }
-
-    private def buildConceptArray(concepts: Array[Concept]) : String = {
-        val stringBuilder = new StringBuilder()
-        if (null != concepts && concepts.length > 0 && concepts(0) != Concept.UNKNOWN) {
-            stringBuilder.append("concepts:")
-            stringBuilder.append("[")
-            for (concept <- concepts) {
-                stringBuilder.append(concept.getName()).append(",")
-            }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1)
-            stringBuilder.append("]")
-        }
-        return stringBuilder.toString()
-    }
-
-    private def buildHead() {
-        var wordName = word.getWordName()
-        wordName = wordName.replaceAll("\"", "%22")
-        wordName = wordName.replaceAll("\\(", "%28")
-        wordName = wordName.replaceAll("\\)", "%29")
-        wordName = wordName.replaceAll("\\[", "%5B")
-        wordName = wordName.replaceAll("\\]", "%5D")
-        wordName = wordName.replaceAll("\\{", "%7B")
-        wordName = wordName.replaceAll("\\}", "%7D")
-        stringBuilder.append("\"").append(wordName).append("\" = ")
-    }
+  private def getConcepts(): Option[JSONArray] = {
+    val concepts = word.getConcepts()
+    if (null != concepts && concepts.length > 0 && concepts(0) != Concept.UNKNOWN)
+      Some(JSONArray(concepts.map(concept => concept.getName()).toList))
+    else
+      None
+  }
 
 }

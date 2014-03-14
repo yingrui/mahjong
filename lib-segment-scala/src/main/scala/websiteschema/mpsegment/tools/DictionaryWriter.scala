@@ -12,10 +12,14 @@ class DictionaryWriter(file: File) {
   def write(dictionary: IDictionary) {
     val iterator = dictionary.iterator()
     if (null != dictionary) {
-      for (word <- iterator) {
+      writer.write("[")
+      for (i <- 0 until iterator.size) {
+        val word = iterator(i)
         val converter = new WordStringConverter(word)
-        writer.write(converter.convertToString() + "\n")
+        writer.write(converter.convertToString())
+        if(i < (iterator.size - 1)) writer.write(",\n")
       }
+      writer.write("]")
     }
   }
 
@@ -26,14 +30,17 @@ class DictionaryWriter(file: File) {
 }
 
 object DictionaryWriter extends App {
-  var file = "dict.txt"
-  if (null != args && args.length > 0) {
-    file = args(0)
+
+  def writeDictionary(dict: IDictionary, file: String) {
+    println("Writing dictionary to file: " + file)
+    val dictionaryWriter = new DictionaryWriter(new File(file))
+    dictionaryWriter.write(dict)
+    dictionaryWriter.close()
   }
 
-  println("All words will output to file: " + file)
-  val writer1 = new DictionaryWriter(new File(file))
   DictionaryFactory().loadDictionary()
-  writer1.write(DictionaryFactory().getCoreDictionary())
-  writer1.close()
+  DictionaryFactory().loadEnglishDictionary()
+  writeDictionary(DictionaryFactory().getCoreDictionary(), "dict-1.txt")
+  writeDictionary(DictionaryFactory().getEnglishDictionary, "dict-en-1.txt")
+
 }

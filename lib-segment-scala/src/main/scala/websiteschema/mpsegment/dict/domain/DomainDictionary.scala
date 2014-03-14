@@ -23,6 +23,12 @@ class DomainDictionary extends IDictionary {
 
   private def getWordIndex(wordName: String): Int = wordNameIndexHashMap.getOrElse(wordName, -1)
 
+  def addWord(word: IWord) {
+    addWord(word.getWordName(),
+      POSUtil.getPOSString(word.getWordPOSTable()(0)(0)),
+      word.getWordPOSTable()(0)(1), word.getDomainType())
+  }
+
   private def addWord(wordName: String, pos: String, freq: Int, domainType: Int): Int = {
     val word = DomainWordItem(wordName, domainType)
     word.setOccuredCount(pos, freq)

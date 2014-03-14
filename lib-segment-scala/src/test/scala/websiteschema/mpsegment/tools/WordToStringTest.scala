@@ -1,11 +1,9 @@
 package websiteschema.mpsegment.tools
 
-import org.junit.Assert
+import org.junit.Assert._
 import org.junit.Test
 import websiteschema.mpsegment.concept.Concept
 import websiteschema.mpsegment.dict.{UnknownWord, IWord, POSUtil}
-
-
 
 class WordToStringTest {
 
@@ -32,19 +30,7 @@ class WordToStringTest {
     val converter = new WordStringConverter(word)
     val actual = converter.convertToString()
     println(actual)
-    Assert.assertTrue(actual.startsWith("\"测试\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("concepts:[noun,verb]"))
-  }
-
-  @Test
-  def should_convert_word_to_string_with_word_name_and_single_POS() {
-    val word = createWord("测试", singlePosAndFreq)
-    val converter = new WordStringConverter(word)
-    val actual = converter.convertToString()
-    println(actual)
-    Assert.assertTrue(actual.startsWith("\"测试\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("POSTable:{N:100}"))
-    Assert.assertTrue(actual.contains("domainType:0"))
+    assertEquals("""{"word" : "测试", "domainType" : 0, "POSTable" : {"N" : 100}, "concepts" : ["noun", "verb"]}""", actual)
   }
 
   @Test
@@ -53,9 +39,7 @@ class WordToStringTest {
     val converter = new WordStringConverter(word)
     val actual = converter.convertToString()
     println(actual)
-    Assert.assertTrue(actual.startsWith("\"测试\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("POSTable:{N:100,V:20}"))
-    Assert.assertTrue(actual.contains("domainType:0"))
+    assertEquals("""{"word" : "测试", "domainType" : 0, "POSTable" : {"N" : 100, "V" : 20}}""", actual)
   }
 
   @Test
@@ -64,42 +48,7 @@ class WordToStringTest {
     val converter = new WordStringConverter(word)
     val actual = converter.convertToString()
     println(actual)
-    Assert.assertTrue(actual.startsWith("\"%22\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("POSTable:{N:100,V:20}"))
-    Assert.assertTrue(actual.contains("domainType:0"))
-  }
-
-  @Test
-  def should_convert_word_to_string_with_special_characters_brackets() {
-    val word = createWord("()", posAndFreq)
-    val converter = new WordStringConverter(word)
-    val actual = converter.convertToString()
-    println(actual)
-    Assert.assertTrue(actual.startsWith("\"%28%29\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("POSTable:{N:100,V:20}"))
-    Assert.assertTrue(actual.contains("domainType:0"))
-  }
-
-  @Test
-  def should_convert_word_to_string_with_special_characters_square_braces() {
-    val word = createWord("[]", posAndFreq)
-    val converter = new WordStringConverter(word)
-    val actual = converter.convertToString()
-    println(actual)
-    Assert.assertTrue(actual.startsWith("\"%5B%5D\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("POSTable:{N:100,V:20}"))
-    Assert.assertTrue(actual.contains("domainType:0"))
-  }
-
-  @Test
-  def should_convert_word_to_string_with_special_characters_braces() {
-    val word = createWord("{}", posAndFreq)
-    val converter = new WordStringConverter(word)
-    val actual = converter.convertToString()
-    println(actual)
-    Assert.assertTrue(actual.startsWith("\"%7B%7D\" = {") && actual.endsWith("}"))
-    Assert.assertTrue(actual.contains("POSTable:{N:100,V:20}"))
-    Assert.assertTrue(actual.contains("domainType:0"))
+    assertEquals("""{"word" : "\"", "domainType" : 0, "POSTable" : {"N" : 100, "V" : 20}}""", actual)
   }
 
   private def createWord(wordName: String, ret: Array[Array[Int]]): IWord = {

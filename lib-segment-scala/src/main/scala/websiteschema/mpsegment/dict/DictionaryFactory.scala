@@ -8,6 +8,8 @@ import websiteschema.mpsegment.tools.StringWordConverter
 import io.Source
 import websiteschema.mpsegment.core.MPSegment
 import websiteschema.mpsegment.util.FileUtil
+import scala.util.parsing.json.{JSON, JSONObject}
+import java.io.InputStream
 
 object DictionaryFactory {
   val instance = new DictionaryFactory()
@@ -32,28 +34,35 @@ class DictionaryFactory {
   def getEnglishDictionary: IDictionary = englishDict
 
   def loadDictionary() {
+    var timestamp = System.currentTimeMillis()
     try {
       coreDict = new HashDictionary()
-      val list = loadWordStr("websiteschema/mpsegment/dict.txt").sorted
-
       val converter = new StringWordConverter()
       converter.setConceptRepository(ConceptRepository())
-      list.foreach(wordStr => {
-        val word = converter.convert(wordStr)
-        if (word != null) {
-          coreDict.addWord(word)
-        }
+
+      val inputStream = getClass.getClassLoader.getResourceAsStream("websiteschema/mpsegment/dict.txt")
+      loadWords(inputStream, (wordString: String) => {
+          val word = converter.convert(wordString)
+          coreDict addWord word
       })
     } catch {
       case e: Throwable =>
         e.printStackTrace()
+    } finally {
+      timestamp = System.currentTimeMillis() - timestamp
+      println(s"loading dictionary time used(ms): $timestamp")
     }
+
   }
 
-  private def loadWordStr(dictResource: String): List[String] = {
-    val inputStream = getClass.getClassLoader.getResourceAsStream(dictResource)
+  private def loadWords(inputStream: InputStream, convert : (String) => Unit) {
     val source = Source.fromInputStream(inputStream, "utf-8")
-    return source.getLines.toList
+
+    source.getLines().foreach(wordString => {
+       convert(wordString.replaceAll("(^\\[)|(,$)|(\\]$)", ""))
+    });
+
+    source.close()
   }
 
   def loadEnglishDictionary() {
@@ -63,13 +72,12 @@ class DictionaryFactory {
       try {
         englishDict = new TrieDictionary()
         val converter = new StringWordConverter()
-        val source = Source.fromInputStream(inputStream, "utf-8")
-        for (wordStr <- source.getLines()) {
-          val word = converter.convert(wordStr)
-          if (null != word) {
-            englishDict.addWord(word)
-          }
-        }
+        converter.setConceptRepository(ConceptRepository())
+
+        loadWords(inputStream, (wordString: String) => {
+          val word = converter.convert(wordString)
+          englishDict addWord word
+        })
       }
       catch {
         case ex: Throwable => ex.printStackTrace()
