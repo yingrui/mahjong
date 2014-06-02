@@ -37,14 +37,9 @@ class DictionaryFactory {
     var timestamp = System.currentTimeMillis()
     try {
       coreDict = new HashDictionary()
-      val converter = new StringWordConverter()
-      converter.setConceptRepository(ConceptRepository())
-
       val inputStream = getClass.getClassLoader.getResourceAsStream("websiteschema/mpsegment/dict.txt")
-      loadWords(inputStream, (wordString: String) => {
-          val word = converter.convert(wordString)
-          coreDict addWord word
-      })
+
+      loadDictionary(inputStream, coreDict)
     } catch {
       case e: Throwable =>
         e.printStackTrace()
@@ -55,29 +50,35 @@ class DictionaryFactory {
 
   }
 
-  private def loadWords(inputStream: InputStream, convert : (String) => Unit) {
+  def loadDictionary(inputStream: InputStream, dictionary: IDictionary) {
+    val converter = new StringWordConverter()
+    converter.setConceptRepository(ConceptRepository())
+
+    loadWords(inputStream) {
+      wordString: String => {
+        val word = converter.convert(wordString)
+        dictionary addWord word
+      }
+    }
+  }
+
+  private def loadWords(inputStream: InputStream)(convert : (String) => Unit) {
     val source = Source.fromInputStream(inputStream, "utf-8")
 
     source.getLines().foreach(wordString => {
        convert(wordString.replaceAll("(^\\[)|(,$)|(\\]$)", ""))
-    });
+    })
 
     source.close()
   }
 
   def loadEnglishDictionary() {
     if (isLoadEnglishDictionary) {
-      val inputStream = FileUtil.getResourceAsStream(config.getEnglishDictionaryFile)
       var timestamp = System.currentTimeMillis()
+      englishDict = new TrieDictionary()
+      val inputStream = FileUtil.getResourceAsStream(config.getEnglishDictionaryFile)
       try {
-        englishDict = new TrieDictionary()
-        val converter = new StringWordConverter()
-        converter.setConceptRepository(ConceptRepository())
-
-        loadWords(inputStream, (wordString: String) => {
-          val word = converter.convert(wordString)
-          englishDict addWord word
-        })
+        loadDictionary(inputStream, englishDict)
       }
       catch {
         case ex: Throwable => ex.printStackTrace()

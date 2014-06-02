@@ -6,7 +6,6 @@ import websiteschema.mpsegment.dict.IWord
 import websiteschema.mpsegment.dict.POS
 import websiteschema.mpsegment.dict.POSArray
 import websiteschema.mpsegment.dict.WordImpl
-import collection.mutable
 import scala.util.parsing.json.JSON
 
 class StringWordConverter {
@@ -20,7 +19,7 @@ class StringWordConverter {
     this.conceptRepository = conceptRepository
   }
 
-  def convert(str: String): IWord = {
+  def convertJSON(str: String): IWord = {
     JSON.parseFull(str) match {
       case Some(map: Map[String, Any]) => {
         val word = new WordImpl(map("word").asInstanceOf[String])
@@ -34,6 +33,67 @@ class StringWordConverter {
     }
   }
 
+  def convert(wordStr: String): IWord = {
+    val wordNamePattern = """"word"\s*:\s*"(.+?)"\s*,""".r
+    wordNamePattern findFirstIn wordStr match {
+      case Some(wordNamePattern(wordName)) => {
+        val word = new WordImpl(escape(wordName))
+
+        parseDomainType(wordStr, word)
+        parsePOS(wordStr, word)
+        parseConcepts(wordStr, word)
+
+        word
+      }
+      case None => throw new RuntimeException(s"Cannot convert to word: $wordStr")
+    }
+  }
+
+  def escape(word:String) = word.
+    replaceAll("""\\r""", "\r").
+    replaceAll("""\\n""", "\n").
+    replaceAll("""\\/""", "/").
+    replaceAll("""\\"""", "\"").
+    replace("""\\""", "\\")
+
+  def parseConcepts(wordStr: String, word: WordImpl) {
+    val conceptsPattern = """"concepts"\s*:\s*\[(("([^"]+)",?)+)\]\s*,?""".r
+    conceptsPattern findFirstMatchIn wordStr match {
+      case Some(m) => {
+        val concepts = m.group(1)
+        val conceptPattern = """"([^"]+)\",?""".r
+        val conceptArray = conceptPattern.findAllMatchIn(concepts).
+          map(m =>conceptRepository.getConceptByName(m.group(1))).toArray
+        word.setConcepts(conceptArray)
+        }
+      case None => word.setConcepts(Array())
+    }
+  }
+
+  def parseDomainType(wordStr: String, word: WordImpl) {
+    val domainTypePattern = """"domainType"\s*:\s*(\d+)\s*,?""".r
+    domainTypePattern findFirstIn wordStr match {
+      case Some(domainTypePattern(domainType)) => word.setDomainType(domainType.toInt)
+      case None => word.setDomainType(0)
+    }
+  }
+
+  def parsePOS(wordStr: String, word: WordImpl) {
+    val posTablePattern = """"POSTable"\s*:\s*\{(("(\w+)"\s*:\s*(\d+)\s*,?\s*)+)\}\s*,?""".r
+    posTablePattern findFirstMatchIn wordStr match {
+      case Some(m) => {
+        val posTable = m.group(1)
+        val posArray = new POSArray()
+
+        val posAndFreq = """"(\w+)"\s*:\s*(\d+)""".r
+        posAndFreq.findAllMatchIn(posTable)
+          .foreach(m => posArray.add(POS(m.group(1), m.group(2).toInt)))
+        posArray.buildPOSArray()
+        word.setPosArray(posArray)
+      }
+      case None =>
+    }
+  }
 
   def updateConcepts(conceptList: List[String], word: WordImpl) {
     val concepts = new Array[Concept](conceptList.size)

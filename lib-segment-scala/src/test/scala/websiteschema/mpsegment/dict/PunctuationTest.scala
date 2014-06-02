@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.dict
 
 import org.junit.Assert
+import org.junit.Assert._
 import org.junit.Test
 
 class PunctuationTest {
@@ -12,9 +13,9 @@ class PunctuationTest {
   def should_contains_basic_punctuations() {
     val punctuations = ",./<>?;':\"{}[]!@#$%^&*()_+-=\\|。，、；：？！…-·ˉˇ¨‘`~'“”々～‖∶＂＇｀｜〃〔〕〈〉《》「」『』．〖〗【】（）［］｛｝".toCharArray()
     for (punctuation <- punctuations) {
-      print(punctuation + " ")
       val word = hashDictionary.getWord(punctuation.toString)
-      Assert.assertEquals(getFirstPosOfWord(word), POSUtil.POS_W)
+      print(punctuation + "," + getFirstPosOfWord(word) + "; ")
+      assertEquals(POSUtil.POS_W, getFirstPosOfWord(word))
     }
     println()
   }
@@ -94,7 +95,5 @@ class PunctuationTest {
     println()
   }
 
-  private def getFirstPosOfWord(word: IWord): Int = {
-    return word.getPOSArray().getWordPOSTable()(0)(0)
-  }
+  private def getFirstPosOfWord(word: IWord) = word.getPOSArray().getWordPOSTable()(0)(0)
 }
