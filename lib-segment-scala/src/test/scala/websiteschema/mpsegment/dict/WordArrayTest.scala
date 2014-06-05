@@ -12,7 +12,6 @@ class WordArrayTest {
         val word3 = new WordImpl("好2")
         val word4 = new WordImpl("好3")
 
-
         val wordArray = BinaryWordArray(List[IWord](word1, word2, word3).toArray)
         wordArray.add(word4)
 
@@ -24,22 +23,18 @@ class WordArrayTest {
     }
 
     @Test
-    def should_return_unsorted_array_in_hash_word_array() {
+    def should_return_word_item() {
         val word1 = new WordImpl("好1")
         val word2 = new WordImpl("好4")
         val word3 = new WordImpl("好2")
         val word4 = new WordImpl("好3")
 
-
         val wordArray = HashWordArray(List[IWord](word1, word2, word3).toArray)
         wordArray.add(word4)
 
-        val words = wordArray.getWordItems()
-        Assert.assertEquals("好1", words(0).getWordName())
-        Assert.assertEquals("好4", words(1).getWordName())
-        Assert.assertEquals("好2", words(2).getWordName())
-        Assert.assertEquals("好3", words(3).getWordName())
+        Assert.assertEquals("好1", wordArray.find("好1").getWordName())
+        Assert.assertEquals("好4", wordArray.find("好4").getWordName())
+        Assert.assertEquals("好2", wordArray.find("好2").getWordName())
+        Assert.assertEquals("好3", wordArray.find("好3").getWordName())
     }
-
-
 }

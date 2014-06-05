@@ -33,8 +33,14 @@ class StringWordConverter {
     }
   }
 
+  val wordNamePattern = """"word"\s*:\s*"(.+?)"\s*,""".r
+  val conceptsPattern = """"concepts"\s*:\s*\[(("([^"]+)",?)+)\]\s*,?""".r
+  val conceptPattern = """"([^"]+)\",?""".r
+  val domainTypePattern = """"domainType"\s*:\s*(\d+)\s*,?""".r
+  val posTablePattern = """"POSTable"\s*:\s*\{(("(\w+)"\s*:\s*(\d+)\s*,?\s*)+)\}\s*,?""".r
+  val posAndFreq = """"(\w+)"\s*:\s*(\d+)""".r
+
   def convert(wordStr: String): IWord = {
-    val wordNamePattern = """"word"\s*:\s*"(.+?)"\s*,""".r
     wordNamePattern findFirstIn wordStr match {
       case Some(wordNamePattern(wordName)) => {
         val word = new WordImpl(escape(wordName))
@@ -49,29 +55,26 @@ class StringWordConverter {
     }
   }
 
-  def escape(word:String) = word.
-    replaceAll("""\\r""", "\r").
-    replaceAll("""\\n""", "\n").
-    replaceAll("""\\/""", "/").
-    replaceAll("""\\"""", "\"").
-    replace("""\\""", "\\")
+  def escape(word: String) = word.
+    replaceAll( """\\r""", "\r").
+    replaceAll( """\\n""", "\n").
+    replaceAll( """\\/""", "/").
+    replaceAll( """\\"""", "\"").
+    replace( """\\""", "\\")
 
   def parseConcepts(wordStr: String, word: WordImpl) {
-    val conceptsPattern = """"concepts"\s*:\s*\[(("([^"]+)",?)+)\]\s*,?""".r
     conceptsPattern findFirstMatchIn wordStr match {
       case Some(m) => {
         val concepts = m.group(1)
-        val conceptPattern = """"([^"]+)\",?""".r
         val conceptArray = conceptPattern.findAllMatchIn(concepts).
-          map(m =>conceptRepository.getConceptByName(m.group(1))).toArray
+          map(m => conceptRepository.getConceptByName(m.group(1))).toArray
         word.setConcepts(conceptArray)
-        }
+      }
       case None => word.setConcepts(Array())
     }
   }
 
   def parseDomainType(wordStr: String, word: WordImpl) {
-    val domainTypePattern = """"domainType"\s*:\s*(\d+)\s*,?""".r
     domainTypePattern findFirstIn wordStr match {
       case Some(domainTypePattern(domainType)) => word.setDomainType(domainType.toInt)
       case None => word.setDomainType(0)
@@ -79,13 +82,10 @@ class StringWordConverter {
   }
 
   def parsePOS(wordStr: String, word: WordImpl) {
-    val posTablePattern = """"POSTable"\s*:\s*\{(("(\w+)"\s*:\s*(\d+)\s*,?\s*)+)\}\s*,?""".r
     posTablePattern findFirstMatchIn wordStr match {
       case Some(m) => {
         val posTable = m.group(1)
         val posArray = new POSArray()
-
-        val posAndFreq = """"(\w+)"\s*:\s*(\d+)""".r
         posAndFreq.findAllMatchIn(posTable)
           .foreach(m => posArray.add(POS(m.group(1), m.group(2).toInt)))
         posArray.buildPOSArray()

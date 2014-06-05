@@ -8,8 +8,10 @@ import websiteschema.mpsegment.tools.StringWordConverter
 import io.Source
 import websiteschema.mpsegment.core.MPSegment
 import websiteschema.mpsegment.util.FileUtil
-import scala.util.parsing.json.{JSON, JSONObject}
 import java.io.InputStream
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object DictionaryFactory {
   val instance = new DictionaryFactory()
@@ -55,19 +57,15 @@ class DictionaryFactory {
     converter.setConceptRepository(ConceptRepository())
 
     loadWords(inputStream) {
-      wordString: String => {
-        val word = converter.convert(wordString)
-        dictionary addWord word
-      }
+      words => words.foreach(wordStr => dictionary.addWord(converter.convert(wordStr)))
     }
   }
 
-  private def loadWords(inputStream: InputStream)(convert : (String) => Unit) {
+  private def loadWords(inputStream: InputStream)(convert : (Iterator[String]) => Unit) {
     val source = Source.fromInputStream(inputStream, "utf-8")
 
-    source.getLines().foreach(wordString => {
-       convert(wordString.replaceAll("(^\\[)|(,$)|(\\]$)", ""))
-    })
+    val words = source.getLines().map(wordStr => wordStr.replaceAll("(^\\[)|(,$)|(\\]$)", ""))
+    convert(words)
 
     source.close()
   }
