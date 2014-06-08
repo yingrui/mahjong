@@ -12,13 +12,12 @@ import org.apache.lucene.analysis.util.CharArraySet
 
 final class MPSegmentAnalyzer extends Analyzer {
 
-  val worker = SegmentWorker("segment.lang.en = true", "convert.touppercase = true")
   val charArraySet = new CharArraySet(Version.LUCENE_46, 1, true)
   charArraySet.add(" ")
 
   @Override
   def createComponents(fieldName: String, reader: Reader): TokenStreamComponents = {
-    val tokenizer = new MPSegmentTokenizer(reader, worker)
+    val tokenizer = new MPSegmentTokenizer(reader, SegmentWorker("segment.lang.en = true", "convert.touppercase = true"))
     new TokenStreamComponents(tokenizer)
   }
 
@@ -38,7 +37,7 @@ final class MPSegmentAnalyzer extends Analyzer {
       clearAttributes()
 
       if (index == 0) {
-        result = worker segment readInputText(reader)
+        result = worker.segment(readInputText(reader))
       }
 
       if (index >= result.length()) {
