@@ -37,7 +37,7 @@ object CRFCliqueTree {
     val factors = for (datum <- doc.data) yield {
       val weightFactor = (for (label <- 0 until model.labelCount) yield {
         var weight = 0.0D
-        for (feature <- datum(0)) weight += weights(feature)(label)
+        for (feature <- datum) weight += weights(feature)(label)
         weight
       }).toArray
       new Factor(weightFactor)

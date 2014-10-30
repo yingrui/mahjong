@@ -46,15 +46,15 @@ object CRFUtils {
 
 }
 
-case class CRFDocument(val data: Array[Array[Array[Int]]], val label: Array[Int])
+case class CRFDocument(val data: Array[Array[Int]], val label: Array[Int])
 
 class CRFCorpus(val docs: Array[CRFDocument], model: CRFModel) {
 
-  def getFeatureOccurrence: Array[Array[Double]] = {
+  val Ehat: Array[Array[Double]] = {
     val featureArray = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
 
     for(doc_i <- docs) {
-      for(t <- 0 until doc_i.data.length; w <- doc_i.data(t); k <- w) {
+      for(t <- 0 until doc_i.data.length; k <- doc_i.data(t)) {
         featureArray(k)(doc_i.label(t)) += 1.0D
       }
     }
@@ -69,15 +69,18 @@ object CRFModel {
   def build(corpus: CRFCorpus) = {
     val model = new CRFModel
 
+    val func = new CRFDiffFunc(corpus, model)
+
+    for(iter <- 0 until 10) {
+      val value = func.valueAt(model.weights)
+      val grad = if(iter < 3) 0.1 else 1.0
+      for (i <- 0 until model.weights.length) {
+        model.weights(i) = model.weights(i) + grad * func.derivative(i)
+      }
+      val sum = func.derivative.sum
+      println(s"Iteration $iter: $value, $sum")
+    }
+
     model
-  }
-}
-
-class CRFLogFunction(docs: Array[CRFDocument]) {
-
-
-
-  def evaluate {
-
   }
 }

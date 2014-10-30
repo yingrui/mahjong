@@ -4,10 +4,10 @@ import org.junit.Test
 import websiteschema.mpsegment.Assertion._
 
 trait WithTestData {
-  // data = int[X][Window][Features]
+  // data = int[X][Features]
   val data = Array(
-    Array(Array(7, 10, 0, 12, 14, 15, 16, 17, 2, 19, 3, 21, 23, 24, 25)),
-    Array(Array(8, 9, 11, 13, 15, 1, 17, 18, 20, 21, 4, 22, 5, 24, 6))
+    Array(7, 10, 0, 12, 14, 15, 16, 17, 2, 19, 3, 21, 23, 24, 25),
+    Array(8, 9, 11, 13, 15, 1, 17, 18, 20, 21, 4, 22, 5, 24, 6)
   )
 
   val label = Array[Int](0, 1)
