@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.hmm
 
+import java.util
+
 
 /**
  * reference: http://www.cs.umb.edu/~srevilak/viterbi/
@@ -9,11 +11,11 @@ trait Viterbi {
 
   def getConditionProb(statePath: Array[Int], state: Int): Double
 
-  def getProb(state: Int, observe: Node): Double
+  def getProb(state: Int, observe: Int): Double
 
   def getPi(state: Int): Double
 
-  def getStatesBy(observe: Node): java.util.Collection[Int]
+  def getStatesBy(observe: Int): java.util.Collection[Int]
 
   def calculateWithLog(listObserve: Seq[String]): Seq[Node]
 
@@ -85,30 +87,35 @@ class ViterbiImpl extends Viterbi {
     ret
   }
 
-  private def calculateHmmResult(listObserve: Seq[String]): HmmResult = {
-    val ret = new HmmResult()
+  private def getObserveIndex(observe: String): Int = {
+    val node = observeBank.get(observe)
+    if (node != null) {
+      node.getIndex()
+    } else {
+      val newNode = Node(observe)
+      observeBank.add(newNode)
+      newNode.getIndex()
+    }
+  }
+
+
+  private def calculateResult(listObserve: Seq[String]): ViterbiResult = {
+    val ret = new ViterbiResult()
 
     if (listObserve.isEmpty) {
       throw new ObserveListException("observe list is empty.")
     }
 
-    var o = listObserve(0)
-    var o1 = observeBank.get(o)
-    if (o1 == null) {
-      o1 = Node(o)
-      observeBank.add(o1)
-    }
-
+    val o1 = getObserveIndex(listObserve(0))
     val relatedStates = getStatesBy(o1)
-    if (null == relatedStates || relatedStates.isEmpty) {
-      throw new ObserveListException("UNKNOWN observe object " + o + ".")
-    }
-    ret.states = new Array[Array[Int]](listObserve.size)
-    ret.delta = new Array[Array[Double]](listObserve.size)
-    ret.psai = new Array[Array[Int]](listObserve.size)
-    ret.states(0) = new Array[Int](relatedStates.size)
-    ret.delta(0) = new Array[Double](relatedStates.size)
-    ret.psai(0) = new Array[Int](relatedStates.size)
+
+    val length = listObserve.size
+    ret.states = new Array[Array[Int]](length)
+    ret.delta = new Array[Array[Double]](length)
+    ret.psai = new Array[Array[Int]](length)
+
+    val relatedStatesCount = relatedStates.size
+    initResultInPosition(ret, 0, relatedStatesCount)
 
     var index = 0
     val iterRlatedStates = relatedStates.iterator()
@@ -120,22 +127,16 @@ class ViterbiImpl extends Viterbi {
       index += 1
     }
 
-    //
     for (p <- 1 until listObserve.size) {
-      o = listObserve(p)
+      val o = listObserve(p)
       var oi = observeBank.get(o)
       if (oi == null) {
         oi = Node(o)
         observeBank.add(oi)
       }
 
-      val stateSet = getStatesBy(oi)
-      if (stateSet.isEmpty) {
-        throw new ObserveListException("UNKNOWN observe object " + o + ".")
-      }
-      ret.states(p) = new Array[Int](stateSet.size)
-      ret.delta(p) = new Array[Double](stateSet.size)
-      ret.psai(p) = new Array[Int](stateSet.size)
+      val stateSet = getStatesBy(oi.getIndex())
+      initResultInPosition(ret, p, stateSet.size)
       var i = 0
       val iterStateSet = stateSet.iterator()
       while (iterStateSet.hasNext) {
@@ -147,7 +148,7 @@ class ViterbiImpl extends Viterbi {
         var j = 0
         while (j < ret.states(p - 1).length) {
           val statePath = getStatePath(ret.states, ret.psai, p - 1, n - 1, j)
-          val b = Math.log(getProb(state, oi))
+          val b = Math.log(getProb(state, oi.getIndex()))
           val Aij = Math.log(getConditionProb(statePath, state))
           val psai_j = ret.delta(p - 1)(j) + Aij
           val delta_j = psai_j + b
@@ -172,20 +173,31 @@ class ViterbiImpl extends Viterbi {
     return ret
   }
 
+  def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
+    ret.states(position) = new Array[Int](relatedStatesCount)
+    ret.delta(position) = new Array[Double](relatedStatesCount)
+    ret.psai(position) = new Array[Int](relatedStatesCount)
+  }
 
   override def getConditionProb(statePath: Array[Int], state: Int) = tran.getConditionProb(statePath, state)
 
-  override def getProb(state: Int, observe: Node) = e.getProb(state, observe.getIndex())
+  override def getProb(state: Int, observe: Int) = e.getProb(state, observe)
 
   override def getPi(state: Int) = pi.getPi(state)
 
-  override def getStatesBy(observe: Node) = e.getStatesBy(observe.getIndex())
+  override def getStatesBy(observe: Int) = {
+    val states = e.getStatesBy(observe)
+    if (null == states || states.isEmpty) {
+      throw new ObserveListException("UNKNOWN observe object " + observe + ".")
+    }
+    states
+  }
 
   override def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
     if (listObserve.isEmpty) {
       List[Node]()
     } else {
-      val ret = calculateHmmResult(listObserve)
+      val ret = calculateResult(listObserve)
       var maxProb = Double.NegativeInfinity
       var pos = 0
       for (j <- 0 until ret.delta(listObserve.size - 1).length) {
