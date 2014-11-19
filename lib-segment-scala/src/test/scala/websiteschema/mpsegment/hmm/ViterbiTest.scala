@@ -97,7 +97,6 @@ class ViterbiTest {
     pi.setPi(stateBank.get("three").getIndex(), 0.4)
     v.setPi(pi)
 
-    v.setN(2)
     v
   }
 }

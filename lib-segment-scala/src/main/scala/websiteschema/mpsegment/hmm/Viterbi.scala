@@ -9,98 +9,47 @@ import java.util
 
 trait Viterbi {
 
+
   def getConditionProb(statePath: Array[Int], state: Int): Double
 
   def getProb(state: Int, observe: Int): Double
 
   def getPi(state: Int): Double
 
-  def getStatesBy(observe: Int): java.util.Collection[Int]
-
-  def calculateWithLog(listObserve: Seq[String]): Seq[Node]
-
   def setObserveBank(observeBank: NodeRepository)
   def setStateBank(stateBank: NodeRepository)
   def setTran(tran: ITransition)
   def setE(e: Emission)
   def setPi(pi: Pi)
-}
 
-class ViterbiImpl extends Viterbi {
+  def getStateBank: NodeRepository
+  def getObserveBank(): NodeRepository
+  def getObserveIndex(observe: String): Int
+  def getStatesBy(observe: Int): java.util.Collection[Int]
 
-  var stateBank = new NodeRepository()
-  var observeBank = new NodeRepository()
-  var tran: ITransition = Transition()
-  var pi = Pi()
-  var e = Emission()
-  var n = 2
-
-  def setN(n: Int) {
-    this.n = n
-  }
-
-  def getE(): Emission = {
-    return e
-  }
-
-  def setE(e: Emission) {
-    this.e = e
-  }
-
-  def getObserveBank(): NodeRepository = {
-    return observeBank
-  }
-
-  def setObserveBank(observeBank: NodeRepository) {
-    this.observeBank = observeBank
-  }
-
-  def getPi(): Pi = {
-    return pi
-  }
-
-  def setPi(pi: Pi) {
-    this.pi = pi
-  }
-
-  def getStateBank(): NodeRepository = {
-    return stateBank
-  }
-
-  def setStateBank(stateBank: NodeRepository) {
-    this.stateBank = stateBank
-  }
-
-  def setTran(tran: ITransition) {
-    this.tran = tran
-  }
-
-  def getStatePath(states: Array[Array[Int]], psai: Array[Array[Int]], end: Int, depth: Int, position: Int): Array[Int] = {
-    val maxDepth = if (end + 1 > depth) depth else end + 1
-    val ret = new Array[Int](maxDepth)
-    var pos = position
-    for (i <- 0 until maxDepth) {
-      val state = states(end - i)(pos)
-      pos = psai(end - i)(pos)
-      ret(ret.length - i - 1) = state
-    }
-    ret
-  }
-
-  private def getObserveIndex(observe: String): Int = {
-    val node = observeBank.get(observe)
-    if (node != null) {
-      node.getIndex()
+  def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
+    if (listObserve.isEmpty) {
+      List[Node]()
     } else {
-      val newNode = Node(observe)
-      observeBank.add(newNode)
-      newNode.getIndex()
+      val ret = calculateResult(listObserve)
+      var maxProb = Double.NegativeInfinity
+      var pos = 0
+      for (j <- 0 until ret.delta(listObserve.size - 1).length) {
+        val p = ret.delta(listObserve.size - 1)(j)
+        if (p > maxProb) {
+          maxProb = p
+          pos = j
+        }
+      }
+
+      val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
+      statePath.map(getStateBank.get(_))
     }
   }
-
 
   private def calculateResult(listObserve: Seq[String]): ViterbiResult = {
     val ret = new ViterbiResult()
+    val n = 2
 
     if (listObserve.isEmpty) {
       throw new ObserveListException("observe list is empty.")
@@ -129,10 +78,10 @@ class ViterbiImpl extends Viterbi {
 
     for (p <- 1 until listObserve.size) {
       val o = listObserve(p)
-      var oi = observeBank.get(o)
+      var oi = getObserveBank().get(o)
       if (oi == null) {
         oi = Node(o)
-        observeBank.add(oi)
+        getObserveBank().add(oi)
       }
 
       val stateSet = getStatesBy(oi.getIndex())
@@ -170,13 +119,70 @@ class ViterbiImpl extends Viterbi {
       }
     }
 
-    return ret
+    ret
   }
 
-  def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
+  private def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
     ret.states(position) = new Array[Int](relatedStatesCount)
     ret.delta(position) = new Array[Double](relatedStatesCount)
     ret.psai(position) = new Array[Int](relatedStatesCount)
+  }
+
+  private def getStatePath(states: Array[Array[Int]], psai: Array[Array[Int]], end: Int, depth: Int, position: Int): Array[Int] = {
+    val maxDepth = if (end + 1 > depth) depth else end + 1
+    val ret = new Array[Int](maxDepth)
+    var pos = position
+    for (i <- 0 until maxDepth) {
+      val state = states(end - i)(pos)
+      pos = psai(end - i)(pos)
+      ret(ret.length - i - 1) = state
+    }
+    ret
+  }
+}
+
+class ViterbiImpl extends Viterbi {
+
+  var stateBank = new NodeRepository()
+  var observeBank = new NodeRepository()
+  var tran: ITransition = Transition()
+  var pi = Pi()
+  var e = Emission()
+
+  def getE(): Emission = {
+    return e
+  }
+
+  def setE(e: Emission) {
+    this.e = e
+  }
+
+  override def getObserveBank(): NodeRepository = {
+    return observeBank
+  }
+
+  def setObserveBank(observeBank: NodeRepository) {
+    this.observeBank = observeBank
+  }
+
+  def getPi(): Pi = {
+    return pi
+  }
+
+  def setPi(pi: Pi) {
+    this.pi = pi
+  }
+
+  def getStateBank(): NodeRepository = {
+    return stateBank
+  }
+
+  def setStateBank(stateBank: NodeRepository) {
+    this.stateBank = stateBank
+  }
+
+  def setTran(tran: ITransition) {
+    this.tran = tran
   }
 
   override def getConditionProb(statePath: Array[Int], state: Int) = tran.getConditionProb(statePath, state)
@@ -185,7 +191,18 @@ class ViterbiImpl extends Viterbi {
 
   override def getPi(state: Int) = pi.getPi(state)
 
-  override def getStatesBy(observe: Int) = {
+  override def getObserveIndex(observe: String): Int = {
+    val node = observeBank.get(observe)
+    if (node != null) {
+      node.getIndex()
+    } else {
+      val newNode = Node(observe)
+      observeBank.add(newNode)
+      newNode.getIndex()
+    }
+  }
+
+  override def getStatesBy(observe: Int): java.util.Collection[Int] = {
     val states = e.getStatesBy(observe)
     if (null == states || states.isEmpty) {
       throw new ObserveListException("UNKNOWN observe object " + observe + ".")
@@ -193,23 +210,4 @@ class ViterbiImpl extends Viterbi {
     states
   }
 
-  override def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
-    if (listObserve.isEmpty) {
-      List[Node]()
-    } else {
-      val ret = calculateResult(listObserve)
-      var maxProb = Double.NegativeInfinity
-      var pos = 0
-      for (j <- 0 until ret.delta(listObserve.size - 1).length) {
-        val p = ret.delta(listObserve.size - 1)(j)
-        if (p > maxProb) {
-          maxProb = p
-          pos = j
-        }
-      }
-
-      val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
-      statePath.map(stateBank.get(_))
-    }
-  }
 }
