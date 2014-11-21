@@ -9,13 +9,13 @@ import collection.mutable.ListBuffer
 
 class POSRecognizer extends IPOSRecognizer {
 
-  private var viterbi: ViterbiImpl = null
+  private var viterbi: HmmViterbi = null
   private var graph: IGraph = null
   private var path: Path = null
   private var posFreq: Array[Int] = null
   private var observeList = ListBuffer[String]()
 
-  viterbi = new ViterbiImpl()
+  viterbi = new HmmViterbi()
   Trie.setTreeNodeSorter(new TrieNodeQuickSort())
   load()
 

@@ -130,7 +130,7 @@ trait Viterbi {
   }
 }
 
-class ViterbiImpl extends Viterbi {
+class HmmViterbi extends Viterbi {
 
   var stateBank = new NodeRepository()
   var observeBank = new NodeRepository()

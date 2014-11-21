@@ -9,7 +9,7 @@ import io.Source
 
 class HmmModel() {
 
-  private val viterbi = new ViterbiImpl
+  private val viterbi = new HmmViterbi
   private val stateBank = new NodeRepository()
   private val observeBank = new NodeRepository()
   private val ngram = new Trie()

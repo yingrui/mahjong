@@ -46,7 +46,7 @@ class ViterbiTest {
   }
 
   def initTestData: Viterbi = {
-    val v = new ViterbiImpl
+    val v = new HmmViterbi
     val stateBank: NodeRepository = new NodeRepository()
     stateBank.add(Node("one"))
     stateBank.add(Node("two"))
