@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.filter.ner
 
-import websiteschema.mpsegment.hmm.{Emission, ViterbiImpl, HmmClassifier, HmmModel}
+import websiteschema.mpsegment.hmm.{Emission, HmmClassifier, HmmModel}
 import websiteschema.mpsegment.util.FileUtil
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.filter.AbstractSegmentFilter
@@ -155,7 +155,7 @@ object HmmNameFilter {
   val Xing = "B"
 
   val nameDistribution = new NameProbDistribution()
-  val model = new HmmModel(new ViterbiImpl)
+  val model = new HmmModel
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
   model.buildViterbi(Emission(model.getEmission, () => getDefaultState, (stateIndex: Int) => getAppendixStates(stateIndex)))
 

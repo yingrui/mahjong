@@ -1,30 +1,19 @@
 package websiteschema.mpsegment.hmm
 
-import java.util
-
-
 /**
  * reference: http://www.cs.umb.edu/~srevilak/viterbi/
  */
 
 trait Viterbi {
 
-
   def getConditionProb(statePath: Array[Int], state: Int): Double
-
   def getProb(state: Int, observe: Int): Double
-
   def getPi(state: Int): Double
 
-  def setObserveBank(observeBank: NodeRepository)
-  def setStateBank(stateBank: NodeRepository)
-  def setTran(tran: ITransition)
-  def setE(e: Emission)
-  def setPi(pi: Pi)
+  def getObserveBank: NodeRepository
+  def getObserveIndex(observe: String): Int
 
   def getStateBank: NodeRepository
-  def getObserveBank(): NodeRepository
-  def getObserveIndex(observe: String): Int
   def getStatesBy(observe: Int): java.util.Collection[Int]
 
   def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
@@ -78,10 +67,10 @@ trait Viterbi {
 
     for (p <- 1 until listObserve.size) {
       val o = listObserve(p)
-      var oi = getObserveBank().get(o)
+      var oi = getObserveBank.get(o)
       if (oi == null) {
         oi = Node(o)
-        getObserveBank().add(oi)
+        getObserveBank.add(oi)
       }
 
       val stateSet = getStatesBy(oi.getIndex())

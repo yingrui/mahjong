@@ -7,8 +7,9 @@ import java.io.{DataInputStream, InputStream, File}
 import websiteschema.mpsegment.util.FileUtil._
 import io.Source
 
-class HmmModel(val viterbi: Viterbi) {
+class HmmModel() {
 
+  private val viterbi = new ViterbiImpl
   private val stateBank = new NodeRepository()
   private val observeBank = new NodeRepository()
   private val ngram = new Trie()

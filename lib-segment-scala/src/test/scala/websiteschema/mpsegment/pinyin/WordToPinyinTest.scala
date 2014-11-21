@@ -1,13 +1,12 @@
 package websiteschema.mpsegment.pinyin
 
-import org.junit.Assert
-import org.junit.Test
+import org.junit.{Assert, Test}
 import websiteschema.mpsegment.core.SegmentResult
-import websiteschema.mpsegment.hmm.{ViterbiImpl, HmmModel}
+import websiteschema.mpsegment.hmm.HmmModel
 
 class WordToPinyinTest {
 
-  val model = new HmmModel(new ViterbiImpl)
+  val model = new HmmModel
   model.load("websiteschema/mpsegment/wtp.m")
   model.buildViterbi
   private val classifier = new WordToPinyinClassifier(model)
