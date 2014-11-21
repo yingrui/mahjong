@@ -10,47 +10,16 @@ trait Viterbi {
   def getProb(state: Int, observe: Int): Double
   def getPi(state: Int): Double
 
-  def getObserveBank: NodeRepository
-  def getObserveIndex(observe: String): Int
-
-  def getStateBank: NodeRepository
   def getStatesBy(observe: Int): java.util.Collection[Int]
 
-  def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
-    if (listObserve.isEmpty) {
-      List[Node]()
-    } else {
-      val ret = calculateResult(listObserve)
-      var maxProb = Double.NegativeInfinity
-      var pos = 0
-      for (j <- 0 until ret.delta(listObserve.size - 1).length) {
-        val p = ret.delta(listObserve.size - 1)(j)
-        if (p > maxProb) {
-          maxProb = p
-          pos = j
-        }
-      }
-
-      val statePath = getStatePath(ret.states, ret.psai, listObserve.size - 1, listObserve.size, pos)
-      statePath.map(getStateBank.get(_))
-    }
-  }
-
-  private def calculateResult(listObserve: Seq[String]): ViterbiResult = {
-    val ret = new ViterbiResult()
-    val n = 2
-
-    if (listObserve.isEmpty) {
-      throw new ObserveListException("observe list is empty.")
-    }
-
-    val o1 = getObserveIndex(listObserve(0))
-    val relatedStates = getStatesBy(o1)
-
+  def calculateResult(listObserve: Seq[Int]): ViterbiResult = {
     val length = listObserve.size
-    ret.states = new Array[Array[Int]](length)
-    ret.delta = new Array[Array[Double]](length)
-    ret.psai = new Array[Array[Int]](length)
+    val ret = new ViterbiResult(length)
+
+    val n = 2
+    val o1 = listObserve(0)
+
+    val relatedStates = getStatesBy(o1)
 
     val relatedStatesCount = relatedStates.size
     initResultInPosition(ret, 0, relatedStatesCount)
@@ -66,14 +35,9 @@ trait Viterbi {
     }
 
     for (p <- 1 until listObserve.size) {
-      val o = listObserve(p)
-      var oi = getObserveBank.get(o)
-      if (oi == null) {
-        oi = Node(o)
-        getObserveBank.add(oi)
-      }
+      val oi = listObserve(p)
 
-      val stateSet = getStatesBy(oi.getIndex())
+      val stateSet = getStatesBy(oi)
       initResultInPosition(ret, p, stateSet.size)
       var i = 0
       val iterStateSet = stateSet.iterator()
@@ -85,8 +49,8 @@ trait Viterbi {
         var ls = 0
         var j = 0
         while (j < ret.states(p - 1).length) {
-          val statePath = getStatePath(ret.states, ret.psai, p - 1, n - 1, j)
-          val b = Math.log(getProb(state, oi.getIndex()))
+          val statePath = ret.getStatePath(p - 1, n - 1, j)
+          val b = Math.log(getProb(state, oi))
           val Aij = Math.log(getConditionProb(statePath, state))
           val psai_j = ret.delta(p - 1)(j) + Aij
           val delta_j = psai_j + b
@@ -116,18 +80,6 @@ trait Viterbi {
     ret.delta(position) = new Array[Double](relatedStatesCount)
     ret.psai(position) = new Array[Int](relatedStatesCount)
   }
-
-  private def getStatePath(states: Array[Array[Int]], psai: Array[Array[Int]], end: Int, depth: Int, position: Int): Array[Int] = {
-    val maxDepth = if (end + 1 > depth) depth else end + 1
-    val ret = new Array[Int](maxDepth)
-    var pos = position
-    for (i <- 0 until maxDepth) {
-      val state = states(end - i)(pos)
-      pos = psai(end - i)(pos)
-      ret(ret.length - i - 1) = state
-    }
-    ret
-  }
 }
 
 class HmmViterbi extends Viterbi {
@@ -146,7 +98,7 @@ class HmmViterbi extends Viterbi {
     this.e = e
   }
 
-  override def getObserveBank(): NodeRepository = {
+  def getObserveBank(): NodeRepository = {
     return observeBank
   }
 
@@ -180,7 +132,7 @@ class HmmViterbi extends Viterbi {
 
   override def getPi(state: Int) = pi.getPi(state)
 
-  override def getObserveIndex(observe: String): Int = {
+  def getObserveIndex(observe: String): Int = {
     val node = observeBank.get(observe)
     if (node != null) {
       node.getIndex()
@@ -199,4 +151,14 @@ class HmmViterbi extends Viterbi {
     states
   }
 
+  def calculateWithLog(listObserve: Seq[String]): Seq[Node] = {
+    if (listObserve.isEmpty) {
+      List[Node]()
+    } else {
+      val ret = calculateResult(listObserve.map(getObserveIndex(_)))
+
+      val statePath = ret.getStatePath(listObserve.size - 1, listObserve.length, ret.getMaxProbPathId)
+      statePath.map(getStateBank.get(_))
+    }
+  }
 }
