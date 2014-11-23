@@ -9,11 +9,13 @@ trait Viterbi {
   val n = 2
 
   def getConditionProb(statePath: Array[Int], state: Int): Double
+
   def getProb(state: Int, observe: Int): Double
 
   def getPi(state: Int): Double
 
   def getStatesBy(observe: Int): java.util.Collection[Int]
+
   def calculateResult(listObserve: Seq[Int]): ViterbiResult = {
     val length = listObserve.size
 
@@ -46,24 +48,24 @@ trait Viterbi {
         val state = iterStateSet.next()
         ret.states(currentPositionIndex)(stateIndex) = state
         var maxDelta = Double.NegativeInfinity
-        var maxPsai = Double.NegativeInfinity
+        var maxProb = Double.NegativeInfinity
         var bestStateIndex = 0
         var lastStateIndex = 0
         val lastPositionIndex = currentPositionIndex - 1
         while (lastStateIndex < ret.states(lastPositionIndex).length) {
           val statePath = ret.getStatePath(lastPositionIndex, n - 1, lastStateIndex)
-          val b = Math.log(getProb(state, oi))
-          val Aij = Math.log(getConditionProb(statePath, state))
-          val psai_j = ret.delta(lastPositionIndex)(lastStateIndex) + Aij
-          val delta_j = psai_j + b
-          if (delta_j > maxDelta) {
-            maxDelta = delta_j
+          val calculateResult = calculateProbability(ret.delta(lastPositionIndex)(lastStateIndex), statePath, state, oi)
+          val prob = calculateResult._2;
+          val delta = calculateResult._1
+          if (delta > maxDelta) {
+            maxDelta = delta
           }
 
-          if (psai_j > maxPsai) {
-            maxPsai = psai_j
+          if (prob > maxProb) {
+            maxProb = prob
             bestStateIndex = lastStateIndex
           }
+
           lastStateIndex += 1
         }
 
@@ -75,6 +77,14 @@ trait Viterbi {
     }
 
     ret
+  }
+
+  def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Int) = {
+    // A * delta * b
+    val b = Math.log(getProb(state, observe))
+    val Aij = Math.log(getConditionProb(statePath, state))
+    val prob = delta + Aij
+    (prob + b, prob)
   }
 
   def calculateFirstState(firstObserve: Int, state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve))
