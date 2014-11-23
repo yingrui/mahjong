@@ -6,17 +6,18 @@ package websiteschema.mpsegment.hmm
 
 trait Viterbi {
 
+  val n = 2
+
   def getConditionProb(statePath: Array[Int], state: Int): Double
   def getProb(state: Int, observe: Int): Double
+
   def getPi(state: Int): Double
 
   def getStatesBy(observe: Int): java.util.Collection[Int]
-
   def calculateResult(listObserve: Seq[Int]): ViterbiResult = {
     val length = listObserve.size
-    val ret = new ViterbiResult(length)
 
-    val n = 2
+    val ret = new ViterbiResult(length)
     val o1 = listObserve(0)
 
     val relatedStates = getStatesBy(o1)
@@ -29,30 +30,31 @@ trait Viterbi {
     while (iterRlatedStates.hasNext) {
       val s = iterRlatedStates.next()
       ret.states(0)(index) = s
-      ret.delta(0)(index) = Math.log(getPi(s)) + Math.log(getProb(s, o1))
+      ret.delta(0)(index) = calculateFirstState(o1, s)
       ret.psai(0)(index) = 0
       index += 1
     }
 
-    for (p <- 1 until listObserve.size) {
-      val oi = listObserve(p)
+    for (currentPositionIndex <- 1 until listObserve.size) {
+      val oi = listObserve(currentPositionIndex)
 
       val stateSet = getStatesBy(oi)
-      initResultInPosition(ret, p, stateSet.size)
-      var i = 0
+      initResultInPosition(ret, currentPositionIndex, stateSet.size)
+      var stateIndex = 0
       val iterStateSet = stateSet.iterator()
       while (iterStateSet.hasNext) {
         val state = iterStateSet.next()
-        ret.states(p)(i) = state
+        ret.states(currentPositionIndex)(stateIndex) = state
         var maxDelta = Double.NegativeInfinity
         var maxPsai = Double.NegativeInfinity
-        var ls = 0
-        var j = 0
-        while (j < ret.states(p - 1).length) {
-          val statePath = ret.getStatePath(p - 1, n - 1, j)
+        var bestStateIndex = 0
+        var lastStateIndex = 0
+        val lastPositionIndex = currentPositionIndex - 1
+        while (lastStateIndex < ret.states(lastPositionIndex).length) {
+          val statePath = ret.getStatePath(lastPositionIndex, n - 1, lastStateIndex)
           val b = Math.log(getProb(state, oi))
           val Aij = Math.log(getConditionProb(statePath, state))
-          val psai_j = ret.delta(p - 1)(j) + Aij
+          val psai_j = ret.delta(lastPositionIndex)(lastStateIndex) + Aij
           val delta_j = psai_j + b
           if (delta_j > maxDelta) {
             maxDelta = delta_j
@@ -60,20 +62,24 @@ trait Viterbi {
 
           if (psai_j > maxPsai) {
             maxPsai = psai_j
-            ls = j
+            bestStateIndex = lastStateIndex
           }
-          j += 1
+          lastStateIndex += 1
         }
 
-        ret.delta(p)(i) = maxDelta
-        ret.psai(p)(i) = ls
+        ret.delta(currentPositionIndex)(stateIndex) = maxDelta
+        ret.psai(currentPositionIndex)(stateIndex) = bestStateIndex
 
-        i += 1
+        stateIndex += 1
       }
     }
 
     ret
   }
+
+  def calculateProbably()
+
+  def calculateFirstState(firstObserve: Int, state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve))
 
   private def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
     ret.states(position) = new Array[Int](relatedStatesCount)
