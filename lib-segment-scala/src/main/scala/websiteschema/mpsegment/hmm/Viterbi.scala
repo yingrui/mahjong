@@ -8,12 +8,6 @@ trait Viterbi {
 
   val n = 2
 
-  def getConditionProb(statePath: Array[Int], state: Int): Double
-
-  def getProb(state: Int, observe: Int): Double
-
-  def getPi(state: Int): Double
-
   def getStatesBy(observe: Int): java.util.Collection[Int]
 
   def calculateResult(listObserve: Seq[Int]): ViterbiResult = {
@@ -79,15 +73,9 @@ trait Viterbi {
     ret
   }
 
-  def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Int) = {
-    // A * delta * b
-    val b = Math.log(getProb(state, observe))
-    val Aij = Math.log(getConditionProb(statePath, state))
-    val prob = delta + Aij
-    (prob + b, prob)
-  }
+  def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Int): (Double, Double)
 
-  def calculateFirstState(firstObserve: Int, state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve))
+  def calculateFirstState(firstObserve: Int, state: Int): Double
 
   private def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
     ret.states(position) = new Array[Int](relatedStatesCount)
@@ -140,11 +128,11 @@ class HmmViterbi extends Viterbi {
     this.tran = tran
   }
 
-  override def getConditionProb(statePath: Array[Int], state: Int) = tran.getConditionProb(statePath, state)
+  def getConditionProb(statePath: Array[Int], state: Int) = tran.getConditionProb(statePath, state)
 
-  override def getProb(state: Int, observe: Int) = e.getProb(state, observe)
+  def getProb(state: Int, observe: Int) = e.getProb(state, observe)
 
-  override def getPi(state: Int) = pi.getPi(state)
+  def getPi(state: Int) = pi.getPi(state)
 
   def getObserveIndex(observe: String): Int = {
     val node = observeBank.get(observe)
@@ -175,4 +163,15 @@ class HmmViterbi extends Viterbi {
       statePath.map(getStateBank.get(_))
     }
   }
+
+  override def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Int) = {
+    // A * delta * b
+    val b = Math.log(getProb(state, observe))
+    val Aij = Math.log(getConditionProb(statePath, state))
+    val prob = delta + Aij
+    (prob + b, prob)
+  }
+
+  override def calculateFirstState(firstObserve: Int, state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve))
+
 }
