@@ -77,8 +77,6 @@ trait Viterbi {
     ret
   }
 
-  def calculateProbably()
-
   def calculateFirstState(firstObserve: Int, state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve))
 
   private def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
