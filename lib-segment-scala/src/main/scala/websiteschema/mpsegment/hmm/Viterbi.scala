@@ -8,9 +8,9 @@ trait Viterbi {
 
   val n = 2
 
-  def getStatesBy(observe: Int): java.util.Collection[Int]
+  def getStatesBy(observe: Seq[Int]): java.util.Collection[Int]
 
-  def calculateResult(listObserve: Seq[Int]): ViterbiResult = {
+  def calculateResult(listObserve: Seq[Array[Int]]): ViterbiResult = {
     val length = listObserve.size
 
     val ret = new ViterbiResult(length)
@@ -73,9 +73,9 @@ trait Viterbi {
     ret
   }
 
-  def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Int): (Double, Double)
+  def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Array[Int]): (Double, Double)
 
-  def calculateFirstState(firstObserve: Int, state: Int): Double
+  def calculateFirstState(firstObserve: Array[Int], state: Int): Double
 
   private def initResultInPosition(ret: ViterbiResult, position: Int, relatedStatesCount: Int) {
     ret.states(position) = new Array[Int](relatedStatesCount)
@@ -134,19 +134,8 @@ class HmmViterbi extends Viterbi {
 
   def getPi(state: Int) = pi.getPi(state)
 
-  def getObserveIndex(observe: String): Int = {
-    val node = observeBank.get(observe)
-    if (node != null) {
-      node.getIndex()
-    } else {
-      val newNode = Node(observe)
-      observeBank.add(newNode)
-      newNode.getIndex()
-    }
-  }
-
-  override def getStatesBy(observe: Int): java.util.Collection[Int] = {
-    val states = e.getStatesBy(observe)
+  override def getStatesBy(observe: Seq[Int]): java.util.Collection[Int] = {
+    val states = e.getStatesBy(observe(0))
     if (null == states || states.isEmpty) {
       throw new ObserveListException("UNKNOWN observe object " + observe + ".")
     }
@@ -157,21 +146,34 @@ class HmmViterbi extends Viterbi {
     if (listObserve.isEmpty) {
       List[Node]()
     } else {
-      val ret = calculateResult(listObserve.map(getObserveIndex(_)))
+      val ret = calculateResult(getObservedFeatures(listObserve))
 
       val statePath = ret.getStatePath(listObserve.size - 1, listObserve.length, ret.getMaxProbPathId)
       statePath.map(getStateBank.get(_))
     }
   }
 
-  override def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Int) = {
+  private def getObservedFeatures(listObserve: Seq[String]) = listObserve.map(o => Array(getObserveIndex(o)))
+
+  override def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Array[Int]) = {
     // A * delta * b
-    val b = Math.log(getProb(state, observe))
+    val b = Math.log(getProb(state, observe(0)))
     val Aij = Math.log(getConditionProb(statePath, state))
     val prob = delta + Aij
     (prob + b, prob)
   }
 
-  override def calculateFirstState(firstObserve: Int, state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve))
+  override def calculateFirstState(firstObserve: Array[Int], state: Int): Double = Math.log(getPi(state)) + Math.log(getProb(state, firstObserve(0)))
+
+  private def getObserveIndex(observe: String): Int = {
+    val node = observeBank.get(observe)
+    if (node != null) {
+      node.getIndex()
+    } else {
+      val newNode = Node(observe)
+      observeBank.add(newNode)
+      newNode.getIndex()
+    }
+  }
 
 }
