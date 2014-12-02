@@ -148,8 +148,7 @@ class HmmViterbi extends Viterbi {
     } else {
       val ret = calculateResult(getObservedFeatures(listObserve))
 
-      val statePath = ret.getStatePath(listObserve.size - 1, listObserve.length, ret.getMaxProbPathId)
-      statePath.map(getStateBank.get(_))
+      ret.getBestPath.map(getStateBank.get(_))
     }
   }
 

@@ -6,7 +6,7 @@ class ViterbiResult(val length: Int) {
   var delta: Array[Array[Double]] = new Array[Array[Double]](length)
   var psai: Array[Array[Int]] = new Array[Array[Int]](length)
 
-  def getMaxProbPathId = {
+  def getBestPathId = {
     var pos = 0
     var maxProb = Double.NegativeInfinity
     for (j <- 0 until delta(length - 1).length) {
@@ -18,6 +18,8 @@ class ViterbiResult(val length: Int) {
     }
     pos
   }
+
+  def getBestPath = getStatePath(length - 1, length, getBestPathId)
 
   def getStatePath(end: Int, len: Int, position: Int): Array[Int] = {
     val maxDepth = if (end + 1 > len) len else end + 1

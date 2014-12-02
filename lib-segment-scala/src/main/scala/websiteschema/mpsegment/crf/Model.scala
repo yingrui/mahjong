@@ -4,8 +4,15 @@ class CRFModel {
 
   val windowSize = 1
   val labelCount = 2
-  val featuresCount = 26
-  val weights: Array[Double] = new Array[Double](featuresCount * labelCount)
+  val featuresCount = 26 + 2 ^ labelCount
+  def getLabelFeature(labels: Array[Int]) = labels match {
+    case Array(0, 0) => 26
+    case Array(0, 1) => 27
+    case Array(1, 0) => 28
+    case Array(1, 1) => 29
+    case _ => throw new RuntimeException
+  }
+  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
   val tolerance = 1.0E-4
 
   def getLabelCount(feature: Int) = labelCount
@@ -73,11 +80,11 @@ object CRFModel {
 
     for(iter <- 0 until 10) {
       val value = func.valueAt(model.weights)
-      val grad = if(iter < 3) 0.1 else 1.0
-      for (i <- 0 until model.weights.length) {
-        model.weights(i) = model.weights(i) + grad * func.derivative(i)
+      val grad = if(iter < 3) 0.1 else 0.5
+      for (i <- 0 until model.featuresCount; j <- 0 until model.labelCount) {
+        model.weights(i)(j) = model.weights(i)(j) + grad * func.derivative(i)(j)
       }
-      val sum = func.derivative.sum
+      val sum = func.derivative.map(array => array.sum).sum
       println(s"Iteration $iter: $value, $sum")
     }
 
