@@ -24,14 +24,14 @@ class CRFModelTrainingTest extends WithTestData {
   @Test
   def should_train_a_model {
     val model = new CRFModel
-    CRFModel.build(new CRFCorpus(Array(doc), model))
+    CRFModel.build(new CRFCorpus(Array(doc), model.featuresCount, model.labelCount))
 
     shouldBeEqual(0.0D, model.weights(0))
   }
 
   @Test
   def should_train_a_model_and_get_the_correct_answer {
-    val model = CRFModel.build(new CRFCorpus(Array(doc), new CRFModel))
+    val model = CRFModel.build(new CRFCorpus(Array(doc), 30, 2))
 
     val classifier = new CRFViterbi(model)
 

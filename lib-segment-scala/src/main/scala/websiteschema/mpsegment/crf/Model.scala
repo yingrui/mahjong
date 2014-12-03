@@ -53,24 +53,6 @@ object CRFUtils {
 
 }
 
-case class CRFDocument(val data: Array[Array[Int]], val label: Array[Int])
-
-class CRFCorpus(val docs: Array[CRFDocument], model: CRFModel) {
-
-  val Ehat: Array[Array[Double]] = {
-    val featureArray = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
-
-    for(doc_i <- docs) {
-      for(t <- 0 until doc_i.data.length; k <- doc_i.data(t)) {
-        featureArray(k)(doc_i.label(t)) += 1.0D
-      }
-    }
-
-    featureArray
-  }
-
-}
-
 object CRFModel {
 
   def build(corpus: CRFCorpus) = {
