@@ -4,7 +4,7 @@ import websiteschema.mpsegment.hmm.Viterbi
 
 class CRFViterbi(model: CRFModel) extends Viterbi {
 
-  val labels = java.util.Arrays.asList(0, 1)
+  val labels = model.labelRepository.featureIds
 
   def getStatesBy(observe: Seq[Int]): java.util.Collection[Int] = labels
 
@@ -15,9 +15,6 @@ class CRFViterbi(model: CRFModel) extends Viterbi {
     (p, p)
   }
 
-  def calculateFirstState(firstObserve: Array[Int], state: Int): Double = {
-    val product = firstObserve.map(feature => model.weights(feature)(state)).sum
-    product
-  }
+  def calculateFirstState(firstObserve: Array[Int], state: Int): Double = firstObserve.map(feature => model.weights(feature)(state)).sum
 
 }

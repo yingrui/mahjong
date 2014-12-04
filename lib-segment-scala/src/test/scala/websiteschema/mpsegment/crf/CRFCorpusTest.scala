@@ -1,18 +1,14 @@
 package websiteschema.mpsegment.crf
 
-import java.io.FileWriter
-
-import org.junit.Test
+import org.junit.{Assert, Test}
 import websiteschema.mpsegment.Assertion._
-
-import scala.io.Source
 
 class CRFCorpusTest extends WithTestData {
 
   @Test
   def should_calculate_expected_probability {
-    val model = new CRFModel
-    val corpus = new CRFCorpus(Array(doc), model.featuresCount, model.labelCount)
+    val model = new CRFModel(30, 2, new FeatureRepository(true), new FeatureRepository(false))
+    val corpus = new CRFCorpus(Array(doc), model.featuresCount, model.labelCount, new FeatureRepository(true), new FeatureRepository(false))
     val occurrence = corpus.Ehat
 
     val feature0Y0Occurrence = occurrence(0)(0)
@@ -32,15 +28,18 @@ class CRFCorpusTest extends WithTestData {
       """Hello  O
         |Jenny  PER
       """.stripMargin
-    println(trainingText)
-  }
+    val corpus = CRFCorpus(populateTrainingFile(trainingText))
 
-  private def populateTrainingFile(text: String) = {
-    val file = java.io.File.createTempFile("crf-corpus", "txt")
-    file.deleteOnExit()
-    val output = new FileWriter(file)
-    output.write(text)
-    output.close()
-    file.getAbsolutePath
+    Assert.assertEquals(1, corpus.docs.length)
+
+    Assert.assertTrue(corpus.featureRepository.contains("Hello"))
+    Assert.assertTrue(corpus.featureRepository.contains("Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("label0+1"))
+    Assert.assertTrue(corpus.featureRepository.contains("label0+0"))
+    Assert.assertTrue(corpus.featureRepository.contains("label1+0"))
+    Assert.assertTrue(corpus.featureRepository.contains("label1+1"))
+
+    Assert.assertTrue(corpus.labelRepository.contains("O"))
+    Assert.assertTrue(corpus.labelRepository.contains("PER"))
   }
 }

@@ -10,7 +10,6 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
   val sigma = 1.0D
 
   private def calculate(weights: Array[Array[Double]]): Double = {
-//    val weights = to2D(x)
     val E = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
 
     val prob = (for (doc_i <- corpus.docs) yield {
@@ -24,7 +23,6 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
 
       clique.condLogProb
     }).sum
-//    prob = -prob
 
     val sigmaSq = sigma * sigma
     val regular = (for (feature <- 0 until model.featuresCount; label <- 0 until model.labelCount) yield {
@@ -34,18 +32,6 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
     }).sum
 
     prob - regular
-  }
-
-  private def to2D(x: Array[Double]): Array[Array[Double]] = {
-    var i = 0
-    val array = for (feature <- 0 until model.featuresCount) yield {
-      (for (index <- 0 until model.getLabelCount(feature)) yield {
-        val weight = x(i)
-        i += 1
-        weight
-      }).toArray
-    }
-    array.toArray
   }
 
 }

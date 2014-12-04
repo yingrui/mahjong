@@ -11,9 +11,7 @@ class CRFCliqueTree(doc: CRFDocument, model: CRFModel, factors: Array[Factor]) {
     sumProducts.sum
   }
 
-  def condLogProb: Double = {
-    sumWeights - logZ
-  }
+  def condLogProb: Double = sumWeights - logZ
 
   def condProb(position: Int, label: Int): Double = {
     val f = factors(position)(label)

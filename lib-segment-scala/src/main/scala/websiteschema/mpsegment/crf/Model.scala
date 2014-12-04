@@ -1,17 +1,9 @@
 package websiteschema.mpsegment.crf
 
-class CRFModel {
+class CRFModel(val featuresCount: Int, val labelCount: Int, val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
 
-  val windowSize = 1
-  val labelCount = 2
-  val featuresCount = 26 + 2 ^ labelCount
-  def getLabelFeature(labels: Array[Int]) = labels match {
-    case Array(0, 0) => 26
-    case Array(0, 1) => 27
-    case Array(1, 0) => 28
-    case Array(1, 1) => 29
-    case _ => throw new RuntimeException
-  }
+  def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels(0), labels.last)
+
   val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
   val tolerance = 1.0E-4
 
@@ -56,7 +48,7 @@ object CRFUtils {
 object CRFModel {
 
   def build(corpus: CRFCorpus) = {
-    val model = new CRFModel
+    val model = new CRFModel(corpus.featuresCount, corpus.labelCount, corpus.featureRepository, corpus.labelRepository)
 
     val func = new CRFDiffFunc(corpus, model)
 
