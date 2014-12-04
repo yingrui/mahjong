@@ -2,10 +2,13 @@ package websiteschema.mpsegment.crf
 
 import java.util
 
-class FeatureRepository(private val reserveForUnknownFeature: Boolean) {
+import websiteschema.mpsegment.util.SerializeHandler
 
-  private val repo = scala.collection.mutable.HashMap[String, Int]()
-  private val defaultFeature = if (reserveForUnknownFeature) 0 else -1
+class FeatureRepository(private val reserveUnknownFeature: Boolean, private val repo: scala.collection.mutable.Map[String, Int]) {
+
+  def this(unknownFeature: Boolean) = this(unknownFeature, scala.collection.mutable.Map[String, Int]())
+
+  private val defaultFeature = if (reserveUnknownFeature) 0 else -1
 
   def getFeatureId(feature: String): Int = repo.getOrElse(feature, defaultFeature)
 
@@ -21,13 +24,29 @@ class FeatureRepository(private val reserveForUnknownFeature: Boolean) {
 
   def contains(feature: String) = repo.contains(feature)
 
-  def size = if (reserveForUnknownFeature) repo.size + 1 else repo.size
-  
-  def getLabelFeatureId(lastLabel: Int, label: Int) = getFeatureId("label"+lastLabel+"+"+label)
+  def size = if (reserveUnknownFeature) repo.size + 1 else repo.size
+
+  def getLabelFeatureId(lastLabel: Int, label: Int) = getFeatureId("label" + lastLabel + "+" + label)
 
   private def addFeature(feature: String) = {
     val index = size
     repo += (feature -> index)
     index
+  }
+}
+
+object FeatureRepository {
+
+  def apply(reader: SerializeHandler) = {
+    val unknownFeature = reader.deserializeInt() > 0
+    val repo = reader.deserializeScalaMapStringInt()
+
+    new FeatureRepository(unknownFeature, repo)
+  }
+
+
+  def save(featureRepository: FeatureRepository, writer: SerializeHandler) {
+    writer.serializeInt(if(featureRepository.reserveUnknownFeature) 1 else 0)
+    writer.serializeMapStringInt(featureRepository.repo)
   }
 }

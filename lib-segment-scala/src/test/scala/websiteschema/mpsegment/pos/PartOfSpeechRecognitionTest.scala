@@ -46,7 +46,7 @@ class PartOfSpeechRecognitionTest {
   def should_save_POS_Matrix() {
     val recognizer = new POSRecognizer()
     val file = new File("pos.dat")
-    val writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
+    val writeHandler = SerializeHandler(file, SerializeHandler.WRITE_ONLY)
     recognizer.save(writeHandler)
   }
 

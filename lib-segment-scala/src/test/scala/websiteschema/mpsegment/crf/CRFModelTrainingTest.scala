@@ -8,7 +8,20 @@ class CRFModelTrainingTest extends WithTestData {
   def should_train_a_model {
     val corpus = new CRFCorpus(Array(doc), featureRepository, labelRepository)
 
-    CRFModel.build(corpus)
+    val m = CRFModel.build(corpus)
+
+    val file = java.io.File.createTempFile("crf-model", ".dat")
+
+    println(file.getAbsolutePath)
+    file.deleteOnExit()
+    CRFModel.save(m, file.getAbsolutePath)
+
+    val model = CRFModel.apply(file.getAbsolutePath)
+    val classifier = new CRFViterbi(model)
+
+    val result = classifier.calculateResult(testData)
+    val path = result.getBestPath
+    path.foreach(println(_))
   }
 
   @Test

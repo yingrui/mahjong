@@ -116,7 +116,7 @@ class NameEntityRecognizerStatisticResult {
   }
 
   def save(file: String) {
-    val serializeHandle = SerializeHandler(new File(file), SerializeHandler.MODE_WRITE_ONLY)
+    val serializeHandle = SerializeHandler(new File(file), SerializeHandler.WRITE_ONLY)
     serializeHandle.serializeDouble(charOccurTotal)
     serializeHandle.serializeDouble(wordOccurTotal)
     serializeHandle.serializeDouble(nameOccurTotal)

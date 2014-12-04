@@ -46,7 +46,7 @@ class HmmModel() {
   }
 
   def save(file: String) {
-    val handler = SerializeHandler(new File(file), SerializeHandler.MODE_WRITE_ONLY)
+    val handler = SerializeHandler(new File(file), SerializeHandler.WRITE_ONLY)
     observeBank.save(handler)
     stateBank.save(handler)
     pi.save(handler)

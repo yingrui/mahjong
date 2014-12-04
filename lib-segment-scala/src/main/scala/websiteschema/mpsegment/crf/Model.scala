@@ -1,13 +1,18 @@
 package websiteschema.mpsegment.crf
 
-class CRFModel(val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
+import websiteschema.mpsegment.util.SerializeHandler
+
+class CRFModel(val featureRepository: FeatureRepository, val labelRepository: FeatureRepository, val weights: Array[Array[Double]]) {
+
+  def this(featureRepository: FeatureRepository, labelRepository: FeatureRepository) =
+        this(featureRepository, labelRepository, CRFUtils.empty2DArray(featureRepository.size, labelRepository.size))
 
   val featuresCount = featureRepository.size
   val labelCount = labelRepository.size
 
   def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels(0), labels.last)
 
-  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
+//  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
   val tolerance = 1.0E-4
 
   def getLabelCount(feature: Int) = labelCount
@@ -43,5 +48,29 @@ object CRFModel {
     }
 
     model
+  }
+
+  def save(model: CRFModel, file: String) {
+    val writer = SerializeHandler(new java.io.File(file), SerializeHandler.WRITE_ONLY)
+
+    FeatureRepository.save(model.featureRepository, writer)
+    FeatureRepository.save(model.labelRepository, writer)
+
+    writer.serialize2DArrayDouble(model.weights)
+
+    writer.close()
+  }
+
+  def apply(file: String) = {
+    val reader = SerializeHandler(new java.io.File(file), SerializeHandler.READ_ONLY)
+
+    val featureRepository = FeatureRepository(reader)
+    val labelRepository = FeatureRepository(reader)
+
+    val weights = reader.deserialize2DArrayDouble()
+
+    reader.close()
+
+    new CRFModel(featureRepository, labelRepository, weights)
   }
 }

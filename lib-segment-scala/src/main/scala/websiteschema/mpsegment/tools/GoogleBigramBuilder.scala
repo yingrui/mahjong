@@ -81,7 +81,7 @@ class GoogleBigramBuilder extends App {
   }
 
   def save(filename: String) {
-    val writer = SerializeHandler(new File(filename), SerializeHandler.MODE_WRITE_ONLY)
+    val writer = SerializeHandler(new File(filename), SerializeHandler.WRITE_ONLY)
     nodeRepository.save(writer)
     trie.save(writer)
   }

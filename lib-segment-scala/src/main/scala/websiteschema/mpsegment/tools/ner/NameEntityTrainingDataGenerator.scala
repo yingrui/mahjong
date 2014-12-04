@@ -46,7 +46,7 @@ object NameEntityTrainingDataGenerator extends App {
 
   class NameProbDistribution {
 
-    val loader = SerializeHandler(new File("ner_cn.dat"), SerializeHandler.MODE_READ_ONLY)
+    val loader = SerializeHandler(new File("ner_cn.dat"), SerializeHandler.READ_ONLY)
     val wordCount = loader.deserializeInt()
     val pinyinFreq = loader.deserializeMapStringInt()
     val wordFreq = loader.deserializeMapStringInt()

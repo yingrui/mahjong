@@ -196,7 +196,7 @@ class ChNameDictionary {
 
   def saveNameDict(dictFile: String) {
     try {
-      val writeHandler = SerializeHandler(new File(dictFile), SerializeHandler.MODE_WRITE_ONLY)
+      val writeHandler = SerializeHandler(new File(dictFile), SerializeHandler.WRITE_ONLY)
       writeHandler.serializeMapStringInt(xingHashMap)
       writeHandler.serializeArrayInt(xingFreq)
       writeHandler.serializeMapStringInt(mingHashMap)
@@ -219,7 +219,7 @@ class ChNameDictionary {
       var f = new File(dictFile)
       var readHandler: SerializeHandler = null
       if (f.exists()) {
-        readHandler = SerializeHandler(f, SerializeHandler.MODE_READ_ONLY)
+        readHandler = SerializeHandler(f, SerializeHandler.READ_ONLY)
       } else {
         objectinputstream = new DataInputStream(
           FileUtil.getResourceAsStream(dictFile))

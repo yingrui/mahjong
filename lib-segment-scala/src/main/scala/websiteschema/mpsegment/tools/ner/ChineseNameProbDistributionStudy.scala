@@ -28,7 +28,7 @@ object ChineseNameProbDistributionStudy extends App {
   println(pinyinFreq)
   println(wordFreq)
 
-  val dumper = SerializeHandler(new File("ner_cn.dat"), SerializeHandler.MODE_WRITE_ONLY)
+  val dumper = SerializeHandler(new File("ner_cn.dat"), SerializeHandler.WRITE_ONLY)
 
   dumper.serializeInt(wordCount)
   dumper.serializeMapStringInt(pinyinFreq)

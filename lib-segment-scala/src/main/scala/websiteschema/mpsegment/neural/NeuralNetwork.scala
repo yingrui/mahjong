@@ -24,7 +24,7 @@ class NeuralNetwork {
   override def toString(): String = layers.map(_.weight).mkString("\n\n")
 
   def save(file: String) {
-    val dumper = SerializeHandler(new java.io.File(file), SerializeHandler.MODE_WRITE_ONLY)
+    val dumper = SerializeHandler(new java.io.File(file), SerializeHandler.WRITE_ONLY)
     dumper.serializeInt(layers.length)
     layers.foreach(layer => dumper.serializeMatrix(layer.weight))
     dumper.close()

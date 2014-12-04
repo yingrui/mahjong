@@ -7,16 +7,16 @@ import scala.collection.mutable.OpenHashMap
 import websiteschema.mpsegment.math.Matrix
 
 object SerializeHandler {
-  val MODE_READ_ONLY = 0
-  val MODE_WRITE_ONLY = 1
+  val READ_ONLY = 0
+  val WRITE_ONLY = 1
 
   def apply(f: File, mode: Int): SerializeHandler = {
     if (!f.exists()) f.createNewFile()
 
-    if (mode == MODE_WRITE_ONLY) {
+    if (mode == WRITE_ONLY) {
       return new SerializeHandler(null, new DataOutputStream(new FileOutputStream(f)))
     }
-    if (mode == MODE_READ_ONLY) {
+    if (mode == READ_ONLY) {
       return new SerializeHandler(new DataInputStream(new FileInputStream(f)), null)
     }
 
@@ -61,6 +61,24 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
     }
   }
 
+  def serializeMapStringInt(map: collection.mutable.Map[String, Int]) {
+    if (null != map) {
+      output.writeInt(map.size)
+      if (!map.isEmpty) {
+        val keys = map.keys.toArray
+        var i = 0
+        while (i < keys.size) {
+          val key = keys(i)
+          val value = map.getOrElse(key, 0)
+          output.writeUTF(key)
+          output.writeInt(value)
+          i += 1
+        }
+      }
+      output.flush()
+    }
+  }
+
   def serializeMapIntDouble(map: java.util.Map[Int, Double]) {
     if (null != map) {
       output.writeInt(map.size)
@@ -91,6 +109,20 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
       map
     } else {
       new java.util.HashMap[String, Int]()
+    }
+  }
+  def deserializeScalaMapStringInt(): collection.mutable.Map[String, Int] = {
+    val size = input.readInt()
+    if (size > 0) {
+      val map = collection.mutable.HashMap[String, Int]()
+      for (i <- 0 until size) {
+        val key = input.readUTF()
+        val value = input.readInt()
+        map.put(key, value)
+      }
+      map
+    } else {
+      collection.mutable.HashMap[String, Int]()
     }
   }
 
@@ -161,6 +193,28 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
       }
       output.flush()
     }
+  }
+
+  def serialize2DArrayDouble(array: Array[Array[Double]]) {
+    if (null != array) {
+      output.writeInt(array.length)
+      for (i <- array) {
+        serializeArrayDouble(i)
+      }
+      output.flush()
+    }
+  }
+
+  def deserialize2DArrayDouble(): Array[Array[Double]] = {
+    val size = input.readInt()
+    val array = new Array[Array[Double]](size)
+    if (size > 0) {
+      for (i <- 0 until size) {
+        val value = deserializeArrayDouble()
+        array(i) = value
+      }
+    }
+    return array
   }
 
   def deserializeArrayDouble(): Array[Double] = {

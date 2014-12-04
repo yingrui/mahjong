@@ -26,11 +26,11 @@ class TrieNodeTest {
         val f = new File(filename)
         f.deleteOnExit()
         val root = create()
-        val writeHandler = SerializeHandler(f, SerializeHandler.MODE_WRITE_ONLY)
+        val writeHandler = SerializeHandler(f, SerializeHandler.WRITE_ONLY)
         root.save(writeHandler)
         writeHandler.close()
 
-        val readHandler = SerializeHandler(f, SerializeHandler.MODE_READ_ONLY)
+        val readHandler = SerializeHandler(f, SerializeHandler.READ_ONLY)
         val copy = new Trie()
         copy.load(readHandler)
         readHandler.close()

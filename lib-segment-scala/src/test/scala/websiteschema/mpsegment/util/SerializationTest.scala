@@ -16,11 +16,11 @@ class SerializationTest {
         var filename = "test-map.dat"
         var file = new File(filename)
         try {
-            var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
+            var writeHandler = SerializeHandler(file, SerializeHandler.WRITE_ONLY)
             writeHandler.serializeMapStringInt(map)
             writeHandler.close()
 
-            var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
+            var readHandler = SerializeHandler(file, SerializeHandler.READ_ONLY)
             var newone = readHandler.deserializeMapStringInt()
             readHandler.close()
             Assert.assertEquals(3, newone.size)
@@ -41,10 +41,10 @@ class SerializationTest {
         var filename = "test-map.dat"
         var file = new File(filename)
         try {
-            var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
+            var writeHandler = SerializeHandler(file, SerializeHandler.WRITE_ONLY)
             writeHandler.serializeArrayInt(array.toArray)
             writeHandler.close()
-            var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
+            var readHandler = SerializeHandler(file, SerializeHandler.READ_ONLY)
             var newone = readHandler.deserializeArrayInt()
             readHandler.close()
             Assert.assertArrayEquals(newone, array.toArray)
@@ -64,10 +64,10 @@ class SerializationTest {
         var filename = "test-map.dat"
         var file = new File(filename)
         try {
-            var writeHandler = SerializeHandler(file, SerializeHandler.MODE_WRITE_ONLY)
+            var writeHandler = SerializeHandler(file, SerializeHandler.WRITE_ONLY)
             writeHandler.serialize2DArrayInt(array)
             writeHandler.close()
-            var readHandler = SerializeHandler(file, SerializeHandler.MODE_READ_ONLY)
+            var readHandler = SerializeHandler(file, SerializeHandler.READ_ONLY)
             var newone = readHandler.deserialize2DArrayInt()
             readHandler.close()
             Assert.assertEquals(newone.length, array.length)
