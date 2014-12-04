@@ -7,8 +7,7 @@ class CRFCorpusTest extends WithTestData {
 
   @Test
   def should_calculate_expected_probability {
-    val model = new CRFModel(30, 2, new FeatureRepository(true), new FeatureRepository(false))
-    val corpus = new CRFCorpus(Array(doc), model.featuresCount, model.labelCount, new FeatureRepository(true), new FeatureRepository(false))
+    val corpus = new CRFCorpus(Array(doc), featureRepository, labelRepository)
     val occurrence = corpus.Ehat
 
     val feature0Y0Occurrence = occurrence(0)(0)

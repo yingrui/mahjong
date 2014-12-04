@@ -1,6 +1,9 @@
 package websiteschema.mpsegment.crf
 
-class CRFModel(val featuresCount: Int, val labelCount: Int, val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
+class CRFModel(val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
+
+  val featuresCount = featureRepository.size
+  val labelCount = labelRepository.size
 
   def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels(0), labels.last)
 
@@ -20,35 +23,12 @@ object CRFUtils {
     array
   }
 
-  /*
-   *  log(exp(lx) + exp(ly))
-   */
-  def logAdd(lx: Double, ly: Double) = {
-
-    var max: Double = 0D
-    var negDiff: Double = 0D
-    if (lx > ly) {
-      max = lx
-      negDiff = ly - lx
-    } else {
-      max = ly
-      negDiff = lx - ly
-    }
-    if (max == Double.NegativeInfinity) {
-      max
-    } else if (negDiff < -30.0) {
-      max
-    } else {
-      max + Math.log(1.0 + Math.exp(negDiff))
-    }
-  }
-
 }
 
 object CRFModel {
 
   def build(corpus: CRFCorpus) = {
-    val model = new CRFModel(corpus.featuresCount, corpus.labelCount, corpus.featureRepository, corpus.labelRepository)
+    val model = new CRFModel(corpus.featureRepository, corpus.labelRepository)
 
     val func = new CRFDiffFunc(corpus, model)
 

@@ -14,8 +14,16 @@ trait WithTestData {
     Array(8, 9, 11, 13, 15, 1, 17, 18, 20, 21, 4, 22, 5, 24, 6)
   )
 
-  val label = Array[Int](0, 1)
-  val doc = new CRFDocument(data, label)
+  val featureRepository = new FeatureRepository(true)
+  for(feature <- 0 until 29) {
+    featureRepository.add(feature.toString)
+  }
+
+  val labelRepository = new FeatureRepository(false)
+  labelRepository.add("0")
+  labelRepository.add("1")
+
+  val doc = new CRFDocument(data, Array[Int](0, 1))
 
   def populateTrainingFile(text: String) = {
     val file = java.io.File.createTempFile("crf-corpus", "txt")

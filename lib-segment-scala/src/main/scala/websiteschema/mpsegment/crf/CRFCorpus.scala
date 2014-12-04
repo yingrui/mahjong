@@ -5,7 +5,10 @@ import scala.collection.mutable._
 
 case class CRFDocument(val data: Array[Array[Int]], val label: Array[Int])
 
-class CRFCorpus(val docs: Array[CRFDocument], val featuresCount: Int, val labelCount: Int, val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
+class CRFCorpus(val docs: Array[CRFDocument], val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
+
+  val featuresCount = featureRepository.size
+  val labelCount = labelRepository.size
 
   val Ehat: Array[Array[Double]] = {
     val featureArray = CRFUtils.empty2DArray(featuresCount, labelCount)
@@ -40,7 +43,7 @@ object CRFCorpus {
 
     addLabelFeaturesIfNotExists(featureRepository, labelRepository)
 
-    new CRFCorpus(documents.toArray, featureRepository.size, labelRepository.size, featureRepository, labelRepository)
+    new CRFCorpus(documents.toArray, featureRepository, labelRepository)
   }
 
   def addLabelFeaturesIfNotExists(featureRepository: FeatureRepository, labelRepository: FeatureRepository) {
