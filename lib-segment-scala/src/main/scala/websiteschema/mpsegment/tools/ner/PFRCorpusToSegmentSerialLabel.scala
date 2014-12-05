@@ -14,6 +14,7 @@ object PFRCorpusToSegmentSerialLabel extends App {
   val printer = new PrintWriter(new File("training.txt"), "utf-8")
 
   loader.load { sentence =>
+
     var i = 0
     while (i < sentence.length()) {
       val word = sentence(i).word
@@ -35,5 +36,6 @@ object PFRCorpusToSegmentSerialLabel extends App {
       i += 1
     }
     printer.println()
+    printer.flush()
   }
 }
