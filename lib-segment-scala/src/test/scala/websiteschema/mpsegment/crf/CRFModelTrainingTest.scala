@@ -44,10 +44,20 @@ class CRFModelTrainingTest extends WithTestData {
 
     val classifier = new CRFViterbi(model)
 
-    val result = classifier.calculateResult(corpus.docs(0).data)
-    val path = result.getBestPath
-    path.foreach(println(_))
-    Assert.assertArrayEquals(Array(0, 1, 0, 0, 0, 1), path)
+    var total = 0
+    var correctCount = 0
+    for(i <- 0 until corpus.docs.length) {
+      val result = classifier.calculateResult(corpus.docs(i).data)
+      val path = result.getBestPath
+      path.foreach(println(_))
+      total += path.length
+      for(index <- 0 until path.length) {
+        val label = corpus.docs(i).label(index)
+        correctCount += (if(label == path(index)) 1 else 0)
+      }
+    }
+    println(correctCount.toDouble / total.toDouble)
+    Assert.assertEquals(correctCount, total)
   }
 }
 

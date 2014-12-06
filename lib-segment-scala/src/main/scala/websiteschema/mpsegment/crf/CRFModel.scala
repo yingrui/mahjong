@@ -28,6 +28,9 @@ object CRFUtils {
     array
   }
 
+  private val maxExpValue = Math.exp(50)
+
+  def exp(x: Double) = if(x > 50) maxExpValue else Math.exp(x)
 }
 
 object CRFModel {
@@ -39,7 +42,7 @@ object CRFModel {
 
     for(iter <- 0 until 10) {
       val value = func.valueAt(model.weights)
-      val grad = if(iter < 3) 0.1 else 0.5
+      val grad = if(iter < 3) 1E-1 else 1
       for (i <- 0 until model.featuresCount; j <- 0 until model.labelCount) {
         model.weights(i)(j) = model.weights(i)(j) + grad * func.derivative(i)(j)
       }

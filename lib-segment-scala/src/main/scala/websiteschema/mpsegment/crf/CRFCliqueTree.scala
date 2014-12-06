@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.crf
 
+import CRFUtils._
+
 class CRFCliqueTree(doc: CRFDocument, model: CRFModel, factors: Array[Factor]) {
 
   val z = factors.map(_.z).sum
@@ -15,9 +17,8 @@ class CRFCliqueTree(doc: CRFDocument, model: CRFModel, factors: Array[Factor]) {
 
   def condProb(position: Int, label: Int): Double = {
     val f = factors(position)(label)
-    Math.exp(f) / z
+    exp(f) / z
   }
-
 }
 
 class Factor(val weightFactor: Array[Double]) {
@@ -26,7 +27,7 @@ class Factor(val weightFactor: Array[Double]) {
     weightFactor(i)
   }
 
-  val z = weightFactor.map(factor => Math.exp(factor)).sum
+  val z = weightFactor.map(factor => exp(factor)).sum
 }
 
 object CRFCliqueTree {

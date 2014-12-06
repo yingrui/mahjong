@@ -12,11 +12,13 @@ object ModelTrainer extends App {
   private var emisMatrix = HashMap[Int, Map[Int,Int]]()
   private val model = new HmmModel
 
-  val filename = "ner-corpus.txt"
+//  val filename = "ner-corpus.txt"
+  val filename = "training.txt"
 
   train(filename)
   build()
-  save("ner-hmm.m")
+//  save("ner-hmm.m")
+  save("segment-hmm.m")
 
   def build() {
     getNgram().buildIndex(1)
