@@ -24,36 +24,33 @@ class CRFCorpus(val docs: Array[CRFDocument], val featureRepository: FeatureRepo
 
 object CRFCorpus {
 
-  def apply(file: String): CRFCorpus = {
+  def apply(file: String): CRFCorpus = apply(file, true)
+
+  def apply(file: String, withLastLabel: Boolean): CRFCorpus = {
     val featureRepository = new FeatureRepository(true)
     val labelRepository = new FeatureRepository(false)
+    apply(file, withLastLabel, featureRepository, labelRepository)
+  }
+
+  def apply(file: String, withLastLabel: Boolean, featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFCorpus = {
 
     val documents = ListBuffer[CRFDocument]()
     val rowData = ListBuffer[String]()
     Source.fromFile(file).getLines().foreach(line => {
       if (line.trim().isEmpty) {
-        documents += createDocument(rowData, featureRepository, labelRepository)
+        documents += createDocument(rowData, withLastLabel, featureRepository, labelRepository)
         rowData.clear()
       } else {
         rowData += line
       }
     })
 
-    if (!rowData.isEmpty) documents += createDocument(rowData, featureRepository, labelRepository)
-
-    addLabelFeaturesIfNotExists(featureRepository, labelRepository)
+    if (!rowData.isEmpty) documents += createDocument(rowData, withLastLabel, featureRepository, labelRepository)
 
     new CRFCorpus(documents.toArray, featureRepository, labelRepository)
   }
 
-  def addLabelFeaturesIfNotExists(featureRepository: FeatureRepository, labelRepository: FeatureRepository) {
-    for (lastLabel <- labelRepository.features; label <- labelRepository.features) {
-      val feature = "label" + labelRepository.getFeatureId(lastLabel) + "+" + labelRepository.getFeatureId(label)
-      featureRepository.add(feature)
-    }
-  }
-
-  private def createDocument(data: ListBuffer[String], featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFDocument = {
+  private def createDocument(data: ListBuffer[String], withLastLabel: Boolean, featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFDocument = {
     val docs = data.map(line => line.split("\\s"))
 
     val featureAndLabel = for (i <- 0 until docs.length; doc = docs(i)) yield {
@@ -61,10 +58,18 @@ object CRFCorpus {
       val word = featureRepository.add(doc(0))
 
       if (i > 0) {
-        // if there are two labels: O, PER. label feature is gonna be: label0+1, label0+0, label1+1
-        val labelFeature = "label" + labelRepository.getFeatureId(docs(i - 1).last) + "+" + labelRepository.getFeatureId(doc.last)
+        // if there are two labels: O, PER. label feature is gonna be: label0, label1
+        val labelFeature = "label" + labelRepository.getFeatureId(docs(i - 1).last)
         val labelFeatureId = featureRepository.add(labelFeature)
-        (Array(word, labelFeatureId), label)
+
+        val lastWord = "n-1->" + labelRepository.getFeatureId(docs(i - 1)(0))
+        val lastWordFeature = featureRepository.add(lastWord)
+
+        if (withLastLabel) {
+          (Array(word, lastWordFeature, labelFeatureId), label)
+        } else {
+          (Array(word, lastWordFeature), label)
+        }
       } else {
         (Array(word), label)
       }

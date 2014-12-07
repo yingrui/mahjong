@@ -4,9 +4,9 @@ import CRFUtils._
 
 class CRFCliqueTree(doc: CRFDocument, model: CRFModel, factors: Array[Factor]) {
 
-  val z = factors.map(_.z).sum
+  val z = (0 until model.labelCount).map(label => factors.map(f => f(label)).sum).toArray //[sum(y1), sum(y2), ...]
 
-  val logZ = Math.log(z)
+  val logZ = logSum(z)
 
   val sumWeights = {
     val sumProducts = for (i <- 0 until factors.length) yield factors(i)(doc.label(i))
@@ -16,8 +16,8 @@ class CRFCliqueTree(doc: CRFDocument, model: CRFModel, factors: Array[Factor]) {
   def condLogProb: Double = sumWeights - logZ
 
   def condProb(position: Int, label: Int): Double = {
-    val f = factors(position)(label)
-    exp(f) / z
+    val f = factors(position)
+    prob(f(label), z)
   }
 }
 
@@ -27,7 +27,7 @@ class Factor(val weightFactor: Array[Double]) {
     weightFactor(i)
   }
 
-  val z = weightFactor.map(factor => exp(factor)).sum
+  val z = weightFactor.sum
 }
 
 object CRFCliqueTree {

@@ -8,6 +8,7 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
 
   val derivative = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
   val sigma = 1.0D
+  val sigmaSq = sigma * sigma
 
   private def calculate(weights: Array[Array[Double]]): Double = {
     val E = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
@@ -15,19 +16,20 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
     val prob = (for (doc_i <- corpus.docs) yield {
       val clique = CRFCliqueTree(doc_i, model, weights)
 
-      for (position_t <- 0 until doc_i.data.length; feature_k <- doc_i.data(position_t)) {
-        for (label_y <- 0 until model.labelCount) {
-          E(feature_k)(label_y) += clique.condProb(position_t, label_y)
-        }
+      for (t <- 0 until doc_i.data.length; feature <- doc_i.data(t)) {
+        val label = doc_i.label(t)
+        val p = clique.condProb(t, label)
+        E(feature)(label) += p
       }
 
       clique.condLogProb
     }).sum
 
-    val sigmaSq = sigma * sigma
     val regular = (for (feature <- 0 until model.featuresCount; label <- 0 until model.labelCount) yield {
       val x_i = weights(feature)(label)
-      derivative(feature)(label) = corpus.Ehat(feature)(label) - E(feature)(label) - (x_i / sigmaSq)
+      val ehat = corpus.Ehat(feature)(label)
+      val e = E(feature)(label)
+      derivative(feature)(label) = ehat - e - (x_i / sigmaSq)
       x_i * x_i / 2 / sigmaSq
     }).sum
 

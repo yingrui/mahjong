@@ -10,7 +10,7 @@ class CRFModel(val featureRepository: FeatureRepository, val labelRepository: Fe
   val featuresCount = featureRepository.size
   val labelCount = labelRepository.size
 
-  def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels(0), labels.last)
+  def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels.last)
 
 //  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
   val tolerance = 1.0E-4
@@ -28,9 +28,16 @@ object CRFUtils {
     array
   }
 
-  private val maxExpValue = Math.exp(50)
+  private val maxExpValue = Math.exp(30)
 
-  def exp(x: Double) = if(x > 50) maxExpValue else Math.exp(x)
+  def exp(x: Double) = if(x > 30.0D) maxExpValue else Math.exp(x)
+
+  def prob(y: Double, X: Array[Double]): Double = 1 / X.map(x => exp(x - y)).sum
+
+  def logSum(X: Array[Double]): Double = {
+    val max = X.max
+    max + Math.log(X.map(x => exp(x - max)).sum)
+  }
 }
 
 object CRFModel {

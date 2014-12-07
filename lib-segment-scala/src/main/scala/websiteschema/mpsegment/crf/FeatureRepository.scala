@@ -26,7 +26,7 @@ class FeatureRepository(private val reserveUnknownFeature: Boolean, private val 
 
   def size = if (reserveUnknownFeature) repo.size + 1 else repo.size
 
-  def getLabelFeatureId(lastLabel: Int, label: Int) = getFeatureId("label" + lastLabel + "+" + label)
+  def getLabelFeatureId(lastLabel: Int) = getFeatureId("label" + lastLabel)
 
   private def addFeature(feature: String) = {
     val index = size
