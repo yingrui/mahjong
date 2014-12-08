@@ -15,15 +15,15 @@ class CRFViterbi(model: CRFModel) extends Viterbi {
     val product = observe.map(feature => model.weights(feature)(state)).sum //+ model.weights(f)(state)
     val z = labelsArray.map(label => observe.map(feature => model.weights(feature)(label)).sum).toArray
 
-    val p = delta + (product - logSum(z))
-//    val p = delta + product
+//    val p = delta + (product - logSum(z))
+    val p = delta + product
     (p, p)
   }
 
   def calculateFirstState(firstObserve: Array[Int], state: Int): Double = {
     val product = firstObserve.map(feature => model.weights(feature)(state)).sum
-    val z = labelsArray.map(label => firstObserve.map(feature => model.weights(feature)(label)).sum).toArray
-    product - logSum(z)
+//    val z = labelsArray.map(label => firstObserve.map(feature => model.weights(feature)(label)).sum).toArray
+    product //- logSum(z)
   }
 
 }

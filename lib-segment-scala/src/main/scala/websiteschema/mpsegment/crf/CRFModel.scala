@@ -5,14 +5,14 @@ import websiteschema.mpsegment.util.SerializeHandler
 class CRFModel(val featureRepository: FeatureRepository, val labelRepository: FeatureRepository, val weights: Array[Array[Double]]) {
 
   def this(featureRepository: FeatureRepository, labelRepository: FeatureRepository) =
-        this(featureRepository, labelRepository, CRFUtils.empty2DArray(featureRepository.size, labelRepository.size))
+    this(featureRepository, labelRepository, CRFUtils.empty2DArray(featureRepository.size, labelRepository.size))
 
   val featuresCount = featureRepository.size
   val labelCount = labelRepository.size
 
   def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels.last)
 
-//  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
+  //  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
   val tolerance = 1.0E-4
 
   def getLabelCount(feature: Int) = labelCount
@@ -22,7 +22,7 @@ object CRFUtils {
 
   def empty2DArray(i: Int, j: Int) = {
     val array = new Array[Array[Double]](i)
-    for(index <- 0 until i) {
+    for (index <- 0 until i) {
       array(index) = new Array[Double](j)
     }
     array
@@ -30,13 +30,17 @@ object CRFUtils {
 
   private val maxExpValue = Math.exp(30)
 
-  def exp(x: Double) = if(x > 30.0D) maxExpValue else Math.exp(x)
+  def exp(x: Double) = if (x > 30.0D) maxExpValue else Math.exp(x)
 
-  def prob(y: Double, X: Array[Double]): Double = 1 / X.map(x => exp(x - y)).sum
-
-  def logSum(X: Array[Double]): Double = {
-    val max = X.max
-    max + Math.log(X.map(x => exp(x - max)).sum)
+  def logSum(arrayX: Array[Double]): Double = {
+    arrayX.foldLeft(0.0D)((x, y) => {
+      val max = if (x > y) x else y
+      val min = if (x > y) y else x
+      if (max - min > 30)
+        max
+      else
+        max + Math.log(1 + exp(min - max))
+    })
   }
 }
 
@@ -47,9 +51,9 @@ object CRFModel {
 
     val func = new CRFDiffFunc(corpus, model)
 
-    for(iter <- 0 until 10) {
+    for (iter <- 0 until 10) {
       val value = func.valueAt(model.weights)
-      val grad = if(iter < 3) 1E-1 else 1
+      val grad = if (iter < 3) 1E-2 else 1
       for (i <- 0 until model.featuresCount; j <- 0 until model.labelCount) {
         model.weights(i)(j) = model.weights(i)(j) + grad * func.derivative(i)(j)
       }

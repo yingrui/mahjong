@@ -17,9 +17,10 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
       val clique = CRFCliqueTree(doc_i, model, weights)
 
       for (t <- 0 until doc_i.data.length; feature <- doc_i.data(t)) {
-        val label = doc_i.label(t)
-        val p = clique.condProb(t, label)
-        E(feature)(label) += p
+        for(label <- 0 until model.labelCount) {
+          val p = clique.condProb(t, label)
+          E(feature)(label) += p
+        }
       }
 
       clique.condLogProb
@@ -33,7 +34,7 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
       x_i * x_i / 2 / sigmaSq
     }).sum
 
-    prob - regular
+    prob + regular
   }
 
 }

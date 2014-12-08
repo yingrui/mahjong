@@ -17,7 +17,7 @@ class CRFCliqueTree(doc: CRFDocument, model: CRFModel, factors: Array[Factor]) {
 
   def condProb(position: Int, label: Int): Double = {
     val f = factors(position)
-    prob(f(label), z)
+    Math.exp(f(label) - logZ)
   }
 }
 
@@ -27,7 +27,7 @@ class Factor(val weightFactor: Array[Double]) {
     weightFactor(i)
   }
 
-  val z = weightFactor.sum
+  val z = logSum(weightFactor)
 }
 
 object CRFCliqueTree {
