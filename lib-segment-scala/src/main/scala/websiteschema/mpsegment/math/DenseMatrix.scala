@@ -9,6 +9,11 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     new DenseMatrix(row, col, Matrix.arithmetic(flatten, m.flatten, (a, b) => a + b))
   }
 
+  def +=(m: Matrix): Unit = {
+    assert(row == m.row && col == m.col)
+    (0 until data.length).foreach(i => data(i) += m.flatten(i))
+  }
+
   def -(n: Double) = new DenseMatrix(row, col, data.map(_ - n))
 
   def -(m: Matrix) = {
@@ -17,6 +22,10 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
   }
 
   def x(n: Double) = new DenseMatrix(row, col, data.map(_ * n))
+
+  def *= (n: Double) {
+    (0 until data.length).foreach(i => data(i) *= n)
+  }
 
   def x(m: Matrix) = {
     assert(col == m.row)
@@ -30,8 +39,7 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
   }
 
   def *(m: Matrix) = {
-    assert(row == 1 && m.row == 1)
-    Matrix.arithmetic(row(0).flatten, m.row(0).flatten, (a, b) => a * b).sum
+    Matrix.arithmetic(flatten, m.flatten, (a, b) => a * b).sum
   }
 
   def /(n: Double) = new DenseMatrix(row, col, data.map(_ / n))
@@ -63,6 +71,9 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
   def clear {
     (0 until data.length).foreach(data(_) = 0D)
   }
+
+  override def :=(other: Matrix): Unit = Array.copy(other.flatten, 0, data, 0, data.length)
+  override def :=(other: Array[Double]): Unit = Array.copy(other, 0, data, 0, data.length)
 
   override def toString: String = (for (i <- 0 until row) yield {
     row(i).flatten mkString ", "

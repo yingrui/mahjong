@@ -57,22 +57,58 @@ object CRFCorpus {
       val label = labelRepository.add(doc.last)
       val word = featureRepository.add(doc(0))
 
-      if (i > 0) {
-        // if there are two labels: O, PER. label feature is gonna be: label0, label1
-        val labelFeature = "label" + labelRepository.getFeatureId(docs(i - 1).last)
-        val labelFeatureId = featureRepository.add(labelFeature)
+      var f: ListBuffer[Int] = new ListBuffer[Int]()
+      f += word
 
-        val lastWord = "n-1->" + labelRepository.getFeatureId(docs(i - 1)(0))
+      if (i > 0) {
+
+        val lastWord = "p1->" + docs(i - 1)(0)
         val lastWordFeature = featureRepository.add(lastWord)
 
+        val biWord = "biword->" + docs(i - 1)(0) + "-" + doc(0)
+        val biWordFeature = featureRepository.add(biWord)
+
+        f ++= Array(lastWordFeature, biWordFeature)
+
         if (withLastLabel) {
-          (Array(word, lastWordFeature, labelFeatureId), label)
-        } else {
-          (Array(word, lastWordFeature), label)
+          // if there are two labels: O, PER. label feature is gonna be: label0, label1
+          val labelFeature = "label" + labelRepository.getFeatureId(docs(i - 1).last)
+          val labelFeatureId = featureRepository.add(labelFeature)
+
+          f += labelFeatureId
         }
-      } else {
-        (Array(word), label)
       }
+
+      if (i > 1) {
+        val lastWord = "p2->" + docs(i - 2)(0)
+        val lastWordFeature = featureRepository.add(lastWord)
+        val triWord = "triword->" + docs(i - 2)(0) + "-" + docs(i - 1)(0) + "-" + doc(0)
+        val triWordFeature = featureRepository.add(triWord)
+
+        f ++= Array(lastWordFeature, triWordFeature)
+      }
+
+      if (i < docs.length - 1) {
+        val nextWord = "n1->" + docs(i + 1)(0)
+        val nextWordFeature = featureRepository.add(nextWord)
+
+        val biWord = "n-biword->" + doc(0) + "-" + docs(i + 1)(0)
+        val biWordFeature = featureRepository.add(biWord)
+
+        f ++= Array(nextWordFeature, biWordFeature)
+      }
+
+//      if (i < docs.length - 2) {
+//        val nextWord = "n2->" + docs(i + 2)(0)
+//        val nextWordFeature = featureRepository.add(nextWord)
+//
+//        val triWord = "n-triword->" + doc(0) + "-" + docs(i + 1)(0) + "-" + docs(i + 2)(0)
+//        val triWordFeature = featureRepository.add(triWord)
+//
+//        f ++= Array(nextWordFeature, triWordFeature)
+//      }
+
+      (f.toArray, label)
     }
 
 

@@ -4,8 +4,15 @@ import websiteschema.mpsegment.crf.{CRFViterbi, CRFModel, CRFCorpus}
 
 object CRFSerialLabelTest extends App {
 
-  val corpusForTrain = CRFCorpus("training.txt")
-  val model = CRFModel.build(corpusForTrain)
+  val train = true
+  val model = if(train) {
+    val corpusForTrain = CRFCorpus("training.txt")
+    val m = CRFModel.build(corpusForTrain)
+    CRFModel.save(m, "segment-crf.m")
+    m
+  } else {
+    CRFModel("segment-crf.m")
+  }
 
   val classifier = new CRFViterbi(model)
 

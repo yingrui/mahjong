@@ -6,7 +6,7 @@ trait WithTestData {
   // data = int[X][Features]
   val data = Array(
     Array(7, 10, 0, 12, 14, 15, 16, 17, 2, 19, 3, 21, 23, 24, 25),
-    Array(8, 9, 11, 13, 15, 1, 17, 18, 20, 21, 4, 22, 5, 24, 6, 27)
+    Array(8, 9, 11, 13, 15, 1, 17, 18, 20, 21, 4, 22, 5, 24, 6)
   )
 
   val testData = Array(

@@ -1,40 +1,45 @@
 package websiteschema.mpsegment.crf
 
+import websiteschema.mpsegment.math.Matrix
+
 class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
 
-  def valueAt(x: Array[Array[Double]]): Double = {
-    calculate(x)
-  }
+  def valueAt(x: Array[Double]): Double = calculate(x)
+  def valueAt(x: Matrix): Double = calculate(x.flatten)
 
-  val derivative = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
+  val derivative = new Array[Double](model.featuresCount * model.labelCount)
   val sigma = 1.0D
   val sigmaSq = sigma * sigma
 
-  private def calculate(weights: Array[Array[Double]]): Double = {
+  private def calculate(weights: Array[Double]): Double = {
     val E = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
 
-    val prob = (for (doc_i <- corpus.docs) yield {
-      val clique = CRFCliqueTree(doc_i, model, weights)
+    var prob = 0.0D
 
-      for (t <- 0 until doc_i.data.length; feature <- doc_i.data(t)) {
-        for(label <- 0 until model.labelCount) {
-          val p = clique.condProb(t, label)
-          E(feature)(label) += p
+    for (doc_i <- corpus.docs) {
+      val clique = CRFClique(doc_i, model, weights)
+
+      for (t <- 0 until doc_i.data.length) {
+        prob += clique.condLogProb(t, doc_i.label(t), Array[Int]())
+
+        for (label <- 0 until model.labelCount) {
+          val p = clique.condProb(t, label, Array[Int]())
+          for (feature <- doc_i.data(t)) {
+            E(feature)(label) += p
+          }
         }
       }
-
-      clique.condLogProb
-    }).sum
+    }
 
     val regular = (for (feature <- 0 until model.featuresCount; label <- 0 until model.labelCount) yield {
-      val x_i = weights(feature)(label)
-      val ehat = corpus.Ehat(feature)(label)
+      val i = model.labelCount * feature + label
+      val x_i = weights(i)
       val e = E(feature)(label)
-      derivative(feature)(label) = ehat - e - (x_i / sigmaSq)
+      derivative(i) = corpus.Ehat(feature)(label) - e - (x_i / sigmaSq)
       x_i * x_i / 2 / sigmaSq
     }).sum
 
-    prob + regular
+    regular - prob
   }
 
 }

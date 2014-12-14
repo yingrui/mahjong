@@ -5,11 +5,14 @@ trait Matrix {
 
   def +(m: Matrix): Matrix
 
+  def +=(m: Matrix): Unit
+
   def -(n: Double): Matrix
 
   def -(m: Matrix): Matrix
 
   def x(n: Double): Matrix
+  def *=(n: Double): Unit
 
   def x(m: Matrix): Matrix
 
@@ -35,6 +38,9 @@ trait Matrix {
   def apply(i: Int, j: Int): Double
 
   def update(i: Int, j: Int, value: Double)
+
+  def :=(other: Matrix): Unit
+  def :=(other: Array[Double]): Unit
 }
 
 object Matrix {
@@ -54,6 +60,8 @@ object Matrix {
   }
 
   def apply(data: Array[Double]): Matrix = new DenseMatrix(1, data.length, data)
+
+  def apply(data: Array[Array[Double]]): Matrix = new DenseMatrix(data.length, data(0).length, data.flatten.toArray)
 
   def apply(data: Seq[Double]): Matrix = new DenseMatrix(1, data.length, data.toArray)
 

@@ -1,21 +1,23 @@
 package websiteschema.mpsegment.crf
 
+import websiteschema.mpsegment.math.Matrix
 import websiteschema.mpsegment.util.SerializeHandler
 
-class CRFModel(val featureRepository: FeatureRepository, val labelRepository: FeatureRepository, val weights: Array[Array[Double]]) {
+class CRFModel(val featureRepository: FeatureRepository, val labelRepository: FeatureRepository, val weights: Matrix) {
 
   def this(featureRepository: FeatureRepository, labelRepository: FeatureRepository) =
-    this(featureRepository, labelRepository, CRFUtils.empty2DArray(featureRepository.size, labelRepository.size))
+    this(featureRepository, labelRepository, Matrix(featureRepository.size, labelRepository.size))
 
   val featuresCount = featureRepository.size
   val labelCount = labelRepository.size
 
   def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels.last)
 
-  //  val weights = CRFUtils.empty2DArray(featuresCount, labelCount)
-  val tolerance = 1.0E-4
+  val tolerance = 1.0E-5
 
   def getLabelCount(feature: Int) = labelCount
+
+  def weight(feature: Int, label: Int) = weights(feature, label)
 }
 
 object CRFUtils {
@@ -28,18 +30,42 @@ object CRFUtils {
     array
   }
 
-  private val maxExpValue = Math.exp(30)
+  import Math._
 
-  def exp(x: Double) = if (x > 30.0D) maxExpValue else Math.exp(x)
+  private val LOG_TOLERANCE = 30.0D
 
-  def logSum(arrayX: Array[Double]): Double = {
-    arrayX.foldLeft(0.0D)((x, y) => {
-      val max = if (x > y) x else y
-      val min = if (x > y) y else x
-      if (max - min > 30)
+  /**
+   * log(x1 + x2 + ... + xn)
+   * @param inputs An array of numbers [log(x1), ..., log(xn)]
+   * @return log(x1 + x2 + ... + xn)
+   */
+  def logSum(inputs: Array[Double]): Double = {
+    val range = 0 until inputs.length
+    val maxId = range.reduceLeft((i, j) => if (inputs(i) >= inputs(j)) i else j)
+    val max = inputs(maxId)
+    val cutoff = max - LOG_TOLERANCE
+    val inter = range.foldLeft(0.0D)((intermediate, i) =>
+      if (i != maxId && inputs(i) > cutoff)
+        intermediate + exp(inputs(i) - max)
+      else
+        intermediate
+    )
+    max + log(1 + inter)
+  }
+
+  /**
+   * log(exp(x1) + exp(x2) + ... + exp(xn))
+   * @param inputs An array of numbers [x1, ..., xn]
+   * @return log(exp(x1) + exp(x2) + ... + exp(xn))
+   */
+  def logSumExp(inputs: Array[Double]): Double = {
+    inputs.reduceLeft((z, xi) => {
+      val max = if (z > xi) z else xi
+      val min = if (z > xi) xi else z
+      if (max - min > LOG_TOLERANCE)
         max
       else
-        max + Math.log(1 + exp(min - max))
+        max + log(1 + exp(min - max))
     })
   }
 }
@@ -50,16 +76,9 @@ object CRFModel {
     val model = new CRFModel(corpus.featureRepository, corpus.labelRepository)
 
     val func = new CRFDiffFunc(corpus, model)
+    val learner = new CRFModelLearner(model, func)
 
-    for (iter <- 0 until 10) {
-      val value = func.valueAt(model.weights)
-      val grad = if (iter < 3) 1E-2 else 1
-      for (i <- 0 until model.featuresCount; j <- 0 until model.labelCount) {
-        model.weights(i)(j) = model.weights(i)(j) + grad * func.derivative(i)(j)
-      }
-      val sum = func.derivative.map(array => array.sum).sum
-      println(s"Iteration $iter: $value, $sum")
-    }
+    learner.train
 
     model
   }
@@ -70,7 +89,7 @@ object CRFModel {
     FeatureRepository.save(model.featureRepository, writer)
     FeatureRepository.save(model.labelRepository, writer)
 
-    writer.serialize2DArrayDouble(model.weights)
+    writer.serializeMatrix(model.weights)
 
     writer.close()
   }
@@ -81,7 +100,7 @@ object CRFModel {
     val featureRepository = FeatureRepository(reader)
     val labelRepository = FeatureRepository(reader)
 
-    val weights = reader.deserialize2DArrayDouble()
+    val weights = reader.deserializeMatrix()
 
     reader.close()
 

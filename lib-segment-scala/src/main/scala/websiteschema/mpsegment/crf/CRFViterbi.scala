@@ -11,19 +11,22 @@ class CRFViterbi(model: CRFModel) extends Viterbi {
   def getStatesBy(observe: Seq[Int]): java.util.Collection[Int] = labels
 
   def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Array[Int]): (Double, Double) = {
-    //val f = model.getLabelFeature(statePath)
-    val product = observe.map(feature => model.weights(feature)(state)).sum //+ model.weights(f)(state)
-    val z = labelsArray.map(label => observe.map(feature => model.weights(feature)(label)).sum).toArray
+    val f = model.getLabelFeature(statePath)
+    val product = observe.map(feature => model.weight(feature, state)).sum
+    val z = labelsArray.map(label => observe.map(feature => model.weight(feature, label)).sum).toArray
 
-//    val p = delta + (product - logSum(z))
-    val p = delta + product
+    val b = model.weight(f, state) - logSumExp(labelsArray.map(label => model.weight(f, label)).toArray)
+
+    val p = delta + (product - logSumExp(z)) + b
+//    val p = delta + product
     (p, p)
   }
 
   def calculateFirstState(firstObserve: Array[Int], state: Int): Double = {
-    val product = firstObserve.map(feature => model.weights(feature)(state)).sum
-//    val z = labelsArray.map(label => firstObserve.map(feature => model.weights(feature)(label)).sum).toArray
-    product //- logSum(z)
+    val product = firstObserve.map(feature => model.weight(feature, state)).sum
+    val z = labelsArray.map(label => firstObserve.map(feature => model.weight(feature, label)).sum).toArray
+    product - logSumExp(z)
+//    product
   }
 
 }
