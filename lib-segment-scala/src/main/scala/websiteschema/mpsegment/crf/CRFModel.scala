@@ -13,7 +13,7 @@ class CRFModel(val featureRepository: FeatureRepository, val labelRepository: Fe
 
   def getLabelFeature(labels: Array[Int]) = featureRepository.getLabelFeatureId(labels.last)
 
-  val tolerance = 1.0E-5
+  val tolerance = 1.0E-4
 
   def getLabelCount(feature: Int) = labelCount
 

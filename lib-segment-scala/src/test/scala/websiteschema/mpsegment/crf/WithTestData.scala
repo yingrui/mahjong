@@ -23,7 +23,7 @@ trait WithTestData {
   labelRepository.add("0")
   labelRepository.add("1")
 
-  val doc = new CRFDocument(data, Array[Int](0, 1))
+  val doc = new CRFDocument(data, Array[Int](0, 1), Array[String]())
 
   def populateTrainingFile(text: String) = {
     val file = java.io.File.createTempFile("crf-corpus", ".txt")

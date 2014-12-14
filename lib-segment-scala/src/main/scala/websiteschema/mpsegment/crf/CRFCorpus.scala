@@ -3,7 +3,7 @@ package websiteschema.mpsegment.crf
 import scala.io.Source
 import scala.collection.mutable._
 
-case class CRFDocument(val data: Array[Array[Int]], val label: Array[Int])
+case class CRFDocument(val data: Array[Array[Int]], val label: Array[Int], val rowData: Array[String])
 
 class CRFCorpus(val docs: Array[CRFDocument], val featureRepository: FeatureRepository, val labelRepository: FeatureRepository) {
 
@@ -29,28 +29,28 @@ object CRFCorpus {
   def apply(file: String, withLastLabel: Boolean): CRFCorpus = {
     val featureRepository = new FeatureRepository(true)
     val labelRepository = new FeatureRepository(false)
-    apply(file, withLastLabel, featureRepository, labelRepository)
+    apply(file, withLastLabel, false, featureRepository, labelRepository)
   }
 
-  def apply(file: String, withLastLabel: Boolean, featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFCorpus = {
+  def apply(file: String, withLastLabel: Boolean, keepOriginData: Boolean, featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFCorpus = {
 
     val documents = ListBuffer[CRFDocument]()
     val rowData = ListBuffer[String]()
     Source.fromFile(file).getLines().foreach(line => {
       if (line.trim().isEmpty) {
-        documents += createDocument(rowData, withLastLabel, featureRepository, labelRepository)
+        documents += createDocument(rowData, withLastLabel, keepOriginData, featureRepository, labelRepository)
         rowData.clear()
       } else {
         rowData += line
       }
     })
 
-    if (!rowData.isEmpty) documents += createDocument(rowData, withLastLabel, featureRepository, labelRepository)
+    if (!rowData.isEmpty) documents += createDocument(rowData, withLastLabel, keepOriginData, featureRepository, labelRepository)
 
     new CRFCorpus(documents.toArray, featureRepository, labelRepository)
   }
 
-  private def createDocument(data: ListBuffer[String], withLastLabel: Boolean, featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFDocument = {
+  private def createDocument(data: ListBuffer[String], withLastLabel: Boolean, keepOriginData: Boolean, featureRepository: FeatureRepository, labelRepository: FeatureRepository): CRFDocument = {
     val docs = data.map(line => line.split("\\s"))
 
     val featureAndLabel = for (i <- 0 until docs.length; doc = docs(i)) yield {
@@ -61,11 +61,10 @@ object CRFCorpus {
       f += word
 
       if (i > 0) {
-
         val lastWord = "p1->" + docs(i - 1)(0)
         val lastWordFeature = featureRepository.add(lastWord)
 
-        val biWord = "biword->" + docs(i - 1)(0) + "-" + doc(0)
+        val biWord = "pc-word->" + docs(i - 1)(0) + "-" + doc(0)
         val biWordFeature = featureRepository.add(biWord)
 
         f ++= Array(lastWordFeature, biWordFeature)
@@ -82,7 +81,7 @@ object CRFCorpus {
       if (i > 1) {
         val lastWord = "p2->" + docs(i - 2)(0)
         val lastWordFeature = featureRepository.add(lastWord)
-        val triWord = "triword->" + docs(i - 2)(0) + "-" + docs(i - 1)(0) + "-" + doc(0)
+        val triWord = "p2p1c-word->" + docs(i - 2)(0) + "-" + docs(i - 1)(0) + "-" + doc(0)
         val triWordFeature = featureRepository.add(triWord)
 
         f ++= Array(lastWordFeature, triWordFeature)
@@ -92,28 +91,33 @@ object CRFCorpus {
         val nextWord = "n1->" + docs(i + 1)(0)
         val nextWordFeature = featureRepository.add(nextWord)
 
-        val biWord = "n-biword->" + doc(0) + "-" + docs(i + 1)(0)
+        val biWord = "cn-word->" + doc(0) + "-" + docs(i + 1)(0)
         val biWordFeature = featureRepository.add(biWord)
 
         f ++= Array(nextWordFeature, biWordFeature)
       }
 
-//      if (i < docs.length - 2) {
-//        val nextWord = "n2->" + docs(i + 2)(0)
-//        val nextWordFeature = featureRepository.add(nextWord)
-//
-//        val triWord = "n-triword->" + doc(0) + "-" + docs(i + 1)(0) + "-" + docs(i + 2)(0)
-//        val triWordFeature = featureRepository.add(triWord)
-//
-//        f ++= Array(nextWordFeature, triWordFeature)
-//      }
+      if (i < docs.length - 2) {
+        val nextWord = "n2->" + docs(i + 2)(0)
+        val nextWordFeature = featureRepository.add(nextWord)
+
+        val triWord = "cn1n2-word->" + doc(0) + "-" + docs(i + 1)(0) + "-" + docs(i + 2)(0)
+        val triWordFeature = featureRepository.add(triWord)
+        f ++= Array(nextWordFeature, triWordFeature)
+      }
+
+      if (i < docs.length - 1 && i > 0) {
+        val triWord = "pcn-word->" + docs(i - 1)(0) + "-" + doc(0) + "-" + docs(i + 1)(0)
+        val triWordFeature = featureRepository.add(triWord)
+
+        f ++= Array(triWordFeature)
+      }
 
       (f.toArray, label)
     }
 
-
     val features = featureAndLabel.map(t => t._1).toArray
     val labels = featureAndLabel.map(t => t._2).toArray
-    CRFDocument(features, labels)
+    CRFDocument(features, labels, if(keepOriginData) data.toArray else Array[String]())
   }
 }

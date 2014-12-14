@@ -50,11 +50,6 @@ class CRFModelLearner(model: CRFModel, func: CRFDiffFunc) {
     gradient := func.derivative
     val maxIteration = 300
     while (it < maxIteration) {
-
-      if(it == 21) {
-        println("debug")
-      }
-
       findDirection(dir, gradient)
 
       val nextS = if (sList.size == 20) sList.remove(0) else Matrix(model.featuresCount, model.labelCount)

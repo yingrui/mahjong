@@ -7,7 +7,7 @@ class CRFCliqueTest {
 
   @Test
   def should_calculate_log_prob_when_weights_are_zero {
-    val crfDoc = new CRFDocument(Array(Array(0, 1, 2)), Array(0))
+    val crfDoc = new CRFDocument(Array(Array(0, 1, 2)), Array(0), Array[String]())
     val factors = Array(new Factor(Array(0D, 0D, 0D)))
     val clique = new CRFClique(crfDoc, 3, factors)
 
@@ -16,7 +16,7 @@ class CRFCliqueTest {
 
   @Test
   def should_calculate_prob_when_weights_are_zero {
-    val crfDoc = new CRFDocument(Array(Array(0, 1, 2)), Array(0))
+    val crfDoc = new CRFDocument(Array(Array(0, 1, 2)), Array(0), Array[String]())
     val factors = Array(new Factor(Array(0D, 0D, 0D)))
     val clique = new CRFClique(crfDoc, 3, factors)
 
@@ -25,7 +25,7 @@ class CRFCliqueTest {
 
   @Test
   def should_calculate_prob_when_weights_ {
-    val crfDoc = new CRFDocument(Array(Array(0, 1, 2)), Array(0))
+    val crfDoc = new CRFDocument(Array(Array(0, 1, 2)), Array(0), Array[String]())
     val factors = Array(new Factor(Array(10D, 30D, 51D)))
     val clique = new CRFClique(crfDoc, 3, factors)
 

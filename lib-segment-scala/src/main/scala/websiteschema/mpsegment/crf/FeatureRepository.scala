@@ -14,6 +14,13 @@ class FeatureRepository(private val reserveUnknownFeature: Boolean, private val 
 
   def features = repo.keys
 
+  def getFeature(id: Int) = {
+    repo.find(t => t._2 == id) match {
+      case Some((feature, i)) => feature
+      case _ => ""
+    }
+  }
+
   def featureIds = {
     val list = new util.ArrayList[Int]()
     repo.values.foreach(list.add(_))
