@@ -65,9 +65,11 @@ object CRFCorpus {
         val lastWordFeature = featureRepository.add(lastWord)
 
         val biWord = "pc-word->" + docs(i - 1)(0) + "-" + doc(0)
+        val biType = "pc-type->" + docs(i - 1)(0) + "-" + doc(0)
         val biWordFeature = featureRepository.add(biWord)
+        val biTypeFeature = featureRepository.add(biType)
 
-        f ++= Array(lastWordFeature, biWordFeature)
+        f ++= Array(lastWordFeature, biWordFeature, biTypeFeature)
 
         if (withLastLabel) {
           // if there are two labels: O, PER. label feature is gonna be: label0, label1
@@ -92,9 +94,11 @@ object CRFCorpus {
         val nextWordFeature = featureRepository.add(nextWord)
 
         val biWord = "cn-word->" + doc(0) + "-" + docs(i + 1)(0)
+        val biType = "cn-type->" + doc(0) + "-" + docs(i + 1)(0)
         val biWordFeature = featureRepository.add(biWord)
+        val biTypeFeature = featureRepository.add(biType)
 
-        f ++= Array(nextWordFeature, biWordFeature)
+        f ++= Array(nextWordFeature, biWordFeature, biTypeFeature)
       }
 
       if (i < docs.length - 2) {
