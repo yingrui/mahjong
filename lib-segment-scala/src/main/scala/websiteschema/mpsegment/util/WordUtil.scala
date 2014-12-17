@@ -18,7 +18,7 @@ object WordUtil {
   }
 
   def isCharaterOrDigit(ch: Char): Boolean = {
-    return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9'
+    ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9'
   }
 
   def isAlphaNumericWithUnderScore(wordString: String): Boolean =
@@ -44,7 +44,7 @@ object WordUtil {
   }
 
   def isChinesePreposition(wordString: String): Boolean = {
-    return wordString.equals("向") || wordString.equals("和") || wordString.equals("丁") || wordString.equals("自") || wordString.equals("若") || wordString.equals("于") || wordString.equals("同") || wordString.equals("为") || wordString.equals("以") || wordString.equals("连") || wordString.equals("从") || wordString.equals("得") || wordString.equals("则") || wordString.equals("之")
+    wordString.equals("向") || wordString.equals("和") || wordString.equals("丁") || wordString.equals("自") || wordString.equals("若") || wordString.equals("于") || wordString.equals("同") || wordString.equals("为") || wordString.equals("以") || wordString.equals("连") || wordString.equals("从") || wordString.equals("得") || wordString.equals("则") || wordString.equals("之")
   }
 
   def isLeftOrRightBraceOrColonOrSlash(ch: String): Boolean = {
@@ -52,11 +52,11 @@ object WordUtil {
     if (glueChars.indexOf(ch) >= 0 && glueChar.indexOf(ch) < 0) {
       flag = true
     }
-    return flag
+    flag
   }
 
   def isSpecialMingChar(ch: String): Boolean = {
-    return ch.equals("向") || ch.equals("自") || ch.equals("乃") || ch.equals("以") || ch.equals("从") || ch.equals("和") || ch.equals("得") || ch.equals("为") || ch.equals("则") || ch.equals("如")
+    ch.equals("向") || ch.equals("自") || ch.equals("乃") || ch.equals("以") || ch.equals("从") || ch.equals("和") || ch.equals("得") || ch.equals("为") || ch.equals("则") || ch.equals("如")
   }
 
   val glueChars = "*?~/Array[_]:"

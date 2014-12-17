@@ -1,10 +1,10 @@
 package websiteschema.mpsegment.tools.ner
 
-import websiteschema.mpsegment.crf.{CRFDocument, CRFViterbi, CRFModel, CRFCorpus}
+import websiteschema.mpsegment.crf._
 
 object CRFSerialLabelTest extends App {
 
-  val train = true
+  val train = false
   val model = if (train) {
     val corpusForTrain = CRFCorpus("training.txt")
     val m = CRFModel.build(corpusForTrain)
@@ -14,13 +14,15 @@ object CRFSerialLabelTest extends App {
     CRFModel("segment-crf.m")
   }
 
+  println("model loaded")
+
   val classifier = new CRFViterbi(model)
 
   var total = 0
   var correctCount = 0
   val corpus = CRFCorpus("training.txt", false, true, model.featureRepository, model.labelRepository)
-  for (i <- 0 until corpus.docs.length) {
-    val doc = corpus.docs(i)
+  println("test corpus loaded")
+  corpus.docs.foreach(doc => {
     val result = classifier.calculateResult(doc.data).getBestPath
     total += result.length
     var success = true
@@ -34,14 +36,33 @@ object CRFSerialLabelTest extends App {
     if (!success) {
       try {
         val errors = (0 until result.length)
-          .map(index => doc.rowData(index) + " " + model.labelRepository.getFeature(result(index)))
+          .map(index => {
+            def isCurrentOrNextFailed(currentIndex: Int) = {
+              val line = doc.rowData(currentIndex)
+              val label = model.labelRepository.getFeature(result(currentIndex))
+              val failed = !line.endsWith(label)
+              if(!failed && currentIndex < result.length - 1) {
+                val nextLine = doc.rowData(currentIndex + 1)
+                val nextLabel = model.labelRepository.getFeature(result(currentIndex + 1))
+                !nextLine.endsWith(nextLabel)
+              } else {
+                failed
+              }
+            }
+
+            if (isCurrentOrNextFailed(index)) {
+              doc.rowData(index) + " " + model.labelRepository.getFeature(result(index)) + " --"
+            } else {
+              doc.rowData(index) + " " + model.labelRepository.getFeature(result(index))
+            }
+          })
         errors.foreach(println(_))
         println()
       } catch {
-        case _ =>
+        case _: Exception =>
       }
     }
-  }
+  })
   println("total: " + total + " correct: " + correctCount + " error: " + (total - correctCount) + " rate: " + correctCount.toDouble / total.toDouble)
 
 }
