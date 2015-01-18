@@ -11,6 +11,8 @@ trait Matrix {
 
   def -(m: Matrix): Matrix
 
+  def -=(m: Matrix): Unit
+
   def x(n: Double): Matrix
   def *=(n: Double): Unit
 

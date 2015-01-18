@@ -5,6 +5,7 @@ import org.junit.Test
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.core.GraphBuilder
 import websiteschema.mpsegment.dict.DictionaryFactory
+import websiteschema.mpsegment.math.Matrix
 
 class HopfieldNetworkTest {
 
@@ -26,6 +27,27 @@ class HopfieldNetworkTest {
         assertArrayEquals(trainPattern, output)
       })
     println(network)
+  }
+
+  @Test
+  def should_be_able_to_initiated_by_specified_weights {
+    val network = HopfieldNetwork(Matrix(Array(Array[Double](0, 0, 0, -4),
+                                               Array[Double](0, 0, -4, 0),
+                                               Array[Double](0, -4, 0, 0),
+                                               Array[Double](-4, 0, 0, 0))))
+
+    val dataSet = Array(
+      Array(false, false, true, true),
+      Array(true, true, false, false),
+      Array(false, true, false, true),
+      Array(true, false, true, false)
+    )
+
+    dataSet.foreach(
+      testData => {
+        val output = network.present(testData)
+        assertArrayEquals(testData, output)
+      })
   }
 
   def assertArrayEquals(expect: Array[Boolean], actual: Array[Boolean]) {

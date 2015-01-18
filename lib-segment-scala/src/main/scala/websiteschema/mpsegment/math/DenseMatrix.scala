@@ -21,6 +21,11 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     new DenseMatrix(row, col, Matrix.arithmetic(flatten, m.flatten, (a, b) => a - b))
   }
 
+  def -=(m: Matrix): Unit = {
+    assert(row == m.row && col == m.col)
+    (0 until data.length).foreach(i => data(i) -= m.flatten(i))
+  }
+
   def x(n: Double) = new DenseMatrix(row, col, data.map(_ * n))
 
   def *= (n: Double) {

@@ -6,6 +6,10 @@ class HopfieldNetwork(val size: Int) {
 
   private var weightMatrix = Matrix(size)
 
+  private def update(weight: Matrix): Unit = {
+    weightMatrix = weight
+  }
+
   def present(pattern: Array[Boolean]): Array[Boolean] = {
     assert(pattern.length == size)
     val input = Matrix(1, size, pattern)
@@ -21,9 +25,18 @@ class HopfieldNetwork(val size: Int) {
     val weight = transposeInput x input
     val identity = Matrix(size, true)
 
-    val m = weight - identity
-    weightMatrix = weightMatrix + m
+    weight -= identity
+    weightMatrix += weight
   }
 
   override def toString() = weightMatrix.toString
+}
+
+object HopfieldNetwork {
+
+  def apply(weight: Matrix): HopfieldNetwork = {
+    val network = new HopfieldNetwork(weight.row)
+    network.update(weight)
+    network
+  }
 }
