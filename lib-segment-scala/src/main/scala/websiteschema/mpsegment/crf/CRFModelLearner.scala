@@ -119,25 +119,4 @@ class CRFModelLearner(model: CRFModel, func: CRFDiffFunc) {
     value
   }
 
-  private def map(src: Array[Double])(op: (Double) => Double): Array[Double] = src.map(op)
-
-  private def copy(src: Array[Double], dest: Array[Double]) = {
-    var i = 0
-    while (i < src.length) {
-      dest(i) = src(i)
-      i += 1
-    }
-
-    dest
-  }
-
-  private def add(left: Array[Double], right: Array[Double], to: Array[Double]) = {
-    var i = 0
-    while (i < left.length) {
-      to(i) = left(i) + right(i)
-      i += 1
-    }
-
-    left
-  }
 }
