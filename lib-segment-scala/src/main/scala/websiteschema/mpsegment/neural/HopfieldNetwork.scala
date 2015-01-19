@@ -5,6 +5,7 @@ import websiteschema.mpsegment.math.Matrix
 class HopfieldNetwork(val size: Int) {
 
   private var weightMatrix = Matrix(size)
+  private val identity = Matrix(size, true)
 
   private def update(weight: Matrix): Unit = {
     weightMatrix = weight
@@ -21,9 +22,7 @@ class HopfieldNetwork(val size: Int) {
   def train(pattern: Array[Boolean]) {
     assert(pattern.length == size)
     val input = Matrix(1, size, pattern)
-    val transposeInput = input.T
-    val weight = transposeInput x input
-    val identity = Matrix(size, true)
+    val weight = input.T x input
 
     weight -= identity
     weightMatrix += weight
