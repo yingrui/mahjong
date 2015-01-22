@@ -6,15 +6,17 @@ import scala.collection.mutable.ListBuffer
 
 class CRFModelLearner(model: CRFModel, func: CRFDiffFunc) {
 
+  val m = 20 //saves m updates
+
   val X = Matrix(model.featuresCount, model.labelCount)
   val gradient = Matrix(model.featuresCount, model.labelCount)
   val newGrad = Matrix(model.featuresCount, model.labelCount)
   val newX = Matrix(model.featuresCount, model.labelCount)
   val dir = Matrix(model.featuresCount, model.labelCount)
 
-  val sList = new ListBuffer[Matrix]()
-  val yList = new ListBuffer[Matrix]()
-  val roList = new ListBuffer[Double]()
+  val sList = new ListBuffer[Matrix]() // s(k) = x(k+1) - x(k) = newX - X
+  val yList = new ListBuffer[Matrix]() // y(k) = g(k+1) - g(k) = newGrad - gradient
+  val roList = new ListBuffer[Double]() // ro(k) = 1 / [ y(k) * s(k) ]
 
   val previousValues = new ListBuffer[Double]()
 
@@ -52,11 +54,7 @@ class CRFModelLearner(model: CRFModel, func: CRFDiffFunc) {
     while (it < maxIteration) {
       findDirection(dir, gradient)
 
-      val nextS = if (sList.size == 20) sList.remove(0) else Matrix(model.featuresCount, model.labelCount)
-      val nextY = if (yList.size == 20) yList.remove(0) else Matrix(model.featuresCount, model.labelCount)
-      if (roList.size == 20) {
-        roList.remove(0)
-      }
+      releaseHistoryUpdates
 
       val sum = func.derivative.map(d => Math.abs(d)).sum
       print(s"Iteration $it: $value, $sum")
@@ -64,11 +62,11 @@ class CRFModelLearner(model: CRFModel, func: CRFDiffFunc) {
       val newValue = linearSearch(func.derivative, value)
       newGrad := func.derivative
 
-      nextS := ((X x -1.0) + newX)
-      nextY := ((gradient x -1.0) + newGrad)
-      sList += nextS
-      yList += nextY
-      roList += (1.0 / (nextS * nextY))
+      val nextS = newX - X
+      val nextY = newGrad - gradient
+      val ro = 1.0 / (nextS * nextY)
+
+      saveHistoryUpdates(nextS, nextY, ro)
 
       println()
 
@@ -93,6 +91,18 @@ class CRFModelLearner(model: CRFModel, func: CRFDiffFunc) {
     }
 
     model.weights := X
+  }
+
+  private def saveHistoryUpdates(nextS: Matrix, nextY: Matrix, ro: Double) {
+    sList += nextS
+    yList += nextY
+    roList += ro
+  }
+
+  private def releaseHistoryUpdates {
+    if (sList.size == m) sList.remove(0)
+    if (yList.size == m) yList.remove(0)
+    if (roList.size == m) roList.remove(0)
   }
 
   private def linearSearch(derivative: Array[Double], lastIterationValue: Double): Double = {

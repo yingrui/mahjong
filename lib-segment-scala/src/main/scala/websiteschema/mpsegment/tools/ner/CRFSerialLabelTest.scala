@@ -4,9 +4,10 @@ import websiteschema.mpsegment.crf._
 
 object CRFSerialLabelTest extends App {
 
-  val train = false
+  val train = true
+  val file = "training-100000.txt"
   val model = if (train) {
-    val corpusForTrain = CRFCorpus("training.txt")
+    val corpusForTrain = CRFCorpus(file)
     val m = CRFModel.build(corpusForTrain)
     CRFModel.save(m, "segment-crf.m")
     m
@@ -20,7 +21,7 @@ object CRFSerialLabelTest extends App {
 
   var total = 0
   var correctCount = 0
-  val corpus = CRFCorpus("training.txt", false, true, model.featureRepository, model.labelRepository)
+  val corpus = CRFCorpus(file, false, true, model.featureRepository, model.labelRepository)
   println("test corpus loaded")
   corpus.docs.foreach(doc => {
     val result = classifier.calculateResult(doc.data).getBestPath
