@@ -26,17 +26,41 @@ class CRFCorpusTest extends WithTestData {
     val trainingText =
       """Hello  O
         |Jenny  PER
+        |!      O
       """.stripMargin
     val corpus = CRFCorpus(populateTrainingFile(trainingText))
 
     Assert.assertEquals(1, corpus.docs.length)
 
+    Assert.assertEquals(23, corpus.featureRepository.size)
     Assert.assertTrue(corpus.featureRepository.contains("Hello"))
     Assert.assertTrue(corpus.featureRepository.contains("Jenny"))
-    Assert.assertTrue(corpus.featureRepository.contains("label0+1"))
-    Assert.assertTrue(corpus.featureRepository.contains("label0+0"))
-    Assert.assertTrue(corpus.featureRepository.contains("label1+0"))
-    Assert.assertTrue(corpus.featureRepository.contains("label1+1"))
+    Assert.assertTrue(corpus.featureRepository.contains("!"))
+
+    Assert.assertTrue(corpus.featureRepository.contains("label0"))
+    Assert.assertTrue(corpus.featureRepository.contains("label1"))
+
+    Assert.assertTrue(corpus.featureRepository.contains("n1->!"))
+    Assert.assertTrue(corpus.featureRepository.contains("n1->Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("n2->!"))
+
+    Assert.assertTrue(corpus.featureRepository.contains("p1->Hello"))
+    Assert.assertTrue(corpus.featureRepository.contains("p1->Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("p2->Hello"))
+
+    Assert.assertTrue(corpus.featureRepository.contains("pcn-word->Hello-Jenny-!"))
+
+    Assert.assertTrue(corpus.featureRepository.contains("pc-type->Jenny-!"))
+    Assert.assertTrue(corpus.featureRepository.contains("pc-type->Hello-Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("pc-word->Jenny-!"))
+    Assert.assertTrue(corpus.featureRepository.contains("pc-word->Hello-Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("p2p1c-word->Hello-Jenny-!"))
+
+    Assert.assertTrue(corpus.featureRepository.contains("cn-type->Hello-Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("cn-type->Jenny-!"))
+    Assert.assertTrue(corpus.featureRepository.contains("cn-word->Jenny-!"))
+    Assert.assertTrue(corpus.featureRepository.contains("cn-word->Hello-Jenny"))
+    Assert.assertTrue(corpus.featureRepository.contains("cn1n2-word->Hello-Jenny-!"))
 
     Assert.assertTrue(corpus.labelRepository.contains("O"))
     Assert.assertTrue(corpus.labelRepository.contains("PER"))
