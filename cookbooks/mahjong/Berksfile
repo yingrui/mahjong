@@ -1,0 +1,6 @@
+source "https://supermarket.chef.io"
+
+metadata
+
+cookbook 'java', '= 1.29.0'
+cookbook 'tomcat', '= 0.17.0'
