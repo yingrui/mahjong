@@ -22,7 +22,7 @@ class PerformanceTest {
   }
 
   @Test
-  def should_segment_Sophies_World_within_1_seconds() {
+  def should_segment_Sophies_World_within_2_seconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentWorker()
     segmentWorker.setRecognizePOS(false)
@@ -38,10 +38,10 @@ class PerformanceTest {
     reader.close()
     val endTime = System.currentTimeMillis()
     val milSeconds = endTime - beginTime
-    println("should_segment_Sophies_World_within_1_seconds")
+    println("should_segment_Sophies_World_within_2_seconds")
     println("    Spend total " + milSeconds + " ms.")
     println("    Segment words " + total + ", the velocity is " + (total * 1000 / milSeconds) + " num/sec.")
-    Assert.assertTrue(milSeconds < 1000 * 1.05)
+    Assert.assertTrue(milSeconds < 2000 * 1.05)
   }
 
   @Ignore
