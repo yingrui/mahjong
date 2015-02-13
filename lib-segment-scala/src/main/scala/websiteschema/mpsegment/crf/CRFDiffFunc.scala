@@ -2,7 +2,7 @@ package websiteschema.mpsegment.crf
 
 import websiteschema.mpsegment.math.Matrix
 
-class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
+class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) extends Function {
 
   def valueAt(x: Matrix): Double = calculate(x)
 

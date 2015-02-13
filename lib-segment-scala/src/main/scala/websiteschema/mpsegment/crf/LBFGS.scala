@@ -68,6 +68,9 @@ class LBFGS(m: Int, X: Matrix) {
     while (it < maxIteration) {
       findDirection(gradient)
 
+      val sum = func.derivative.flatten.map(d => Math.abs(d)).sum
+      println("Iteration %d: %10.5f, %10.5f".format(it, value, sum))
+
       releaseHistoryUpdates
 
       val newValue = search(func, value)

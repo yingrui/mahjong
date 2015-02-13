@@ -76,9 +76,8 @@ object CRFModel {
     val model = new CRFModel(corpus.featureRepository, corpus.labelRepository)
 
     val func = new CRFDiffFunc(corpus, model)
-    val learner = new CRFModelLearner(model, func)
 
-    learner.train
+    model.weights := LBFGS(model.weights).search(func)
 
     model
   }

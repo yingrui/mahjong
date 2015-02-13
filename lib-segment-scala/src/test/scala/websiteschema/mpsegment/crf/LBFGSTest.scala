@@ -4,7 +4,7 @@ import org.junit.Test
 import websiteschema.mpsegment.Assertion.shouldBeEqual
 import websiteschema.mpsegment.math.Matrix
 
-class BFGSTest {
+class LBFGSTest {
 
   class F extends Function {
 
