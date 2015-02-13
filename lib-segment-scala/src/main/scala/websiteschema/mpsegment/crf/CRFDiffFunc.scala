@@ -4,15 +4,14 @@ import websiteschema.mpsegment.math.Matrix
 
 class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
 
-  def valueAt(x: Array[Double]): Double = calculate(x)
-  def valueAt(x: Matrix): Double = calculate(x.flatten)
+  def valueAt(x: Matrix): Double = calculate(x)
 
-  val derivative = new Array[Double](model.featuresCount * model.labelCount)
+  val derivative = Matrix(model.featuresCount, model.labelCount)
   val sigma = 1.0D
   val sigmaSq = sigma * sigma
 
-  private def calculate(weights: Array[Double]): Double = {
-    val E = CRFUtils.empty2DArray(model.featuresCount, model.labelCount)
+  private def calculate(weights: Matrix): Double = {
+    val E = Matrix(model.featuresCount, model.labelCount)
 
     var prob = 0.0D
 
@@ -25,17 +24,16 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) {
         for (label <- 0 until model.labelCount) {
           val p = clique.condProb(t, label, Array[Int]())
           for (feature <- doc_i.data(t)) {
-            E(feature)(label) += p
+            E(feature, label) = E(feature, label) + p
           }
         }
       }
     }
 
     val regular = (for (feature <- 0 until model.featuresCount; label <- 0 until model.labelCount) yield {
-      val i = model.labelCount * feature + label
-      val x_i = weights(i)
-      val e = E(feature)(label)
-      derivative(i) = corpus.Ehat(feature)(label) - e - (x_i / sigmaSq)
+      val x_i = weights(feature, label)
+      val e = E(feature, label)
+      derivative(feature, label) = corpus.Ehat(feature)(label) - e - (x_i / sigmaSq)
       x_i * x_i / 2 / sigmaSq
     }).sum
 

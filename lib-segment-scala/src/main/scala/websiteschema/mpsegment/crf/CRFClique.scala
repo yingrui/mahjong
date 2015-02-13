@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.crf
 
 import CRFUtils._
+import websiteschema.mpsegment.math.Matrix
 
 class CRFClique(doc: CRFDocument, labelCount: Int, factors: Array[Factor]) {
 
@@ -53,6 +54,20 @@ object CRFClique {
       val weightFactor = (for (label <- 0 until model.labelCount) yield {
         var weight = 0.0D
         for (feature <- datum) weight += weights(model.labelCount * feature + label)
+        weight
+      }).toArray
+
+      new Factor(weightFactor)
+    }
+
+    new CRFClique(doc, model.labelCount, factors.toArray)
+  }
+
+  def apply(doc: CRFDocument, model: CRFModel, weights: Matrix) = {
+    val factors = for (datum <- doc.data) yield {
+      val weightFactor = (for (label <- 0 until model.labelCount) yield {
+        var weight = 0.0D
+        for (feature <- datum) weight += weights(feature, label)
         weight
       }).toArray
 
