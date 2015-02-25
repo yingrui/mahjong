@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.crf
 
+import websiteschema.mpsegment.math.Matrix
+
 import scala.io.Source
 import scala.collection.mutable._
 
@@ -10,12 +12,13 @@ class CRFCorpus(val docs: Array[CRFDocument], val featureRepository: FeatureRepo
   val featuresCount = featureRepository.size
   val labelCount = labelRepository.size
 
-  val Ehat: Array[Array[Double]] = {
-    val featureArray = CRFUtils.empty2DArray(featuresCount, labelCount)
+  // Ehat
+  val occurrence: Matrix = {
+    val featureArray = Matrix(featuresCount, labelCount)
 
     for (doc_i <- docs) {
       for (t <- 0 until doc_i.data.length; k <- doc_i.data(t)) {
-        featureArray(k)(doc_i.label(t)) += 1.0D
+        featureArray(k, doc_i.label(t)) += 1.0D
       }
     }
     featureArray

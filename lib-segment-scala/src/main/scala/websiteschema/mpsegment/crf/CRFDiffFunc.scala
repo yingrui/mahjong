@@ -33,7 +33,7 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) extends Function {
     val regular = (for (feature <- 0 until model.featuresCount; label <- 0 until model.labelCount) yield {
       val x_i = weights(feature, label)
       val e = E(feature, label)
-      derivative(feature, label) = corpus.Ehat(feature)(label) - e - (x_i / sigmaSq)
+      derivative(feature, label) = corpus.occurrence(feature, label) - e - (x_i / sigmaSq)
       x_i * x_i / 2 / sigmaSq
     }).sum
 
