@@ -11,6 +11,10 @@ class CRFCorpus(val docs: Array[CRFDocument], val featureRepository: FeatureRepo
 
   val featuresCount = featureRepository.size
   val labelCount = labelRepository.size
+  val grouped = {
+    val groupSize = if (docs.length > 6) docs.length / 6 else 1
+    docs.grouped(groupSize).toArray
+  }
 
   // Ehat
   val occurrence: Matrix = {
