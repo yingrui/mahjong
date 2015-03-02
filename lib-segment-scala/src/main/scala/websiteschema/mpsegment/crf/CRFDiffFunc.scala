@@ -7,29 +7,6 @@ import websiteschema.mpsegment.math.Matrix
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class Calculator(docs: Array[CRFDocument], model: CRFModel, weights: Matrix) {
-  val E = Matrix(model.featuresCount, model.labelCount)
-  var prob = 0D
-
-  def calculate: Unit = {
-    for (doc_i <- docs) {
-      val clique = CRFClique(doc_i, model, weights)
-
-      for (t <- 0 until doc_i.data.length) {
-        prob += clique.condLogProb(t, doc_i.label(t), Array[Int]())
-
-        for (label <- 0 until model.labelCount) {
-          val p = clique.condProb(t, label, Array[Int]())
-          for (feature <- doc_i.data(t)) {
-            E(feature, label) += p
-          }
-        }
-      }
-    }
-  }
-}
-
-
 class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) extends Function {
 
   def valueAt(x: Matrix): Double = calculate(x)
@@ -67,4 +44,27 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) extends Function {
     regular - prob
   }
 
+  class Calculator(docs: Array[CRFDocument], model: CRFModel, weights: Matrix) {
+    val E = Matrix(model.featuresCount, model.labelCount)
+    var prob = 0D
+
+    def calculate: Unit = {
+      for (doc_i <- docs) {
+        val clique = CRFClique(doc_i, model, weights)
+
+        for (t <- 0 until doc_i.data.length) {
+          prob += clique.condLogProb(t, doc_i.label(t), Array[Int]())
+
+          for (label <- 0 until model.labelCount) {
+            val p = clique.condProb(t, label, Array[Int]())
+            for (feature <- doc_i.data(t)) {
+              E(feature, label) += p
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
+

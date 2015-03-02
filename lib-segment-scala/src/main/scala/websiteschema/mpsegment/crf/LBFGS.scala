@@ -53,7 +53,7 @@ class LBFGS(m: Int, X: Matrix) {
 
     (0 until m).foreach(i => {
       val b = yList(i) * dir * roList(i)
-      dir += (sList(i) x as(i) - b)
+      dir += (sList(i) x (as(i) - b))
     })
 
     dir *= -1
