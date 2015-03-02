@@ -59,6 +59,16 @@ class LBFGS(m: Int, X: Matrix) {
     dir *= -1
   }
 
+  var tic = java.util.Calendar.getInstance().getTime().getTime()
+  var toc = tic
+
+  def timeElapse = {
+    toc = java.util.Calendar.getInstance().getTime().getTime()
+    val elapse = toc - tic
+    tic = toc
+    elapse
+  }
+
   def search(func: Function): Matrix = {
     var it = 0
     var value = func.valueAt(X)
@@ -69,7 +79,7 @@ class LBFGS(m: Int, X: Matrix) {
       findDirection(gradient)
 
       val sum = func.derivative.flatten.map(d => Math.abs(d)).sum
-      println("Iteration %d: %10.5f, %10.5f".format(it, value, sum))
+      println("Iteration %d: %10.5f, %10.5f, %d".format(it, value, sum, timeElapse))
 
       releaseHistoryUpdates
 
