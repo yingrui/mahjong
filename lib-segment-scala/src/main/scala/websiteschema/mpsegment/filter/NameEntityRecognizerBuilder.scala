@@ -3,7 +3,7 @@ package websiteschema.mpsegment.filter
 import websiteschema.mpsegment.tools.PFRCorpusLoader
 import websiteschema.mpsegment.util.FileUtil._
 import websiteschema.mpsegment.util.CharCheckUtil._
-import websiteschema.mpsegment.core.{WordAtom, SegmentResult}
+import websiteschema.mpsegment.core.{Word, SegmentResult}
 import websiteschema.mpsegment.dict.POSUtil
 
 class NameEntityRecognizerBuilder {
@@ -76,13 +76,13 @@ class NameEntityRecognizerBuilder {
 
   private def statisticBoundary(i: Int, sentence: SegmentResult) {
     val word = sentence(i)
-    result.wordFreqPlusOne(word.word)
+    result.wordFreqPlusOne(word.name)
     if (i > 0 && isWordName(sentence, i - 1) && !isWordName(sentence, i)) {
-      result.wordRightBoundaryFreqPlusOne(word.word)
+      result.wordRightBoundaryFreqPlusOne(word.name)
     }
 
     if (i < sentence.length() - 1 && (isWordName(sentence, i + 1)) && !isWordName(sentence, i)) {
-      result.wordLeftBoundaryFreqPlusOne(word.word)
+      result.wordLeftBoundaryFreqPlusOne(word.name)
     }
 
     if(i == 0 && (isWordPosNR(word) || isWordPosR(word))) {
@@ -95,8 +95,8 @@ class NameEntityRecognizerBuilder {
     }
   }
 
-  private def isWordPosNR(word: WordAtom): Boolean = word.pos == POSUtil.POS_NR
+  private def isWordPosNR(word: Word): Boolean = word.pos == POSUtil.POS_NR
 
-  private def isWordPosR(word: WordAtom): Boolean = word.pos == POSUtil.POS_R
+  private def isWordPosR(word: Word): Boolean = word.pos == POSUtil.POS_R
 
 }

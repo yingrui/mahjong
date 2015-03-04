@@ -1,15 +1,11 @@
 package websiteschema.mpsegment.tools.accurary
 
-import websiteschema.mpsegment.core.SegmentResult
-import websiteschema.mpsegment.core.SegmentWorker
-import websiteschema.mpsegment.core.WordAtom
-import websiteschema.mpsegment.tools.PFRCorpusLoader
-import websiteschema.mpsegment.util.NumberUtil
-import websiteschema.mpsegment.util.StringUtil
-import collection.mutable._
-import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
+import websiteschema.mpsegment.core.{SegmentResult, SegmentWorker, Word}
 import websiteschema.mpsegment.dict.POSUtil
-import scala.collection.mutable
+import websiteschema.mpsegment.tools.PFRCorpusLoader
+import websiteschema.mpsegment.tools.accurary.SegmentErrorType._
+
+import scala.collection.mutable._
 
 class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends SegmentResultCompareHook {
 
@@ -75,8 +71,8 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
 
   private def recordWordFreqInCorpus(expectResult: SegmentResult) {
     expectResult.foreach(word => {
-      val freq = if (allWordsAndFreqInCorpus.contains(word.word)) allWordsAndFreqInCorpus(word.word) + 1 else 1
-      allWordsAndFreqInCorpus.put(word.word, freq)
+      val freq = if (allWordsAndFreqInCorpus.contains(word.name)) allWordsAndFreqInCorpus(word.name) + 1 else 1
+      allWordsAndFreqInCorpus.put(word.name, freq)
     })
   }
 
@@ -90,18 +86,18 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
     wrong += 1
   }
 
-  override def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom, expectWordIndex: Int, matchedWordIndex: Int) {
+  override def correctWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {
     segmentCorrect(expectWord, matchedWord)
     correct += 1
   }
 
-  private def segmentCorrect(expect: WordAtom, actual: WordAtom) {
+  private def segmentCorrect(expect: Word, actual: Word) {
     if (actual.pos == POSUtil.POS_NR) {
       NerNameStatisticData.correctRecognizedNameCount += 1
     }
   }
 
-  override def analyzeReason(expect: WordAtom, possibleErrorWord: String) {
+  override def analyzeReason(expect: Word, possibleErrorWord: String) {
     for (errorType <- allErrorAnalyzer.keys) {
       val analyzer = allErrorAnalyzer(errorType)
       val isErrorWord = analyzer.analysis(expect, possibleErrorWord)

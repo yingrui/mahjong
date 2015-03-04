@@ -10,14 +10,14 @@ object NerNameStatisticData {
   var correctRecognizedNameCount = 0.0
 
   def scanNameWordCount(segmentResult: SegmentResult) {
-    segmentResult.foreach(wordAtom => {
-      if (wordAtom.pos == POSUtil.POS_NR) nameCount += 1.0
+    segmentResult.foreach(word => {
+      if (word.pos == POSUtil.POS_NR) nameCount += 1.0
     })
   }
 
   def scanRecognizedNameWordCount(segmentResult: SegmentResult) {
-    segmentResult.foreach(wordAtom => {
-      if (wordAtom.pos == POSUtil.POS_NR) recognizedNameCount += 1.0
+    segmentResult.foreach(word => {
+      if (word.pos == POSUtil.POS_NR) recognizedNameCount += 1.0
     })
   }
 

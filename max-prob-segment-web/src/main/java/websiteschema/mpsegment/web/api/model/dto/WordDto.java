@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.web.api.model.dto;
 
-import websiteschema.mpsegment.core.WordAtom;
+import websiteschema.mpsegment.core.Word;
 import websiteschema.mpsegment.dict.POSUtil;
 
 public class WordDto {
@@ -10,12 +10,12 @@ public class WordDto {
     public String concept;
     public int domainType;
 
-    public WordDto(WordAtom wordAtom) {
-        word = wordAtom.word();
-        pinyin = wordAtom.pinyin();
-        pos = POSUtil.getPOSString(wordAtom.pos());
-        concept = wordAtom.concept();
-        domainType = wordAtom.domainType();
+    public WordDto(Word word) {
+        this.word = word.name();
+        pinyin = word.pinyin();
+        pos = POSUtil.getPOSString(word.pos());
+        concept = word.concept();
+        domainType = word.domainType();
     }
 
     @Override

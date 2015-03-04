@@ -1,8 +1,9 @@
 package websiteschema.mpsegment.filter
 
 import websiteschema.mpsegment.core.SegmentResult
-import collection.mutable.ListBuffer
-import websiteschema.mpsegment.dict.{HashDictionary, POSUtil, DictionaryFactory}
+import websiteschema.mpsegment.dict.{DictionaryFactory, POSUtil}
+
+import scala.collection.mutable.ListBuffer
 
 abstract class AbstractSegmentFilter extends ISegmentFilter {
 
@@ -27,7 +28,7 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
   class SeparateOperation(index: Int, pos: Int, secondPos: Int) extends Operation {
 
     def modify(segmentResult: SegmentResult) {
-      val rest = segmentResult(index).word.substring(1)
+      val rest = segmentResult(index).name.substring(1)
       val secondPartOfSpeech = getPartOfSpeechForSecondWord(secondPos, rest)
       segmentResult.separate(index, 1, pos, secondPartOfSpeech)
     }

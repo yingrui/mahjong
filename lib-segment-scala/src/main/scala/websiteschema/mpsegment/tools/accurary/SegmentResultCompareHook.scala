@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.tools.accurary
 
-import websiteschema.mpsegment.core.WordAtom
+import websiteschema.mpsegment.core.Word
 
 trait SegmentResultCompareHook {
 
@@ -8,9 +8,9 @@ trait SegmentResultCompareHook {
 
   def compeleted {}
 
-  def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom, expectWordIndex: Int, matchedWordIndex: Int) {}
+  def correctWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {}
 
-  def analyzeReason(expect: WordAtom, possibleErrorWord: String) {}
+  def analyzeReason(expect: Word, possibleErrorWord: String) {}
 
-  def foundError(expect: WordAtom, word: WordAtom, expectWordIndex: Int, errorWordIndex: Int) {}
+  def foundError(expect: Word, word: Word, expectWordIndex: Int, errorWordIndex: Int) {}
 }

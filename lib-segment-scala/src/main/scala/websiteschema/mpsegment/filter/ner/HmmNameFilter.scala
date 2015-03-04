@@ -19,7 +19,7 @@ class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) e
   private var curIndex = 0
 
   override def doFilter() {
-    val words = segmentResult.getWordAtoms().map(wordAtom => wordAtom.word)
+    val words = segmentResult.getWords().map(word => word.name)
     labels = classifier.classify(words)
     for (index <- 0 until labels.length; label = labels(index)) {
       curIndex = index

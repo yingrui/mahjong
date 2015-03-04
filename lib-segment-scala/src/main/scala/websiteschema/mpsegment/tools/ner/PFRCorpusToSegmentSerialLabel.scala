@@ -17,7 +17,7 @@ object PFRCorpusToSegmentSerialLabel extends App {
 
     var i = 0
     while (i < sentence.length()) {
-      val word = sentence(i).word
+      val word = sentence(i).name
       if(WordUtil.isAlphaNumericWithUnderScore_Slash_Colon(word)) {
         printer.println(word + "\t" + "S")
       } else if(word.length == 1) {

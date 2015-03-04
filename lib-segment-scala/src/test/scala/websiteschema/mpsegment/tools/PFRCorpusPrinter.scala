@@ -20,7 +20,7 @@ object PFRCorpusPrinter extends App {
 
   def print(result: SegmentResult, out: PrintStream) {
     WordToPinyinClassfierFactory().getClassifier().classify(result)
-    val containsDomainWord = !result.getWordAtoms().forall(word => word.domainType == 0)
+    val containsDomainWord = !result.getWords().forall(word => word.domainType == 0)
 
     if (containsDomainWord) {
       for (i <- 0 until result.length) {

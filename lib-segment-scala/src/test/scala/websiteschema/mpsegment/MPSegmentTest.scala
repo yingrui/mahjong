@@ -266,7 +266,7 @@ class MPSegmentTest {
     assert(str.length() > 1024)
     val words = SegmentWorker().segment(str)
     var containsPRC = false
-    words.foreach(word => if(word.word.equals("中华人民共和国")) {
+    words.foreach(word => if(word.name.equals("中华人民共和国")) {
       containsPRC = true
     })
     assert(containsPRC, "should know stop vertex when input sentence is too long")

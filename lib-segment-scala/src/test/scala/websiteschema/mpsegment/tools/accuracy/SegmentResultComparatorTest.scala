@@ -6,22 +6,22 @@ import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import websiteschema.mpsegment.tools.PFRCorpusLoader
-import websiteschema.mpsegment.core.WordAtom
+import websiteschema.mpsegment.core.Word
 import websiteschema.mpsegment.tools.accurary.{SegmentResultComparator, SegmentResultCompareHook}
 
 class SegmentResultComparatorTest {
 
   class StubHooker extends SegmentResultCompareHook {
     var errorCount = 0
-    var words = List[WordAtom]()
+    var words = List[Word]()
 
     override def errorWordHook = errorCount += 1
 
-    override def correctWordHook(expectWord: WordAtom, matchedWord: WordAtom, expectWordIndex: Int, matchedWordIndex: Int) {
+    override def correctWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {
       words = words :+ matchedWord
     }
 
-    override def foundError(expect: WordAtom, word: WordAtom, expectWordIndex: Int, errorWordIndex: Int) {
+    override def foundError(expect: Word, word: Word, expectWordIndex: Int, errorWordIndex: Int) {
       words = words :+ word
     }
   }
@@ -61,7 +61,7 @@ class SegmentResultComparatorTest {
 
     Assert.assertEquals(actual.length, hooker.words.size)
     val joined: String = hooker.words.foldRight("") {
-      (a, b) => a.word + b
+      (a, b) => a.name + b
     }
     Assert.assertEquals(actual.toOriginalString(), joined)
   }
@@ -77,7 +77,7 @@ class SegmentResultComparatorTest {
 
     Assert.assertEquals(actual.length, hooker.words.size)
     val joined: String = hooker.words.foldRight("") {
-      (a, b) => a.word + b
+      (a, b) => a.name + b
     }
     Assert.assertEquals(actual.toOriginalString(), joined)
   }
@@ -93,7 +93,7 @@ class SegmentResultComparatorTest {
 
     Assert.assertEquals(actual.length, hooker.words.size)
     val joined: String = hooker.words.foldRight("") {
-      (a, b) => a.word + b
+      (a, b) => a.name + b
     }
     Assert.assertEquals(actual.toOriginalString(), joined)
   }

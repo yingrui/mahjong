@@ -1,6 +1,6 @@
 package websiteschema.mpsegment.tools.accurary
 
-import websiteschema.mpsegment.core.{WordAtom, SegmentResult}
+import websiteschema.mpsegment.core.{Word, SegmentResult}
 import websiteschema.mpsegment.util.{StringUtil, NumberUtil}
 
 class SegmentResultComparator(hooker: SegmentResultCompareHook) {
@@ -25,10 +25,10 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
     hooker.compeleted
   }
 
-  private def lookupMatch(actualResult: SegmentResult, expectWord: WordAtom, start: Int, expectWordIndex: Int): Int = {
+  private def lookupMatch(actualResult: SegmentResult, expectWord: Word, start: Int, expectWordIndex: Int): Int = {
     for (wordIndex <- start until actualResult.length) {
       val actualWord = actualResult.getWord(wordIndex)
-      if (isSameWord(expectWord.word, actualWord)) {
+      if (isSameWord(expectWord.name, actualWord)) {
         if (actualResult.getWordStartAt(wordIndex) == indexInOriginalString) {
           return wordIndex
         }
@@ -39,19 +39,19 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
     return -1
   }
 
-  private def recordError(errorWordIndex: Int, actual: WordAtom, expect: WordAtom, expectWordIndex: Int) {
+  private def recordError(errorWordIndex: Int, actual: Word, expect: Word, expectWordIndex: Int) {
     if (!(foundError contains errorWordIndex)) {
       hooker.foundError(expect, actual, expectWordIndex, errorWordIndex)
       foundError += errorWordIndex
     }
   }
 
-  private def analyzeErrorReason(actualResult: SegmentResult, expect: WordAtom, start: Int, expectWordIndex: Int) {
+  private def analyzeErrorReason(actualResult: SegmentResult, expect: Word, start: Int, expectWordIndex: Int) {
     val possibleErrorWord = lookupErrorWord(actualResult, expect, start, expectWordIndex)
     hooker.analyzeReason(expect, possibleErrorWord)
   }
 
-  private def lookupErrorWord(actualResult: SegmentResult, expect: WordAtom, start: Int, expectWordIndex: Int) = {
+  private def lookupErrorWord(actualResult: SegmentResult, expect: Word, start: Int, expectWordIndex: Int) = {
     val to = indexInOriginalString + expect.length
     val stringBuilder = new StringBuilder()
     for (wordIndex <- start until actualResult.length) {

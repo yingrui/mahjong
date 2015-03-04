@@ -1,11 +1,11 @@
 package websiteschema.mpsegment.tools.accurary
 
-import websiteschema.mpsegment.core.WordAtom
+import websiteschema.mpsegment.core.Word
 import collection.mutable.Map
 
 class ContainErrorAnalyzer extends AbstractErrorAnalyzer {
 
-    override def analysis(expect: WordAtom, possibleErrorWord: String) : Boolean = {
+    override def analysis(expect: Word, possibleErrorWord: String) : Boolean = {
         var foundError = false
         if (possibleErrorWord.length() == 0) {
             // Bigger word contains the littler words.
@@ -13,8 +13,8 @@ class ContainErrorAnalyzer extends AbstractErrorAnalyzer {
             increaseOccur()
 //            println(expect.word + " in " + possibleErrorWord)
             foundError = true
-        } else if (!possibleErrorWord.replaceAll(" ", "").equals(expect.word)
-                && possibleErrorWord.contains(expect.word)) {
+        } else if (!possibleErrorWord.replaceAll(" ", "").equals(expect.name)
+                && possibleErrorWord.contains(expect.name)) {
             increaseOccur()
             addErrorWord(possibleErrorWord)
 //            println(expect.word + " in " + possibleErrorWord)
