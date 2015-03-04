@@ -15,12 +15,10 @@ class DisambiguationSegmentTest {
     var words = worker.segment(str)
     println(words)
 
-    val old = worker.isUseContextFreqSegment()
-    worker.setUseContextFreqSegment(true)
-    words = worker.segment(str)
+    val worker2 = SegmentWorker("segment.context -> true")
+    words = worker2.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(1), "机会")
-    worker.setUseContextFreqSegment(old)
   }
 
   @Test
@@ -33,45 +31,34 @@ class DisambiguationSegmentTest {
     Assert.assertEquals(words.getWord(0), "学生")
     Assert.assertEquals(words.getWord(1), "物")
 
-    val old = worker.isUseContextFreqSegment()
-    worker.setUseContextFreqSegment(true)
-    words = worker.segment(str)
+    val worker2 = SegmentWorker("segment.context -> true")
+    words = worker2.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "学")
     Assert.assertEquals(words.getWord(1), "生物")
-
-    worker.setUseContextFreqSegment(old)
   }
 
   @Test
   def should_scan_context_freq_for_Pingpang_and_Auction() {
     val str = "今天的拍卖非常成功，王励勤的乒乓球拍卖完了"
-    val worker = SegmentWorker()
+    val worker = SegmentWorker("segment.context -> true")
 
-    val old = worker.isUseContextFreqSegment()
-    worker.setUseContextFreqSegment(true)
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(8), "乒乓球")
     Assert.assertEquals(words.getWord(9), "拍卖")
-
-    worker.setUseContextFreqSegment(old)
   }
 
   @Test
   def should_scan_context_freq_for_PingpangRackets_and_Sale() {
     val str = "乒乓球拍卖完了。这里所有的球拍都物美价廉，这最后几个球拍便宜一点，你就都拿走吧？要不再送你几个其它球拍。（Context: 球拍球拍球拍球拍球拍球拍球拍。乒乓乒乓乒乓乒乓乒乓乒乓）"
-    val worker = SegmentWorker()
+    val worker = SegmentWorker("segment.context -> true")
 
-    val old = worker.isUseContextFreqSegment()
-    worker.setUseContextFreqSegment(true)
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "乒乓")
     Assert.assertEquals(words.getWord(1), "球拍")
     Assert.assertEquals(words.getWord(2), "卖")
-
-    worker.setUseContextFreqSegment(old)
   }
 
   @Test
@@ -83,13 +70,10 @@ class DisambiguationSegmentTest {
     println(words)
     Assert.assertEquals(words.getWord(8), "学生")
 
-    val old = worker.isUseContextFreqSegment()
-    worker.setUseContextFreqSegment(true)
-    words = worker.segment(str)
+    val worker2 = SegmentWorker("segment.context -> true")
+    words = worker2.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(8), "学")
-
-    worker.setUseContextFreqSegment(old)
   }
 
   @Test

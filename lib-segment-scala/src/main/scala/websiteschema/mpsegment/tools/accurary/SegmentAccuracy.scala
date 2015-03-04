@@ -16,8 +16,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   private var accuracyRate: Double = 0D
 
   private val allWordsAndFreqInCorpus = HashMap[String, Int]()
-  private var allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
-
+  private val allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
 
   initialErrorAnalyzer()
   loader = PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus))
@@ -31,8 +30,6 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   def getErrorAnalyzer(errorType: SegmentErrorType) = allErrorAnalyzer(errorType)
 
   def checkSegmentAccuracy() {
-    val isUseContextFreq = segmentWorker.isUseContextFreqSegment()
-    segmentWorker.setUseContextFreqSegment(true)
     try {
       var expectResult = loader.readLine()
       while (expectResult != null) {
@@ -55,7 +52,6 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
         ex.printStackTrace()
     } finally {
       postAnalysis()
-      segmentWorker.setUseContextFreqSegment(isUseContextFreq)
     }
     assert(correct > 0 && totalWords > 0)
     accuracyRate = correct.toDouble / totalWords.toDouble

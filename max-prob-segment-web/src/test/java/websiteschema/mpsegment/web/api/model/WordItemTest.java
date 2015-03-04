@@ -6,6 +6,7 @@ import websiteschema.mpsegment.web.ui.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +24,7 @@ public class WordItemTest {
         assertEquals(1, word.id);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         assertEquals(dateFormat.format(now), word.createAt);
 
         assertEquals("FirstName", word.user.firstName);

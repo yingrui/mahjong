@@ -48,6 +48,10 @@ class MPSegmentConfiguration {
     return loadEnglishDictionary
   }
 
+  def isUseContextFreqSegment(): Boolean = {
+    return useContextFreqSegment
+  }
+
   def getUserDictionaryFile(): String = {
     return getHomePath() + properties.getOrElse("user.dictionaryfile", "userdict.txt")
   }
@@ -120,6 +124,7 @@ class MPSegmentConfiguration {
     halfshapeall = properties.getOrElse("convert.tohalfshape", "false").toBoolean
     uppercaseall = properties.getOrElse("convert.touppercase", "false").toBoolean
     withPinyin = properties.getOrElse("recognize.pinyin", "false").toBoolean
+    useContextFreqSegment = properties.getOrElse("segment.context", "false").toBoolean
     this
   }
 
@@ -146,6 +151,7 @@ class MPSegmentConfiguration {
   private var loaddomaindictionary = false
   private var loaduserdictionary = false
   private var loadEnglishDictionary = false
+  private var useContextFreqSegment = false
   private var segment_min = false
   private var querysyntax = false
   //TODO: add test case for stop word filter.

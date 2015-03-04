@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import scala.collection.immutable.List;
 import websiteschema.mpsegment.concept.Concept;
 import websiteschema.mpsegment.core.SegmentWorker;
+import websiteschema.mpsegment.core.SegmentWorkerBuilder;
 import websiteschema.mpsegment.dict.DictionaryFactory;
 import websiteschema.mpsegment.dict.IDictionary;
 import websiteschema.mpsegment.dict.IWord;
@@ -14,11 +15,12 @@ import websiteschema.mpsegment.hmm.NodeRepository;
 import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 public class WordItemCreator {
 
     public void createWordItems(JdbcTemplate jdbcTemplate) {
-        SegmentWorker.apply();
+        SegmentWorkerBuilder.build(new HashMap<String, String>());
         IDictionary dict = DictionaryFactory.apply().getCoreDictionary();
         try {
             createWordItemsByDictionary(jdbcTemplate, dict);

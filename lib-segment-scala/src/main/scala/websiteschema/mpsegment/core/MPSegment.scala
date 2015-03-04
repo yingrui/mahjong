@@ -2,7 +2,7 @@ package websiteschema.mpsegment.core
 
 import websiteschema.mpsegment.conf.MPSegmentConfiguration
 import websiteschema.mpsegment.dict.IWord
-import websiteschema.mpsegment.graph.{IShortestPath, IGraph, _}
+import websiteschema.mpsegment.graph._
 import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory
 
 class MPSegment(config: MPSegmentConfiguration) {
@@ -13,26 +13,10 @@ class MPSegment(config: MPSegmentConfiguration) {
   private val conceptRecognizer: IConceptRecognizer = new SimpleConceptRecognizer()
   private var lastSection: Boolean = false
   private var lastSectionStr: String = ""
-  private var useDomainDictionary: Boolean = true
-  private var useContextFreqSegment: Boolean = false
+  private var useDomainDictionary: Boolean = config.isLoadDomainDictionary()
+  private var useContextFreqSegment: Boolean = config.isUseContextFreqSegment()
 
   initialize()
-
-  def isUseDomainDictionary(): Boolean = {
-    useDomainDictionary
-  }
-
-  def setUseDomainDictionary(flag: Boolean) {
-    useDomainDictionary = flag
-  }
-
-  def isUseContextFreqSegment(): Boolean = {
-    useContextFreqSegment
-  }
-
-  def setUseContextFreqSegment(useContextFreqSegment: Boolean) {
-    this.useContextFreqSegment = useContextFreqSegment
-  }
 
   private def initialize() {
     withPinyin = config.isWithPinyin()
