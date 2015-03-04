@@ -7,15 +7,10 @@ class MPSegmentWorker(config: MPSegmentConfiguration) extends SegmentWorker {
 
   private var unKnownFilter: SegmentResultFilter = null
   private val maxSegStrLength = 400000
-  private var mpSegment: MPSegment = null
-  private var recognizePOS: Boolean = true
+  private val mpSegment: MPSegment = new MPSegment(config)
+  private val recognizePOS = config.isRecognizePOS()
 
-  mpSegment = new MPSegment(config)
   unKnownFilter = new SegmentResultFilter(config)
-
-  def isUseDomainDictionary(): Boolean = {
-    config.isLoadDomainDictionary()
-  }
 
   def segment(sen: String): SegmentResult = {
     var sentence = sen
@@ -32,13 +27,5 @@ class MPSegmentWorker(config: MPSegmentConfiguration) extends SegmentWorker {
       result = new SegmentResult(0)
     }
     result
-  }
-
-  def isUseContextFreqSegment() = config.isUseContextFreqSegment()
-
-  def isRecognizePOS() = recognizePOS
-
-  def setRecognizePOS(recognizePOS: Boolean) {
-    this.recognizePOS = recognizePOS
   }
 }

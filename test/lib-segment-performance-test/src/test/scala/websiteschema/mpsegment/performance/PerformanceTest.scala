@@ -12,7 +12,6 @@ class PerformanceTest {
   def warmUp() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentWorker()
-    segmentWorker.setRecognizePOS(true)
     for (line <- reader.getLines()) {
       if (line.trim().length > 0) {
         segmentWorker.segment(line)
@@ -24,8 +23,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_within_2_seconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker()
-    segmentWorker.setRecognizePOS(false)
+    val segmentWorker = SegmentWorker("recognize.partOfSpeech -> false")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -49,7 +47,6 @@ class PerformanceTest {
   def should_segment_Sophies_World_with_POS_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentWorker()
-    segmentWorker.setRecognizePOS(true)
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -72,9 +69,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker()
-    segmentWorker.setRecognizePOS(true)
-    segmentWorker.setUseDomainDictionary(false)
+    val segmentWorker = SegmentWorker("load.domaindictionary -> true")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -85,7 +80,6 @@ class PerformanceTest {
       }
     }
     reader.close()
-    segmentWorker.setUseDomainDictionary(true)
     val endTime = System.currentTimeMillis()
     val milSeconds = endTime - beginTime
     println("should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_3_seconds")
@@ -98,9 +92,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_and_Context_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker()
-    segmentWorker.setRecognizePOS(true)
-    segmentWorker.setUseContextFreqSegment(true)
+    val segmentWorker = SegmentWorker("segment.context -> false", "recognize.partOfSpeech -> true")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -111,7 +103,6 @@ class PerformanceTest {
       }
     }
     reader.close()
-    segmentWorker.setUseContextFreqSegment(false)
     val endTime = System.currentTimeMillis()
     val milSeconds = endTime - beginTime
     println("should_segment_Sophies_World_with_POS_and_Context_within_3_seconds")
@@ -121,11 +112,9 @@ class PerformanceTest {
   }
 
   @Test
-  def should_spend_memory_within_80_MB() {
+  def should_spend_memory_within_90_MB() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker()
-    segmentWorker.setRecognizePOS(true)
-    segmentWorker.setUseContextFreqSegment(true)
+    val segmentWorker = SegmentWorker("segment.context -> false", "recognize.partOfSpeech -> false")
     segmentWorker.segment("世界您好！")
     for (line <- reader.getLines()) {
       if (line.trim().length > 0) {
@@ -133,15 +122,14 @@ class PerformanceTest {
       }
     }
     reader.close()
-    segmentWorker.setUseContextFreqSegment(false)
     Runtime.getRuntime().gc()
     Thread.sleep(2000)
     val totalMemory = Runtime.getRuntime().totalMemory()
     val freeMemory = Runtime.getRuntime().freeMemory()
     val memorySize = (totalMemory - freeMemory) / 1024 / 1024
-    println("should_spend_memory_within_80_MB")
+    println("should_spend_memory_within_90_MB")
     println("    Current application has taken " + memorySize + "MB memory size.")
-    Assert.assertTrue(memorySize <= 80)
+    Assert.assertTrue(memorySize <= 90)
   }
 }
 

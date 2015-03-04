@@ -108,6 +108,8 @@ class MPSegmentConfiguration {
     return withPinyin
   }
 
+  def isRecognizePOS() = recognizePOS
+
   def getPinyinModel(): String = {
     return properties.getOrElse("pinyin.model", "wtp.m")
   }
@@ -120,6 +122,7 @@ class MPSegmentConfiguration {
     loadEnglishDictionary = properties.getOrElse("load.englishdictionary", "true").toBoolean
     segment_min = properties.getOrElse("minimize.word", "false").toBoolean
     chinesenameidentify = properties.getOrElse("recognize.chinesename", "true").toBoolean
+    recognizePOS = properties.getOrElse("recognize.partOfSpeech", "true").toBoolean
     xingmingseparate = properties.getOrElse("separate.xingming", "false").toBoolean
     halfshapeall = properties.getOrElse("convert.tohalfshape", "false").toBoolean
     uppercaseall = properties.getOrElse("convert.touppercase", "false").toBoolean
@@ -150,6 +153,7 @@ class MPSegmentConfiguration {
   private var withPinyin = false
   private var loaddomaindictionary = false
   private var loaduserdictionary = false
+  private var recognizePOS = true
   private var loadEnglishDictionary = false
   private var useContextFreqSegment = false
   private var segment_min = false
