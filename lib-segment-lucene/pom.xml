@@ -49,7 +49,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>websiteschema</groupId>
+            <groupId>mahjong</groupId>
             <artifactId>max-prob-segment-scala</artifactId>
             <version>${project.version}</version>
         </dependency>
