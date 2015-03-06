@@ -4,3 +4,4 @@ idea-boardy-support
 *.dat
 target
 test_index_dir
+**/*.m

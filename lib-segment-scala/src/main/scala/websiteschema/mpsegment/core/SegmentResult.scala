@@ -14,6 +14,8 @@ class SegmentResult(size: Int) {
 
   def getWords() = words
 
+  def map[B](op: Word => B) = words.map(op)
+
   def setWords(wordArray: Array[String]) {
     for (i <- 0 until wordArray.length) {
       words(i).name = wordArray(i)

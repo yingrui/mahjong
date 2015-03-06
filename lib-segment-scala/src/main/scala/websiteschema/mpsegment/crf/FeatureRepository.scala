@@ -8,7 +8,7 @@ class FeatureRepository(private val reserveUnknownFeature: Boolean, private val 
 
   def this(unknownFeature: Boolean) = this(unknownFeature, scala.collection.mutable.Map[String, Int]())
 
-  private val defaultFeature = if (reserveUnknownFeature) 0 else -1
+  val defaultFeature = if (reserveUnknownFeature) 0 else -1
 
   def getFeatureId(feature: String): Int = repo.getOrElse(feature, defaultFeature)
 

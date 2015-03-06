@@ -2,6 +2,7 @@ package websiteschema.mpsegment.crf
 
 import org.junit.{Assert, Test}
 import websiteschema.mpsegment.Assertion._
+import websiteschema.mpsegment.TestHelper._
 
 class CRFCorpusTest extends WithTestData {
 
@@ -28,7 +29,7 @@ class CRFCorpusTest extends WithTestData {
         |Jenny  PER
         |!      O
       """.stripMargin
-    val corpus = CRFCorpus(populateTrainingFile(trainingText))
+    val corpus = CRFCorpus(createTempFile(trainingText))
 
     Assert.assertEquals(1, corpus.docs.length)
 

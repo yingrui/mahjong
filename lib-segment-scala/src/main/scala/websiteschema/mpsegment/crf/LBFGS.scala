@@ -69,6 +69,8 @@ class LBFGS(m: Int, X: Matrix) {
     elapse
   }
 
+  private def log(message: String): Unit = println(message)
+
   def search(func: Function): Matrix = {
     var it = 0
     var value = func.valueAt(X)
@@ -79,7 +81,7 @@ class LBFGS(m: Int, X: Matrix) {
       findDirection(gradient)
 
       val sum = func.derivative.flatten.map(d => Math.abs(d)).sum
-      println("Iteration %d: %10.5f, %10.5f, %d".format(it, value, sum, timeElapse))
+      log("Iteration %d: %10.5f, %10.5f, %d".format(it, value, sum, timeElapse))
 
       releaseHistoryUpdates
 

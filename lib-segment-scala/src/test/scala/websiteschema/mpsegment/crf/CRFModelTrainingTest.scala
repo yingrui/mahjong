@@ -1,6 +1,7 @@
 package websiteschema.mpsegment.crf
 
 import org.junit.{Assert, Test}
+import websiteschema.mpsegment.TestHelper._
 
 class CRFModelTrainingTest extends WithTestData {
 
@@ -39,7 +40,7 @@ class CRFModelTrainingTest extends WithTestData {
         |is O
         |Jenny  PER
       """.stripMargin
-    val corpus = CRFCorpus(populateTrainingFile(trainingText))
+    val corpus = CRFCorpus(createTempFile(trainingText))
     val model = CRFModel.build(corpus)
 
     val classifier = new CRFViterbi(model)

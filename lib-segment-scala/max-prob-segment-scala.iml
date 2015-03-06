@@ -24,9 +24,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.10.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jmock:jmock:2.5.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-library:1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalatest:scalatest_2.10:2.2.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-reflect:2.10.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalamock:scalamock-scalatest-support_2.10:3.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.scalamock:scalamock-core_2.10:3.2" level="project" />
   </component>
 </module>
 
