@@ -1,8 +1,0 @@
-*.log
-*.txt
-*.dat
-*.arff
-*.iml
-.idea
-target
-test_index_dir

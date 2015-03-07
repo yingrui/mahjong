@@ -19,10 +19,10 @@
     </scm>
 
     <modules>
-        <module>./lib-segment-scala</module>
-        <module>./max-prob-segment-web</module>
-        <module>./lib-segment-lucene</module>
-        <module>./test/lib-segment-performance-test</module>
+        <module>./lib-segment</module>
+        <module>./mahjong-web</module>
+        <module>./mahjong-lucene</module>
+        <module>./test/performance-test</module>
     </modules>
 
 </project>

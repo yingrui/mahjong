@@ -1,0 +1,9 @@
+.idea
+*.iml
+*.DS_Store
+*.log
+target
+corpus.txt
+dict.txt
+test.dat
+google-bigram.dat

@@ -1,8 +1,0 @@
-/target
-/.classpath
-/.project
-/.settings
-/tomcat.*
-/.idea
-/*.iml
-src/main/webapp/.idea

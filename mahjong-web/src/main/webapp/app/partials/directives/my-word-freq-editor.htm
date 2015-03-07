@@ -1,0 +1,8 @@
+<div>
+    <span class="input-prepend input-append">
+        <select id="appendedPrependedInput" class="input-small" ng-options="pos.note for pos in allPartOfSpeeches" ng-model="wordFreq.partOfSpeech"></select>
+        <span class="add-on">词频</span>
+        <input ng-model="wordFreq.freq" type="number" class="input-mini"/>
+        <button class="btn" ng-click="deletePartOfSpeech(wordFreq.partOfSpeech)"><i class="icon-trash"/></button>
+    </span>
+</div>

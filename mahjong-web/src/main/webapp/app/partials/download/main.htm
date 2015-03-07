@@ -1,0 +1,53 @@
+<div class="hero-unit">
+    <h2>到底怎么样？试了才知道</h2>
+    <p class="lead">相比其它语言，中文因为没有空格，才有了分词，但这不是问题！</p>
+    <a class="btn btn-large btn-success" href="https://github.com/yingrui/max-prob-segment">Go to Github</a>
+</div>
+
+<hr/>
+
+<div class="row-fluid">
+    <div>
+        <h3>FAQ</h3>
+
+        <h4>如何在项目中使用？</h4>
+        <p>可以查看测试文件<a href="https://github.com/yingrui/max-prob-segment/blob/master/lib-segment/src/test/java/websiteschema/mpsegment/MPSegmentTest.java">MPSegmentTest.java</a>，一切您就明白了！主要通过SegmentEngine加载词典等资源，并创建SegmentWorker对象。</p>
+        <p>一些常用配置的默认值为：
+        <ul style="list-style-type: none;">
+        <li>glue.queryoperator = *?~/_[]: </li>
+        <li>convert.tohalfshape = false</li>
+        <li>minimize.word = true</li>
+        <li>recognize.pinyin = false</li>
+        <li>support.querysyntax = false</li>
+        <li>convert.touppercase = false</li>
+        <li>separate.xingming = false</li>
+        <li>user.dictionaryfile = userdict.txt</li>
+        </ul>
+        </p>
+
+        <h4>如何使用N-最短路径分词？</h4>
+        <p>项目默认使用1-最短路径分词，如果希望分词切分的更细，准确性更高，则可以支持到2-最短路径分词。</p>
+        <p>
+            基于PFR语料训练Bigram数据：websiteschema.mpsegment.tools.WordBigramBuilder，程序会生成文件word-bigram.dat。<br/>
+            基于<a href="http://books.google.com/ngrams/info">Google Bigram语料</a>训练Bigram数据：websiteschema.mpsegment.tools.GoogleBigramBuilder，程序会生成文件google-bigram.dat。<br/>
+        </p>
+        <p>
+            目前并没有开关可以选择2-最短路径分词，因为还希望在一些其它应用上确认其效果之后再发布。
+            但如果您需要的话，您仅能通过修改代码<a href="https://github.com/yingrui/max-prob-segment/blob/master/lib-segment/src/main/java/websiteschema/mpsegment/core/MPSegment.java">MPSegment.java</a>中initializeGraph方法来实现。
+            您可以通过运行<a href="https://github.com/yingrui/max-prob-segment/blob/master/lib-segment/src/test/java/websiteschema/mpsegment/performance/AccuracyTest.java">AccuracyTest</a>来查看修改之后的结果，正确的情况下包含歧义会减少，但是会将一些词切分的更小，重要的是准确性确实有较大的提高。
+        </p>
+
+        <h4>如何加载自定义领域词典？</h4>
+        <p>
+            您需要在配置文件maxprob.cfg中修改参数，domain.dictloader是您用来加载词典的Java Class。多个DomainDictLoader之间可以使用逗号、分号和空格分隔。
+        <ul style="list-style-type: none;">
+            <li>domain.loaddomaindictionary = true</li>
+            <li>domain.dictloader = websiteschema.mpsegment.SimpleDomainDictLoader</li>
+        </ul>
+        </p>
+        <p>
+            您需要实现DomainDictLoader接口，然后<a href="https://github.com/yingrui/max-prob-segment/blob/master/lib-segment/src/test/java/websiteschema/mpsegment/SimpleDomainDictLoader.java">SimpleDomainDictLoader.java</a>展示了如何加载自定义的词典。同时您可以自定义那些词是同义词。
+            如果您使用了领域词典，那么分词结果中会返回词的domainType，<a href="https://github.com/yingrui/max-prob-segment/blob/master/lib-segment/src/test/java/websiteschema/mpsegment/dict/DomainDictionaryTest.java">DomainDictionaryTest.java</a>展示了如何获取同义词。
+        </p>
+    </div>
+</div>
