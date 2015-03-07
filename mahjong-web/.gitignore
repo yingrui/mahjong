@@ -4,5 +4,4 @@
 /.settings
 /tomcat.*
 /.idea
-/*.iml
 src/main/webapp/.idea
