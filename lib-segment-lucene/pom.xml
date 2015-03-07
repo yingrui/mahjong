@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>mahjong</groupId>
-    <artifactId>max-prob-segment-lucene</artifactId>
+    <groupId>me.yingrui.mahjong</groupId>
+    <artifactId>mahjong-lucene</artifactId>
     <packaging>jar</packaging>
-    <name>max-prob-segment-lucene</name>
+    <name>mahjong lucene support</name>
     <version>1.0-SNAPSHOT</version>
 
     <licenses>
@@ -17,7 +17,7 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/yingrui/max-prob-segment.git</url>
+        <url>https://github.com/yingrui/mahjong.git</url>
     </scm>
 
     <dependencies>
@@ -49,8 +49,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>mahjong</groupId>
-            <artifactId>max-prob-segment-scala</artifactId>
+            <groupId>me.yingrui.mahjong</groupId>
+            <artifactId>lib-segment</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
