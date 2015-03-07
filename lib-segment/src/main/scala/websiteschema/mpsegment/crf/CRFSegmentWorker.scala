@@ -36,9 +36,7 @@ class CRFSegmentWorker(model: CRFModel) extends SegmentWorker {
 
 object CRFSegmentWorker {
 
-  private val model = CRFModel("segment-crf.m")
-
-  def apply(): SegmentWorker = new CRFSegmentWorker(model)
+  def apply(modelResource: String): SegmentWorker = new CRFSegmentWorker(CRFModel(modelResource))
 
   def apply(model: CRFModel): SegmentWorker = new CRFSegmentWorker(model)
 
