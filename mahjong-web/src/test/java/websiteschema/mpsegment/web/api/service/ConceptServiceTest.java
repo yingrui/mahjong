@@ -30,6 +30,9 @@ public class ConceptServiceTest extends UsingFixtures {
     public void cleanup() {
         List<Concept> list = conceptService.list();
         for (Concept concept : list) {
+            if(concept.getParent() != null) {
+                conceptService.remove(concept.getParent().getId());
+            }
             conceptService.remove(concept.getId());
         }
     }
