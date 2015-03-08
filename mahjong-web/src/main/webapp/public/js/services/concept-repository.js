@@ -3,13 +3,13 @@ corpusEditorServices.
 
         var allConcepts = [];
 
-        $http.get('/api/concept').success(function(data){
+        $http.get('/concept').success(function(data){
             allConcepts = data;
         });
 
         return {
             getAll: function(onSuccess) {
-                $http.get('/api/concept').success(function(data){
+                $http.get('/concept').success(function(data){
                     allConcepts = data;
                     onSuccess(allConcepts);
                 });

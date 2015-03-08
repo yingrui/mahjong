@@ -14,7 +14,7 @@ corpusEditorDirectives.directive('myConceptEditor', ['ConceptRepository', '$time
 
     return {
         priority: 0,
-        templateUrl: '/app/partials/directives/my-concept-editor.htm',
+        templateUrl: '/public/partials/directives/my-concept-editor.htm',
         replace: false,
         restrict: 'E',
         compile: function(){

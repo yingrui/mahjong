@@ -1,34 +1,29 @@
 package websiteschema.mpsegment.web.api.service;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import websiteschema.mpsegment.web.Application;
 import websiteschema.mpsegment.web.UsingFixtures;
 import websiteschema.mpsegment.web.api.model.Concept;
 import websiteschema.mpsegment.web.api.model.PartOfSpeech;
 import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
 
-import javax.persistence.EntityTransaction;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
 @Transactional
 public class ConceptServiceTest extends UsingFixtures {
 
-    private ConceptService conceptService = resolve("conceptServiceImpl", ConceptService.class);
-
-    @Before
-    public void clearDatabase() {
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        em.createNativeQuery("DELETE from WordConcept")
-                .executeUpdate();
-        em.createNativeQuery("DELETE from Concepts")
-                .executeUpdate();
-        tx.commit();
-    }
+    @Autowired
+    private ConceptService conceptService;
 
     @Test
     public void should_add_concept_in_database() {
@@ -121,7 +116,6 @@ public class ConceptServiceTest extends UsingFixtures {
         assertEquals(c2, children.get(0).getName());
         assertEquals(c3, children.get(1).getName());
     }
-
 
     private Concept addConcept(String c, PartOfSpeech pos, Concept parent) {
         Concept concept = new Concept();

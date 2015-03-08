@@ -13,7 +13,7 @@ corpusEditorDirectives.directive('word', function () {
 
     return {
         priority:0,
-        templateUrl:'/app/partials/directives/word.htm',
+        templateUrl:'/public/partials/directives/word.htm',
         replace:false,
         restrict:'E',
         scope:false,

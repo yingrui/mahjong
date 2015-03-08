@@ -14,11 +14,11 @@ corpusEditorServices.
 
         return {
             getWordHeads: function(dict, wordIndex, callback) {
-                var path = '/api/dictionary/'+dict+'/pinyin/' + wordIndex;
+                var path = '/dictionary/'+dict+'/pinyin/' + wordIndex;
                 $http.get(path).success(callback);
             },
             getWords: function(dict, wordHead, callback) {
-                var path = '/api/dictionary/'+dict+'/heads/' + wordHead;
+                var path = '/dictionary/'+dict+'/heads/' + wordHead;
                 $http.get(path).success(function(data){
                     _.each(data, function(word){
                         extendWord(word);
@@ -27,7 +27,7 @@ corpusEditorServices.
                 });
             },
             save: function(word, onSuccess) {
-                var path = '/api/dictionary/core/words/' + word.id;
+                var path = '/dictionary/core/words/' + word.id;
                 $http.put(path, word)
                     .success(function(data){
                         onSuccess(data);

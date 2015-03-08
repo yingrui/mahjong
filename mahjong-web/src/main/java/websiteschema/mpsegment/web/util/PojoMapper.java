@@ -4,15 +4,18 @@
  */
 package websiteschema.mpsegment.web.util;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.PrettyPrinter;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.PrettyPrinter;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PojoMapper {
 
@@ -22,6 +25,16 @@ public class PojoMapper {
     public static <T> T fromJson(String jsonAsString, Class<T> clazz)
             throws IOException {
         return objectMapper.readValue(jsonAsString, clazz);
+    }
+
+    public static <T> List<T> fromJsonArray(String jsonAsString, Class<T> clazz) throws IOException {
+        JsonNode rootNode = objectMapper.readTree(jsonAsString);
+        List<T> list = new ArrayList<T>();
+        for (JsonNode node : rootNode) {
+            T ele = objectMapper.treeToValue(node, clazz);
+            list.add(ele);
+        }
+        return list;
     }
 
     public static <T> T fromJson(FileReader fr, Class<T> clazz)

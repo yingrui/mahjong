@@ -9,7 +9,7 @@ corpusEditorDirectives.directive('myMessageBox', ['MessageBox',function (message
 
     return {
         priority:0,
-        templateUrl:'/app/partials/directives/my-message-box.htm',
+        templateUrl:'/public/partials/directives/my-message-box.htm',
         restrict:'A',
         link:function (scope, ele, iAttrs) {
             scope.hide = function() {

@@ -15,7 +15,7 @@ import websiteschema.mpsegment.web.ui.service.UserService;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/admin/user")
 public class UserController {
 
     @Autowired

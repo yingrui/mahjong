@@ -1,5 +1,6 @@
 package websiteschema.mpsegment.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +13,8 @@ import static org.mockito.Mockito.when;
 
 public class UsingUserFixtures extends UsingFixtures {
 
-    private UserService userService = resolve("userServiceImpl", UserService.class);
+    @Autowired
+    private UserService userService;
 
     protected void setUpCurrentUser(String currentUserEmail) {
         User user = new User();

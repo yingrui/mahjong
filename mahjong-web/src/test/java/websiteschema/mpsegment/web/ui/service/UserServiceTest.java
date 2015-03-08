@@ -1,7 +1,12 @@
 package websiteschema.mpsegment.web.ui.service;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import websiteschema.mpsegment.web.Application;
 import websiteschema.mpsegment.web.UsingFixtures;
 import websiteschema.mpsegment.web.ui.model.User;
 
@@ -11,11 +16,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
 public class UserServiceTest extends UsingFixtures {
 
-    private UserService userService = resolve("userServiceImpl", UserService.class);
-
-    private EntityManager em = resolve("entityManagerFactory", EntityManagerFactory.class).createEntityManager();
+    @Autowired
+    private UserService userService;
 
     @Test
     public void should_add_user_in_database() {
@@ -25,9 +31,9 @@ public class UserServiceTest extends UsingFixtures {
 
         User user = addUser(firstName, lastName, email);
 
-        User userInDatabase = em.find(User.class, user.getId());
-        assertEquals(firstName, userInDatabase.getFirstName());
-        assertEquals(lastName, userInDatabase.getLastName());
+        assert(user.getId() > 0);
+        assertEquals(firstName, user.getFirstName());
+        assertEquals(lastName, user.getLastName());
     }
 
     @Test
@@ -39,7 +45,7 @@ public class UserServiceTest extends UsingFixtures {
         User user = addUser(firstName, lastName, email);
 
         userService.removeUser(user.getId());
-        User userInDatabase = em.find(User.class, user.getId());
+        User userInDatabase = userService.getUserById(user.getId());
         assertNull(userInDatabase);
     }
 

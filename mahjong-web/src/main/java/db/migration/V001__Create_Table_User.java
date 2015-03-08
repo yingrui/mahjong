@@ -1,6 +1,6 @@
 package db.migration;
 
-import com.googlecode.flyway.core.api.migration.spring.SpringJdbcMigration;
+import org.flywaydb.core.api.migration.spring.SpringJdbcMigration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class V001__Create_Table_User implements SpringJdbcMigration {

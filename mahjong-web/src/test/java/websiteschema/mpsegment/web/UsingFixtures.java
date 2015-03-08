@@ -1,34 +1,25 @@
 package websiteschema.mpsegment.web;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import websiteschema.mpsegment.web.api.model.PartOfSpeech;
+import websiteschema.mpsegment.web.api.service.PartOfSpeechRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 public class UsingFixtures extends UsingTestUtils {
 
-    static ApplicationContext ctx = new ClassPathXmlApplicationContext("testContext.xml");
-    protected static EntityManager em = resolve("entityManagerFactory", EntityManagerFactory.class).createEntityManager();
-    static {
-        initPartOfSpeech();
-    }
+    @Autowired
+    protected PartOfSpeechRepository partOfSpeechRepository;
 
-    public static <T> T resolve(String bean, Class<T> clazz) {
-        return ctx.getBean(bean, clazz);
-    }
+    protected PartOfSpeech posN;
+    protected PartOfSpeech posT;
+    protected PartOfSpeech posV;
+    protected PartOfSpeech posA;
+    protected PartOfSpeech posUN;
 
-    protected static PartOfSpeech posN;
-    protected static PartOfSpeech posT;
-    protected static PartOfSpeech posV;
-    protected static PartOfSpeech posA;
-    protected static PartOfSpeech posUN;
-
-
-
-    private static void initPartOfSpeech() {
+    @Before
+    public void initPartOfSpeech() {
         posN = addPartOfSpeech(1, "名词", "N");
         posT = addPartOfSpeech(2, "时间词", "T");
         posV = addPartOfSpeech(9, "动词", "V");
@@ -36,15 +27,15 @@ public class UsingFixtures extends UsingTestUtils {
         posUN = addPartOfSpeech(44, "未登录词", "UN");
     }
 
-    private static PartOfSpeech addPartOfSpeech(int id, String note, String pos) {
-        PartOfSpeech partOfSpeech = new PartOfSpeech();
+    private PartOfSpeech addPartOfSpeech(int id, String note, String pos) {
+        PartOfSpeech partOfSpeech = partOfSpeechRepository.get(id);
+        if(partOfSpeech != null) return partOfSpeech;
+
+        partOfSpeech = new PartOfSpeech();
         partOfSpeech.setId(id);
         partOfSpeech.setNote(note);
         partOfSpeech.setName(pos);
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-        em.persist(partOfSpeech);
-        transaction.commit();
+        partOfSpeechRepository.save(partOfSpeech);
         return partOfSpeech;
     }
 }

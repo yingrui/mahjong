@@ -2,6 +2,11 @@ package websiteschema.mpsegment.web.api.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import websiteschema.mpsegment.web.Application;
 import websiteschema.mpsegment.web.UsingUserFixtures;
 import websiteschema.mpsegment.web.api.model.*;
 import websiteschema.mpsegment.web.ui.model.User;
@@ -11,10 +16,16 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
 public class WordItemServiceTest extends UsingUserFixtures {
 
-    private WordItemService wordItemService = resolve("wordItemServiceImpl", WordItemService.class);
-    private ConceptService conceptService = resolve("conceptServiceImpl", ConceptService.class);
+    @Autowired
+    private WordItemService wordItemService;
+
+    @Autowired
+    private ConceptService conceptService;
+
     private String currentUserEmail = uniq("yingrui.f@gmail.com");
 
     @Before

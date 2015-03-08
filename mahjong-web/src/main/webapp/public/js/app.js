@@ -8,34 +8,34 @@ angular.module('corpusEditor', ['ui','corpusEditorFilters', 'corpusEditorService
     config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
         when('/', {
-            templateUrl: '/app/layout.htm',
-            mainBoardTemplateUrl: '/app/partials/main-board.html',
+            templateUrl: '/public/layout.htm',
+            mainBoardTemplateUrl: '/public/partials/main-board.html',
             }).
         when('/segment', {
-            templateUrl: '/app/partials/segment/main.htm',
+            templateUrl: '/public/partials/segment/main.htm',
             controller: SegmentCtrl}).
         when('/download', {
-            templateUrl: '/app/partials/download/main.htm',
+            templateUrl: '/public/partials/download/main.htm',
             controller: function(){}}).
 
         when('/dictionary', {
-            templateUrl: '/app/partials/dict/core-dict.htm',
+            templateUrl: '/public/partials/dict/core-dict.htm',
             controller: CoreDictionaryCtrl}).
         when('/dictionary/:type/:index', {
-            templateUrl: '/app/partials/dict/core-dict.htm',
+            templateUrl: '/public/partials/dict/core-dict.htm',
             controller: CoreDictionaryCtrl}).
         when('/dictionary/:type/:index/:pinyin', {
-            templateUrl: '/app/partials/dict/core-dict.htm',
+            templateUrl: '/public/partials/dict/core-dict.htm',
             controller: CoreDictionaryCtrl}).
         when('/dictionary/:type/:index/:pinyin/:wordHead', {
-            templateUrl: '/app/partials/dict/core-dict.htm',
+            templateUrl: '/public/partials/dict/core-dict.htm',
             controller: CoreDictionaryCtrl}).
 
         when('/concepts', {
-            templateUrl: '/app/partials/concept/main.htm',
+            templateUrl: '/public/partials/concept/main.htm',
             controller: ConceptsCtrl}).
         when('/contact', {
-            templateUrl: '/app/partials/contact/main.htm',
+            templateUrl: '/public/partials/contact/main.htm',
             controller: function(){}}).
         otherwise({redirectTo:'/'});
 }]);

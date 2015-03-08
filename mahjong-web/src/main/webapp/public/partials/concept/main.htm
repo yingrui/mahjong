@@ -39,7 +39,7 @@
         return concept;
     }
 
-    d3.json("/api/concept/tree", function(data) {
+    d3.json("/concept/tree", function(data) {
         node = root = wrap(data, null);
 
         var nodes = treemap.nodes(root)

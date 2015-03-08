@@ -2,7 +2,12 @@ package websiteschema.mpsegment.web.api.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import websiteschema.mpsegment.dict.POSUtil;
+import websiteschema.mpsegment.web.Application;
 import websiteschema.mpsegment.web.UsingUserFixtures;
 import websiteschema.mpsegment.web.api.model.*;
 import websiteschema.mpsegment.web.api.model.dto.ConceptDto;
@@ -17,9 +22,18 @@ import java.util.Comparator;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class})
 public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
 
-    private WordItemService wordItemService = resolve("wordItemServiceImpl", WordItemService.class);
+    @Autowired
+    private WordItemService wordItemService;
+
+    @Autowired
+    WordItemUpdateRequestMerger merger;
+
+    @Autowired
+    private ConceptService conceptService;
     private String currentUserEmail = uniq("yingrui.f@gmail.com");
     private WordItem wordItem = null;
     protected Concept adj;
@@ -55,8 +69,6 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         verb.name = "v-verb";
         dto.conceptSet.add(adj);
         dto.conceptSet.add(verb);
-
-        WordItemUpdateRequestMerger merger = resolve("wordItemUpdateRequestMerger", WordItemUpdateRequestMerger.class);
 
         merger.merge(dto).to(wordItem);
 
@@ -118,10 +130,7 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         concept.setName(name);
         concept.setNote(note);
         concept.setPartOfSpeech(partOfSpeech);
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
-        em.persist(concept);
-        transaction.commit();
+        conceptService.add(concept);
         return concept;
     }
 }

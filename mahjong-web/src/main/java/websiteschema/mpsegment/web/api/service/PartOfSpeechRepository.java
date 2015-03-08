@@ -6,5 +6,7 @@ public interface PartOfSpeechRepository {
 
     public PartOfSpeech get(int id);
 
+    public void save(PartOfSpeech pos);
+
 }
 

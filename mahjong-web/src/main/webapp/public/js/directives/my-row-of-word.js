@@ -2,7 +2,7 @@ corpusEditorDirectives.directive('myRowOfWord', ['$window', 'DictionaryService',
 
     return {
         priority:0,
-        templateUrl:'/app/partials/directives/row-of-word.htm',
+        templateUrl:'/public/partials/directives/row-of-word.htm',
         replace:false,
         restrict:'A',
         link:function ($scope, iElement, iAttrs) {
