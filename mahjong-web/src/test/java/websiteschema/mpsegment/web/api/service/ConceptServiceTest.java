@@ -1,5 +1,6 @@
 package websiteschema.mpsegment.web.api.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,14 @@ public class ConceptServiceTest extends UsingFixtures {
 
     @Autowired
     private ConceptService conceptService;
+
+    @Before
+    public void cleanup() {
+        List<Concept> list = conceptService.list();
+        for (Concept concept : list) {
+            conceptService.remove(concept.getId());
+        }
+    }
 
     @Test
     public void should_add_concept_in_database() {
