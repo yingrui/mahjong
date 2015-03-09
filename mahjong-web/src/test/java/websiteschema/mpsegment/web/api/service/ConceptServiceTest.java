@@ -26,17 +26,6 @@ public class ConceptServiceTest extends UsingFixtures {
     @Autowired
     private ConceptService conceptService;
 
-    @Before
-    public void cleanup() {
-        List<Concept> list = conceptService.list();
-        for (Concept concept : list) {
-            if(concept.getParent() != null) {
-                conceptService.remove(concept.getParent().getId());
-            }
-            conceptService.remove(concept.getId());
-        }
-    }
-
     @Test
     public void should_add_concept_in_database() {
         String c = uniq("Concept");
