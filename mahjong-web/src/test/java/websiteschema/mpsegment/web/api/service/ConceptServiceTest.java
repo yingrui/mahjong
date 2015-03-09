@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
@@ -80,10 +81,6 @@ public class ConceptServiceTest extends UsingFixtures {
 
     @Test
     public void should_build_concept_tree() {
-        for(Concept concept: conceptService.list()) {
-            conceptService.remove(concept.getId());
-        }
-
         Concept concept1 = addConcept(uniq("Concept"), posN, null);
         Concept concept2 = addConcept(uniq("Concept"), posT, concept1);
         Concept concept3 = addConcept(uniq("Concept"), posT, concept2);
@@ -91,12 +88,19 @@ public class ConceptServiceTest extends UsingFixtures {
         ConceptDto root = conceptService.getConceptTree();
         assertNotNull(root);
         assertEquals("root", root.name);
-        assertEquals(concept1.getName(), root.children.get(0).name);
-        assertEquals(1, root.children.size());
-        assertEquals(concept2.getName(), root.children.get(0).children.get(0).name);
-        assertEquals(1, root.children.get(0).children.size());
-        assertEquals(concept3.getName(), root.children.get(0).children.get(0).children.get(0).name);
-        assertEquals(1, root.children.get(0).children.get(0).children.size());
+
+        for (ConceptDto concept: root.children) {
+            if(concept.name.equals(concept1.getName())) {
+                assertEquals(concept1.getName(), root.children.get(0).name);
+                assertEquals(1, root.children.size());
+                assertEquals(concept2.getName(), root.children.get(0).children.get(0).name);
+                assertEquals(1, root.children.get(0).children.size());
+                assertEquals(concept3.getName(), root.children.get(0).children.get(0).children.get(0).name);
+                assertEquals(1, root.children.get(0).children.get(0).children.size());
+                return;
+            }
+        }
+        fail();
     }
 
     @Test
