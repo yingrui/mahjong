@@ -91,12 +91,11 @@ public class ConceptServiceTest extends UsingFixtures {
 
         for (ConceptDto concept: root.children) {
             if(concept.name.equals(concept1.getName())) {
-                assertEquals(concept1.getName(), root.children.get(0).name);
-                assertEquals(1, root.children.size());
-                assertEquals(concept2.getName(), root.children.get(0).children.get(0).name);
-                assertEquals(1, root.children.get(0).children.size());
-                assertEquals(concept3.getName(), root.children.get(0).children.get(0).children.get(0).name);
-                assertEquals(1, root.children.get(0).children.get(0).children.size());
+                assertEquals(concept1.getName(), concept.name);
+                assertEquals(concept2.getName(), concept.children.get(0).name);
+                assertEquals(1, concept.children.size());
+                assertEquals(concept3.getName(), concept.children.get(0).children.get(0).name);
+                assertEquals(1, concept.children.get(0).children.size());
                 return;
             }
         }
