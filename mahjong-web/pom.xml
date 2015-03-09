@@ -38,6 +38,16 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-spring-service-connector</artifactId>
+            <version>1.1.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-heroku-connector</artifactId>
+            <version>1.1.1.RELEASE</version>
+        </dependency>
+        <dependency>
             <groupId>me.yingrui.mahjong</groupId>
             <artifactId>lib-segment</artifactId>
             <version>1.0-SNAPSHOT</version>

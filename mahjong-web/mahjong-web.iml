@@ -88,6 +88,9 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:1.7.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.9.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.1.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-spring-service-connector:1.1.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-core:1.1.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-heroku-connector:1.1.1.RELEASE" level="project" />
     <orderEntry type="module" module-name="lib-segment" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.10.1" level="project" />
     <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
