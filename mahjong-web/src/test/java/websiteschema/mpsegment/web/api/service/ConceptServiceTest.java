@@ -1,12 +1,10 @@
 package websiteschema.mpsegment.web.api.service;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 import websiteschema.mpsegment.web.Application;
 import websiteschema.mpsegment.web.UsingFixtures;
 import websiteschema.mpsegment.web.api.model.Concept;
@@ -20,7 +18,6 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
-@Transactional
 public class ConceptServiceTest extends UsingFixtures {
 
     @Autowired
@@ -83,22 +80,22 @@ public class ConceptServiceTest extends UsingFixtures {
 
     @Test
     public void should_build_concept_tree() {
-        String c1 = uniq("Concept");
-        String c2 = uniq("Concept");
-        String c3 = uniq("Concept");
+        for(Concept concept: conceptService.list()) {
+            conceptService.remove(concept.getId());
+        }
 
-        Concept concept1 = addConcept(c1, posN, null);
-        Concept concept2 = addConcept(c2, posT, concept1);
-        Concept concept3 = addConcept(c3, posT, concept2);
+        Concept concept1 = addConcept(uniq("Concept"), posN, null);
+        Concept concept2 = addConcept(uniq("Concept"), posT, concept1);
+        Concept concept3 = addConcept(uniq("Concept"), posT, concept2);
 
         ConceptDto root = conceptService.getConceptTree();
         assertNotNull(root);
         assertEquals("root", root.name);
-        assertEquals(c1, root.children.get(0).name);
+        assertEquals(concept1.getName(), root.children.get(0).name);
         assertEquals(1, root.children.size());
-        assertEquals(c2, root.children.get(0).children.get(0).name);
+        assertEquals(concept2.getName(), root.children.get(0).children.get(0).name);
         assertEquals(1, root.children.get(0).children.size());
-        assertEquals(c3, root.children.get(0).children.get(0).children.get(0).name);
+        assertEquals(concept3.getName(), root.children.get(0).children.get(0).children.get(0).name);
         assertEquals(1, root.children.get(0).children.get(0).children.size());
     }
 
