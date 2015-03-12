@@ -1,20 +1,6 @@
 #!/bin/bash
 
-export DISPLAY=:0
+echo "Running Javascript Tests"
 
-SeleniumServer=$1
-SeleniumPort=$2
-Browser=$3
-RootUrl=$4
-Path=$5
-
-cd test/javascript-test/
-mvn clean install
-cd -
-cd test/javascript-test/target
-unzip javascript-test-1.0-SNAPSHOT-bundle.zip
-cd -
-cd test/javascript-test/target/javascript-test-1.0-SNAPSHOT
-
-echo "java -jar lib/javascript-test.jar $SeleniumServer $SeleniumPort $Browser $RootUrl $Path"
-java -jar lib/javascript-test.jar $SeleniumServer $SeleniumPort $Browser $RootUrl $Path
+npm install
+./node_modules/karma/bin/karma start karma.conf.js --log-level debug --single-run
