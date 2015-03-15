@@ -23,7 +23,7 @@ public class WordItemUpdateRequestMerger {
 
     public void to(WordItem wordItem) {
         wordItem.setName(dto.word);
-        wordItem.setType(dto.type);
+        wordItem.setType(DomainType.core.valueOf(dto.type));
         mergePinyin(wordItem);
         mergeWordFreq(wordItem);
         mergeConcept(wordItem);

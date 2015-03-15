@@ -26,7 +26,8 @@ public class WordItem {
     private String name;
 
     @Column(name = "Type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private DomainType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CreateBy")
@@ -63,11 +64,11 @@ public class WordItem {
         this.name = name;
     }
 
-    public String getType() {
+    public DomainType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(DomainType type) {
         this.type = type;
     }
 
@@ -110,7 +111,7 @@ public class WordItem {
 
     public WordItemDto toDto() {
         WordItemDto wordItemDto = new WordItemDto(name);
-        wordItemDto.type = type;
+        wordItemDto.type = type.toString();
         wordItemDto.id = id;
 
         wordItemDto.createAt = toDateString(createAt);

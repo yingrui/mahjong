@@ -1,6 +1,5 @@
 package websiteschema.mpsegment.web.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -23,7 +22,6 @@ import websiteschema.mpsegment.web.util.PojoMapper;
 import java.io.IOException;
 import java.util.List;
 
-import static com.jayway.restassured.RestAssured.objectMapper;
 import static com.jayway.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

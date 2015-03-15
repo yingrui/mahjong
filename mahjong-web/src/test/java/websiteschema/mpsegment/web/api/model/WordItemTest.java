@@ -44,7 +44,7 @@ public class WordItemTest {
         WordItem wordItem = new WordItem();
         wordItem.setName("wordItem");
         wordItem.setId(1);
-        wordItem.setType("core");
+        wordItem.setType(DomainType.core);
 
         User user = new User();
         user.setFirstName("FirstName");

@@ -54,7 +54,7 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         String expectedWord = "ExpectedWord";
 
         WordItemDto dto = new WordItemDto(expectedWord);
-        dto.type = "core1";
+        dto.type = "core";
         dto.pinyinSet.clear();
         dto.pinyinSet.add("expected'word");
 
@@ -73,7 +73,7 @@ public class WordItemUpdateRequestMergerTest extends UsingUserFixtures {
         merger.merge(dto).to(wordItem);
 
         assertEquals(expectedWord, wordItem.getName());
-        assertEquals("core1", wordItem.getType());
+        assertEquals(DomainType.core, wordItem.getType());
         assertEquals(1, wordItem.getPinyinSet().size());
         assertEquals("expected'word", wordItem.getPinyinSet().iterator().next().getName());
         assertEquals(1, wordItem.getWordFreqSet().size());
