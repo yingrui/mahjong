@@ -22,6 +22,15 @@ public class WordFreq {
     @JoinColumn(name = "PartOfSpeechId")
     private PartOfSpeech partOfSpeech;
 
+    public WordFreq() {
+
+    }
+
+    public WordFreq(PartOfSpeech partOfSpeech, int freq) {
+        this.partOfSpeech = partOfSpeech;
+        this.freq = freq;
+    }
+
     public int getId() {
         return id;
     }
