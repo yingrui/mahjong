@@ -57,7 +57,7 @@ public class ConceptControllerTest extends UsingFixtures {
 
         String content = validatableResponse.extract().response().asString();
         List<ConceptDto> conceptDtos = PojoMapper.fromJsonArray(content, ConceptDto.class);
-        assertThat(conceptDtos.get(0).id, is(concept.getId()));
+        assertThat(conceptDtos.get(conceptDtos.size() - 1).id, is(concept.getId()));
     }
 
 }
