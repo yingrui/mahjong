@@ -13,6 +13,6 @@ It support user dictionary, synonyms, pinyin recognition etc.
 
 ## Online Demonstrate
 
-Open link <http://max-prob-segment.herokuapp.com/>, and you could try it. 
+Open link <http://mahjong.yingrui.me/>, and you could try it. 
 
 Any question, please contact me <yingrui.f@gmail.com>.
