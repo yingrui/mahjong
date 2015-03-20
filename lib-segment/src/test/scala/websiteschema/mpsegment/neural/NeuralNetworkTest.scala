@@ -11,17 +11,17 @@ class NeuralNetworkTest {
     val network = NeuralNetwork()
 
     Assert.assertEquals(0, network.layers.length)
-    network.add(Layer(Matrix(3, 3)))
+    network.add(SigmoidLayer(Matrix(3, 3)))
     Assert.assertEquals(1, network.layers.length)
   }
 
   @Test
   def should_throw_exception_when_add_unmatched_layer {
     val network = NeuralNetwork()
-    network.add(Layer(Matrix(3, 3)))
+    network.add(SigmoidLayer(Matrix(3, 3)))
 
     try {
-      network.add(Layer(Matrix(2, 2)))
+      network.add(SigmoidLayer(Matrix(2, 2)))
       Assert.fail()
     }catch{
       case _: Throwable =>

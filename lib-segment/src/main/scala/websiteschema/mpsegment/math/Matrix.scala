@@ -47,7 +47,9 @@ trait Matrix {
 
 object Matrix {
 
-
+  implicit class RichMatrix(matrix: Matrix) {
+    def map(compute: (Double) => Double): Matrix = Matrix.map(matrix, compute)
+  }
 
   def vector(d: Double*): Matrix = new DenseMatrix(1, d.length, d.toArray)
 

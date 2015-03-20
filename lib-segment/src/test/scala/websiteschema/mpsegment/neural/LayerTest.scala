@@ -8,7 +8,7 @@ class LayerTest {
 
   @Test
   def should_return_number_of_neural {
-    val layer = Layer(Matrix(3, 2))
+    val layer = SigmoidLayer(Matrix(3, 2))
     Assert.assertEquals(2, layer.size)
   }
 

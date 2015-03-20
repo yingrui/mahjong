@@ -2,7 +2,7 @@ package websiteschema.mpsegment.filter.ner
 
 import websiteschema.mpsegment.core.SegmentResult
 import websiteschema.mpsegment.filter.{ForeignName, NameEntityRecognizerStatisticResult}
-import websiteschema.mpsegment.neural.{Normalizer, Sigmoid, Layer, NeuralNetwork}
+import websiteschema.mpsegment.neural._
 import websiteschema.mpsegment.math.Matrix
 import websiteschema.mpsegment.dict.POSUtil
 import collection.mutable

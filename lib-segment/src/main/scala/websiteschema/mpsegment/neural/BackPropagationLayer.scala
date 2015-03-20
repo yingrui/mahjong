@@ -15,7 +15,7 @@ class BackPropagationLayer(var weight: Matrix) {
   var accumulateDelta = Matrix(inputNeuronCount + 1, neuronCount)
   var delta = Matrix(inputNeuronCount + 1, neuronCount)
 
-  def getLayer = Layer(weight)
+  def getLayer = SigmoidLayer(weight)
 
   def computeOutput(in: Matrix) = {
     input = in
