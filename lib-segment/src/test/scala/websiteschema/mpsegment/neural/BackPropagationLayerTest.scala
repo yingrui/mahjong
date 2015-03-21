@@ -1,9 +1,7 @@
 package websiteschema.mpsegment.neural
 
 import org.junit.{Assert, Test}
-import websiteschema.mpsegment.Assertion._
-import websiteschema.mpsegment.math.{DenseMatrix, Matrix}
-import websiteschema.mpsegment.Assertion
+import websiteschema.mpsegment.math.Matrix
 
 class BackPropagationLayerTest {
 

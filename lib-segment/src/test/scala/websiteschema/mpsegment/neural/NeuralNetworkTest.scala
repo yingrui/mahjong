@@ -1,8 +1,8 @@
 package websiteschema.mpsegment.neural
 
 import org.junit.{Assert, Test}
+import websiteschema.mpsegment.Assertion._
 import websiteschema.mpsegment.math.Matrix
-import websiteschema.mpsegment.Assertion
 
 class NeuralNetworkTest {
 
@@ -35,12 +35,12 @@ class NeuralNetworkTest {
 
     network.add {
       val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
-      new Layer(weight, x => x + 1D)
+      new Layer(weight, Sigmoid())
     }
 
     val output = network.computeOutput(Matrix(1, 2, Array(1D, 1D)))
 
-    Assertion.shouldBeEqual(4D, output.flatten)
+    shouldBeEqual(0.9525741268224334D, output.flatten)
   }
 
   /**
@@ -77,8 +77,8 @@ class NeuralNetworkTest {
     network.add(new Layer(Matrix(3, 3, Array(0.61, -3.15, -2.97,
                                              2.41, -1.73, 1.91,
                                              -1.21, -2.90, -3.29)),
-                Sigmoid.activation))
-    network.add(new Layer(Matrix(4, 1, Array(2.53, 2.66, -2.36, -1.15)), Sigmoid.activation))
+                Sigmoid()))
+    network.add(new Layer(Matrix(4, 1, Array(2.53, 2.66, -2.36, -1.15)), Sigmoid()))
 
     println(network.computeOutput(Matrix(Array(1D, 0D))))
     println(network.computeOutput(Matrix(Array(0D, 1D))))

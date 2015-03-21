@@ -7,15 +7,15 @@ class TangentActivationTest {
 
   @Test
   def should_return_activation {
-    shouldBeEqual(0D, Tangent.activation(0D))
-    Assert.assertTrue(Tangent.activation(100D) <= 1D)
-    Assert.assertTrue(Tangent.activation(-100D) >= -1D)
+    shouldBeEqual(0D, Tangent().activation(0D))
+    Assert.assertTrue(Tangent().activation(100D) <= 1D)
+    Assert.assertTrue(Tangent().activation(-100D) >= -1D)
   }
 
   @Test
   def should_return_derivative() {
-    shouldBeEqual(1D, Tangent.derivative(0D))
-    shouldBeEqual(0D, Tangent.derivative(Double.MaxValue))
-    shouldBeEqual(0D, Tangent.derivative(Double.MinValue))
+    shouldBeEqual(1D, Tangent().derivative(0D))
+    shouldBeEqual(0D, Tangent().derivative(Double.MaxValue))
+    shouldBeEqual(0D, Tangent().derivative(Double.MinValue))
   }
 }

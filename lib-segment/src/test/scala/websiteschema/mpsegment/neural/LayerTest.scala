@@ -1,8 +1,8 @@
 package websiteschema.mpsegment.neural
 
 import org.junit.{Assert, Test}
+import websiteschema.mpsegment.Assertion._
 import websiteschema.mpsegment.math.Matrix
-import websiteschema.mpsegment.Assertion
 
 class LayerTest {
 
@@ -15,11 +15,11 @@ class LayerTest {
   @Test
   def should_return_output {
     val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
-    val layer = new Layer(weight, x => x + 1D)
+    val layer = new Layer(weight, Sigmoid())
 
     val output = layer.computeOutput(Matrix(Array(1D, 1D)))
     println(output)
-    Assertion.shouldBeEqual(4D, output.flatten)
+    shouldBeEqual(0.9525741268224334D, output.flatten)
   }
 
 
