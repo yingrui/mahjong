@@ -1,21 +1,39 @@
 package websiteschema.mpsegment.neural
 
+import org.junit.Assert.assertTrue
 import org.junit.{Assert, Test}
 import websiteschema.mpsegment.Assertion._
+import websiteschema.mpsegment.math.Matrix
 
 class TangentActivationTest {
 
   @Test
   def should_return_activation {
-    shouldBeEqual(0D, Tangent().activation(0D))
-    Assert.assertTrue(Tangent().activation(100D) <= 1D)
-    Assert.assertTrue(Tangent().activation(-100D) >= -1D)
+    shouldBeEqual(Matrix(Array(0D)), Tangent().activate(Matrix(Array(0D))))
   }
 
   @Test
-  def should_return_derivative() {
-    shouldBeEqual(1D, Tangent().derivative(0D))
-    shouldBeEqual(0D, Tangent().derivative(Double.MaxValue))
-    shouldBeEqual(0D, Tangent().derivative(Double.MinValue))
+  def should_return_activation_when_input_is_max_value {
+    shouldBeEqual(Matrix(Array(1D)), Tangent().activate(Matrix(Array(100D))))
+  }
+
+  @Test
+  def should_return_activation_when_input_is_min_value {
+    shouldBeEqual(Matrix(Array(-1D)), Tangent().activate(Matrix(Array(-100D))))
+  }
+
+  @Test
+  def should_return_derivative {
+    shouldBeEqual(Matrix(Array(1D)), Tangent().getDerivative(Matrix(Array(0D))))
+  }
+
+  @Test
+  def should_return_derivative_when_input_is_max_value {
+    shouldBeEqual(Matrix(Array(0D)), Tangent().getDerivative(Matrix(Array(Double.MaxValue))))
+  }
+
+  @Test
+  def should_return_derivative_when_input_is_min_value {
+    shouldBeEqual(Matrix(Array(0D)), Tangent().getDerivative(Matrix(Array(Double.MinValue))))
   }
 }

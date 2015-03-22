@@ -9,7 +9,7 @@ class Layer(val weight: Matrix, val activation: Activation) {
   def computeOutput(input: Matrix) = {
     assert(input.isVector && input.col == (weight.row - 1)) // b = weight(weight.row - 1)
     val output = Matrix(input.flatten ++ Array(1D)) x weight // W * h + b
-    output.map(x => activation.activation(x)) // by default: sigmoid(W * h + b)
+    activation.activate(output) // by default: sigmoid(W * h + b)
   }
 }
 

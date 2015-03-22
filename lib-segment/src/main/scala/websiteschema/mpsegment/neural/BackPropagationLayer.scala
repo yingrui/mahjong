@@ -38,7 +38,7 @@ class BackPropagationLayer(var weight: Matrix) {
   }
 
   def calculateDelta(err: Double, output: Double): Double = {
-    err * Sigmoid().derivative(output)
+    err * Sigmoid().getDerivative(output)
   }
 
   def learn(rate: Double, momentum: Double) {
