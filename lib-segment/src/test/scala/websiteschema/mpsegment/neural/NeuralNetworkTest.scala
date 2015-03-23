@@ -35,7 +35,7 @@ class NeuralNetworkTest {
 
     network.add {
       val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
-      new Layer(weight, Sigmoid())
+      SigmoidLayer(weight)
     }
 
     val output = network.computeOutput(Matrix(1, 2, Array(1D, 1D)))
@@ -74,11 +74,10 @@ class NeuralNetworkTest {
   @Test
   def should_classify_xor {
     val network = NeuralNetwork()
-    network.add(new Layer(Matrix(3, 3, Array(0.61, -3.15, -2.97,
+    network.add(SigmoidLayer(Matrix(3, 3, Array(0.61, -3.15, -2.97,
                                              2.41, -1.73, 1.91,
-                                             -1.21, -2.90, -3.29)),
-                Sigmoid()))
-    network.add(new Layer(Matrix(4, 1, Array(2.53, 2.66, -2.36, -1.15)), Sigmoid()))
+                                             -1.21, -2.90, -3.29))))
+    network.add(SigmoidLayer(Matrix(4, 1, Array(2.53, 2.66, -2.36, -1.15))))
 
     println(network.computeOutput(Matrix(Array(1D, 0D))))
     println(network.computeOutput(Matrix(Array(0D, 1D))))

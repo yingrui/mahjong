@@ -1,18 +1,14 @@
 package websiteschema.mpsegment.neural
 
 import websiteschema.mpsegment.math.Matrix
+import websiteschema.mpsegment.neural.Layer
 import websiteschema.mpsegment.util.{FileUtil, SerializeHandler}
 
 class NeuralNetwork {
 
-  type NeuronLayer = {
-    def computeOutput(input: Matrix): Matrix
-    def weight: Matrix
-  }
+  var layers = List[Layer]()
 
-  var layers = List[NeuronLayer]()
-
-  def add(layer: NeuronLayer) {
+  def add(layer: Layer) {
     assert(layers.length == 0 || layers.last.weight.col == layer.weight.row - 1)
     layers = layers :+ layer
   }

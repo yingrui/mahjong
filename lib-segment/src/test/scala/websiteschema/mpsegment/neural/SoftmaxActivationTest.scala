@@ -22,19 +22,4 @@ class SoftmaxActivationTest {
   def should_return_activation_when_input_is_min_value {
     shouldBeEqual(Matrix(Array(0D, 1D)), Softmax().activate(Matrix(Array(Double.MinValue, 1D))))
   }
-
-//  @Test
-//  def should_return_derivative {
-//    shouldBeEqual(Matrix(Array(0D)), Softmax().getDerivative(Matrix(Array(1D))))
-//  }
-//
-//  @Test
-//  def should_return_derivative_when_input_is_max_value {
-//    shouldBeEqual(Matrix(Array(0D)), Tangent().getDerivative(Matrix(Array(Double.MaxValue))))
-//  }
-//
-//  @Test
-//  def should_return_derivative_when_input_is_min_value {
-//    shouldBeEqual(Matrix(Array(0D)), Tangent().getDerivative(Matrix(Array(Double.MinValue))))
-//  }
 }

@@ -2,7 +2,13 @@ package websiteschema.mpsegment.neural
 
 import websiteschema.mpsegment.math.Matrix
 
-class Layer(val weight: Matrix, val activation: Activation) {
+trait Layer {
+  def weight: Matrix
+  def size: Int
+  def computeOutput(input: Matrix): Matrix
+}
+
+class SingleLayer(val weight: Matrix, val activation: Activation) extends Layer {
 
   def size = weight.col
 
@@ -14,5 +20,5 @@ class Layer(val weight: Matrix, val activation: Activation) {
 }
 
 object SigmoidLayer {
-  def apply(weight: Matrix) = new Layer(weight, Sigmoid())
+  def apply(weight: Matrix): Layer = new SingleLayer(weight, Sigmoid())
 }

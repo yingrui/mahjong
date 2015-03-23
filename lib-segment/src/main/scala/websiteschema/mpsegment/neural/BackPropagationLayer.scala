@@ -2,8 +2,18 @@ package websiteschema.mpsegment.neural
 
 import websiteschema.mpsegment.math.Matrix
 
-class BackPropagationLayer(var weight: Matrix) {
+trait BackPropagationLayer extends Layer {
 
+  def update(rate: Double, momentum: Double)
+
+  def propagateError(delta: Matrix): Matrix
+
+  def calculateDelta(actual: Matrix, error: Matrix): Matrix
+
+  def layer: Layer
+}
+
+trait BPLayer extends BackPropagationLayer {
   val neuronCount = weight.col
   val inputNeuronCount = weight.row - 1
   val biasRow = inputNeuronCount
@@ -15,15 +25,13 @@ class BackPropagationLayer(var weight: Matrix) {
   var accumulateDelta = Matrix(inputNeuronCount + 1, neuronCount)
   var delta = Matrix(inputNeuronCount + 1, neuronCount)
 
-  def getLayer = SigmoidLayer(weight)
-
   def computeOutput(in: Matrix) = {
     input = in
-    output = getLayer.computeOutput(input)
+    output = layer.computeOutput(input)
     output
   }
 
-  def calculateError(delta: Matrix): Matrix = {
+  def propagateError(delta: Matrix): Matrix = {
     for (j <- 0 until neuronCount) {
       for (i <- 0 until inputNeuronCount) {
         accumulateDelta(i, j) = accumulateDelta(i, j) + delta(0, j) * input(0, i)
@@ -32,16 +40,30 @@ class BackPropagationLayer(var weight: Matrix) {
       accumulateDelta(biasRow, j) = accumulateDelta(biasRow, j) + delta(0, j)
     }
 
-    (0 until inputNeuronCount).foreach{i => errorDelta(0, i) = calculateDelta(error(0, i), input(0, i))}
+    errorDelta := calculateDelta(input, error)
 
     errorDelta
   }
+}
 
-  def calculateDelta(err: Double, output: Double): Double = {
+class BPSigmoidLayer(var weight: Matrix) extends BPLayer {
+
+  def layer = SigmoidLayer(weight)
+
+  def size = layer.size
+
+  private def calculateDelta(err: Double, output: Double): Double = {
     err * Sigmoid().getDerivative(output)
   }
 
-  def learn(rate: Double, momentum: Double) {
+  def calculateDelta(actual: Matrix, error: Matrix): Matrix = {
+    val delta = for (i <- 0 until error.col) yield {
+      calculateDelta(error(0, i), actual(0, i))
+    }
+    Matrix(delta)
+  }
+
+  def update(rate: Double, momentum: Double) {
     delta = (accumulateDelta x rate) + (delta x momentum)
     weight = weight + delta
     accumulateDelta.clear
@@ -50,7 +72,7 @@ class BackPropagationLayer(var weight: Matrix) {
 }
 
 object BackPropagationLayer {
-  def apply(size: Int) = new BackPropagationLayer(Matrix.ramdomize(size + 1, size, -1D, 1D))
+  def apply(size: Int) = new BPSigmoidLayer(Matrix.ramdomize(size + 1, size, -1D, 1D))
 
-  def apply(size: Int, nextLayerSize: Int) = new BackPropagationLayer(Matrix.ramdomize(size + 1, nextLayerSize, -1D, 1D))
+  def apply(size: Int, nextLayerSize: Int) = new BPSigmoidLayer(Matrix.ramdomize(size + 1, nextLayerSize, -1D, 1D))
 }

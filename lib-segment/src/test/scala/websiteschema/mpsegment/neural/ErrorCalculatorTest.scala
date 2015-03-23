@@ -12,7 +12,7 @@ class ErrorCalculatorTest {
 
     val error = new ErrorCalculator()
     error.updateError(actual, ideal)
-    val rms = error.getRootMeanSquare
+    val rms = error.loss
 
     Assert.assertTrue(rms - 0.5D > -0.0000001 && rms - 0.5D < 0.0000001)
   }

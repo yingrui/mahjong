@@ -15,7 +15,7 @@ class LayerTest {
   @Test
   def should_return_output {
     val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
-    val layer = new Layer(weight, Sigmoid())
+    val layer = new SingleLayer(weight, Sigmoid())
 
     val output = layer.computeOutput(Matrix(Array(1D, 1D)))
     println(output)

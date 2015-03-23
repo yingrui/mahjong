@@ -1,7 +1,6 @@
 package websiteschema.mpsegment.neural
 
 import websiteschema.mpsegment.math.Matrix
-import collection.mutable.ListBuffer
 
 object BackPropagation {
   def apply(inputSize: Int, outputSize: Int, rate: Double, momentum: Double): BackPropagation = new BackPropagation(inputSize, outputSize, rate, momentum)
@@ -43,7 +42,7 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
       val outputs = for (i <- 0 until inputArray.length) yield {
         val output = network.computeOutput(inputArray(i))
         computeError(output, idealArray(i))
-        layers.foreach(_.learn(rate, momentum))
+        layers.foreach(_.update(rate, momentum))
         output
       }
       error = recalculateError(outputs)
@@ -64,14 +63,14 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
       errorCalculator.updateError(actual.flatten, idealArray(i).flatten)
       i += 1
     }
-    errorCalculator.getRootMeanSquare
+    errorCalculator.loss
   }
 
   def computeError(actual: Matrix, ideal: Matrix) {
     val error = ideal - actual
-    val errorDelta = Matrix(for(i <- 0 until error.col) yield {layers.last.calculateDelta(error(0, i), actual(0, i))})
+    val errorDelta = layers.last.calculateDelta(actual, error)
 
-    layers.foldRight(errorDelta)((layer, delta) => layer.calculateError(delta))
+    layers.foldRight(errorDelta)((layer, delta) => layer.propagateError(delta))
   }
 
   private def initLayers {
