@@ -2,17 +2,16 @@ package db.migration;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import scala.collection.immutable.List;
-import websiteschema.mpsegment.concept.Concept;
-import websiteschema.mpsegment.core.SegmentWorker;
-import websiteschema.mpsegment.core.SegmentWorkerBuilder;
-import websiteschema.mpsegment.dict.DictionaryFactory;
-import websiteschema.mpsegment.dict.IDictionary;
-import websiteschema.mpsegment.dict.IWord;
-import websiteschema.mpsegment.dict.POSArray;
-import websiteschema.mpsegment.hmm.Emission;
-import websiteschema.mpsegment.hmm.Node;
-import websiteschema.mpsegment.hmm.NodeRepository;
-import websiteschema.mpsegment.pinyin.WordToPinyinClassfierFactory;
+import me.yingrui.segment.concept.Concept;
+import me.yingrui.segment.core.SegmentWorkerBuilder;
+import me.yingrui.segment.dict.DictionaryFactory;
+import me.yingrui.segment.dict.IDictionary;
+import me.yingrui.segment.dict.IWord;
+import me.yingrui.segment.dict.POSArray;
+import me.yingrui.segment.hmm.Emission;
+import me.yingrui.segment.hmm.Node;
+import me.yingrui.segment.hmm.NodeRepository;
+import me.yingrui.segment.pinyin.WordToPinyinClassfierFactory;
 
 import java.util.Collection;
 import java.util.HashMap;

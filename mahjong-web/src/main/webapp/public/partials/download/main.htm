@@ -28,8 +28,8 @@
         <h4>如何使用N-最短路径分词？</h4>
         <p>项目默认使用1-最短路径分词，如果希望分词切分的更细，准确性更高，则可以支持到2-最短路径分词。</p>
         <p>
-            基于PFR语料训练Bigram数据：websiteschema.mpsegment.tools.WordBigramBuilder，程序会生成文件word-bigram.dat。<br/>
-            基于<a href="http://books.google.com/ngrams/info">Google Bigram语料</a>训练Bigram数据：websiteschema.mpsegment.tools.GoogleBigramBuilder，程序会生成文件google-bigram.dat。<br/>
+            基于PFR语料训练Bigram数据：me.yingrui.mpsegment.tools.WordBigramBuilder，程序会生成文件word-bigram.dat。<br/>
+            基于<a href="http://books.google.com/ngrams/info">Google Bigram语料</a>训练Bigram数据：me.yingrui.mpsegment.tools.GoogleBigramBuilder，程序会生成文件google-bigram.dat。<br/>
         </p>
         <p>
             目前并没有开关可以选择2-最短路径分词，因为还希望在一些其它应用上确认其效果之后再发布。
@@ -42,7 +42,7 @@
             您需要在配置文件maxprob.cfg中修改参数，domain.dictloader是您用来加载词典的Java Class。多个DomainDictLoader之间可以使用逗号、分号和空格分隔。
         <ul style="list-style-type: none;">
             <li>domain.loaddomaindictionary = true</li>
-            <li>domain.dictloader = websiteschema.mpsegment.SimpleDomainDictLoader</li>
+            <li>domain.dictloader = me.yingrui.segment.SimpleDomainDictLoader</li>
         </ul>
         </p>
         <p>

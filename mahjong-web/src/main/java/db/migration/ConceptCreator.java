@@ -2,10 +2,10 @@ package db.migration;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import scala.collection.immutable.List;
-import websiteschema.mpsegment.concept.Concept;
-import websiteschema.mpsegment.concept.ConceptRepository;
-import websiteschema.mpsegment.concept.ConceptTree;
-import websiteschema.mpsegment.dict.POSUtil;
+import me.yingrui.segment.concept.Concept;
+import me.yingrui.segment.concept.ConceptRepository;
+import me.yingrui.segment.concept.ConceptTree;
+import me.yingrui.segment.dict.POSUtil;
 
 import java.util.HashMap;
 
