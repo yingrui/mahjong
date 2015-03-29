@@ -43,6 +43,11 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     result
   }
 
+  def %(m: Matrix) = {
+    assert(col == m.col && row == m.row)
+    Matrix(row, col, Matrix.arithmetic(flatten, m.flatten, (a, b) => a * b))
+  }
+
   def *(m: Matrix) = {
     Matrix.arithmetic(flatten, m.flatten, (a, b) => a * b).sum
   }

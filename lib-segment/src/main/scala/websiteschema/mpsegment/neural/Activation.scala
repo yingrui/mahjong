@@ -68,6 +68,7 @@ object Softmax {
   def apply(): Activation = new Softmax
 
   class Softmax extends Activation {
+
     def activate(input: Double) = {
       0D
     }
@@ -75,7 +76,7 @@ object Softmax {
     def getDerivative(input: Double) = 0D
 
     def activate(input: Matrix) = {
-      val exp = input.map(x => Boundary(Math.exp(x)))
+      val exp = input.map(x => Boundary(Math.exp(x - 10)))
       val sum = exp.flatten.sum
       exp.map(i => i / sum)
     }

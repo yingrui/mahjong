@@ -1,5 +1,7 @@
 package websiteschema.mpsegment.math
 
+import scala.util.Random
+
 trait Matrix {
   def +(n: Double): Matrix
 
@@ -17,6 +19,7 @@ trait Matrix {
   def *=(n: Double): Unit
 
   def x(m: Matrix): Matrix
+  def %(m: Matrix): Matrix
 
   def *(m: Matrix): Double
 
@@ -78,12 +81,17 @@ object Matrix {
 
   def map(m: Matrix, compute: (Double) => Double): Matrix = apply(m.row, m.col, m.flatten.map(compute))
 
-  def ramdomize(row: Int, col: Int, min: Double, max: Double) = {
+  def randomize(row: Int, col: Int, min: Double, max: Double) = {
     val data = new Array[Double](row * col)
     for (i <- 0 until data.length) {
         data(i) = (Math.random() * (max - min)) + min
     }
     apply(row, col, data)
+  }
+
+  def randomize(row: Int, col: Int): Matrix = {
+    val data = (0 until row * col).map(i => 1e-5 * Random.nextInt(100).toDouble)
+    new DenseMatrix(row, col, data.toArray)
   }
 
   def doubleArrayEquals(data: Array[Double], other: Array[Double]): Boolean = {

@@ -72,7 +72,7 @@ class BPSigmoidLayer(var weight: Matrix) extends BPLayer {
 }
 
 object BackPropagationLayer {
-  def apply(size: Int) = new BPSigmoidLayer(Matrix.ramdomize(size + 1, size, -1D, 1D))
+  def apply(size: Int) = new BPSigmoidLayer(Matrix.randomize(size + 1, size, -1D, 1D))
 
-  def apply(size: Int, nextLayerSize: Int) = new BPSigmoidLayer(Matrix.ramdomize(size + 1, nextLayerSize, -1D, 1D))
+  def apply(size: Int, nextLayerSize: Int) = new BPSigmoidLayer(Matrix.randomize(size + 1, nextLayerSize, -1D, 1D))
 }
