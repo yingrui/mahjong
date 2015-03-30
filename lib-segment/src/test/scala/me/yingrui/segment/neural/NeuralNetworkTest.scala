@@ -11,17 +11,17 @@ class NeuralNetworkTest {
     val network = NeuralNetwork()
 
     Assert.assertEquals(0, network.layers.length)
-    network.add(SigmoidLayer(Matrix(3, 3)))
+    network.add(SigmoidLayer(Matrix(2, 3), Matrix(1, 3)))
     Assert.assertEquals(1, network.layers.length)
   }
 
   @Test
   def should_throw_exception_when_add_unmatched_layer {
     val network = NeuralNetwork()
-    network.add(SigmoidLayer(Matrix(3, 3)))
+    network.add(SigmoidLayer(Matrix(2, 3), Matrix(1, 3)))
 
     try {
-      network.add(SigmoidLayer(Matrix(2, 2)))
+      network.add(SigmoidLayer(Matrix(1, 2), Matrix(1, 2)))
       Assert.fail()
     }catch{
       case _: Throwable =>
@@ -34,8 +34,9 @@ class NeuralNetworkTest {
     val network = NeuralNetwork()
 
     network.add {
-      val weight = Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D))
-      SigmoidLayer(weight)
+      val weight = Matrix(2, 2, Array(1D, 1D, 1D, 1D))
+      val bias = Matrix(Array(1D, 1D))
+      SigmoidLayer(weight, bias)
     }
 
     val output = network.computeOutput(Matrix(1, 2, Array(1D, 1D)))
@@ -74,10 +75,10 @@ class NeuralNetworkTest {
   @Test
   def should_classify_xor {
     val network = NeuralNetwork()
-    network.add(SigmoidLayer(Matrix(3, 3, Array(0.61, -3.15, -2.97,
-                                             2.41, -1.73, 1.91,
-                                             -1.21, -2.90, -3.29))))
-    network.add(SigmoidLayer(Matrix(4, 1, Array(2.53, 2.66, -2.36, -1.15))))
+    network.add(SigmoidLayer(Matrix(2, 3, Array(0.61, -3.15, -2.97,
+                                             2.41, -1.73, 1.91)),
+                                             Matrix(Array(-1.21, -2.90, -3.29))))
+    network.add(SigmoidLayer(Matrix(3, 1, Array(2.53, 2.66, -2.36)), Matrix(Array(-1.15))))
 
     println(network.computeOutput(Matrix(Array(1D, 0D))))
     println(network.computeOutput(Matrix(Array(0D, 1D))))

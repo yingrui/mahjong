@@ -4,12 +4,13 @@ import me.yingrui.segment.math.Matrix
 
 trait Layer {
   def weight: Matrix
+  def bias: Matrix
   def size: Int
   def computeOutput(input: Matrix): Matrix
 }
 
-class SingleLayer(val weight: Matrix, val activation: Activation, withBias: Boolean = true) extends Layer {
-
+class SingleLayer(val weight: Matrix, val activation: Activation, val bias: Matrix, withBias: Boolean = true) extends Layer {
+  assert(weight.col == bias.col)
   def size = weight.col
 
   def computeOutput(input: Matrix) = {
@@ -17,25 +18,24 @@ class SingleLayer(val weight: Matrix, val activation: Activation, withBias: Bool
   }
 
   private def compute(input: Matrix): Matrix = {
+    assert(input.isVector && input.col == weight.row)
     if (withBias) {
-      assert(input.isVector && input.col == (weight.row - 1)) // b = weight(weight.row - 1)
-      Matrix(input.flatten ++ Array(1D)) x weight // W * h + b
+      (input x weight) + bias // W * h + b
     } else {
-      assert(input.isVector && input.col == weight.row) // b = weight(weight.row)
       input x weight // W * h
     }
   }
 }
 
 object SigmoidLayer {
-  def apply(weight: Matrix): Layer = new SingleLayer(weight, Sigmoid())
+  def apply(weight: Matrix, bias: Matrix): Layer = new SingleLayer(weight, Sigmoid(), bias)
 }
 
 object SoftmaxLayer {
 
-  class BPSoftmaxLayer(var weight: Matrix) extends BPLayer {
+  class BPSoftmaxLayer(var weight: Matrix, var bias: Matrix) extends BPLayer {
 
-    def layer = new SingleLayer(weight, Softmax(), false)
+    def layer = new SingleLayer(weight, Softmax(), bias, false)
 
     def size = layer.size
 
@@ -43,13 +43,7 @@ object SoftmaxLayer {
       throw new RuntimeException("Not implemented")
     }
 
-    def update(rate: Double, momentum: Double) {
-      delta = (accumulateDelta x rate) + (delta x momentum)
-      weight = weight + delta
-      accumulateDelta.clear
-      error.clear
-    }
   }
 
-  def apply(weight: Matrix): BPLayer = new BPSoftmaxLayer(weight)
+  def apply(weight: Matrix): BPLayer = new BPSoftmaxLayer(weight, Matrix(1, weight.col))
 }

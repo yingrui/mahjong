@@ -9,7 +9,7 @@ class NeuralNetwork {
   var layers = List[Layer]()
 
   def add(layer: Layer) {
-    assert(layers.length == 0 || layers.last.weight.col == layer.weight.row - 1)
+    assert(layers.length == 0 || layers.last.weight.col == layer.weight.row)
     layers = layers :+ layer
   }
 
@@ -17,12 +17,15 @@ class NeuralNetwork {
     layers.foldLeft(input)((inputVertex, layer) => layer.computeOutput(inputVertex))
   }
 
-  override def toString(): String = layers.map(_.weight).mkString("\n\n")
+  override def toString(): String = layers.map(layer => Array(layer.weight, layer.bias)).flatten.mkString("\n\n")
 
   def save(file: String) {
     val dumper = SerializeHandler(new java.io.File(file), SerializeHandler.WRITE_ONLY)
     dumper.serializeInt(layers.length)
-    layers.foreach(layer => dumper.serializeMatrix(layer.weight))
+    layers.foreach(layer => {
+      dumper.serializeMatrix(layer.weight)
+      dumper.serializeMatrix(layer.bias)
+    })
     dumper.close()
   }
 
@@ -30,7 +33,9 @@ class NeuralNetwork {
     val input = new java.io.DataInputStream(FileUtil.getResourceAsStream(resource))
     val serializeHandler = new SerializeHandler(input, null)
     for(i <- 0 until serializeHandler.deserializeInt()) {
-      add(SigmoidLayer(serializeHandler.deserializeMatrix()))
+      val weight: Matrix = serializeHandler.deserializeMatrix()
+      val bias: Matrix = serializeHandler.deserializeMatrix()
+      add(SigmoidLayer(weight, bias))
     }
     input.close()
   }
