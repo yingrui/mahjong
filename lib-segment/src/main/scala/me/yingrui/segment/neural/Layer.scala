@@ -39,9 +39,7 @@ object SoftmaxLayer {
 
     def size = layer.size
 
-    def calculateDelta(actual: Matrix, error: Matrix): Matrix = {
-      throw new RuntimeException("Not implemented")
-    }
+    def calculateDelta(actual: Matrix, error: Matrix): Matrix = input.T x error
 
   }
 

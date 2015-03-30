@@ -47,6 +47,9 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
       }
       error = recalculateError(outputs)
       if (BackPropagation.debug && it % 100 == 0) {
+        if(iteration-it == 100) {
+          println("Cycles Left: " + (iteration - it) + ", Error: " + error);
+        }
         println("Cycles Left: " + (iteration - it) + ", Error: " + error);
       }
     }
@@ -60,7 +63,8 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
     var i = 0
     while(i < idealArray.length) {
       val actual = outputs(i)
-      errorCalculator.updateError(actual.flatten, idealArray(i).flatten)
+      val ideal = idealArray(i)
+      errorCalculator.updateError(actual, ideal)
       i += 1
     }
     errorCalculator.loss

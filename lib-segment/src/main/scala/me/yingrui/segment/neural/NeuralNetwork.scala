@@ -14,7 +14,10 @@ class NeuralNetwork {
   }
 
   def computeOutput(input: Matrix): Matrix = {
-    layers.foldLeft(input)((inputVertex, layer) => layer.computeOutput(inputVertex))
+    val out = Matrix(1, layers.last.size)
+    val result = layers.foldLeft(input)((inputVertex, layer) => layer.computeOutput(inputVertex))
+    out := result
+    out
   }
 
   override def toString(): String = layers.map(layer => Array(layer.weight, layer.bias)).flatten.mkString("\n\n")

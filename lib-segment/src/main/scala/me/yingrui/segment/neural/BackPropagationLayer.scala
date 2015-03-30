@@ -22,7 +22,6 @@ trait BPLayer extends BackPropagationLayer {
 
   val input = Matrix(1, inputNeuronCount)
   val output = Matrix(1, neuronCount)
-  val errorDelta = Matrix(1, inputNeuronCount)
   val error = Matrix(1, inputNeuronCount)
   val accumulateDelta = Matrix(inputNeuronCount, neuronCount)
   val accumulateBiasDelta = Matrix(1, neuronCount)
@@ -36,21 +35,11 @@ trait BPLayer extends BackPropagationLayer {
   }
 
   def propagateError(delta: Matrix): Matrix = {
+    accumulateDelta += input.T x delta
+    accumulateBiasDelta += delta.row(0)
+    error := delta x weight.T
 
-//    accumulateDelta += input.T x delta
-//    error += delta x weight.T
-
-    for (j <- 0 until neuronCount) {
-      for (i <- 0 until inputNeuronCount) {
-        accumulateDelta(i, j) = accumulateDelta(i, j) + delta(0, j) * input(0, i)
-        error(0, i) = error(0, i) + weight(i, j) * delta(0, j)
-      }
-      accumulateBiasDelta(0, j) = accumulateBiasDelta(0, j) + delta(0, j)
-    }
-
-    errorDelta := calculateDelta(input, error)
-
-    errorDelta
+    calculateDelta(input, error)
   }
 
   def update(rate: Double, momentum: Double) {
@@ -66,10 +55,10 @@ trait BPLayer extends BackPropagationLayer {
     weight += delta
     bias += biasDelta
 
-    clearAfterUpdate
+    cleanupAfterUpdate
   }
 
-  private def clearAfterUpdate: Unit = {
+  private def cleanupAfterUpdate: Unit = {
     accumulateDelta.clear
     accumulateBiasDelta.clear
     error.clear
