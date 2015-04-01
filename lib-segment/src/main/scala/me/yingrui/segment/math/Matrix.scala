@@ -46,6 +46,8 @@ trait Matrix {
 
   def :=(other: Matrix): Unit
   def :=(other: Array[Double]): Unit
+
+  def sum: Double
 }
 
 object Matrix {

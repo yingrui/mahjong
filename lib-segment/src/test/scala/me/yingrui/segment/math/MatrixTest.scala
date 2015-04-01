@@ -146,5 +146,11 @@ class MatrixTest {
     m.clear
     shouldBeEqual(0D, m.flatten)
   }
+
+  @Test
+  def should_return_sum_of_all_elements {
+    val m = Matrix(2, 2, Array(2D,2D,3D,3D))
+    shouldBeEqual(10D, m.sum)
+  }
 }
 

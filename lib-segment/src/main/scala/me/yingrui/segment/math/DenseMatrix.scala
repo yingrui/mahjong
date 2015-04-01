@@ -82,6 +82,8 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     (0 until data.length).foreach(data(_) = 0D)
   }
 
+  def sum: Double = data.sum
+
   override def :=(other: Matrix): Unit = Array.copy(other.flatten, 0, data, 0, data.length)
   override def :=(other: Array[Double]): Unit = Array.copy(other, 0, data, 0, data.length)
 
