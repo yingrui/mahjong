@@ -1,7 +1,5 @@
 package me.yingrui.segment.math
 
-import java.util
-
 import org.nd4j.linalg.api.ndarray.INDArray
 
 class NDMatrix(val data: INDArray) extends Matrix {
@@ -40,22 +38,23 @@ class NDMatrix(val data: INDArray) extends Matrix {
 
   def -=(m: Matrix): Unit = data.subi(m.asInstanceOf[NDMatrix].data)
 
-  def x(n: Double): Matrix = throw new UnsupportedOperationException
-  def x(m: Matrix): Matrix = throw new UnsupportedOperationException
-  def %(m: Matrix): Matrix = throw new UnsupportedOperationException
-  def *=(n: Double): Unit = throw new UnsupportedOperationException
+  def x(n: Double): Matrix = new NDMatrix(data.mul(n))
+  def x(m: Matrix): Matrix = new NDMatrix(data.mmul(m.asInstanceOf[NDMatrix].data))
+  def %(m: Matrix): Matrix = new NDMatrix(data.mul(m.asInstanceOf[NDMatrix].data))
+  def *=(n: Double): Unit = data.muli(n)
 
-  def *(m: Matrix): Double = throw new UnsupportedOperationException
+  def *(m: Matrix): Double = this.%(m).sum
 
-  def /(n: Double): Matrix = throw new UnsupportedOperationException
+  def /(n: Double): Matrix = new NDMatrix(data.div(n))
 
-  def T: Matrix = throw new UnsupportedOperationException
+  def T: Matrix = new NDMatrix(data.transpose())
 
-  def isVector: Boolean = throw new UnsupportedOperationException
+  def isVector: Boolean = data.isRowVector
 
-  def clear: Unit = throw new UnsupportedOperationException
+  def isColumnVector: Boolean = data.isColumnVector
 
-  def :=(other: Matrix): Unit = throw new UnsupportedOperationException
-  def :=(other: Array[Double]): Unit = throw new UnsupportedOperationException
+  def clear: Unit = data.assign(0D)
+
+  def :=(other: Matrix): Unit = data.assign(other.asInstanceOf[NDMatrix].data)
 
 }

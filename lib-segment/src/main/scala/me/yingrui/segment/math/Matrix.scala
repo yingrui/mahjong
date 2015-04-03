@@ -37,6 +37,8 @@ trait Matrix {
 
   def isVector: Boolean
 
+  def isColumnVector: Boolean
+
   def clear: Unit
 
   def apply(i: Int, j: Int): Double

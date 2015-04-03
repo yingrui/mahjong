@@ -78,6 +78,8 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
 
   def isVector = row == 1
 
+  def isColumnVector = col == 1
+
   def clear {
     (0 until data.length).foreach(data(_) = 0D)
   }

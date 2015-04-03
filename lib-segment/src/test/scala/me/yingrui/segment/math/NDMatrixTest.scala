@@ -123,6 +123,107 @@ class NDMatrixTest extends FunSuite with Matchers {
     m(1, 1) should be (1D)
   }
 
+  test("div : matrix / double -> matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    val factor = 5.0D
+    val n = m / factor
+    m(0, 0) should be (1D)
+    n(0, 0) should be (m(0, 0) / factor)
+    n(0, 1) should be (m(0, 1) / factor)
+    n(1, 0) should be (m(1, 0) / factor)
+    n(1, 1) should be (m(1, 1) / factor)
+  }
+
+  test("mul : matrix x double -> matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    val factor = 5.0D
+    val n = m x factor
+    m(0, 0) should be (1D)
+    n(0, 0) should be (m(0, 0) * factor)
+    n(0, 1) should be (m(0, 1) * factor)
+    n(1, 0) should be (m(1, 0) * factor)
+    n(1, 1) should be (m(1, 1) * factor)
+  }
+
+  test("mul : matrix *= double") {
+    val m = new NDMatrix(create(Array(Array(1D, 1D), Array(1D, 1D))))
+
+    val factor = 11D
+    m *= factor
+    m(0, 0) should be (factor)
+    m(0, 1) should be (factor)
+    m(1, 0) should be (factor)
+    m(1, 1) should be (factor)
+  }
+
+  test("mul : matrix x matrix -> matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    val n = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    val x = m x n
+    x(0, 0) should be (7D)
+    x(0, 1) should be (10D)
+    x(1, 0) should be (15D)
+    x(1, 1) should be (22D)
+  }
+
+  test("mul : matrix % matrix -> matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    val x = m % m
+    x(0, 0) should be (1D)
+    x(0, 1) should be (4D)
+    x(1, 0) should be (9D)
+    x(1, 1) should be (16D)
+  }
+
+  test("mul : matrix * matrix -> double") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    m * m should be (30D)
+  }
+
+  test("transpose : matrix.T") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    val t = m.T
+    t(0, 0) should be (1D)
+    t(0, 1) should be (3D)
+    t(1, 0) should be (2D)
+    t(1, 1) should be (4D)
+  }
+
+  test("isVector : m.row") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    m.row(0).isVector shouldBe true
+    m.row(1).isVector shouldBe true
+  }
+
+  test("isColumnVector") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    m.col(0).isColumnVector shouldBe true
+    m.col(1).isColumnVector shouldBe true
+  }
+
+  test("clear matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    m.clear
+    m(0, 0) should be (0D)
+    m(0, 1) should be (0D)
+    m(1, 0) should be (0D)
+    m(1, 1) should be (0D)
+  }
+
+  test("assign matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    val n = new NDMatrix(create(Array(Array(1D, 1D), Array(1D, 1D))))
+    n := m
+    n(0, 0) should be (1D)
+    n(0, 1) should be (2D)
+    n(1, 0) should be (3D)
+    n(1, 1) should be (4D)
+  }
+
   private def verifyUpdateElements(m: Matrix) {
     for (i <- 0 until m.row; j <- 0 until m.col) {
       val value = new Random().nextDouble()
