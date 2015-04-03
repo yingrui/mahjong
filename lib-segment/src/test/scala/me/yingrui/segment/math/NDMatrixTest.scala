@@ -50,7 +50,7 @@ class NDMatrixTest extends FunSuite with Matchers {
 
     val n = m + 1D
     n.row should be (m.row)
-    n.col should be (n.col)
+    n.col should be (m.col)
 
     m(0, 0) should be (1D +- 1e-20)
 
@@ -58,6 +58,69 @@ class NDMatrixTest extends FunSuite with Matchers {
     n(0, 1) should be (3D +- 1e-20)
     n(1, 0) should be (4D +- 1e-20)
     n(1, 1) should be (5D +- 1e-20)
+  }
+
+  test("add : matrix + matrix -> matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    val n = new NDMatrix(create(Array(Array(4D, 3D), Array(2D, 1D))))
+
+    val x = m + n
+    m(0, 0) should be (1D)
+    x(0, 0) should be (5D)
+    x(0, 1) should be (5D)
+    x(1, 0) should be (5D)
+    x(1, 1) should be (5D)
+  }
+
+  test("add : matrix += matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+    val n = new NDMatrix(create(Array(Array(4D, 3D), Array(2D, 1D))))
+
+    m += n
+    n(0, 0) should be (4D)
+    m(0, 0) should be (5D)
+    m(0, 1) should be (5D)
+    m(1, 0) should be (5D)
+    m(1, 1) should be (5D)
+  }
+
+  test("sub : matrix - double -> matrix") {
+    val data = create(Array(Array(1D, 2D), Array(3D, 4D)))
+    val m = new NDMatrix(data)
+
+    val n = m - 1D
+    n.row should be (m.row)
+    n.col should be (m.col)
+
+    m(0, 0) should be (1D)
+    n(0, 0) should be (0D)
+    n(0, 1) should be (1D)
+    n(1, 0) should be (2D)
+    n(1, 1) should be (3D)
+  }
+
+  test("sub : matrix - matrix -> matrix") {
+    val m = new NDMatrix(create(Array(Array(2D, 3D), Array(4D, 5D))))
+    val n = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    val x = m - n
+    n(0, 0) should be (1D)
+    x(0, 0) should be (1D)
+    x(0, 1) should be (1D)
+    x(1, 0) should be (1D)
+    x(1, 1) should be (1D)
+  }
+
+  test("sub : matrix -= matrix") {
+    val m = new NDMatrix(create(Array(Array(2D, 3D), Array(4D, 5D))))
+    val n = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    m -= n
+    n(0, 0) should be (1D)
+    m(0, 0) should be (1D)
+    m(0, 1) should be (1D)
+    m(1, 0) should be (1D)
+    m(1, 1) should be (1D)
   }
 
   private def verifyUpdateElements(m: Matrix) {

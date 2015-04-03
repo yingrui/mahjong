@@ -6,8 +6,6 @@ import org.nd4j.linalg.api.ndarray.INDArray
 
 class NDMatrix(val data: INDArray) extends Matrix {
 
-  def +(n: Double): NDMatrix = new NDMatrix(data.add(n))
-
   val row = data.rows()
   val col = data.columns()
 
@@ -30,15 +28,17 @@ class NDMatrix(val data: INDArray) extends Matrix {
 
   override def toString() = data.toString
 
-  def +(m: Matrix): Matrix = throw new UnsupportedOperationException
+  def +(n: Double): NDMatrix = new NDMatrix(data.add(n))
 
-  def +=(m: Matrix): Unit = throw new UnsupportedOperationException
+  def +(m: Matrix): Matrix = new NDMatrix(data.add(m.asInstanceOf[NDMatrix].data))
 
-  def -(n: Double): Matrix = throw new UnsupportedOperationException
+  def +=(m: Matrix): Unit = data.addi(m.asInstanceOf[NDMatrix].data)
 
-  def -(m: Matrix): Matrix = throw new UnsupportedOperationException
+  def -(n: Double): Matrix = new NDMatrix(data.sub(n))
 
-  def -=(m: Matrix): Unit = throw new UnsupportedOperationException
+  def -(m: Matrix): Matrix = new NDMatrix(data.sub(m.asInstanceOf[NDMatrix].data))
+
+  def -=(m: Matrix): Unit = data.subi(m.asInstanceOf[NDMatrix].data)
 
   def x(n: Double): Matrix = throw new UnsupportedOperationException
   def *=(n: Double): Unit = throw new UnsupportedOperationException
