@@ -41,10 +41,9 @@ class NDMatrix(val data: INDArray) extends Matrix {
   def -=(m: Matrix): Unit = data.subi(m.asInstanceOf[NDMatrix].data)
 
   def x(n: Double): Matrix = throw new UnsupportedOperationException
-  def *=(n: Double): Unit = throw new UnsupportedOperationException
-
   def x(m: Matrix): Matrix = throw new UnsupportedOperationException
   def %(m: Matrix): Matrix = throw new UnsupportedOperationException
+  def *=(n: Double): Unit = throw new UnsupportedOperationException
 
   def *(m: Matrix): Double = throw new UnsupportedOperationException
 

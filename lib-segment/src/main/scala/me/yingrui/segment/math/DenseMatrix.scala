@@ -85,7 +85,6 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
   def sum: Double = data.sum
 
   override def :=(other: Matrix): Unit = Array.copy(other.flatten, 0, data, 0, data.length)
-  override def :=(other: Array[Double]): Unit = Array.copy(other, 0, data, 0, data.length)
 
   override def toString: String = (for (i <- 0 until row) yield {
     row(i).flatten mkString ", "

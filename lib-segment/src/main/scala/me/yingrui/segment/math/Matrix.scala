@@ -16,10 +16,9 @@ trait Matrix {
   def -=(m: Matrix): Unit
 
   def x(n: Double): Matrix
-  def *=(n: Double): Unit
-
   def x(m: Matrix): Matrix
   def %(m: Matrix): Matrix
+  def *=(n: Double): Unit
 
   def *(m: Matrix): Double
 
@@ -45,7 +44,6 @@ trait Matrix {
   def update(i: Int, j: Int, value: Double)
 
   def :=(other: Matrix): Unit
-  def :=(other: Array[Double]): Unit
 
   def sum: Double
 }
