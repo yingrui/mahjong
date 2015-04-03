@@ -2,7 +2,7 @@ package me.yingrui.segment.tools.ner
 
 import me.yingrui.segment.tools.accurary.SegmentResultCompareHook
 import me.yingrui.segment.core.{Word, SegmentResult}
-import me.yingrui.segment.filter.ner.NeuralNetworkNameRecognizer
+import me.yingrui.segment.filter.ner.NameProbDistribution
 import me.yingrui.segment.dict.POSUtil
 import me.yingrui.segment.filter.ForeignName
 
@@ -122,7 +122,7 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
   private def lastLabel = if(serialLabels.length > 0) serialLabels.last._2 else ""
   private def lastExpectWord(expectWordIndex: Int) = if(expectWordIndex > 0) expect(expectWordIndex - 1) else new Word
 
-  private def isXing(word: Word): Boolean = NeuralNetworkNameRecognizer.nameDistribution.xingSet.contains(word.name)
+  private def isXing(word: Word): Boolean = NameProbDistribution().xingSet.contains(word.name)
   private def isForeignName(word: Word): Boolean = word.name.length >= 4 || ForeignName().isForeignName(word.name)
 
   private def isName(word: Word) = word.pos == POSUtil.POS_NR

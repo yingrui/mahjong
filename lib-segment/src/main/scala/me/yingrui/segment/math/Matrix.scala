@@ -96,16 +96,6 @@ object Matrix {
     new DenseMatrix(row, col, data.toArray)
   }
 
-  def doubleArrayEquals(data: Array[Double], other: Array[Double]): Boolean = {
-    if (data.length == other.length) {
-      val index = (0 until data.length).find(i => data(i) - other(i) > 0.000000001D || data(i) - other(i) < -0.000000001D)
-      index match {
-        case None => true
-        case _ => false
-      }
-    } else {
-      false
-    }
-  }
+
 }
 

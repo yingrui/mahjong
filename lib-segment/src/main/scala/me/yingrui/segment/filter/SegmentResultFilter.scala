@@ -1,10 +1,10 @@
 package me.yingrui.segment.filter
 
-import ner.{HmmNameFilter, ForeignNameRecognizerCreator, ChineseNameRecognizerCreator}
 import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.core.SegmentResult
+import me.yingrui.segment.filter.ner.HmmNameFilter
 
-import collection.mutable.ListBuffer
+import scala.collection.mutable.ListBuffer
 
 class SegmentResultFilter(config: MPSegmentConfiguration) {
 
@@ -15,8 +15,6 @@ class SegmentResultFilter(config: MPSegmentConfiguration) {
   if (config.isChineseNameIdentify()) {
     if (config.getNameRecognizer == "UnknownNameFilter")
       filters += (new UnknownNameFilter(config))
-    if (config.getNameRecognizer == "ChineseNameFilter")
-      filters += (new ChineseNameFilter(config, new ChineseNameRecognizerCreator(), 10))
     if (config.getNameRecognizer == "HmmNameFilter")
       filters += HmmNameFilter(config)
   }

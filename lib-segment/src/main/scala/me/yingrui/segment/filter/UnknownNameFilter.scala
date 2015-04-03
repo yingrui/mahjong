@@ -1,6 +1,6 @@
 package me.yingrui.segment.filter
 
-import ner.{NameEntityRecognizer, NeuralNetworkNameRecognizer, ProbChineseNameRecognizer}
+import ner.{NameEntityRecognizer, ProbChineseNameRecognizer}
 import me.yingrui.segment.concept.Concept
 import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.dict.POSUtil

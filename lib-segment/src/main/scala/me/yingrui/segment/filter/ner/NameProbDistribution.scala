@@ -30,3 +30,11 @@ class NameProbDistribution {
     Math.log(prob) / Math.log(2)
   }
 }
+
+object NameProbDistribution {
+
+  private val instance = new NameProbDistribution()
+
+  def apply() = instance
+
+}
