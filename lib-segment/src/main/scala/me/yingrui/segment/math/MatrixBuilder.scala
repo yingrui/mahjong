@@ -2,7 +2,7 @@ package me.yingrui.segment.math
 
 trait MatrixBuilder {
 
-  def vector(d: Seq[Double]): Matrix
+  def vector(data: Seq[Double]): Matrix
 
   def apply(row: Int, col: Int): Matrix
 

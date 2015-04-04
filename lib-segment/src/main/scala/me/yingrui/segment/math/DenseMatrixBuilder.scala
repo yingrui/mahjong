@@ -4,7 +4,11 @@ import scala.util.Random
 
 class DenseMatrixBuilder extends MatrixBuilder {
 
-  override def vector(d: Seq[Double]): Matrix = new DenseMatrix(1, d.length, d.toArray)
+  override def vector(data: Seq[Double]): Matrix = new DenseMatrix(1, data.length, data.toArray)
+
+  override def apply(data: Array[Double]): Matrix = vector(data)
+
+  override def apply(data: Seq[Double]): Matrix = vector(data)
 
   override def apply(row: Int, col: Int): Matrix = new DenseMatrix(row, col, new Array[Double](row * col))
 
@@ -16,11 +20,7 @@ class DenseMatrixBuilder extends MatrixBuilder {
     m
   }
 
-  override def apply(data: Array[Double]): Matrix = new DenseMatrix(1, data.length, data)
-
   override def apply(data: Array[Array[Double]]): Matrix = new DenseMatrix(data.length, data(0).length, data.flatten.toArray)
-
-  override def apply(data: Seq[Double]): Matrix = new DenseMatrix(1, data.length, data.toArray)
 
   override def apply(row: Int, col: Int, data: Array[Double]): Matrix = new DenseMatrix(row, col, data)
 
@@ -36,7 +36,7 @@ class DenseMatrixBuilder extends MatrixBuilder {
 
   override def randomize(row: Int, col: Int): Matrix = {
     val data = (0 until row * col).map(i => 1e-5 * Random.nextInt(100).toDouble)
-    new DenseMatrix(row, col, data.toArray)
+    apply(row, col, data.toArray)
   }
 
 }

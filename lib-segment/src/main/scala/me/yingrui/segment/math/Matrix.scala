@@ -1,7 +1,5 @@
 package me.yingrui.segment.math
 
-import scala.util.Random
-
 trait Matrix {
   def +(n: Double): Matrix
 
