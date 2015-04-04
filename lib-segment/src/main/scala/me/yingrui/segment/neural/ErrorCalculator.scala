@@ -15,7 +15,7 @@ class ErrorCalculator {
   }
 
   def updateError(actual: Matrix, ideal: Matrix) {
-    globalError += (ideal - actual).map(pow(_, 2D)).flatten.sum
+    globalError += (ideal - actual).map(pow(_, 2D)).sum
     setSize += actual.col
   }
 

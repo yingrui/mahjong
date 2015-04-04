@@ -12,7 +12,7 @@ class LBFGSTest {
 
     def valueAt(x: Matrix): Double = {
       currentX = x
-      x.flatten.map(x_i => x_i * x_i).sum
+      x.map(x_i => x_i * x_i).sum
     }
 
     def derivative: Matrix = currentX x 2

@@ -77,7 +77,7 @@ object Softmax {
 
     def activate(input: Matrix) = {
       val exp = input.map(x => Boundary(Math.exp(x - 10)))
-      val sum = exp.flatten.sum
+      val sum = exp.sum
       exp.map(i => i / sum)
     }
 

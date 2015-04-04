@@ -49,7 +49,7 @@ class SoftmaxRegressionTest extends FunSuite with Matchers {
       trainSet.map((data) => {
         val output: Matrix = layer.computeOutput(data._1)
         val expectedOutput: Matrix = data._2
-        cost -= (expectedOutput % output.map(ele => log(ele))).flatten.sum
+        cost -= (expectedOutput % output.map(ele => log(ele))).sum
         grad -= (data._1.T x (expectedOutput - output))
       })
 
@@ -99,7 +99,7 @@ class SoftmaxRegressionTest extends FunSuite with Matchers {
 
       val actualOutput: Matrix = classify(classifier, testInput)
 
-      if((expectedOutput - actualOutput).map(abs(_)).flatten.sum > 0)
+      if((expectedOutput - actualOutput).map(abs(_)).sum > 0)
         1.0D
       else
         0.0D

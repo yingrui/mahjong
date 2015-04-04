@@ -38,7 +38,7 @@ object NameEntityRecognitionTest extends App {
     val actual = network.computeOutput(input)
 
     val errorCalculator = new ErrorCalculator()
-    errorCalculator.updateError(actual.flatten, ideal.flatten)
+    errorCalculator.updateError(actual, ideal)
     if (errorCalculator.loss > 0.5) {
       errorCount += 1
     }
