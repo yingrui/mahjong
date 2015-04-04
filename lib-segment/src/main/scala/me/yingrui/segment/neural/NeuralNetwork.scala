@@ -1,7 +1,6 @@
 package me.yingrui.segment.neural
 
 import me.yingrui.segment.math.Matrix
-import me.yingrui.segment.neural.Layer
 import me.yingrui.segment.util.{FileUtil, SerializeHandler}
 
 class NeuralNetwork {
