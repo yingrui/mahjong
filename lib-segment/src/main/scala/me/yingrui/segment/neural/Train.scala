@@ -1,5 +1,7 @@
 package me.yingrui.segment.neural
 
+import java.lang.Math._
+
 import me.yingrui.segment.math.Matrix
 import collection.mutable.ListBuffer
 
@@ -19,8 +21,8 @@ trait Train {
     var correct = 0
     for (i <- 0 until inputArray.length) {
       val actual = getNetwork.computeOutput(inputArray(i))
-      val error = Matrix.arithmetic(actual.flatten, idealArray(i).flatten, (a, b) => Math.pow(a - b, 2D)).sum
-      val th = Math.pow(1.0 - 0.5, 2D)
+      val error = (actual - idealArray(i)).map(Eij => pow(Eij, 2D)).sum
+      val th = pow(1.0 - 0.5, 2D)
       if (error < th) {
         correct += 1
       }

@@ -6,7 +6,7 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
 
   def +(m: Matrix) = {
     assert(row == m.row && col == m.col)
-    new DenseMatrix(row, col, Matrix.arithmetic(flatten, m.flatten, (a, b) => a + b))
+    new DenseMatrix(row, col, arithmetic(flatten, m.flatten, (a, b) => a + b))
   }
 
   def +=(m: Matrix): Unit = {
@@ -18,7 +18,7 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
 
   def -(m: Matrix) = {
     assert(row == m.row && col == m.col)
-    new DenseMatrix(row, col, Matrix.arithmetic(flatten, m.flatten, (a, b) => a - b))
+    new DenseMatrix(row, col, arithmetic(flatten, m.flatten, (a, b) => a - b))
   }
 
   def -=(m: Matrix): Unit = {
@@ -37,7 +37,7 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     val result = Matrix(row, m.col)
     for (i <- 0 until row) {
       for (j <- 0 until m.col) {
-        result(i, j) = Matrix.arithmetic(row(i).flatten, m.col(j).flatten, (a, b) => a * b).sum
+        result(i, j) = arithmetic(row(i).flatten, m.col(j).flatten, (a, b) => a * b).sum
       }
     }
     result
@@ -45,12 +45,10 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
 
   def %(m: Matrix) = {
     assert(col == m.col && row == m.row)
-    Matrix(row, col, Matrix.arithmetic(flatten, m.flatten, (a, b) => a * b))
+    Matrix(row, col, arithmetic(flatten, m.flatten, (a, b) => a * b))
   }
 
-  def *(m: Matrix) = {
-    Matrix.arithmetic(flatten, m.flatten, (a, b) => a * b).sum
-  }
+  def *(m: Matrix) = arithmetic(flatten, m.flatten, (a, b) => a * b).sum
 
   def /(n: Double) = new DenseMatrix(row, col, data.map(_ / n))
 
@@ -64,9 +62,9 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     new DenseMatrix(col, row, inverse)
   }
 
-  def row(i: Int): Matrix = Matrix(for (index <- i * col until (i + 1) * col) yield data(index))
+  def row(i: Int): Matrix = new DenseMatrix(1, col, (for (index <- i * col until (i + 1) * col) yield data(index)).toArray)
 
-  def col(i: Int): Matrix = Matrix(for (index <- 0 until data.length; if (index % col == i)) yield data(index))
+  def col(i: Int): Matrix = new DenseMatrix(row, 1, (for (index <- 0 until data.length; if (index % col == i)) yield data(index)).toArray)
 
   def apply(i: Int, j: Int): Double = data(col * i + j)
 
@@ -94,22 +92,7 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
     row(i).flatten mkString ", "
   }) mkString "\n"
 
-  override def equals(that: Any): Boolean = {
-    that match {
-      case other: DenseMatrix => other != null && row == other.row && col == other.col && doubleArrayEquals(data, other.flatten)
-      case _ => false
-    }
-  }
+  private def arithmetic(data: Array[Double], other: Array[Double], op: (Double, Double) => Double): Array[Double] =
+    (for (i <- 0 until data.length) yield op(data(i), other(i))).toArray
 
-  private def doubleArrayEquals(data: Array[Double], other: Array[Double]): Boolean = {
-    if (data.length == other.length) {
-      val index = (0 until data.length).find(i => data(i) - other(i) > 0.000000001D || data(i) - other(i) < -0.000000001D)
-      index match {
-        case None => true
-        case _ => false
-      }
-    } else {
-      false
-    }
-  }
 }

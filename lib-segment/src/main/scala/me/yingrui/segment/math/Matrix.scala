@@ -52,14 +52,17 @@ trait Matrix {
 
 object Matrix {
 
-  private var matrixBuilder: MatrixBuilder = new DenseMatrixBuilder()
+  private var matrixBuilder: MatrixBuilder = defaultMatrixBuilder
+  //  private val defaultMatrixBuilder: MatrixBuilder = new DenseMatrixBuilder()
+  private val defaultMatrixBuilder: MatrixBuilder = new NDMatrixBuilder()
 
   def setMatrixBuilder(builder: MatrixBuilder) {
     matrixBuilder = builder
   }
 
-  def arithmetic(data: Array[Double], other: Array[Double], op: (Double, Double) => Double): Array[Double] =
-    (for (i <- 0 until data.length) yield op(data(i), other(i))).toArray
+  def restoreMatrixBuilder {
+    matrixBuilder = defaultMatrixBuilder
+  }
 
   def vector(d: Double*): Matrix = matrixBuilder.vector(d)
 
@@ -80,5 +83,27 @@ object Matrix {
   def randomize(row: Int, col: Int, min: Double, max: Double) = matrixBuilder.randomize(row, col, min, max)
 
   def randomize(row: Int, col: Int): Matrix = matrixBuilder.apply(row, col)
+
+
+  implicit class RichMatrix(matrix: Matrix) {
+
+    def equalsTo(other: Matrix): Boolean = equals(matrix, other)
+
+    private def equals(m: Matrix, n: Matrix): Boolean = {
+      m.row == n.row && m.col == n.col && doubleArrayEquals(m.flatten, n.flatten)
+    }
+
+    private def doubleArrayEquals(data: Array[Double], other: Array[Double]): Boolean = {
+      if (data.length == other.length) {
+        val index = (0 until data.length).find(i => data(i) - other(i) > 0.000000001D || data(i) - other(i) < -0.000000001D)
+        index match {
+          case None => true
+          case _ => false
+        }
+      } else {
+        false
+      }
+    }
+  }
 }
 

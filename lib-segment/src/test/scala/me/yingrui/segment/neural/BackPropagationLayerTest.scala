@@ -1,8 +1,9 @@
 package me.yingrui.segment.neural
 
-import org.junit.{Assert, Test}
-import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.Assertion.shouldBeEqual
+import me.yingrui.segment.math.Matrix
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 class BackPropagationLayerTest {
 
@@ -23,7 +24,7 @@ class BackPropagationLayerTest {
     layer.propagateError(Matrix(Array(-6D, -6D)))
     val expect = Matrix(3, 2, Array(-12D, -12D, -12D, -12D, -12D, -12D))
     println(layer.accumulateDelta)
-    Assert.assertTrue(expect == layer.accumulateDelta)
-    Assert.assertTrue(Matrix(Array(-6D, -6D)) == layer.accumulateBiasDelta)
+    assertTrue(expect equalsTo layer.accumulateDelta)
+    assertTrue(Matrix(Array(-6D, -6D)) equalsTo layer.accumulateBiasDelta)
   }
 }
