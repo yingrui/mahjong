@@ -2,9 +2,16 @@ package me.yingrui.segment.util
 
 object Logger {
 
-  val containsLogger = false
+  private val containsLogger = false
+  private var consoleOutput = false
 
-  val consoleOutput = false
+  def enableConsoleOutput {
+    consoleOutput = true
+  }
+
+  def disableConsoleOutput {
+    consoleOutput = false
+  }
 
   def debug(logger: String, message: String) {
     if (containsLogger) {
