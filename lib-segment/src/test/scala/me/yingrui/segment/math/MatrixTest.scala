@@ -106,7 +106,7 @@ class MatrixTest extends FunSuite with Matchers {
 
   test("should_return_mapped_matrix") {
     val m = Matrix(1,2, Array(2D, 2D))
-    val n = Matrix.map(m, d => d + 1D)
+    val n = m.map(d => d + 1D)
     shouldBeEqual(3D, n.flatten)
   }
 

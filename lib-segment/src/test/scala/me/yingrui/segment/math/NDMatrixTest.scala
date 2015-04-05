@@ -224,6 +224,12 @@ class NDMatrixTest extends FunSuite with Matchers {
     n(1, 1) should be (4D)
   }
 
+  test("map by given method") {
+    val m = Matrix(1,2, Array(2D, 2D))
+    val n = m.map(d => d + 1D)
+    n.flatten should be (Array(3D, 3D))
+  }
+
   private def verifyUpdateElements(m: Matrix) {
     for (i <- 0 until m.row; j <- 0 until m.col) {
       val value = new Random().nextDouble()

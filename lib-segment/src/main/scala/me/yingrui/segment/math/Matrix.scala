@@ -46,6 +46,8 @@ trait Matrix {
   def :=(other: Matrix): Unit
 
   def sum: Double
+
+  def map(compute: (Double) => Double): Matrix
 }
 
 object Matrix {
@@ -56,14 +58,8 @@ object Matrix {
     matrixBuilder = builder
   }
 
-  implicit class RichMatrix(matrix: Matrix) {
-    def map(compute: (Double) => Double): Matrix = Matrix.map(matrix, compute)
-  }
-
   def arithmetic(data: Array[Double], other: Array[Double], op: (Double, Double) => Double): Array[Double] =
     (for (i <- 0 until data.length) yield op(data(i), other(i))).toArray
-
-  def map(m: Matrix, compute: (Double) => Double): Matrix = apply(m.row, m.col, m.flatten.map(compute))
 
   def vector(d: Double*): Matrix = matrixBuilder.vector(d)
 

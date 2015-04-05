@@ -1,6 +1,7 @@
 package me.yingrui.segment.math
 
 import org.nd4j.linalg.api.ndarray.INDArray
+import org.nd4j.linalg.factory.Nd4j._
 
 class NDMatrix(val data: INDArray) extends Matrix {
 
@@ -56,5 +57,10 @@ class NDMatrix(val data: INDArray) extends Matrix {
   def clear: Unit = data.assign(0D)
 
   def :=(other: Matrix): Unit = data.assign(other.asInstanceOf[NDMatrix].data)
+
+  def map(compute: (Double) => Double): Matrix = {
+    val array = data.data().asDouble().map(compute)
+    new NDMatrix(create(array, data.shape(), data.stride(), data.offset()))
+  }
 
 }

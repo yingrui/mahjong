@@ -23,8 +23,8 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) extends Function {
 
     var regular = 0D
     val regularFuture = Future {
-      regular = Matrix.map(weights, x_i => x_i * x_i / 2 / sigmaSq).sum
-      derivative := corpus.occurrence - Matrix.map(weights, x_i => x_i / sigmaSq)
+      regular = weights.map(x_i => x_i * x_i / 2 / sigmaSq).sum
+      derivative := corpus.occurrence - weights.map(x_i => x_i / sigmaSq)
     }
 
     corpus.grouped

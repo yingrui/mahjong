@@ -86,6 +86,8 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
 
   def sum: Double = data.sum
 
+  def map(compute: (Double) => Double): Matrix = new DenseMatrix(row, col, data.map(compute))
+
   override def :=(other: Matrix): Unit = Array.copy(other.flatten, 0, data, 0, data.length)
 
   override def toString: String = (for (i <- 0 until row) yield {
