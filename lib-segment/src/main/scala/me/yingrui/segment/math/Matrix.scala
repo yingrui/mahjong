@@ -52,9 +52,9 @@ trait Matrix {
 
 object Matrix {
 
-  private var matrixBuilder: MatrixBuilder = defaultMatrixBuilder
-  //  private val defaultMatrixBuilder: MatrixBuilder = new DenseMatrixBuilder()
   private val defaultMatrixBuilder: MatrixBuilder = new NDMatrixBuilder()
+  //  private val defaultMatrixBuilder: MatrixBuilder = new DenseMatrixBuilder()
+  private var matrixBuilder: MatrixBuilder = defaultMatrixBuilder
 
   def setMatrixBuilder(builder: MatrixBuilder) {
     matrixBuilder = builder

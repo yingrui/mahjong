@@ -5,7 +5,7 @@ import me.yingrui.segment.crf._
 object CRFSerialLabelTest extends App {
 
   val train = true
-  val file = "./lib-segment-scala/training-100000.txt"
+  val file = "./lib-segment/training-100000.txt"
   val model = if (train) {
     val corpusForTrain = CRFCorpus(file)
     val m = CRFModel.build(corpusForTrain)
