@@ -30,18 +30,3 @@ class SingleLayer(val weight: Matrix, val activation: Activation, val bias: Matr
 object SigmoidLayer {
   def apply(weight: Matrix, bias: Matrix): Layer = new SingleLayer(weight, Sigmoid(), bias)
 }
-
-object SoftmaxLayer {
-
-  class BPSoftmaxLayer(var weight: Matrix, var bias: Matrix) extends BPLayer {
-
-    def layer = new SingleLayer(weight, Softmax(), bias, false)
-
-    def size = layer.size
-
-    def calculateDelta(actual: Matrix, error: Matrix): Matrix = error
-
-  }
-
-  def apply(weight: Matrix): BPLayer = new BPSoftmaxLayer(weight, Matrix(1, weight.col))
-}

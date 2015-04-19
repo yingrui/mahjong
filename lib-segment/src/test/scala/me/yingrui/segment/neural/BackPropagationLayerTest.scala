@@ -21,10 +21,11 @@ class BackPropagationLayerTest {
     val layer = new BPSigmoidLayer(Matrix(3, 2, Array(1D, 1D, 1D, 1D, 1D, 1D, 1D, 1D)), Matrix(Array(1D, 1D)))
     layer.accumulateDelta.clear
     layer.input := Matrix(Array(2D, 2D, 2D))
-    layer.propagateError(Matrix(Array(-6D, -6D)))
-    val expect = Matrix(3, 2, Array(-12D, -12D, -12D, -12D, -12D, -12D))
-    println(layer.accumulateDelta)
-    assertTrue(expect equalsTo layer.accumulateDelta)
-    assertTrue(Matrix(Array(-6D, -6D)) equalsTo layer.accumulateBiasDelta)
+    layer.output := Matrix(Array(0.9D, 0.9D))
+    layer.propagateError(Matrix(Array(-1D, -1D)))
+    val expectedAccumulateDelta = -0.17999999999999997D
+    val expectedAccumulateBiasDelta = -0.08999999999999998D
+    assertTrue(layer.accumulateDelta.flatten.forall(a => a == expectedAccumulateDelta))
+    assertTrue(layer.accumulateBiasDelta.flatten.forall(a => a == expectedAccumulateBiasDelta))
   }
 }
