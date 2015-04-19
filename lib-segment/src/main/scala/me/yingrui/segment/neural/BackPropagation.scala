@@ -86,10 +86,7 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
   def computeError(actual: Matrix, ideal: Matrix) {
     errorCalculator.updateError(actual, ideal)
 
-    val error = ideal - actual
-    val errorDelta = layers.last.calculateDelta(actual, error)
-
-    layers.foldRight(errorDelta)((layer, delta) => layer.propagateError(delta))
+    layers.foldRight(ideal - actual)((layer, error) => layer.propagateError(error))
   }
 
   private def initLayers {

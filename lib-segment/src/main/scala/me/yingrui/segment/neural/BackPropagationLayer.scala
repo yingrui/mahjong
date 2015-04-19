@@ -34,12 +34,14 @@ trait BPLayer extends BackPropagationLayer {
     output
   }
 
-  def propagateError(delta: Matrix): Matrix = {
+  def propagateError(err: Matrix): Matrix = {
+    val delta = calculateDelta(output, err)
+
     accumulateDelta += input.T x delta
     accumulateBiasDelta += delta.row(0)
     error := delta x weight.T
 
-    calculateDelta(input, error)
+    error
   }
 
   def update(rate: Double, momentum: Double) {
@@ -71,13 +73,11 @@ class BPSigmoidLayer(val weight: Matrix, val bias: Matrix) extends BPLayer {
 
   def size = layer.size
 
-  private def calculateDelta(err: Double, output: Double): Double = {
-    err * Sigmoid().getDerivative(output)
-  }
-
   def calculateDelta(actual: Matrix, error: Matrix): Matrix = {
     val delta = for (i <- 0 until error.col) yield {
-      calculateDelta(error(0, i), actual(0, i))
+      val err = error(0, i)
+      val output = actual(0, i)
+      err * Sigmoid().getDerivative(output)
     }
     Matrix(delta)
   }

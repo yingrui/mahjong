@@ -8,8 +8,6 @@ import me.yingrui.segment.neural._
 import me.yingrui.segment.util.Logger._
 import org.scalatest.{FunSuite, Matchers}
 
-import scala.io.Source
-
 class SigmoidSoftmaxMLPTest extends FunSuite with Matchers with WisconsinBreastCancerDataSet {
 
   private def train() = {
@@ -26,7 +24,6 @@ class SigmoidSoftmaxMLPTest extends FunSuite with Matchers with WisconsinBreastC
     val network = new BackPropagation(numberOfNeurons, numberOfClasses, 1.0, 0.0D, loss)
     network.addLayer(new BPSigmoidLayer(layer0Weight, layer0Bias))
     network.addLayer(SoftmaxLayer(layer1Weight))
-
 
     def takeARound(trainSet: Seq[(Matrix, Matrix)]): Double = {
       trainSet.foreach(data => {
@@ -68,10 +65,7 @@ class SigmoidSoftmaxMLPTest extends FunSuite with Matchers with WisconsinBreastC
   }
 
   test("train mlp classifier") {
-    val accuracy = trainAndTest
-    if (accuracy < 0.92) {
-      trainAndTest should be > 0.92
-    }
+    trainAndTest should be > 0.92
   }
 
   def trainAndTest = {

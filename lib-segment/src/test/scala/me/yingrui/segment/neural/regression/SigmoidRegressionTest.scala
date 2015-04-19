@@ -8,8 +8,6 @@ import me.yingrui.segment.neural.errors.RMSLoss
 import me.yingrui.segment.util.Logger
 import org.scalatest.{BeforeAndAfter, FunSuite, Matchers}
 
-import scala.io.Source
-
 class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter with WisconsinBreastCancerDataSet {
 
   private def train = {
@@ -30,8 +28,8 @@ class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter w
         val output: Matrix = layer.computeOutput(data._1)
         val expectedOutput: Matrix = data._2
         error.updateError(output, expectedOutput)
-        val delta = layer.calculateDelta(output, expectedOutput - output)
-        layer.propagateError(delta)
+        val err = expectedOutput - output
+        layer.propagateError(err)
         layer.update(1.0D, 0.0D)
       })
 
