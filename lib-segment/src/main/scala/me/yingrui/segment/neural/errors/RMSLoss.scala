@@ -1,13 +1,17 @@
-package me.yingrui.segment.neural
+package me.yingrui.segment.neural.errors
 
-import java.lang.Math.pow
-
+import java.lang.Math._
 import me.yingrui.segment.math.Matrix
 
-class ErrorCalculator {
+class RMSLoss extends Loss {
 
   private var setSize = 0D
   private var globalError = 0D
+
+  def clear: Unit = {
+    setSize = 0D
+    globalError = 0D
+  }
 
   def updateError(actual: Matrix, ideal: Matrix) {
     globalError += (ideal - actual).map(pow(_, 2D)).sum
@@ -18,3 +22,4 @@ class ErrorCalculator {
 
   def loss = getRootMeanSquare
 }
+

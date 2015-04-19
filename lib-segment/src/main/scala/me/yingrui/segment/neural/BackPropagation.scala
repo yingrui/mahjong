@@ -1,21 +1,23 @@
 package me.yingrui.segment.neural
 
 import me.yingrui.segment.math.Matrix
+import me.yingrui.segment.neural.errors.RMSLoss
+import me.yingrui.segment.neural.errors.Loss
+import me.yingrui.segment.util.Logger._
 
 object BackPropagation {
-  def apply(inputSize: Int, outputSize: Int, rate: Double, momentum: Double): BackPropagation = new BackPropagation(inputSize, outputSize, rate, momentum)
+
+  def apply(inputSize: Int, outputSize: Int, rate: Double, momentum: Double): BackPropagation = new BackPropagation(inputSize, outputSize, rate, momentum, new RMSLoss)
 
   def apply(inputSize: Int, outputSize: Int): BackPropagation = {
-    new BackPropagation(inputSize, outputSize, 1.0D, 0.0D)
+    new BackPropagation(inputSize, outputSize, 1.0D, 0.0D, new RMSLoss)
   }
-
-  var debug: Boolean = false
 }
 
-class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double, val momentum: Double) extends Train {
+class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double, val momentum: Double, val errorCalculator: Loss) extends Train {
 
-  private var error = 0D
-  private var network = new NeuralNetwork()
+  private var loss = 0D
+  private val network = new NeuralNetwork()
   private var layers = List[BackPropagationLayer]()
   private var neuronSizePerLayer = List[Int](inputSize)
 
@@ -30,9 +32,20 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
     neuronSizePerLayer = neuronSizePerLayer ++ List(neuronSize)
   }
 
-  def getError = error
+  def addLayer(layer: BackPropagationLayer) {
+    layers :+= layer
+    network add layer
+  }
+
+  def computeOutput(input: Matrix): Matrix = network.computeOutput(input)
+
+  def getLoss = errorCalculator.loss
 
   def getNetwork = network
+
+  def update() {
+    layers.foreach(_.update(rate, momentum))
+  }
 
   def takeARound(iteration: Int): Unit = {
     initLayers
@@ -40,17 +53,17 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
     for (it <- 1 to iteration) {
       val outputs = for (i <- 0 until inputArray.length) yield {
-        val output = network.computeOutput(inputArray(i))
+        val output = computeOutput(inputArray(i))
         computeError(output, idealArray(i))
-        layers.foreach(_.update(rate, momentum))
+        update()
         output
       }
-      error = recalculateError(outputs)
-      if (BackPropagation.debug && it % 100 == 0) {
+      loss = recalculateError(outputs)
+      if (it % 100 == 0) {
         if(iteration-it == 100) {
-          println("Cycles Left: " + (iteration - it) + ", Error: " + error);
+          debug("Cycles Left: " + (iteration - it) + ", Error: " + loss);
         }
-        println("Cycles Left: " + (iteration - it) + ", Error: " + error);
+        debug("Cycles Left: " + (iteration - it) + ", Error: " + loss);
       }
     }
   }
@@ -59,7 +72,7 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
     val network = new NeuralNetwork
     layers.foreach(network.add)
 
-    val errorCalculator = new ErrorCalculator
+    errorCalculator.clear
     var i = 0
     while(i < idealArray.length) {
       val actual = outputs(i)
@@ -71,6 +84,8 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
   }
 
   def computeError(actual: Matrix, ideal: Matrix) {
+    errorCalculator.updateError(actual, ideal)
+
     val error = ideal - actual
     val errorDelta = layers.last.calculateDelta(actual, error)
 
@@ -84,7 +99,6 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
         layers = layers ++ List(BackPropagationLayer(neuronSizePerLayer(i - 1), neuronSizePerLayer(i)))
       }
 
-      network = new NeuralNetwork
       layers.foreach(bp => network.add(bp))
     }
   }

@@ -1,36 +1,16 @@
 package me.yingrui.segment.neural.regression
 
-import java.lang.Math.{abs, log}
-import java.util.Date
+import java.lang.Math.abs
 
-import org.scalatest.{FunSuite, Matchers}
 import me.yingrui.segment.math.Matrix
-import me.yingrui.segment.neural.{Layer, BPLayer, SoftmaxLayer}
+import me.yingrui.segment.neural.errors.CrossEntropyLoss
+import me.yingrui.segment.neural.{WisconsinBreastCancerDataSet, Layer, SoftmaxLayer}
 import me.yingrui.segment.util.Logger._
+import org.scalatest.{FunSuite, Matchers}
 
 import scala.io.Source
 
-class SoftmaxRegressionTest extends FunSuite with Matchers {
-
-  val trainDataSet = loadData("train")
-  val testDataSet = loadData("test")
-
-  private def loadData(dataSet: String) = {
-    val classLoader = getClass.getClassLoader()
-    val inputSource = Source.fromURL(classLoader.getResource(s"wisconsin-breast-cancer/${dataSet}X.txt"))
-    val outputSource = Source.fromURL(classLoader.getResource(s"wisconsin-breast-cancer/${dataSet}Y.txt"))
-
-    val inputs = inputSource.getLines().map(line => Matrix(line.split("\\s+").map(_.toDouble))).toArray
-
-    val outputs = outputSource.getLines().map(result =>
-      if(result.toDouble > 0.0D)
-        Matrix(Array(0.0D, 1.0D))
-      else
-        Matrix(Array(1.0D, 0.0D))
-    ).toArray
-
-    (0 until inputs.length).map(i => (inputs(i), outputs(i)))
-  }
+class SoftmaxRegressionTest extends FunSuite with Matchers with WisconsinBreastCancerDataSet {
 
   private def train = {
     val numberOfClasses = 2
@@ -40,30 +20,28 @@ class SoftmaxRegressionTest extends FunSuite with Matchers {
     val weight = Matrix.randomize(numberOfFeatures, numberOfClasses, -1D, 1D)
     var cost = 0D
 
-    def calculateGrad(trainSet: Seq[(Matrix, Matrix)], weight: Matrix): Matrix = {
-      val numberOfSamples = trainSet.size
+    def calculateGrad(trainSet: Seq[(Matrix, Matrix)], weight: Matrix) {
+      val error = new CrossEntropyLoss()
       val layer = SoftmaxLayer(weight)
 
-      val grad = Matrix(numberOfFeatures, numberOfClasses)
-
-      trainSet.map((data) => {
+      trainSet.foreach(data => {
         val output: Matrix = layer.computeOutput(data._1)
         val expectedOutput: Matrix = data._2
-        cost -= (expectedOutput % output.map(ele => log(ele))).sum
-        grad -= (data._1.T x (expectedOutput - output))
+        error.updateError(output, expectedOutput)
+        val delta = layer.calculateDelta(output, expectedOutput - output)
+        layer.propagateError(delta)
+        layer.update(1.0D, 0.0D)
       })
 
-      cost /= numberOfSamples.toDouble
-      grad x (1.0D / numberOfSamples.toDouble)
+      cost = error.loss
     }
 
     var iteration = 0
     var lastCost = 0.0D
     var hasImprovement = true
     while (iteration < 100000 && hasImprovement) {
-      val grad = calculateGrad(trainDataSet, weight)
+      calculateGrad(trainDataSet, weight)
       debug(s"iter: ${iteration} cost: ${cost}")
-      weight -= (grad x 1.0)
       hasImprovement = abs(cost - lastCost) > 1e-5
 
       lastCost = cost

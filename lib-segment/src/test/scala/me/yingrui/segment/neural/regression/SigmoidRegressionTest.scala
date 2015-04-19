@@ -4,32 +4,13 @@ import java.lang.Math.abs
 
 import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural._
+import me.yingrui.segment.neural.errors.RMSLoss
 import me.yingrui.segment.util.Logger
 import org.scalatest.{BeforeAndAfter, FunSuite, Matchers}
 
 import scala.io.Source
 
-class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter {
-
-  val trainDataSet = loadData("train")
-  val testDataSet = loadData("test")
-
-  private def loadData(dataSet: String) = {
-    val classLoader = getClass.getClassLoader()
-    val inputSource = Source.fromURL(classLoader.getResource(s"wisconsin-breast-cancer/${dataSet}X.txt"))
-    val outputSource = Source.fromURL(classLoader.getResource(s"wisconsin-breast-cancer/${dataSet}Y.txt"))
-
-    val inputs = inputSource.getLines().map(line => Matrix(line.split("\\s+").map(_.toDouble))).toArray
-
-    val outputs = outputSource.getLines().map(result =>
-      if(result.toDouble > 0.0D)
-        Matrix(Array(0.0D, 1.0D))
-      else
-        Matrix(Array(1.0D, 0.0D))
-    ).toArray
-
-    (0 until inputs.length).map(i => (inputs(i), outputs(i)))
-  }
+class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter with WisconsinBreastCancerDataSet {
 
   private def train = {
     val numberOfClasses = 2
@@ -41,11 +22,11 @@ class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter {
     var cost = 0D
 
     def calculateGrad(trainSet: Seq[(Matrix, Matrix)], weight: Matrix, bias: Matrix): Unit = {
-      val error = new ErrorCalculator()
+      val error = new RMSLoss()
 
       val layer = new BPSigmoidLayer(weight, bias)
 
-      trainSet.map((data) => {
+      trainSet.foreach(data => {
         val output: Matrix = layer.computeOutput(data._1)
         val expectedOutput: Matrix = data._2
         error.updateError(output, expectedOutput)
@@ -84,7 +65,7 @@ class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter {
     actualOutput
   }
 
-  test("train softmax classifier") {
+  test("train sigmoid classifier") {
     val tic = System.currentTimeMillis()
     println("train set contains " + trainDataSet.size + " samples, test set contains " + testDataSet.size + " samples.")
 

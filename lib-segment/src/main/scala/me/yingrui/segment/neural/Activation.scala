@@ -70,10 +70,10 @@ object Softmax {
   class Softmax extends Activation {
 
     def activate(input: Double) = {
-      0D
+      throw new UnsupportedOperationException()
     }
 
-    def getDerivative(input: Double) = 0D
+    def getDerivative(input: Double) = throw new UnsupportedOperationException()
 
     def activate(input: Matrix) = {
       val exp = input.map(x => Boundary(Math.exp(x - 10)))

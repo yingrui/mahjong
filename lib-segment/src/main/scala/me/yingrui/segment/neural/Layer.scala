@@ -39,7 +39,7 @@ object SoftmaxLayer {
 
     def size = layer.size
 
-    def calculateDelta(actual: Matrix, error: Matrix): Matrix = input.T x error
+    def calculateDelta(actual: Matrix, error: Matrix): Matrix = error
 
   }
 

@@ -3,12 +3,11 @@ package me.yingrui.segment.neural
 import org.junit.{Assert, Test}
 import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.Assertion
+import org.scalatest.{Matchers, FunSuite}
 
-class BackPropagationTest {
+class BackPropagationTest extends FunSuite with Matchers {
 
-  @Test
-  def should_train_a_xor_classifier {
-    BackPropagation.debug = true;
+  test("should train a xor classifier") {
     val trainer = createBackPropagationTrainer
     trainer.addLayer(3)
 

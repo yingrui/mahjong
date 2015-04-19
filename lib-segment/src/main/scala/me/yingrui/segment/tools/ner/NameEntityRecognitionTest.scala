@@ -2,6 +2,7 @@ package me.yingrui.segment.tools.ner
 
 import me.yingrui.segment.neural._
 import me.yingrui.segment.math.Matrix
+import me.yingrui.segment.neural.errors.RMSLoss
 
 object NameEntityRecognitionTest extends App {
 
@@ -37,7 +38,7 @@ object NameEntityRecognitionTest extends App {
     val ideal = if (array(6) > 0.0) Matrix(Array(1.0, 0.0)) else Matrix(Array(0.0, 1.0))
     val actual = network.computeOutput(input)
 
-    val errorCalculator = new ErrorCalculator()
+    val errorCalculator = new RMSLoss()
     errorCalculator.updateError(actual, ideal)
     if (errorCalculator.loss > 0.5) {
       errorCount += 1

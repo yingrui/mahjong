@@ -11,7 +11,7 @@ trait Train {
 
   def addSample(input: Matrix, ideal: Matrix)
 
-  def getError: Double
+  def getLoss: Double
 
   def getNetwork: NeuralNetwork
 
