@@ -167,6 +167,9 @@ class NDMatrixTest extends FunSuite with Matchers {
     x(0, 1) should be (10D)
     x(1, 0) should be (15D)
     x(1, 1) should be (22D)
+
+    val y = m.row(0) x m.row(0).T
+    y(0, 0) should be (5D)
   }
 
   test("mul : matrix % matrix -> matrix") {
@@ -191,6 +194,15 @@ class NDMatrixTest extends FunSuite with Matchers {
     t(0, 1) should be (3D)
     t(1, 0) should be (2D)
     t(1, 1) should be (4D)
+
+    m(0, 0) should be (1D)
+    m(0, 1) should be (2D)
+    m(1, 0) should be (3D)
+    m(1, 1) should be (4D)
+
+    val t1 = m.row(0).T
+    t1(0, 0) should be (1D)
+    t1(1, 0) should be (2D)
   }
 
   test("isVector : m.row") {

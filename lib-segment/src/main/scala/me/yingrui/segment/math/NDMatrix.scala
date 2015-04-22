@@ -15,13 +15,15 @@ class NDMatrix(val data: INDArray) extends Matrix {
   def update(i: Int, j: Int, value: Double) = data.data().put(data.offset() + j * row + i, value)
 
   def flatten: Array[Double] = {
-    if (data.data().length() == row * col)
+    if (isDataSizeMatchShape)
       data.data().asDouble()
     else
       (for (i <- 0 until row) yield {
         for (j <- 0 until col) yield data.getDouble(i, j)
       }).flatten.toArray
   }
+
+  private def isDataSizeMatchShape: Boolean = data.data().length() == row * col
 
   def sum: Double = flatten.sum
 
@@ -48,7 +50,12 @@ class NDMatrix(val data: INDArray) extends Matrix {
 
   def /(n: Double): Matrix = new NDMatrix(data.div(n))
 
-  def T: Matrix = new NDMatrix(data.transpose())
+  def T: Matrix = new NDMatrix(
+    if(isDataSizeMatchShape)
+      data.transpose()
+    else
+      create(this.flatten, Array(row, col)).transpose()
+  )
 
   def isVector: Boolean = data.isRowVector
 
