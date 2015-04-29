@@ -82,7 +82,7 @@ object Matrix {
 
   def randomize(row: Int, col: Int, min: Double, max: Double) = matrixBuilder.randomize(row, col, min, max)
 
-  def randomize(row: Int, col: Int): Matrix = matrixBuilder.apply(row, col)
+  def randomize(row: Int, col: Int): Matrix = matrixBuilder.randomize(row, col, 1e-4D, 0.1D)
 
 
   implicit class RichMatrix(matrix: Matrix) {

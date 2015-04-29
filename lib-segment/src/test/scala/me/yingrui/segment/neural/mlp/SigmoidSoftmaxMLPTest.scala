@@ -26,6 +26,7 @@ class SigmoidSoftmaxMLPTest extends FunSuite with Matchers with WisconsinBreastC
     network.addLayer(SoftmaxLayer(layer1Weight))
 
     def takeARound(trainSet: Seq[(Matrix, Matrix)]): Double = {
+      network.errorCalculator.clear
       trainSet.foreach(data => {
         val output: Matrix = network.computeOutput(data._1)
         val expectedOutput: Matrix = data._2

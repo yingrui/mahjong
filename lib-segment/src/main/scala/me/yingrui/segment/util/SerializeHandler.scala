@@ -284,8 +284,17 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
     output.flush()
   }
 
+  def serializeLong(i: Long) {
+    output.writeLong(i)
+    output.flush()
+  }
+
   def deserializeInt(): Int = {
     return input.readInt()
+  }
+
+  def deserializeLong(): Long = {
+    return input.readLong()
   }
 
   def serializeString(str: String) {

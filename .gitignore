@@ -5,4 +5,4 @@ idea-boardy-support
 target
 test_index_dir
 **/*.m
-text8.txt
+text?.txt
