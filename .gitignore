@@ -5,4 +5,6 @@ idea-boardy-support
 target
 test_index_dir
 **/*.m
+text?
 text?.txt
+text?.zip

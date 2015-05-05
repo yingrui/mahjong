@@ -1,18 +1,20 @@
 package me.yingrui.segment.word2vec
 
 import java.io.{File, FileInputStream, InputStreamReader}
-import java.lang.Math._
 
 import me.yingrui.segment.math.Matrix
-import me.yingrui.segment.neural.{BPSigmoidLayer, SoftmaxLayer, BPSimpleRecurrentLayer, BackPropagation}
-import me.yingrui.segment.neural.errors.{RMSLoss, CrossEntropyLoss}
-import me.yingrui.segment.util.SerializeHandler
+import me.yingrui.segment.neural.errors.CrossEntropyLoss
+import me.yingrui.segment.neural.{BPSimpleRecurrentLayer, BackPropagation, SoftmaxLayer}
 import me.yingrui.segment.util.Logger._
+import me.yingrui.segment.util.SerializeHandler
+
+import scala.util.Random
+import Math.abs
 
 object Word2VecTrainingApp extends App {
 
   println("WORD VECTOR estimation toolkit")
-  private val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "text8.txt"
+  private val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "text8"
   private val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   private val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 100
   private val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 5
@@ -27,28 +29,36 @@ object Word2VecTrainingApp extends App {
   private val vocab = readVocabulary
   println(s"Vocabulary has ${vocab.size} words and total word count is ${vocab.getTotalWordCount}")
 
-  private val word2VecBuilder = new Word2VecTrainingNetworkBuilder(vocab, vecSize)
-  private val network = word2VecBuilder.initNetwork
+//  private val network: Word2VecNetwork = new Word2VecTrainingNetworkBuilder(vocab, vecSize).buildNetwork
+  private val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
+
+  val random = new Random()
 
   def takeARound(): Double = {
-    network.errorCalculator.clear
+    network.clearError
     val reader = new InputStreamReader(new FileInputStream(trainFile))
 
     val wordReader = new WordReader(reader, window)
     var words = wordReader.readWindow()
+    var count = 0
     while (!words.isEmpty) {
-      val input = Matrix(1, vocab.size)
-      val expectedOutput = Matrix(1, vocab.size)
-      words.foreach(w => input(0, vocab.getIndex(w)) = 1D)
-      expectedOutput(0, vocab.getIndex(words(window))) = 1D
+      val input = words.map(w => vocab.getIndex(w))
+      val output = new Array[(Int, Int)](25)
+      val wordIndex = vocab.getIndex(words(window))
+      output(0) = (wordIndex, 1)
+      for(i <- 1 until 25) {
+        var index = random.nextInt(vocab.size)
+        if(index == wordIndex) index = random.nextInt(vocab.size)
+        output(i) = (index, 0)
+      }
 
-      val output = network.computeOutput(input)
-      network.computeError(output, expectedOutput)
-      network.update()
+      network.learn(input.toArray, output)
 
       words = wordReader.readWindow()
+      count += 1
+      if(count % 1000 == 0) print(s"progress: $count/${vocab.getTotalWordCount}\r")
     }
-
+    println()
     reader.close()
     network.getLoss
   }
@@ -67,18 +77,17 @@ object Word2VecTrainingApp extends App {
     iteration += 1
   }
 
-  network.getNetwork
-
   private val writer = SerializeHandler(new File(saveFile), SerializeHandler.WRITE_ONLY)
   vocab.save(writer)
-  writer.serializeMatrix(network.getNetwork.layers.head.weight)
+  writer.serialize2DArrayDouble(network.wordVector)
 }
 
 class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
 
+  val ALPHA = 0.1D
   val loss = new CrossEntropyLoss
 //  val loss = new RMSLoss
-  val network = new BackPropagation(vocab.size, vocab.size, 0.1D, 0.0D, loss)
+  val network = new BackPropagation(vocab.size, vocab.size, ALPHA, 0.0D, loss)
 
   def initNetwork: BackPropagation = {
     val layer0Weight = Matrix.randomize(vocab.size, vecSize)
@@ -92,5 +101,41 @@ class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
     network.addLayer(recurrentHiddenLayer)
     network.addLayer(outputLayer)
     network
+  }
+
+  def buildNetwork = {
+    class SimpleWord2VecNetwork extends Word2VecNetwork {
+      val alpha = ALPHA
+      val network = initNetwork
+      val wordsCount = vocab.size
+      val size = vecSize
+      val wordVector = matrixTo2DArray(network.getNetwork.layers.head.weight)
+
+      def learn(input: Array[Int], output: Array[(Int, Int)]): Unit = {
+        val in = Matrix(1, vocab.size)
+        val expectedOutput = Matrix(1, vocab.size)
+
+        input.foreach(w => in(0, w) = 1D)
+        output.foreach(t => expectedOutput(0, t._1) = t._2.toDouble)
+
+        val out = network.computeOutput(in)
+        network.computeError(out, expectedOutput)
+        network.update()
+      }
+
+      def clearError = loss.clear
+
+      def getLoss = loss.loss
+
+      private def matrixTo2DArray(m: Matrix): Array[Array[Double]] = {
+        val arrays = new Array[Array[Double]](m.row)
+        for(i <- 0 until m.row) {
+          arrays(i) = m.row(i).flatten
+        }
+        arrays
+      }
+    }
+
+    new SimpleWord2VecNetwork()
   }
 }
