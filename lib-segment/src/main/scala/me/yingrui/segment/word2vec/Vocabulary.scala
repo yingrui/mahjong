@@ -22,20 +22,36 @@ class Vocabulary(private val wordIndexMap: util.Map[String, Int],
     ""
   }
 
-  def add(word: String): Unit = {
-    totalWordCount += 1
+  def add(word: String): Unit = add(word, 1)
+
+  private def add(word: String, count: Int): Unit = {
+    totalWordCount += count
     if (!wordIndexMap.containsKey(word)) {
       wordIndexMap.put(word, wordCount.size)
-      wordCount += 1
+      wordCount += count
     } else {
       val wordIndex = wordIndexMap.get(word)
-      wordCount(wordIndex) += 1
+      wordCount(wordIndex) += count
     }
   }
 
   def getCount(word: String): Int = if (wordIndexMap.containsKey(word)) wordCount(wordIndexMap.get(word)) else 0
 
   def getIndex(word: String): Int = wordIndexMap.get(word)
+
+  def rebuild(minCount: Int): Unit = {
+    val temp = Vocabulary.apply()
+    for(word <- wordIndexMap.keySet().toArray(new Array[String](0))) {
+      val count = getCount(word)
+      if(count >= minCount) temp.add(word, count)
+    }
+
+    this.wordIndexMap.clear()
+    this.wordIndexMap.putAll(temp.wordIndexMap)
+    this.wordCount.clear()
+    this.wordCount.appendAll(temp.wordCount)
+    this.totalWordCount = temp.totalWordCount
+  }
 
 }
 

@@ -44,4 +44,17 @@ class VocabularyTest extends FunSuite with Matchers {
     index should be (0)
   }
 
+  test("should remove words when frequency less than 5") {
+    val vocab = Vocabulary()
+    for(i <- 0 until 5) vocab.add("word1")
+    vocab.add("word2")
+
+    vocab.rebuild(5)
+
+    vocab.getIndex("word2") should be (0)
+    vocab.getIndex("word1") should be (1)
+    vocab.getCount("word1") should be (5)
+    vocab.getTotalWordCount should be (5)
+  }
+
 }

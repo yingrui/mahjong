@@ -24,12 +24,14 @@ object Word2VecTrainingApp extends App {
     val wordReader = new WordReader(reader, window)
     val vocab = Vocabulary(wordReader)
     reader.close()
+    vocab.rebuild(5)
     vocab
   }
+
   private val vocab = readVocabulary
   println(s"Vocabulary has ${vocab.size} words and total word count is ${vocab.getTotalWordCount}")
 
-//  private val network: Word2VecNetwork = new Word2VecTrainingNetworkBuilder(vocab, vecSize).buildNetwork
+  //  private val network: Word2VecNetwork = new Word2VecTrainingNetworkBuilder(vocab, vecSize).buildNetwork
   private val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
 
   val random = new Random()
@@ -42,21 +44,23 @@ object Word2VecTrainingApp extends App {
     var words = wordReader.readWindow()
     var count = 0
     while (!words.isEmpty) {
-      val input = words.map(w => vocab.getIndex(w))
-      val output = new Array[(Int, Int)](25)
       val wordIndex = vocab.getIndex(words(window))
-      output(0) = (wordIndex, 1)
-      for(i <- 1 until 25) {
-        var index = random.nextInt(vocab.size)
-        if(index == wordIndex) index = random.nextInt(vocab.size)
-        output(i) = (index, 0)
+      if (wordIndex > 0) {
+        val input = words.map(w => vocab.getIndex(w))
+        val output = new Array[(Int, Int)](25)
+        output(0) = (wordIndex, 1)
+        for (i <- 1 until 25) {
+          var index = random.nextInt(vocab.size)
+          if (index == wordIndex) index = random.nextInt(vocab.size)
+          output(i) = (index, 0)
+        }
+
+        network.learn(input.toArray, output)
+
+        count += 1
+        if (count % 1000 == 0) print(s"progress: $count/${vocab.getTotalWordCount}\r")
       }
-
-      network.learn(input.toArray, output)
-
       words = wordReader.readWindow()
-      count += 1
-      if(count % 1000 == 0) print(s"progress: $count/${vocab.getTotalWordCount}\r")
     }
     println()
     reader.close()
@@ -86,7 +90,7 @@ class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
 
   val ALPHA = 0.1D
   val loss = new CrossEntropyLoss
-//  val loss = new RMSLoss
+  //  val loss = new RMSLoss
   val network = new BackPropagation(vocab.size, vocab.size, ALPHA, 0.0D, loss)
 
   def initNetwork: BackPropagation = {
@@ -95,7 +99,7 @@ class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
     val layer1Weight = Matrix.randomize(vecSize, vocab.size)
     val layer1Bias = Matrix.randomize(1, vocab.size)
     val recurrentHiddenLayer = new BPSimpleRecurrentLayer(layer0Weight, layer0Bias)
-//    val outputLayer = new BPSigmoidLayer(layer1Weight, layer1Bias)
+    //    val outputLayer = new BPSigmoidLayer(layer1Weight, layer1Bias)
     val outputLayer = SoftmaxLayer(layer1Weight)
 
     network.addLayer(recurrentHiddenLayer)
@@ -129,7 +133,7 @@ class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
 
       private def matrixTo2DArray(m: Matrix): Array[Array[Double]] = {
         val arrays = new Array[Array[Double]](m.row)
-        for(i <- 0 until m.row) {
+        for (i <- 0 until m.row) {
           arrays(i) = m.row(i).flatten
         }
         arrays

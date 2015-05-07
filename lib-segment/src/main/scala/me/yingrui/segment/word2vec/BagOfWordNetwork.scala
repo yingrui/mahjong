@@ -57,10 +57,12 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
 
   def computeLayer0Output(input: Array[Int]): Array[Double] = {
     for(wordIndex <- input) {
-      val wordVec = wordVector(wordIndex)
-      for(i <- 0 until size) layer0Output(i) += wordVec(i)
+      if(wordIndex != 0) {
+        val wordVec = wordVector(wordIndex)
+        for(i <- 0 until size) layer0Output(i) += wordVec(i)
+      }
     }
-    val inputWordCount = input.length.toDouble
+    val inputWordCount = input.filter(index => index > 0).length.toDouble
     for(i <- 0 until size) layer0Output(i) /= inputWordCount
     layer0Output
   }
