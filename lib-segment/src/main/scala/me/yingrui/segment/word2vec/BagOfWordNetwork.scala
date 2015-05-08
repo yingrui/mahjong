@@ -18,7 +18,7 @@ object BagOfWordNetwork {
   }
 
   private def randomArray(size: Int): Array[Double] = {
-    (for(i <- 0 until size) yield random.nextDouble() * 1E-1).toArray
+    (for(i <- 0 until size) yield random.nextDouble() * 1E-4).toArray
   }
 
   def apply(wordsCount: Int, size: Int): BagOfWordNetwork = {
@@ -33,14 +33,14 @@ object BagOfWordNetwork {
 class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array[Array[Double]], val layer1Weights: Array[Array[Double]]) extends Word2VecNetwork {
 
   val layer0Output = new Array[Double](size)
-  val alpha = 0.1D
+  val alpha = 0.001D
 
   var loss = 0D
   var learningTimes = 0D
 
   def learn(input: Array[Int], output: Array[(Int, Int)]): Unit = {
 
-    computeLayer0Output(input)
+    computeLayer0Output(input.filter(wordIndex => wordIndex > 0))
     val grads = computeLayer1Grads(layer0Output, output)
     val errors = updateLayer1WeightsAndPropagateErrors(grads, layer0Output)
     updateLayer0Weights(errors, output.map(t => t._1))
@@ -56,14 +56,12 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
   def getLoss = sqrt(loss / learningTimes)
 
   def computeLayer0Output(input: Array[Int]): Array[Double] = {
+    for(i <- 0 until size) layer0Output(i) = 0D
     for(wordIndex <- input) {
-      if(wordIndex != 0) {
-        val wordVec = wordVector(wordIndex)
-        for(i <- 0 until size) layer0Output(i) += wordVec(i)
-      }
+      for(i <- 0 until size) layer0Output(i) += wordVector(wordIndex)(i)
     }
-    val inputWordCount = input.filter(index => index > 0).length.toDouble
-    for(i <- 0 until size) layer0Output(i) /= inputWordCount
+    val inputWordCount = input.length
+    for(i <- 0 until size) layer0Output(i) /= inputWordCount.toDouble
     layer0Output
   }
 

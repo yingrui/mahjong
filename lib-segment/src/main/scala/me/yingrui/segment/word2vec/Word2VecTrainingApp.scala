@@ -14,7 +14,7 @@ import Math.abs
 object Word2VecTrainingApp extends App {
 
   println("WORD VECTOR estimation toolkit")
-  private val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "text8"
+  private val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "text9.txt"
   private val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   private val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 100
   private val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 5
@@ -31,7 +31,7 @@ object Word2VecTrainingApp extends App {
   private val vocab = readVocabulary
   println(s"Vocabulary has ${vocab.size} words and total word count is ${vocab.getTotalWordCount}")
 
-  //  private val network: Word2VecNetwork = new Word2VecTrainingNetworkBuilder(vocab, vecSize).buildNetwork
+//    private val network: Word2VecNetwork = new Word2VecTrainingNetworkBuilder(vocab, vecSize).buildNetwork
   private val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
 
   val random = new Random()
@@ -47,15 +47,18 @@ object Word2VecTrainingApp extends App {
       val wordIndex = vocab.getIndex(words(window))
       if (wordIndex > 0) {
         val input = words.map(w => vocab.getIndex(w))
-        val output = new Array[(Int, Int)](25)
+
+        val output = new Array[(Int, Int)](50)
         output(0) = (wordIndex, 1)
-        for (i <- 1 until 25) {
+        for (i <- 1 until 50) {
           var index = random.nextInt(vocab.size)
           if (index == wordIndex) index = random.nextInt(vocab.size)
           output(i) = (index, 0)
         }
 
-        network.learn(input.toArray, output)
+        val inputArray = input.toArray
+        inputArray(window) = 0
+        network.learn(input.filter(in => in > 0).toArray, output)
 
         count += 1
         if (count % 1000 == 0) print(s"progress: $count/${vocab.getTotalWordCount}\r")

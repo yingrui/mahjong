@@ -17,20 +17,21 @@ object Word2VecDemo extends App {
   println(s"matrix shape(${matrix.row}, ${matrix.col})")
 
   val E = Matrix(matrix.col, 1).map(x => 1D)
-  val A = matrix.map(ele => ele * ele) x E
+  val A = (matrix.map(ele => ele * ele) x E).map(ele => sqrt(ele))
 
   def findSimWords(vector: Matrix, B: Double): List[(String, Double)] = {
     var result = List[(String, Double)]()
     for (j <- 1 until vector.row) {
-      val cosine = vector(j, 0) / (sqrt(A(j, 0)) * sqrt(B))
+      val cosine = vector(j, 0) / (A(j, 0) * B)
       result :+= (vocab.getWord(j), cosine)
     }
     result.sortBy(t => t._2).reverse.take(5)
   }
 
+  println("please input word to find its similar words (type QUIT to break)")
   val inputReader = new BufferedReader(new InputStreamReader(System.in))
   var line = inputReader.readLine()
-  while (line != null && !line.equals("quit")) {
+  while (line != null && !line.equals("QUIT")) {
     val wordIndex = vocab.getIndex(line.trim)
     if(wordIndex >= 0) {
       val vector = matrix.row(wordIndex)
