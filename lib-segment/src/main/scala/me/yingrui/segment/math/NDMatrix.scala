@@ -49,6 +49,7 @@ class NDMatrix(val data: INDArray) extends Matrix {
   def *(m: Matrix): Double = this.%(m).sum
 
   def /(n: Double): Matrix = new NDMatrix(data.div(n))
+  def /(m: Matrix): Matrix = new NDMatrix(data.div(m.asInstanceOf[NDMatrix].data))
 
   def T: Matrix = new NDMatrix(
     if(isDataSizeMatchShape)

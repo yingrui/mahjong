@@ -52,6 +52,11 @@ class DenseMatrix(val row: Int, val col: Int, data: Array[Double]) extends Matri
 
   def /(n: Double) = new DenseMatrix(row, col, data.map(_ / n))
 
+  def /(m: Matrix) = {
+    assert(col == m.col && row == m.row)
+    Matrix(row, col, arithmetic(flatten, m.flatten, (a, b) => a / b))
+  }
+
   def T = {
     val inverse = new Array[Double](data.length)
     for (i <- 0 until row) {

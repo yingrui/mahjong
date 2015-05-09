@@ -19,27 +19,46 @@ object Word2VecDemo extends App {
   val E = Matrix(matrix.col, 1).map(x => 1D)
   val A = (matrix.map(ele => ele * ele) x E).map(ele => sqrt(ele))
 
-  def findSimWords(vector: Matrix, B: Double): List[(String, Double)] = {
-    var result = List[(String, Double)]()
-    for (j <- 1 until vector.row) {
-      val cosine = vector(j, 0) / (A(j, 0) * B)
-      result :+= (vocab.getWord(j), cosine)
-    }
-    result.sortBy(t => t._2).reverse.take(5)
+  def findSimWords(vector: Matrix, B: Double): Seq[(String, String)] = {
+    val cosines = vector / A / B
+
+    val result = (1 until vector.row).map(j => (j, cosines(j, 0)))
+
+    result.sortBy(t => t._2).reverse.take(10).map(t => (vocab.getWord(t._1), "%3.3f".format(t._2)))
   }
 
   println("please input word to find its similar words (type QUIT to break)")
   val inputReader = new BufferedReader(new InputStreamReader(System.in))
   var line = inputReader.readLine()
   while (line != null && !line.equals("QUIT")) {
-    val wordIndex = vocab.getIndex(line.trim)
-    if(wordIndex >= 0) {
-      val vector = matrix.row(wordIndex)
+    if(line.contains(" ")) {
+      val words = line.split(" ")
+      computeSimilarity(words(0), words(1))
+    } else {
+      displaySimilarWords(line)
+    }
+    line = inputReader.readLine()
+  }
+
+  def displaySimilarWords(word: String) {
+    val wordIndex = vocab.getIndex(word.trim)
+    if (wordIndex >= 0) {
+      val vector = Matrix(matrix.row(wordIndex).flatten)
       val result = matrix x vector.T
       assert(result.row == matrix.row && result.col == 1)
       println(s"${vocab.getWord(wordIndex)} : " + findSimWords(result, A(wordIndex, 0)))
     }
-    line = inputReader.readLine()
+  }
+
+  def computeSimilarity(word1: String, word2: String) {
+    val wordIndex1 = vocab.getIndex(word1.trim)
+    val wordIndex2 = vocab.getIndex(word2.trim)
+    if (wordIndex1 > 0 & wordIndex2 > 0) {
+      val vector1 = Matrix(matrix.row(wordIndex1).flatten)
+      val vector2 = Matrix(matrix.row(wordIndex2).flatten)
+      val result = (vector1 * vector2) / A(wordIndex1, 0) / A(wordIndex2, 0)
+      println(s"similarity : $result")
+    }
   }
 
   def displayAll() {

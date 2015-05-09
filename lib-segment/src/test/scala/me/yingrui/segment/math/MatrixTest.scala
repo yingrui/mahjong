@@ -60,6 +60,14 @@ class MatrixTest extends FunSpec with Matchers with BeforeAndAfter {
       })
     }
 
+    it("should_return_right_value_when_divide_matrix_to_matrix") {
+      matrixBuilders.foreach(builder => {
+        Matrix.setMatrixBuilder(builder)
+        val m = Matrix(2, 2, Array(1D, 2D, 3D, 4D)) / Matrix(2, 2, Array(1D, 2D, 3D, 4D))
+        shouldBeEqual(1D, m.flatten)
+      })
+    }
+
     it("should_throw_exception_when_matrix_form_is_not_match") {
       matrixBuilders.foreach(builder => {
         Matrix.setMatrixBuilder(builder)

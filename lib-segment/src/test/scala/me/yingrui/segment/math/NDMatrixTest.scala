@@ -182,6 +182,16 @@ class NDMatrixTest extends FunSuite with Matchers {
     x(1, 1) should be (16D)
   }
 
+  test("div : matrix / matrix -> matrix") {
+    val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
+
+    val x = m / m
+    x(0, 0) should be (1D)
+    x(0, 1) should be (1D)
+    x(1, 0) should be (1D)
+    x(1, 1) should be (1D)
+  }
+
   test("mul : matrix * matrix -> double") {
     val m = new NDMatrix(create(Array(Array(1D, 2D), Array(3D, 4D))))
     m * m should be (30D)

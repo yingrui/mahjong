@@ -21,6 +21,7 @@ trait Matrix {
   def *(m: Matrix): Double
 
   def /(n: Double): Matrix
+  def /(n: Matrix): Matrix
 
   def T: Matrix
 
