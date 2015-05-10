@@ -24,7 +24,7 @@ object Word2VecDemo extends App {
 
     val result = (1 until vector.row).map(j => (j, cosines(j, 0)))
 
-    result.sortBy(t => t._2).reverse.take(10).map(t => (vocab.getWord(t._1), "%3.3f".format(t._2)))
+    result.sortBy(t => t._2).reverse.take(50).map(t => (vocab.getWord(t._1), "%3.3f".format(t._2)))
   }
 
   println("please input word to find its similar words (type QUIT to break)")

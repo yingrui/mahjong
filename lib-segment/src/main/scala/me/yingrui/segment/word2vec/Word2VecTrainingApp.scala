@@ -17,7 +17,7 @@ object Word2VecTrainingApp extends App {
   println("WORD VECTOR estimation toolkit")
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "text8"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
-  val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 100
+  val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 5
   val random = new Random()
 
@@ -41,7 +41,7 @@ object Word2VecTrainingApp extends App {
   def takeARound(iteration: Int): Double = {
     network.clearError
 
-    val startAlpha = 1e-3
+    val startAlpha = 0.05D
     var totalTrainedWords = 0
     val taskCount = 4
     val futures = (0 until taskCount).map(taskId => Future {
@@ -78,11 +78,11 @@ object Word2VecTrainingApp extends App {
         count += 1
         val progress = 1D - (endAt - count).toDouble / (endAt - startAt).toDouble
         if (count > startAt && count % 10000 == 0) {
-          print("progress: %2.5f\r".format(progress))
           alpha = startAlpha * (1D - (1D / (iteration + 1D)) * progress)
-
           if(alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
           if(alpha >= startAlpha) alpha = startAlpha
+
+          print("Alpha %2.5f   progress: %2.5f\r".format(alpha, progress))
         }
         words = wordReader.readWindow()
       }
