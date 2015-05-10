@@ -33,15 +33,14 @@ object BagOfWordNetwork {
 class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array[Array[Double]], val layer1Weights: Array[Array[Double]]) extends Word2VecNetwork {
 
   val layer0Output = new Array[Double](size)
-  val alpha = 0.001D
 
   var loss = 0D
   var learningTimes = 0D
 
-  def learn(input: Array[Int], output: Array[(Int, Int)]): Unit = {
+  def learn(input: Array[Int], output: Array[(Int, Int)], alpha: Double): Unit = {
 
     computeLayer0Output(input.filter(wordIndex => wordIndex > 0))
-    val grads = computeLayer1Grads(layer0Output, output)
+    val grads = computeLayer1Grads(layer0Output, output, alpha)
     val errors = updateLayer1WeightsAndPropagateErrors(grads, layer0Output)
     updateLayer0Weights(errors, output.map(t => t._1))
 
@@ -65,7 +64,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
     layer0Output
   }
 
-  def computeLayer1Grads(input: Array[Double], output: Array[(Int, Int)]): Array[(Int, Double)] = {
+  def computeLayer1Grads(input: Array[Double], output: Array[(Int, Int)], alpha: Double): Array[(Int, Double)] = {
     val grads = for((wordIndex, label) <- output) yield {
       val weights = layer1Weights(wordIndex)
       val output = simplifiedSigmoid((for(i <- 0 until size) yield {input(i) * weights(i)}).sum)

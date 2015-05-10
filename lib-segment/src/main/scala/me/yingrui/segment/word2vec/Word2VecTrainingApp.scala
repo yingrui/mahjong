@@ -38,18 +38,23 @@ object Word2VecTrainingApp extends App {
 
   val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
 
-  def takeARound(): Double = {
+  def takeARound(iteration: Int): Double = {
     network.clearError
 
-
+    val startAlpha = 1e-3
+    var totalTrainedWords = 0
     val taskCount = 4
     val futures = (0 until taskCount).map(taskId => Future {
+
       val startAt = totalWordCount / taskCount * taskId
       val endAt = startAt + totalWordCount / taskCount
       val reader = new InputStreamReader(new FileInputStream(trainFile))
       val wordReader = new WordReader(reader, window)
       var words = wordReader.readWindow()
       var count = 0
+      var alpha = startAlpha * (1D - 1D / (iteration + 1D))
+      if(alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
+
       while (!words.isEmpty && count <= endAt) {
         val wordIndex = vocab.getIndex(words(window))
         if (wordIndex > 0 && count >= startAt) {
@@ -66,11 +71,19 @@ object Word2VecTrainingApp extends App {
 
           val inputArray = input.toArray
           inputArray(window) = 0
-          network.learn(input.filter(in => in > 0).toArray, output)
+          // train
+          network.learn(input.filter(in => in > 0).toArray, output, startAlpha)
         }
+
         count += 1
         val progress = 1D - (endAt - count).toDouble / (endAt - startAt).toDouble
-        if (count > startAt && count % 1000 == 0) print(s"progress: $progress\r")
+        if (count > startAt && count % 10000 == 0) {
+          print("progress: %2.5f\r".format(progress))
+          alpha = startAlpha * (1D - (1D / (iteration + 1D)) * progress)
+
+          if(alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
+          if(alpha >= startAlpha) alpha = startAlpha
+        }
         words = wordReader.readWindow()
       }
       reader.close()
@@ -88,7 +101,7 @@ object Word2VecTrainingApp extends App {
   var hasImprovement = true
   enableConsoleOutput
   while (iteration < 25 && hasImprovement) {
-    cost = takeARound()
+    cost = takeARound(iteration)
     debug(s"iter: ${iteration} cost: ${cost}")
     hasImprovement = abs(cost - lastCost) > 1e-5
 
@@ -101,4 +114,3 @@ object Word2VecTrainingApp extends App {
   vocab.save(writer)
   writer.serialize2DArrayDouble(network.wordVector)
 }
-

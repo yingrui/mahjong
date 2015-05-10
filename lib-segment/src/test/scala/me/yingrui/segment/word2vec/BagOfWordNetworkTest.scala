@@ -39,13 +39,14 @@ class BagOfWordNetworkTest extends FunSuite with Matchers {
     val wordVector = Array(Array(1D, 1D), Array(1D, 1D), Array(1D, 1D))
     val layer1Weight = Array(Array(1D, 1D), Array(1D, 1D), Array(1D, 1D))
     val network = BagOfWordNetwork(wordsCount, vectorSize, wordVector, layer1Weight)
+    val alpha = 0.1D
 
     val input = Array[Double](1D, 1D)
     val output = Array[(Int, Int)]((0, 1), (1, 0), (2, 0))
-    val grad = network.computeLayer1Grads(input, output)
-    grad(0)._2 should be ((1D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha)
-    grad(1)._2 should be ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha)
-    grad(2)._2 should be ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha)
+    val grad = network.computeLayer1Grads(input, output, alpha)
+    grad(0)._2 should be ((1D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha)
+    grad(1)._2 should be ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha)
+    grad(2)._2 should be ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha)
   }
 
   test("should update layer1 weights and compute back propagation errors") {
@@ -54,10 +55,11 @@ class BagOfWordNetworkTest extends FunSuite with Matchers {
     val wordVector = Array(Array(1D, 1D), Array(1D, 1D), Array(1D, 1D))
     val layer1Weight = Array(Array(1D, 1D), Array(1D, 1D), Array(1D, 1D))
     val network = BagOfWordNetwork(wordsCount, vectorSize, wordVector, layer1Weight)
+    val alpha = 0.1D
 
     val input = Array[Double](1D, 1D)
     val output = Array[(Int, Int)]((0, 1), (1, 0), (2, 0))
-    val grads = network.computeLayer1Grads(input, output)
+    val grads = network.computeLayer1Grads(input, output, alpha)
     val errors = network.updateLayer1WeightsAndPropagateErrors(grads, input)
 
     errors.foreach(println)
@@ -65,14 +67,14 @@ class BagOfWordNetworkTest extends FunSuite with Matchers {
     errors(0) should be (grads.map(t => t._2 * weightX).sum)
     errors(1) should be (grads.map(t => t._2 * weightX).sum)
 
-    layer1Weight(0)(0) should be (1D + ((1D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha))
-    layer1Weight(0)(1) should be (1D + ((1D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha))
+    layer1Weight(0)(0) should be (1D + ((1D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha))
+    layer1Weight(0)(1) should be (1D + ((1D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha))
 
-    layer1Weight(1)(0) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha))
-    layer1Weight(1)(1) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha))
+    layer1Weight(1)(0) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha))
+    layer1Weight(1)(1) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha))
 
-    layer1Weight(2)(0) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha))
-    layer1Weight(2)(1) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * network.alpha))
+    layer1Weight(2)(0) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha))
+    layer1Weight(2)(1) should be (1D + ((0D - Word2VecUtil.simplifiedSigmoid(2D)) * alpha))
   }
 
   test("should update layer0 weights") {
@@ -84,7 +86,7 @@ class BagOfWordNetworkTest extends FunSuite with Matchers {
 
     val input = Array[Double](1D, 1D)
     val output = Array[(Int, Int)]((0, 1), (1, 0), (2, 0))
-    val grads = network.computeLayer1Grads(input, output)
+    val grads = network.computeLayer1Grads(input, output, 0.1D)
     val errors = network.updateLayer1WeightsAndPropagateErrors(grads, input)
     network.updateLayer0Weights(errors, output.map(t => t._1))
 

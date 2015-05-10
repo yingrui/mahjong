@@ -27,13 +27,12 @@ class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
 
   def buildNetwork = {
     class SimpleWord2VecNetwork extends Word2VecNetwork {
-      val alpha = ALPHA
       val network = initNetwork
       val wordsCount = vocab.size
       val size = vecSize
       val wordVector = matrixTo2DArray(network.getNetwork.layers.head.weight)
 
-      def learn(input: Array[Int], output: Array[(Int, Int)]): Unit = {
+      def learn(input: Array[Int], output: Array[(Int, Int)], alpha: Double): Unit = {
         val in = Matrix(1, vocab.size)
         val expectedOutput = Matrix(1, vocab.size)
 
