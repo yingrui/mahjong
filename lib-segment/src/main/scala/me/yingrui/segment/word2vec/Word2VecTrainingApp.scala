@@ -18,7 +18,7 @@ object Word2VecTrainingApp extends App {
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "text8"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
-  val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 5
+  val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
   val random = new Random()
 
   def readVocabulary = {
@@ -42,49 +42,63 @@ object Word2VecTrainingApp extends App {
     network.clearError
 
     val startAlpha = 0.05D
-    var totalTrainedWords = 0
+    val sample = 1e-4
     val taskCount = 4
+    val batchSize = 10000
     val futures = (0 until taskCount).map(taskId => Future {
 
       val startAt = totalWordCount / taskCount * taskId
       val endAt = startAt + totalWordCount / taskCount
+      var alpha = startAlpha * (1D - 1D / (iteration + 1D))
+      if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
+
       val reader = new InputStreamReader(new FileInputStream(trainFile))
       val wordReader = new WordReader(reader, window)
-      var words = wordReader.readWindow()
-      var count = 0
-      var alpha = startAlpha * (1D - 1D / (iteration + 1D))
-      if(alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
 
-      while (!words.isEmpty && count <= endAt) {
-        val wordIndex = vocab.getIndex(words(window))
-        if (wordIndex > 0 && count >= startAt) {
-          val input = words.map(w => vocab.getIndex(w))
-
-          val negativeSamples = 25
-          val output = new Array[(Int, Int)](negativeSamples)
-          output(0) = (wordIndex, 1)
-          for (i <- 1 until negativeSamples) {
-            var index = random.nextInt(vocab.size)
-            if (index == wordIndex) index = random.nextInt(vocab.size)
-            output(i) = (index, 0)
-          }
-
-          val inputArray = input.toArray
-          inputArray(window) = 0
-          // train
-          network.learn(input.filter(in => in > 0).toArray, output, startAlpha)
-        }
-
+      var count = 0L
+      while (count < startAt) {
+        wordReader.read()
         count += 1
-        val progress = 1D - (endAt - count).toDouble / (endAt - startAt).toDouble
-        if (count > startAt && count % 10000 == 0) {
-          alpha = startAlpha * (1D - (1D / (iteration + 1D)) * progress)
-          if(alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
-          if(alpha >= startAlpha) alpha = startAlpha
+      }
 
-          print("Alpha %2.5f   progress: %2.5f\r".format(alpha, progress))
+      var countAndWordList = wordReader.readWordListAndRandomlyDiscardFrequentWords(batchSize, count, endAt, sample, vocab)
+      count += countAndWordList._1
+      var wordList = countAndWordList._2
+      while (!wordList.isEmpty) {
+        for (index <- 0 until wordList.size) {
+          val words = wordReader.readWindow(wordList, index)
+          val wordIndex = vocab.getIndex(words(window))
+          if (wordIndex > 0) {
+            val input = words.map(w => vocab.getIndex(w))
+
+            val negativeSamples = 25
+            val output = new Array[(Int, Int)](negativeSamples)
+            output(0) = (wordIndex, 1)
+            for (i <- 1 until negativeSamples) {
+              var index = random.nextInt(vocab.size)
+              if (index == wordIndex) index = random.nextInt(vocab.size)
+              output(i) = (index, 0)
+            }
+
+            val inputArray = input.toArray
+            inputArray(window) = 0
+            // train
+            network.learn(input.filter(in => in > 0).toArray, output, startAlpha)
+          }
         }
-        words = wordReader.readWindow()
+
+        val progress = 1D - (endAt - count).toDouble / (endAt - startAt).toDouble
+        if(progress > 1D) {
+          println(s"$endAt, $count, $startAt")
+        }
+        alpha = startAlpha * (1D - (1D / (iteration + 1D)) * progress)
+        if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
+        if (alpha >= startAlpha) alpha = startAlpha
+        print("Alpha %2.5f   progress: %2.5f\r".format(alpha, progress))
+
+        countAndWordList = wordReader.readWordListAndRandomlyDiscardFrequentWords(batchSize, count, endAt, sample, vocab)
+        count += countAndWordList._1
+        wordList = countAndWordList._2
       }
       reader.close()
     })
@@ -100,7 +114,7 @@ object Word2VecTrainingApp extends App {
   var lastCost = 0.0D
   var hasImprovement = true
   enableConsoleOutput
-  while (iteration < 25 && hasImprovement) {
+  while (iteration < 15 && hasImprovement) {
     cost = takeARound(iteration)
     debug(s"iter: ${iteration} cost: ${cost}")
     hasImprovement = abs(cost - lastCost) > 1e-5
