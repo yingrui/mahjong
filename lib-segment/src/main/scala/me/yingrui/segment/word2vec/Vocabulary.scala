@@ -36,6 +36,7 @@ class Vocabulary(private val wordIndexMap: util.Map[String, Int],
   }
 
   def getCount(word: String): Int = if (wordIndexMap.containsKey(word)) wordCount(wordIndexMap.get(word)) else 0
+  def getCountByIndex(index: Int) = wordCount(index)
 
   def getIndex(word: String): Int = wordIndexMap.get(word)
 

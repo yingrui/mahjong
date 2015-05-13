@@ -26,7 +26,7 @@ class Word2VecTrainingNetworkBuilder(val vocab: Vocabulary, val vecSize: Int) {
   }
 
   def buildNetwork = {
-    class SimpleWord2VecNetwork extends Word2VecNetwork {
+    class SimpleWord2VecNetwork {
       val network = initNetwork
       val wordsCount = vocab.size
       val size = vecSize

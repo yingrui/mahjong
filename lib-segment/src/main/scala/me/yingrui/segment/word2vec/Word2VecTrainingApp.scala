@@ -5,7 +5,7 @@ import java.lang.Math.abs
 
 import me.yingrui.segment.util.Logger._
 import me.yingrui.segment.util.SerializeHandler
-
+import scala.collection.mutable.Map
 import scala.concurrent._
 import scala.concurrent.duration.Duration
 import scala.util.Random
@@ -19,6 +19,7 @@ object Word2VecTrainingApp extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 15
   val random = new Random()
 
   def readVocabulary = {
@@ -37,39 +38,72 @@ object Word2VecTrainingApp extends App {
   println(s"Rebuild vocabulary and remove lower frequent words, now it contains ${vocab.size} words")
 
   val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
+  val taskCount = 4
+  val startAlpha = 0.05D
+  val sample = 1e-4
+  val batchSize = 10000
+  val taskWordTotal = Map[Long, Long](2L -> 4181364L, 1L -> 4179509L, 3L -> 4177272L, 0L -> 4180696L)
+
+  def getDataFile(taskId: Int) = trainFile + "." + taskId + ".dat"
+
+  def prepareData(taskCount: Int) {
+    val wordCountForEachTask = totalWordCount / taskCount
+    val reader = new InputStreamReader(new FileInputStream(trainFile))
+    val wordReader = new WordReader(reader, window)
+    var count = 0
+    var actualWordCount = 0
+    var taskId = 0L
+    var writer = SerializeHandler(new File(getDataFile(taskId.toInt)), SerializeHandler.WRITE_ONLY)
+    while (count < totalWordCount) {
+      val wordIndex = vocab.getIndex(wordReader.read())
+      if (wordIndex > 0) {
+        writer.serializeInt(wordIndex)
+        actualWordCount += 1
+      }
+
+      count += 1
+      if (count % wordCountForEachTask == 0) {
+        print("Preprocess train data taskId: %d, progress: %2.3f\r".format(taskId, count.toDouble / totalWordCount.toDouble))
+        taskWordTotal += (taskId -> actualWordCount)
+        actualWordCount = 0
+
+        taskId = count / wordCountForEachTask
+        if (taskId < taskCount) {
+          writer.close()
+          writer = SerializeHandler(new File(getDataFile(taskId.toInt)), SerializeHandler.WRITE_ONLY)
+        }
+      }
+    }
+    println()
+    writer.close()
+    reader.close()
+  }
+
+  prepareData(taskCount)
+  println(taskWordTotal)
 
   def takeARound(iteration: Int): Double = {
     network.clearError
 
-    val startAlpha = 0.05D
-    val sample = 1e-4
-    val taskCount = 4
-    val batchSize = 10000
     val futures = (0 until taskCount).map(taskId => Future {
-
-      val startAt = totalWordCount / taskCount * taskId
-      val endAt = startAt + totalWordCount / taskCount
-      var alpha = startAlpha * (1D - 1D / (iteration + 1D))
-      if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
-
-      val reader = new InputStreamReader(new FileInputStream(trainFile))
-      val wordReader = new WordReader(reader, window)
+      val totalCount: Long = taskWordTotal.getOrElse(taskId, 1)
+      val reader = new WordIndexReader(getDataFile(taskId), vocab, window)
 
       var count = 0L
-      while (count < startAt) {
-        wordReader.read()
-        count += 1
-      }
+      var alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D))
+      if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
 
-      var countAndWordList = wordReader.readWordListAndRandomlyDiscardFrequentWords(batchSize, count, endAt, sample, vocab)
+      var countAndWordList = reader.readWordListAndRandomlyDiscardFrequentWords(batchSize, sample)
       count += countAndWordList._1
       var wordList = countAndWordList._2
       while (!wordList.isEmpty) {
         for (index <- 0 until wordList.size) {
-          val words = wordReader.readWindow(wordList, index)
-          val wordIndex = vocab.getIndex(words(window))
-          if (wordIndex > 0) {
-            val input = words.map(w => vocab.getIndex(w))
+          val randomRightContext = random.nextInt(window)
+          val words = reader.readWindow(wordList, index).slice(randomRightContext, 2 * window + 1 - randomRightContext)
+          val wordIndex = words(words.size / 2)
+          if (wordIndex > 0 && words.size > 2) {
+            val input = words.toArray
+            input(words.size / 2) = 0
 
             val negativeSamples = 25
             val output = new Array[(Int, Int)](negativeSamples)
@@ -80,23 +114,21 @@ object Word2VecTrainingApp extends App {
               output(i) = (index, 0)
             }
 
-            val inputArray = input.toArray
-            inputArray(window) = 0
             // train
-            network.learn(input.filter(in => in > 0).toArray, output, startAlpha)
+            network.learn(input.filter(in => in > 0), output, alpha)
           }
         }
 
-        val progress = 1D - (endAt - count).toDouble / (endAt - startAt).toDouble
-        if(progress > 1D) {
-          println(s"$endAt, $count, $startAt")
-        }
-        alpha = startAlpha * (1D - (1D / (iteration + 1D)) * progress)
+        val progress = count.toDouble / totalCount.toDouble
+        //        if(progress > 1D) {
+        //          println(s"$endAt, $count, $startAt")
+        //        }
+        alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D))
         if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
         if (alpha >= startAlpha) alpha = startAlpha
-        print("Alpha %2.5f   progress: %2.5f\r".format(alpha, progress))
+        print("Iteration: %2d    Alpha %2.5f    progress: %2.5f\r".format(iteration, alpha, progress))
 
-        countAndWordList = wordReader.readWordListAndRandomlyDiscardFrequentWords(batchSize, count, endAt, sample, vocab)
+        countAndWordList = reader.readWordListAndRandomlyDiscardFrequentWords(batchSize, sample)
         count += countAndWordList._1
         wordList = countAndWordList._2
       }
@@ -114,7 +146,7 @@ object Word2VecTrainingApp extends App {
   var lastCost = 0.0D
   var hasImprovement = true
   enableConsoleOutput
-  while (iteration < 15 && hasImprovement) {
+  while (iteration < maxIteration && hasImprovement) {
     cost = takeARound(iteration)
     debug(s"iter: ${iteration} cost: ${cost}")
     hasImprovement = abs(cost - lastCost) > 1e-5
