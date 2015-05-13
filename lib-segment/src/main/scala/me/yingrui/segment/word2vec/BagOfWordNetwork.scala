@@ -63,7 +63,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
   def getLoss = sqrt(loss / learningTimes)
 
   def computeLayer0Output(input: Array[Int]): Array[Double] = {
-//    print("window: %d ".format(input.length))
+    //    print("window: %d ".format(input.length))
 
     update(layer0Output, 0D)
     for (wordIndex <- input) {
@@ -82,7 +82,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
     }
   }
 
-  private def multipy(a: Array[Double], b: Array[Double]): Double = {
+  private def multiply(a: Array[Double], b: Array[Double]): Double = {
     var result = 0D
     var i = 0
     while (i < a.length) {
@@ -95,10 +95,10 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
   def computeLayer1Grads(input: Array[Double], output: Array[(Int, Int)], alpha: Double): Array[(Int, Double)] = {
     val grads = for ((wordIndex, label) <- output) yield {
       val weights = layer1Weights(wordIndex)
-      val f = multipy(input, weights)
+      val f = multiply(input, weights)
       val output = simplifiedSigmoid(f)
       val error = label.toDouble - output
-      loss += Math.pow(error, 2D)
+      if (label == 1) loss += Math.pow(error, 2D)
       val grad = error * alpha
 //      println("grad: %2.5f  f: %2.5f  alpha: %2.5f  index: %d  output: %d".format(grad, f, alpha, wordIndex, label))
       (wordIndex, grad)

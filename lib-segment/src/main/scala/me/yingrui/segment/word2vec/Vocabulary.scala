@@ -42,10 +42,11 @@ class Vocabulary(private val wordIndexMap: util.Map[String, Int],
 
   def rebuild(minCount: Int): Unit = {
     val temp = Vocabulary.apply()
-    for(word <- wordIndexMap.keySet().toArray(new Array[String](0))) {
-      val count = getCount(word)
-      if(count >= minCount) temp.add(word, count)
-    }
+
+    val words: Array[String] = wordIndexMap.keySet().toArray(new Array[String](0))
+    (for(word <- words; count = getCount(word); if count >= minCount) yield {
+      (count, word)
+    }).sortBy(t => t._1).reverse.foreach(t => temp.add(t._2, t._1))
 
     this.wordIndexMap.clear()
     this.wordIndexMap.putAll(temp.wordIndexMap)
