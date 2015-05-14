@@ -1,6 +1,6 @@
 package me.yingrui.segment.word2vec
 
-import java.lang.Math.sqrt
+import java.lang.Math.{abs, sqrt}
 
 import scala.util.Random
 import Word2VecUtil.simplifiedSigmoid
@@ -53,7 +53,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
 
     for ((wordIndex, label) <- output) yield {
       val grad = computeLayer1Grad(layer0Output, alpha, wordIndex, label)
-      updateLayer1WeightsAndPropagateErrors(layer0Output, errors, wordIndex, grad)
+      if (abs(grad) > 1e-10D) updateLayer1WeightsAndPropagateErrors(layer0Output, errors, wordIndex, grad)
     }
 //    val grads = computeLayer1Grads(layer0Output, output, alpha)
 //    val errors = updateLayer1WeightsAndPropagateErrors(grads, layer0Output)
@@ -85,7 +85,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
     val inputWordCount = input.length.toDouble
     var col = 0
     while (col < size) {
-      layer0Output(col) /= inputWordCount
+      layer0Output(col) = layer0Output(col) / inputWordCount
       col += 1
     }
     layer0Output

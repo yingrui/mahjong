@@ -19,7 +19,7 @@ object Word2VecTrainingApp extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
-  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 35
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 5
   val random = new Random()
 
   def readVocabulary = {
@@ -38,12 +38,12 @@ object Word2VecTrainingApp extends App {
   println(s"Rebuild vocabulary and remove lower frequent words, now it contains ${vocab.size} words")
 
   val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
-  val taskCount = 8
+  val taskCount = 4
   val startAlpha = 0.05D
   val sample = 1e-4
   val batchSize = 10000
-//  val taskWordTotal = Map[Long, Long](2L -> 4181364L, 1L -> 4179509L, 3L -> 4177272L, 0L -> 4180696L)
-  val taskWordTotal = Map[Long, Long](2L -> 2091178L, 5L -> 2092893L, 4L-> 2088469L, 7L -> 2089806L, 1L -> 2093259L, 3L -> 2088331L, 6L -> 2087465L, 0L -> 2087436L)
+  val taskWordTotal = Map[Long, Long](2L -> 4181364L, 1L -> 4179509L, 3L -> 4177272L, 0L -> 4180696L)
+//  val taskWordTotal = Map[Long, Long](2L -> 2091178L, 5L -> 2092893L, 4L-> 2088469L, 7L -> 2089806L, 1L -> 2093259L, 3L -> 2088331L, 6L -> 2087465L, 0L -> 2087436L)
 
   def getDataFile(taskId: Int) = trainFile + "." + taskId + ".dat"
 
@@ -91,7 +91,7 @@ object Word2VecTrainingApp extends App {
       val reader = new WordIndexReader(getDataFile(taskId), vocab, window)
 
       var count = 0L
-      var alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D))
+      var alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D)) * (1D / (iteration.toDouble + 1D))
       if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
 
       var countAndWordList = reader.readWordListAndRandomlyDiscardFrequentWords(batchSize, sample)
@@ -121,7 +121,7 @@ object Word2VecTrainingApp extends App {
         }
 
         val progress = count.toDouble / totalCount.toDouble
-        alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D))
+        alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D)) * (1D / (iteration.toDouble + 1D))
         if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
         if (alpha >= startAlpha) alpha = startAlpha
         print("Iteration: %2d    Alpha %2.5f    progress: %2.5f\r".format(iteration, alpha, progress))
@@ -147,7 +147,7 @@ object Word2VecTrainingApp extends App {
   while (iteration < maxIteration && hasImprovement) {
     cost = takeARound(iteration)
     debug("Iteration: %2d    cost: %2.5f".format(iteration, cost))
-    hasImprovement = abs(cost - lastCost) > 1e-5
+    hasImprovement = cost - lastCost > 1e-5
 
     lastCost = cost
     iteration += 1
