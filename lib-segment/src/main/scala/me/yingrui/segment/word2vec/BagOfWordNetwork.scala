@@ -48,8 +48,16 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
   def learn(input: Array[Int], output: Array[(Int, Int)], alpha: Double): Unit = {
 
     computeLayer0Output(input.filter(wordIndex => wordIndex > 0))
-    val grads = computeLayer1Grads(layer0Output, output, alpha)
-    val errors = updateLayer1WeightsAndPropagateErrors(grads, layer0Output)
+
+    val errors = new Array[Double](size)
+
+    for ((wordIndex, label) <- output) yield {
+      val grad = computeLayer1Grad(layer0Output, alpha, wordIndex, label)
+      updateLayer1WeightsAndPropagateErrors(layer0Output, errors, wordIndex, grad)
+    }
+//    val grads = computeLayer1Grads(layer0Output, output, alpha)
+//    val errors = updateLayer1WeightsAndPropagateErrors(grads, layer0Output)
+
     updateLayer0Weights(errors, input)
 
     learningTimes += 1D
@@ -67,10 +75,19 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
 
     update(layer0Output, 0D)
     for (wordIndex <- input) {
-      for (i <- 0 until size) layer0Output(i) += wordVector(wordIndex)(i)
+      var col = 0
+      while (col < size) {
+        layer0Output(col) += wordVector(wordIndex)(col)
+        col += 1
+      }
     }
-    val inputWordCount = input.length
-    for (i <- 0 until size) layer0Output(i) /= inputWordCount.toDouble
+
+    val inputWordCount = input.length.toDouble
+    var col = 0
+    while (col < size) {
+      layer0Output(col) /= inputWordCount
+      col += 1
+    }
     layer0Output
   }
 
@@ -94,33 +111,46 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
 
   def computeLayer1Grads(input: Array[Double], output: Array[(Int, Int)], alpha: Double): Array[(Int, Double)] = {
     val grads = for ((wordIndex, label) <- output) yield {
-      val weights = layer1Weights(wordIndex)
-      val f = multiply(input, weights)
-      val output = simplifiedSigmoid(f)
-      val error = label.toDouble - output
-      if (label == 1) loss += Math.pow(error, 2D)
-      val grad = error * alpha
-//      println("grad: %2.5f  f: %2.5f  alpha: %2.5f  index: %d  output: %d".format(grad, f, alpha, wordIndex, label))
-      (wordIndex, grad)
+      (wordIndex, computeLayer1Grad(input, alpha, wordIndex, label))
     }
     grads.toArray
+  }
+
+  def computeLayer1Grad(input: Array[Double], alpha: Double, wordIndex: Int, label: Int): Double = {
+    val weights = layer1Weights(wordIndex)
+    val f = multiply(input, weights)
+    val output = simplifiedSigmoid(f)
+    val error = label.toDouble - output
+    loss += Math.pow(error, 2D)
+    val grad = error * alpha
+//    println("grad: %2.5f  f: %2.5f  alpha: %2.5f  index: %d  output: %d".format(grad, f, alpha, wordIndex, label))
+    grad
   }
 
   def updateLayer1WeightsAndPropagateErrors(grads: Array[(Int, Double)], layer1Input: Array[Double]): Array[Double] = {
     val errors = new Array[Double](size)
     for ((wordIndex, grad) <- grads) {
-      for (col <- 0 until size) {
-        errors(col) += grad * layer1Weights(wordIndex)(col)
-        layer1Weights(wordIndex)(col) += grad * layer1Input(col)
-      }
+      updateLayer1WeightsAndPropagateErrors(layer1Input, errors, wordIndex, grad)
     }
     errors
   }
 
+  def updateLayer1WeightsAndPropagateErrors(layer1Input: Array[Double], errors: Array[Double], wordIndex: Int, grad: Double): Unit = {
+    var col = 0
+    while (col < size) {
+      errors(col) += grad * layer1Weights(wordIndex)(col)
+      layer1Weights(wordIndex)(col) += grad * layer1Input(col)
+      col += 1
+    }
+  }
+
   def updateLayer0Weights(errors: Array[Double], wordIndexes: Array[Int]): Unit = {
+//    println(wordIndexes.toList + "  " + errors.toList)
     for (wordIndex <- wordIndexes) {
-      for (i <- 0 until size) {
-        wordVector(wordIndex)(i) += errors(i)
+      var col = 0
+      while (col < size) {
+        wordVector(wordIndex)(col) += errors(col)
+        col += 1
       }
     }
   }

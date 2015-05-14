@@ -19,7 +19,7 @@ object Word2VecTrainingApp extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
-  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 25
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 35
   val random = new Random()
 
   def readVocabulary = {
