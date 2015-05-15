@@ -19,7 +19,7 @@ object Word2VecTrainingApp extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
-  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 5
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 15
   val random = new Random()
 
   def readVocabulary = {
@@ -141,13 +141,13 @@ object Word2VecTrainingApp extends App {
 
   var iteration = 0
   var cost = 0D
-  var lastCost = 0.0D
+  var lastCost = Double.MaxValue
   var hasImprovement = true
   enableConsoleOutput
   while (iteration < maxIteration && hasImprovement) {
     cost = takeARound(iteration)
     debug("Iteration: %2d    cost: %2.5f".format(iteration, cost))
-    hasImprovement = cost - lastCost > 1e-5
+    hasImprovement = lastCost - cost > 1e-5
 
     lastCost = cost
     iteration += 1
