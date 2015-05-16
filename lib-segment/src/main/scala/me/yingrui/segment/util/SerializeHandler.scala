@@ -2,8 +2,6 @@ package me.yingrui.segment.util
 
 import java.io._
 
-import scala.collection.mutable.Map
-import scala.collection.mutable.OpenHashMap
 import me.yingrui.segment.math.Matrix
 
 object SerializeHandler {
@@ -79,6 +77,24 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
     }
   }
 
+  def serializeMapStringLong(map: collection.mutable.Map[String, Long]) {
+    if (null != map) {
+      output.writeInt(map.size)
+      if (!map.isEmpty) {
+        val keys = map.keys.toArray
+        var i = 0
+        while (i < keys.size) {
+          val key = keys(i)
+          val value = map.getOrElse(key, 0L)
+          output.writeUTF(key)
+          output.writeLong(value)
+          i += 1
+        }
+      }
+      output.flush()
+    }
+  }
+
   def serializeMapIntDouble(map: java.util.Map[Int, Double]) {
     if (null != map) {
       output.writeInt(map.size)
@@ -123,6 +139,25 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
       map
     } else {
       collection.mutable.HashMap[String, Int]()
+    }
+  }
+
+  def deserializeScalaMapStringLong(): collection.mutable.Map[String, Long] = {
+    try {
+      val size = input.readInt()
+      if (size > 0) {
+        val map = collection.mutable.HashMap[String, Long]()
+        for (i <- 0 until size) {
+          val key = input.readUTF()
+          val value = input.readLong()
+          map.put(key, value)
+        }
+        map
+      } else {
+        collection.mutable.HashMap[String, Long]()
+      }
+    }catch {
+      case _ => collection.mutable.HashMap[String, Long]()
     }
   }
 

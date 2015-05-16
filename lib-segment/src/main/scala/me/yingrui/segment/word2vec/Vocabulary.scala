@@ -1,5 +1,6 @@
 package me.yingrui.segment.word2vec
 
+import java.io.{FileInputStream, InputStreamReader}
 import java.util
 import scala.collection.mutable
 
@@ -68,6 +69,14 @@ object Vocabulary {
       vocab.add(word)
       word = reader.read()
     }
+    vocab
+  }
+
+  def apply(file: String): Vocabulary = {
+    val reader = new InputStreamReader(new FileInputStream(file))
+    val wordReader = new WordReader(reader)
+    val vocab = apply(wordReader)
+    reader.close()
     vocab
   }
 

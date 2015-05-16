@@ -5,7 +5,7 @@ import java.lang.Math._
 import scala.util.Random
 
 class Word2VecTrainingWorker(val network: Word2VecNetwork,
-                             val totalCount: Long,
+                             val totalWordCount: Long,
                              val batchSize: Int,
                              val sample: Double,
                              val startAlpha: Double,
@@ -44,7 +44,7 @@ class Word2VecTrainingWorker(val network: Word2VecNetwork,
         }
       }
 
-      val progress = count.toDouble / totalCount.toDouble
+      val progress = count.toDouble / totalWordCount.toDouble
       alpha = reduceAlpha(count, currentIteration)
       print("Iteration: %2d    Alpha %2.5f    progress: %2.5f\r".format(currentIteration, alpha, progress))
 
@@ -55,7 +55,7 @@ class Word2VecTrainingWorker(val network: Word2VecNetwork,
   }
 
   private def reduceAlpha(count: Long, currentIteration: Int): Double = {
-    val alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D)) * (1D / (currentIteration.toDouble + 1D))
+    val alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalWordCount.toDouble + 1D)) * (1D / (currentIteration.toDouble + 1D))
     if (alpha < startAlpha * 1e-4)
       startAlpha * 1e-4
     else if (alpha >= startAlpha)

@@ -19,18 +19,13 @@ object Word2VecTrainingApp extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
-  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 1
-  val random = new Random()
+  val taskCount = if (args.indexOf("-thread") >= 0) args(args.indexOf("-thread") + 1).toInt else 4
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 15
+  val sample = if (args.indexOf("-sample") >= 0) args(args.indexOf("-sample") + 1).toDouble else 1e-4
+  val startAlpha = if (args.indexOf("-alpha") >= 0) args(args.indexOf("-alpha") + 1).toDouble else 0.05D
+  val random = new Random(System.currentTimeMillis())
 
-  def readVocabulary = {
-    val reader = new InputStreamReader(new FileInputStream(trainFile))
-    val wordReader = new WordReader(reader, window)
-    val vocab = Vocabulary(wordReader)
-    reader.close()
-    vocab
-  }
-
-  val vocab = readVocabulary
+  val vocab = Vocabulary(trainFile)
   val totalWordCount = vocab.getTotalWordCount
   println(s"Vocabulary has ${vocab.size} words and total word count is ${vocab.getTotalWordCount}")
 
@@ -38,61 +33,23 @@ object Word2VecTrainingApp extends App {
   println(s"Rebuild vocabulary and remove lower frequent words, now it contains ${vocab.size} words")
 
   val network: Word2VecNetwork = BagOfWordNetwork(vocab.size, vecSize)
-  val taskCount = 4
-  val startAlpha = 0.05D
-  val sample = 1e-4
   val batchSize = 10000
-  val taskWordTotal = Map[Long, Long](2L -> 4181364L, 1L -> 4179509L, 3L -> 4177272L, 0L -> 4180696L)
-//  val taskWordTotal = Map[Long, Long](2L -> 2091178L, 5L -> 2092893L, 4L-> 2088469L, 7L -> 2089806L, 1L -> 2093259L, 3L -> 2088331L, 6L -> 2087465L, 0L -> 2087436L)
+  val splitter = new TrainingDataSplitter(trainFile, totalWordCount, vocab)
+  val taskWordTotal: Map[String, Long] = splitter.loadSplitDataWordCount(taskCount)
 
-  def getDataFile(taskId: Int) = trainFile + "." + taskId + ".dat"
-
-  def prepareData(taskCount: Int) {
-    val wordCountForEachTask = totalWordCount / taskCount
-    val reader = new InputStreamReader(new FileInputStream(trainFile))
-    val wordReader = new WordReader(reader, window)
-    var count = 0
-    var actualWordCount = 0
-    var taskId = 0L
-    var writer = SerializeHandler(new File(getDataFile(taskId.toInt)), SerializeHandler.WRITE_ONLY)
-    while (count < totalWordCount) {
-      val wordIndex = vocab.getIndex(wordReader.read())
-      if (wordIndex > 0) {
-        writer.serializeInt(wordIndex)
-        actualWordCount += 1
-      }
-
-      count += 1
-      if (count % wordCountForEachTask == 0) {
-        print("Preprocess train data taskId: %d, progress: %2.3f\r".format(taskId, count.toDouble / totalWordCount.toDouble))
-        taskWordTotal += (taskId -> actualWordCount)
-        actualWordCount = 0
-
-        taskId = count / wordCountForEachTask
-        if (taskId < taskCount) {
-          writer.close()
-          writer = SerializeHandler(new File(getDataFile(taskId.toInt)), SerializeHandler.WRITE_ONLY)
-        }
-      }
-    }
-    println()
-    writer.close()
-    reader.close()
-  }
-
-//  prepareData(taskCount)
+  splitter.split(taskWordTotal, taskCount)
   println(taskWordTotal)
 
-  def takeARound(iteration: Int): Double = {
+  def takeARound(currentIteration: Int): Double = {
     network.clearError
 
     val futures = (0 until taskCount).map(taskId => Future {
-      val totalCount = taskWordTotal.getOrElse(taskId, 1L)
-      val reader = new WordIndexReader(getDataFile(taskId), vocab, window)
-
-      val worker = new Word2VecTrainingWorker(network, totalCount, batchSize, sample, startAlpha, maxIteration, window, vocab.size, random)
-      worker.start(reader, iteration)
-
+      val taskTotalWordCount = taskWordTotal.getOrElse(taskId.toString, 1L)
+      val reader = new WordIndexReader(splitter.getDataFile(taskId), vocab, window)
+      val worker = new Word2VecTrainingWorker(network, taskTotalWordCount, batchSize,
+        sample, startAlpha, maxIteration,
+        window, vocab.size, random)
+      worker.start(reader, currentIteration)
       reader.close()
     })
 
@@ -117,7 +74,8 @@ object Word2VecTrainingApp extends App {
   }
 
   val writer = SerializeHandler(new File(saveFile), SerializeHandler.WRITE_ONLY)
-  println("saving the model")
+  println("saving the model...")
   vocab.save(writer)
   writer.serialize2DArrayDouble(network.wordVector)
+  writer.close()
 }
