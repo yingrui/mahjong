@@ -67,7 +67,7 @@ object Word2VecTrainingApp extends App {
   while (iteration < maxIteration && hasImprovement) {
     cost = takeARound(iteration)
     debug("Iteration: %2d    cost: %2.5f".format(iteration, cost))
-    hasImprovement = lastCost - cost > 1e-5
+    hasImprovement = lastCost - cost > 1e-6
 
     lastCost = cost
     iteration += 1
