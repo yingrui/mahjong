@@ -16,3 +16,10 @@ It support user dictionary, synonyms, pinyin recognition etc.
 Open link <http://mahjong.yingrui.me/>, and you could try it. 
 
 Any question, please contact me <yingrui.f@gmail.com>.
+
+## Experimental Development
+**CRF** is the state-of-the-art algorithm for serial label classify problem, it has been widely adopted to apply to NLP tasks.
+
+**Mahjong** also implemented CRF algorithm and trying to balance the between different algorithms.
+
+**Deep Learning** is also become the hottest topic in machine learning. Our project also implements **Word2Vec**, it is going to integrate with max probability algorithm as well.
