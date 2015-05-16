@@ -5,39 +5,6 @@ import java.lang.Math.{abs, sqrt}
 import scala.util.Random
 import Word2VecUtil.simplifiedSigmoid
 
-object BagOfWordNetwork {
-
-  private def random = new Random()
-
-  private def random2DArray(row: Int, col: Int): Array[Array[Double]] = {
-    val arrays = new Array[Array[Double]](row)
-    for (i <- 0 until row) {
-      arrays(i) = randomArray(col)
-    }
-    arrays
-  }
-
-  private def randomArray(size: Int): Array[Double] = {
-    (for (i <- 0 until size) yield ((random.nextDouble() - 0.5D) / size.toDouble)).toArray
-  }
-
-  private def zero2DArray(row: Int, col: Int): Array[Array[Double]] = {
-    val arrays = new Array[Array[Double]](row)
-    for (i <- 0 until row) {
-      arrays(i) = (for (i <- 0 until col) yield 0D).toArray
-    }
-    arrays
-  }
-
-  def apply(wordsCount: Int, size: Int): BagOfWordNetwork = {
-    new BagOfWordNetwork(wordsCount, size, random2DArray(wordsCount, size), zero2DArray(wordsCount, size))
-  }
-
-  def apply(wordsCount: Int, size: Int, wordVector: Array[Array[Double]], layer1Weights: Array[Array[Double]]): BagOfWordNetwork = {
-    new BagOfWordNetwork(wordsCount, size, wordVector, layer1Weights)
-  }
-}
-
 class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array[Array[Double]], val layer1Weights: Array[Array[Double]]) extends Word2VecNetwork {
 
   val layer0Output = new Array[Double](size)
@@ -153,5 +120,38 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
         col += 1
       }
     }
+  }
+}
+
+object BagOfWordNetwork {
+
+  private def random = new Random()
+
+  private def random2DArray(row: Int, col: Int): Array[Array[Double]] = {
+    val arrays = new Array[Array[Double]](row)
+    for (i <- 0 until row) {
+      arrays(i) = randomArray(col)
+    }
+    arrays
+  }
+
+  private def randomArray(size: Int): Array[Double] = {
+    (for (i <- 0 until size) yield ((random.nextDouble() - 0.5D) / size.toDouble)).toArray
+  }
+
+  private def zero2DArray(row: Int, col: Int): Array[Array[Double]] = {
+    val arrays = new Array[Array[Double]](row)
+    for (i <- 0 until row) {
+      arrays(i) = (for (i <- 0 until col) yield 0D).toArray
+    }
+    arrays
+  }
+
+  def apply(wordsCount: Int, size: Int): BagOfWordNetwork = {
+    new BagOfWordNetwork(wordsCount, size, random2DArray(wordsCount, size), zero2DArray(wordsCount, size))
+  }
+
+  def apply(wordsCount: Int, size: Int, wordVector: Array[Array[Double]], layer1Weights: Array[Array[Double]]): BagOfWordNetwork = {
+    new BagOfWordNetwork(wordsCount, size, wordVector, layer1Weights)
   }
 }

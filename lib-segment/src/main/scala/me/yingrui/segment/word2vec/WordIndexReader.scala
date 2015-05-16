@@ -10,7 +10,7 @@ class WordIndexReader(val inputFile: String, val vocab: Vocabulary, val window: 
   private val reader = new DataInputStream(new FileInputStream(inputFile))
   private val random = new scala.util.Random(currentTimeMillis())
 
-  def read(): Int = readWord()
+  private def read(): Int = readWord()
 
   def close(): Unit = reader.close();
 
