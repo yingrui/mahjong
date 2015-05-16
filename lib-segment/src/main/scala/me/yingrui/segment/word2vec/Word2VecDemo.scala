@@ -8,7 +8,7 @@ import me.yingrui.segment.util.SerializeHandler
 
 object Word2VecDemo extends App {
 
-  println("loading...")
+  print("loading...\r")
   val reader = SerializeHandler(new File("vectors.dat"), SerializeHandler.READ_ONLY)
 
   val vocab = Vocabulary(reader)

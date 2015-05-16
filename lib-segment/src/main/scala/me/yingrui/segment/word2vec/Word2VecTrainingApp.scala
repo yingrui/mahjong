@@ -1,10 +1,10 @@
 package me.yingrui.segment.word2vec
 
 import java.io._
-import java.lang.Math.abs
 
 import me.yingrui.segment.util.Logger._
 import me.yingrui.segment.util.SerializeHandler
+
 import scala.collection.mutable.Map
 import scala.concurrent._
 import scala.concurrent.duration.Duration
@@ -19,7 +19,7 @@ object Word2VecTrainingApp extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "vectors.dat"
   val vecSize = if (args.indexOf("-size") >= 0) args(args.indexOf("-size") + 1).toInt else 200
   val window = if (args.indexOf("-window") >= 0) args(args.indexOf("-window") + 1).toInt else 8
-  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 15
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 1
   val random = new Random()
 
   def readVocabulary = {
@@ -87,49 +87,12 @@ object Word2VecTrainingApp extends App {
     network.clearError
 
     val futures = (0 until taskCount).map(taskId => Future {
-      val totalCount: Long = taskWordTotal.getOrElse(taskId, 1)
+      val totalCount = taskWordTotal.getOrElse(taskId, 1L)
       val reader = new WordIndexReader(getDataFile(taskId), vocab, window)
 
-      var count = 0L
-      var alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D)) * (1D / (iteration.toDouble + 1D))
-      if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
+      val worker = new Word2VecTrainingWorker(network, totalCount, batchSize, sample, startAlpha, maxIteration, window, vocab.size, random)
+      worker.start(reader, iteration)
 
-      var countAndWordList = reader.readWordListAndRandomlyDiscardFrequentWords(batchSize, sample)
-      count += countAndWordList._1
-      var wordList = countAndWordList._2
-      while (!wordList.isEmpty) {
-        for (index <- 0 until wordList.size) {
-          val randomRightContext = random.nextInt(window)
-          val words = reader.readWindow(wordList, index).slice(randomRightContext, 2 * window + 1 - randomRightContext)
-          val wordIndex = words(words.size / 2)
-          if (wordIndex > 0 && words.size > 2) {
-            val input = words.toArray
-            input(words.size / 2) = 0
-
-            val negativeSamples = 25
-            val output = new Array[(Int, Int)](negativeSamples + 1)
-            output(0) = (wordIndex, 1)
-            for (i <- 1 to negativeSamples) {
-              var index = (abs(random.nextLong() / 65536) % vocab.size).toInt
-              if (index == wordIndex) index = random.nextInt(vocab.size)
-              output(i) = (index, 0)
-            }
-
-            // train
-            network.learn(input.filter(in => in > 0), output, alpha)
-          }
-        }
-
-        val progress = count.toDouble / totalCount.toDouble
-        alpha = startAlpha * (1D - (count.toDouble + 1D) / (maxIteration * totalCount.toDouble + 1D)) * (1D / (iteration.toDouble + 1D))
-        if (alpha < startAlpha * 1e-4) alpha = startAlpha * 1e-4
-        if (alpha >= startAlpha) alpha = startAlpha
-        print("Iteration: %2d    Alpha %2.5f    progress: %2.5f\r".format(iteration, alpha, progress))
-
-        countAndWordList = reader.readWordListAndRandomlyDiscardFrequentWords(batchSize, sample)
-        count += countAndWordList._1
-        wordList = countAndWordList._2
-      }
       reader.close()
     })
 
