@@ -11,7 +11,7 @@ import me.yingrui.segment.util.SerializeHandler
 
 class MLPSegment {
 
-  val segmentCorpusFile = "lib-segment/training-100000.txt"
+  val segmentCorpusFile = "lib-segment/training-10000.txt"
 
   val word2VecModelFile = "vectors.cn.dat"
 
@@ -23,12 +23,12 @@ class MLPSegment {
   val trainDataSet = corpus.load(segmentCorpusFile)
   val testDataSet = trainDataSet
 
-  private def train() = {
-    val numberOfClasses = 4
-    val numberOfNeurons = 200
+  val numberOfClasses = 4
+  val numberOfNeurons = 200
 
-    val numberOfFeatures = 200
+  val numberOfFeatures = 200
 
+  def train(maxIteration: Int) = {
     val layer0Weight = Matrix.randomize(numberOfFeatures, numberOfNeurons, -1D, 1D)
     val layer0Bias = Matrix.randomize(1, numberOfNeurons, -1D, 1D)
     val layer1Weight = Matrix.randomize(numberOfNeurons, numberOfClasses, -1D, 1D)
@@ -60,12 +60,12 @@ class MLPSegment {
 
     var iteration = 0
     var cost = 0D
-    var lastCost = 0.0D
+    var lastCost = Double.MaxValue
     var hasImprovement = true
-    while (iteration < 100 && hasImprovement) {
+    while (iteration < maxIteration && hasImprovement) {
       cost = takeARound(trainDataSet)
       println("Iteration: %2d cost: %2.5f".format(iteration, cost))
-      hasImprovement = abs(cost - lastCost) > 1e-5
+      hasImprovement = abs(lastCost - cost) > 1e-5
 
       lastCost = cost
       iteration += 1
@@ -74,8 +74,8 @@ class MLPSegment {
     network.getNetwork
   }
 
-  private def classify(classifier: NeuralNetwork, testInput: Matrix): Matrix = {
-    val actualOutput = classifier computeOutput testInput
+  def classify(classifier: NeuralNetwork, input: Matrix): Matrix = {
+    val actualOutput = classifier computeOutput input
     var maxIndex = 0
     var maxValue = 0D
     for (i <- 0 until actualOutput.col) {
@@ -92,11 +92,11 @@ class MLPSegment {
     actualOutput
   }
 
-  def trainAndTest = {
+  def trainAndTest(maxIteration: Int) = {
     val tic = System.currentTimeMillis()
     println("train set contains " + trainDataSet.size + " samples, test set contains " + testDataSet.size + " samples.")
 
-    val classifier = train()
+    val classifier = train(maxIteration)
 
     val error = test(classifier)
 
@@ -108,10 +108,10 @@ class MLPSegment {
     val toc = System.currentTimeMillis()
     val second = (toc - tic) / 1000
     println(s"elapsed time: ${second}s")
-    accuracy
+    classifier
   }
 
-  private def test(classifier: NeuralNetwork): Double = {
+  def test(classifier: NeuralNetwork): Double = {
     testDataSet.map(data => {
       val testInput = data._1
       val expectedOutput = data._2

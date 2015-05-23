@@ -35,9 +35,8 @@ class NeuralNetwork {
     val input = new java.io.DataInputStream(FileUtil.getResourceAsStream(resource))
     val serializeHandler = new SerializeHandler(input, null)
     for(i <- 0 until serializeHandler.deserializeInt()) {
-      val weight: Matrix = serializeHandler.deserializeMatrix()
-      val bias: Matrix = serializeHandler.deserializeMatrix()
-      add(SigmoidLayer(weight, bias))
+      layers(i).weight := serializeHandler.deserializeMatrix()
+      layers(i).bias := serializeHandler.deserializeMatrix()
     }
     input.close()
   }
