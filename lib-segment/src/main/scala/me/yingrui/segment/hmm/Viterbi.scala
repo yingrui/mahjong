@@ -32,6 +32,7 @@ trait Viterbi {
     }
 
     for (currentPositionIndex <- 1 until listObserve.size) {
+      updateCurrentPosition(currentPositionIndex)
       val oi = listObserve(currentPositionIndex)
 
       val stateSet = getStatesBy(oi)
@@ -49,7 +50,7 @@ trait Viterbi {
         while (lastStateIndex < ret.states(lastPositionIndex).length) {
           val statePath = ret.getStatePath(lastPositionIndex, n - 1, lastStateIndex)
           val calculateResult = calculateProbability(ret.delta(lastPositionIndex)(lastStateIndex), statePath, state, oi)
-          val prob = calculateResult._2;
+          val prob = calculateResult._2
           val delta = calculateResult._1
           if (delta > maxDelta) {
             maxDelta = delta
@@ -71,6 +72,13 @@ trait Viterbi {
     }
 
     ret
+  }
+
+  private var currentPosition = 0
+  def currentPostion = currentPosition
+
+  private def updateCurrentPosition(currentPosition: Int) {
+    this.currentPosition = currentPosition
   }
 
   def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Array[Int]): (Double, Double)

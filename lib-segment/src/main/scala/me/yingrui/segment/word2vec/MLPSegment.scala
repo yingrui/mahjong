@@ -11,7 +11,7 @@ import me.yingrui.segment.util.SerializeHandler
 
 class MLPSegment {
 
-  val segmentCorpusFile = "lib-segment/training-10000.txt"
+  val segmentCorpusFile = "lib-segment/training-100000.txt"
 
   val word2VecModelFile = "vectors.cn.dat"
 
@@ -21,7 +21,8 @@ class MLPSegment {
 
   val corpus = new SegmentCorpus(word2VecModel, vocab)
   val trainDataSet = corpus.load(segmentCorpusFile)
-  val testDataSet = trainDataSet
+  val transitionProb = corpus.buildLabelTransitionProb
+  val testDataSet = corpus.loadSegmentDataSet(segmentCorpusFile)
 
   val numberOfClasses = 4
   val numberOfNeurons = 200
@@ -94,13 +95,13 @@ class MLPSegment {
 
   def trainAndTest(maxIteration: Int) = {
     val tic = System.currentTimeMillis()
-    println("train set contains " + trainDataSet.size + " samples, test set contains " + testDataSet.size + " samples.")
+    println("train set contains " + trainDataSet.size + " samples")
 
     val classifier = train(maxIteration)
 
     val error = test(classifier)
 
-    val numberOfSamples = testDataSet.size.toDouble
+    val numberOfSamples = trainDataSet.size.toDouble
     val accuracy = 1.0 - error / numberOfSamples
 
     println("error = " + error + " total = " + numberOfSamples)
@@ -112,7 +113,7 @@ class MLPSegment {
   }
 
   def test(classifier: NeuralNetwork): Double = {
-    testDataSet.map(data => {
+    trainDataSet.map(data => {
       val testInput = data._1
       val expectedOutput = data._2
 
@@ -122,6 +123,18 @@ class MLPSegment {
         1.0D
       else
         0.0D
+    }).sum
+  }
+
+  def testSegmentCorpus(network: NeuralNetwork): Double = {
+    testDataSet.map(document => {
+      val expectedOutput = document.map(data => data._3)
+      val classifier = new MLPSegmentViterbiClassifier(network, transitionProb)
+      val result = classifier.classify(document.map(data => (data._1, data._2)))
+      val output = result.getBestPath
+
+      val errors: Double = (0 until document.length).map(i => if(expectedOutput(i) == output(i)) 0D else 1D).sum
+      errors
     }).sum
   }
 }
