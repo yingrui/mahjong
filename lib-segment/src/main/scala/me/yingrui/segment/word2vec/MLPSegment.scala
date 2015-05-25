@@ -24,10 +24,9 @@ class MLPSegment {
   val transitionProb = corpus.buildLabelTransitionProb
   val testDataSet = corpus.loadSegmentDataSet(segmentCorpusFile)
 
-  val numberOfClasses = 4
+  val numberOfFeatures = word2VecModel(0).length
   val numberOfNeurons = 200
-
-  val numberOfFeatures = 200
+  val numberOfClasses = 4
 
   def train(maxIteration: Int) = {
     val layer0Weight = Matrix.randomize(numberOfFeatures, numberOfNeurons, -1D, 1D)
@@ -133,8 +132,8 @@ class MLPSegment {
       val result = classifier.classify(document.map(data => (data._1, data._2)))
       val output = result.getBestPath
 
-      val errors: Double = (0 until document.length).map(i => if(expectedOutput(i) == output(i)) 0D else 1D).sum
-      errors
+      val errors = (0 until document.length).map(i => if(expectedOutput(i) == output(i)) 0D else 1D)
+      errors.sum
     }).sum
   }
 }

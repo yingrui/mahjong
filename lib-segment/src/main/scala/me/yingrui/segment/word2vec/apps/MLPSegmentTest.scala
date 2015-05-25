@@ -19,16 +19,29 @@ object MLPSegmentTest extends App {
     network.add(SoftmaxLayer(Matrix(segment.numberOfNeurons, segment.numberOfClasses)).layer)
     network.load(saveFile)
 
-    val error = segment.testSegmentCorpus(network)
-    val numberOfSamples = segment.testDataSet.map(doc => doc.length).sum.toDouble
-    val accuracy = 1.0 - error / numberOfSamples
-
-    println("error = " + error + " total = " + numberOfSamples)
-    println("accuracy = " + accuracy)
+    test(network)
+    testSegmentCorpus(network)
   } else {
     val network = segment.trainAndTest(maxIteration = 200)
     network save saveFile
   }
 
+  def testSegmentCorpus(network: NeuralNetwork) {
+    val error = segment.testSegmentCorpus(network)
+    val numberOfSamples = segment.testDataSet.map(doc => doc.length).sum.toDouble
+    displayTestResult(error, numberOfSamples)
+  }
 
+  def test(network: NeuralNetwork) {
+    val error = segment.test(network)
+    val numberOfSamples = segment.trainDataSet.size.toDouble
+    displayTestResult(error, numberOfSamples)
+  }
+
+  def displayTestResult(error: Double, numberOfSamples: Double) {
+    val accuracy = 1.0 - error / numberOfSamples
+
+    println("error = " + error + " total = " + numberOfSamples)
+    println("accuracy = " + accuracy)
+  }
 }
