@@ -1,13 +1,14 @@
 package me.yingrui.segment.performance
 
-import junit.framework.Assert
-import org.junit.{Ignore, Test}
-import me.yingrui.segment.core.SegmentWorker
 import java.io.InputStream
-import me.yingrui.segment.util.FileUtil._
-import scala.Some
-import io.Source
+
+import junit.framework.Assert
+import me.yingrui.segment.core.SegmentWorker
 import me.yingrui.segment.dict.POSUtil
+import me.yingrui.segment.util.FileUtil._
+import org.junit.{Ignore, Test}
+
+import scala.io.Source
 
 @Ignore
 class NERAccuracyTest {

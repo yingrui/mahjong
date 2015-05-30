@@ -1,11 +1,11 @@
 package me.yingrui.segment.hmm
 
+import java.io.{DataInputStream, File, InputStream}
+
+import me.yingrui.segment.util.FileUtil._
 import me.yingrui.segment.util.SerializeHandler
 
-import collection.mutable.Map
-import java.io.{DataInputStream, InputStream, File}
-import me.yingrui.segment.util.FileUtil._
-import io.Source
+import scala.collection.mutable.Map
 
 class HmmModel() {
 

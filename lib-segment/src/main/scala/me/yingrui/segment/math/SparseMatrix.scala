@@ -1,7 +1,5 @@
 package me.yingrui.segment.math
 
-import me.yingrui.segment.graph.SparseVector
-
 import scala.collection.mutable.Map
 
 class SparseMatrix(val row: Int, val col: Int, val rowOrder: Boolean = true) {

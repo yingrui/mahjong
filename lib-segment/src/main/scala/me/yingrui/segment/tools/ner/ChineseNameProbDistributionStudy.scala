@@ -1,6 +1,6 @@
 package me.yingrui.segment.tools.ner
 
-import io.Source
+import scala.io.Source
 import java.io.{File, InputStream}
 import me.yingrui.segment.pinyin.WordToPinyinClassfierFactory
 import me.yingrui.segment.util.FileUtil._

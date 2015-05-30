@@ -3,10 +3,9 @@ package me.yingrui.segment.pinyin
 import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.hmm.{HmmClassifier, HmmModel}
 import me.yingrui.segment.util.CharCheckUtil
-
-import io.Source
 import me.yingrui.segment.util.FileUtil._
-import scala.Some
+
+import scala.io.Source
 
 class WordToPinyinClassifier(val model: HmmModel) {
 

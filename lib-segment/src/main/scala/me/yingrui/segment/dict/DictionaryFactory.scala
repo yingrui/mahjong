@@ -1,17 +1,15 @@
 package me.yingrui.segment.dict
 
-import domain.DomainDictFactory
+import java.io.InputStream
+
 import me.yingrui.segment.concept.ConceptRepository
 import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.tools.StringWordConverter
-
-import io.Source
 import me.yingrui.segment.core.MPSegment
+import me.yingrui.segment.dict.domain.DomainDictFactory
+import me.yingrui.segment.tools.StringWordConverter
 import me.yingrui.segment.util.FileUtil
-import java.io.InputStream
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.io.Source
 
 object DictionaryFactory {
   val instance = new DictionaryFactory()

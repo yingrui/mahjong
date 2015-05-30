@@ -1,6 +1,6 @@
 package me.yingrui.segment.conf
 
-import io.Source
+import scala.io.Source
 import collection.Map
 import java.net.URL
 

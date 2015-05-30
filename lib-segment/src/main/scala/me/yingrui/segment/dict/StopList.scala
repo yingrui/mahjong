@@ -2,7 +2,7 @@ package me.yingrui.segment.dict
 
 import me.yingrui.segment.conf.MPSegmentConfiguration
 
-import io.Source
+import scala.io.Source
 import collection.mutable
 
 object StopList {

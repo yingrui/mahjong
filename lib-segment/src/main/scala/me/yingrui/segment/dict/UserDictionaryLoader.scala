@@ -1,12 +1,13 @@
 package me.yingrui.segment.dict
 
+import java.io.File
+
 import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.core._
 import me.yingrui.segment.dict.domain.DomainDictionary
-import me.yingrui.segment.dict.domain.DomainDictFactory
-import java.io.{File, FileInputStream, InputStreamReader, BufferedReader}
-import collection.mutable.ListBuffer
-import io.Source
+
+import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 object UserDictionaryLoader {
   def apply(domaindictionary: DomainDictionary, hashdictionary: HashDictionary) = {

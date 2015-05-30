@@ -8,6 +8,7 @@ import me.yingrui.segment.neural.errors.CrossEntropyLoss
 import me.yingrui.segment.neural.{BPSigmoidLayer, BackPropagation, NeuralNetwork, SoftmaxLayer}
 import me.yingrui.segment.util.SerializeHandler
 
+import scala.collection.mutable.ListBuffer
 
 class MLPSegment {
 
@@ -49,25 +50,29 @@ class MLPSegment {
         network.computeError(output, expectedOutput)
         network.update()
         count += 1
-        if(count % 1000 == 0) {
+        if (count % 1000 == 0) {
           print("Progress %2.5f \r".format(count.toDouble / trainSet.size.toDouble))
         }
       }
-      println()
 
       network.getLoss
     }
 
     var iteration = 0
     var cost = 0D
+    val costs = new ListBuffer[Double]()
     var lastCost = Double.MaxValue
     var hasImprovement = true
     while (iteration < maxIteration && hasImprovement) {
+      val tic = System.currentTimeMillis()
       cost = takeARound(trainDataSet)
-      println("Iteration: %2d cost: %2.5f".format(iteration, cost))
-      hasImprovement = abs(lastCost - cost) > 1e-5
+      val toc = System.currentTimeMillis()
+      costs += cost
+      val averageCost = costs.takeRight(20).sum / costs.takeRight(20).size.toDouble
+      println("Iteration: %2d cost: %2.5f average cost: %2.5f elapse: %ds".format(iteration, cost, averageCost, (toc - tic) / 1000))
+      hasImprovement = (lastCost - averageCost) > 1e-5
 
-      lastCost = cost
+      lastCost = averageCost
       iteration += 1
     }
 
@@ -86,7 +91,7 @@ class MLPSegment {
     }
 
     for (i <- 0 until actualOutput.col) {
-      actualOutput(0, i) = if(i == maxIndex) 1D else 0D
+      actualOutput(0, i) = if (i == maxIndex) 1D else 0D
     }
 
     actualOutput
@@ -132,7 +137,7 @@ class MLPSegment {
       val result = classifier.classify(document.map(data => (data._1, data._2)))
       val output = result.getBestPath
 
-      val errors = (0 until document.length).map(i => if(expectedOutput(i) == output(i)) 0D else 1D)
+      val errors = (0 until document.length).map(i => if (expectedOutput(i) == output(i)) 0D else 1D)
       errors.sum
     }).sum
   }
