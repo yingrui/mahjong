@@ -56,6 +56,14 @@ class Vocabulary(private val wordIndexMap: util.Map[String, Int],
     this.totalWordCount = temp.totalWordCount
   }
 
+  def buildHuffmanTree(): HuffmanTree = {
+    val huffmanTree = new HuffmanTree
+    wordIndexMap.keySet().toArray(new Array[String](0)).foreach(word => {
+      huffmanTree.add(getIndex(word), getCount(word))
+    })
+    huffmanTree.build()
+    huffmanTree
+  }
 }
 
 object Vocabulary {

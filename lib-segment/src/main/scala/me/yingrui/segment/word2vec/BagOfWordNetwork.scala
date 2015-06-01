@@ -5,7 +5,11 @@ import java.lang.Math.{abs, sqrt}
 import scala.util.Random
 import Word2VecUtil.simplifiedSigmoid
 
-class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array[Array[Double]], val layer1Weights: Array[Array[Double]]) extends Word2VecNetwork {
+class BagOfWordNetwork(val wordsCount: Int, val size: Int,
+                       val wordVector: Array[Array[Double]],
+                       val layer1Weights: Array[Array[Double]],
+                       val layerHierachySoftmax: Array[Array[Double]],
+                       val tree: HuffmanTree, val hierarchySoftmax: Boolean) extends Word2VecNetwork {
 
   val layer0Output = new Array[Double](size)
 
@@ -18,16 +22,39 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
 
     val errors = new Array[Double](size)
 
+    if (hierarchySoftmax) {
+      val currentWordIndex = output(0)._1
+      computeHierachySoftmaxError(layer0Output, currentWordIndex, errors, alpha)
+    }
+
     for ((wordIndex, label) <- output) yield {
       val grad = computeLayer1Grad(layer0Output, alpha, wordIndex, label)
       if (abs(grad) > 1e-10D) updateLayer1WeightsAndPropagateErrors(layer0Output, errors, wordIndex, grad)
     }
-//    val grads = computeLayer1Grads(layer0Output, output, alpha)
-//    val errors = updateLayer1WeightsAndPropagateErrors(grads, layer0Output)
 
     updateLayer0Weights(errors, input)
 
     learningTimes += 1D
+  }
+
+  def computeHierachySoftmaxError(input: Array[Double], currentWordIndex: Int, errors: Array[Double], alpha: Double) {
+    val codes = tree.getCode(currentWordIndex)
+    val parentIndexes = tree.getParentIndexes(currentWordIndex)
+    var i = 0
+    while (i < codes.size) {
+      val code = codes(i)
+      val wordIndex = parentIndexes(i)
+
+      val weights = layerHierachySoftmax(wordIndex)
+      val f = multiply(input, weights)
+      val output = simplifiedSigmoid(f)
+      val error = 1 - code - output
+      val grad = error * alpha
+
+      updateLayerHierachiSoftmaxAndPropagateErrors(input, errors, wordIndex, grad)
+
+      i += 1
+    }
   }
 
   def clearError {
@@ -90,7 +117,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
     val error = label.toDouble - output
     loss += Math.pow(error, 2D)
     val grad = error * alpha
-//    println("grad: %2.5f  f: %2.5f  alpha: %2.5f  index: %d  output: %d".format(grad, f, alpha, wordIndex, label))
+    //    println("grad: %2.5f  f: %2.5f  alpha: %2.5f  index: %d  output: %d".format(grad, f, alpha, wordIndex, label))
     grad
   }
 
@@ -111,8 +138,17 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int, val wordVector: Array
     }
   }
 
+  def updateLayerHierachiSoftmaxAndPropagateErrors(input: Array[Double], errors: Array[Double], wordIndex: Int, grad: Double): Unit = {
+    var col = 0
+    while (col < size) {
+      errors(col) += grad * layerHierachySoftmax(wordIndex)(col)
+      layerHierachySoftmax(wordIndex)(col) += grad * input(col)
+      col += 1
+    }
+  }
+
   def updateLayer0Weights(errors: Array[Double], wordIndexes: Array[Int]): Unit = {
-//    println(wordIndexes.toList + "  " + errors.toList)
+    //    println(wordIndexes.toList + "  " + errors.toList)
     for (wordIndex <- wordIndexes) {
       var col = 0
       while (col < size) {
@@ -148,10 +184,18 @@ object BagOfWordNetwork {
   }
 
   def apply(wordsCount: Int, size: Int): BagOfWordNetwork = {
-    new BagOfWordNetwork(wordsCount, size, random2DArray(wordsCount, size), zero2DArray(wordsCount, size))
+    new BagOfWordNetwork(wordsCount, size, random2DArray(wordsCount, size), zero2DArray(wordsCount, size), zero2DArray(wordsCount, size), null, false)
+  }
+
+  def apply(wordsCount: Int, size: Int, tree: HuffmanTree, hierarchySoftmax: Boolean): BagOfWordNetwork = {
+    new BagOfWordNetwork(wordsCount, size, random2DArray(wordsCount, size), zero2DArray(wordsCount, size), zero2DArray(wordsCount, size), tree, hierarchySoftmax)
+  }
+
+  def apply(wordsCount: Int, size: Int, wordVector: Array[Array[Double]], layer1Weights: Array[Array[Double]], layerHierachySoftmax: Array[Array[Double]], tree: HuffmanTree, hierarchySoftmax: Boolean): BagOfWordNetwork = {
+    new BagOfWordNetwork(wordsCount, size, wordVector, layer1Weights, layerHierachySoftmax, tree, hierarchySoftmax)
   }
 
   def apply(wordsCount: Int, size: Int, wordVector: Array[Array[Double]], layer1Weights: Array[Array[Double]]): BagOfWordNetwork = {
-    new BagOfWordNetwork(wordsCount, size, wordVector, layer1Weights)
+    new BagOfWordNetwork(wordsCount, size, wordVector, layer1Weights, Array(Array[Double]()), null, false)
   }
 }

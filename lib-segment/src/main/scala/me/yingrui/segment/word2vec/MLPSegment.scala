@@ -12,9 +12,9 @@ import scala.collection.mutable.ListBuffer
 
 class MLPSegment {
 
-  val segmentCorpusFile = "lib-segment/training-100000.txt"
+  val segmentCorpusFile = "lib-segment/training-10000.txt"
 
-  val word2VecModelFile = "vectors.cn.dat"
+  val word2VecModelFile = "vectors.cn.hs.dat"
 
   val reader = SerializeHandler(new File(word2VecModelFile), SerializeHandler.READ_ONLY)
   val vocab = Vocabulary(reader)
