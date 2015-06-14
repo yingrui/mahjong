@@ -10,20 +10,20 @@ import me.yingrui.segment.util.SerializeHandler
 
 import scala.collection.mutable.ListBuffer
 
-class MLPSegment(val segmentCorpusFile: String, val word2VecModelFile: String) {
+class MLPSegment(val segmentCorpusFile: String, val word2VecModelFile: String, val ngram: Int = 1) {
 
   val reader = SerializeHandler(new File(word2VecModelFile), SerializeHandler.READ_ONLY)
   val vocab = Vocabulary(reader)
   val word2VecModel = reader.deserialize2DArrayDouble()
 
-  val corpus = new SegmentCorpus(word2VecModel, vocab)
+  val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
   val trainDataSet = corpus.load(segmentCorpusFile)
   val transitionProb = corpus.buildLabelTransitionProb
   val testDataSet = corpus.loadSegmentDataSet(segmentCorpusFile)
 
   val numberOfFeatures = word2VecModel(0).length
   val numberOfNeurons = 200
-  val numberOfClasses = 4
+  val numberOfClasses = Math.pow(4, ngram).toInt
 
   def train(maxIteration: Int) = {
     val layer0Weight = Matrix.randomize(numberOfFeatures, numberOfNeurons, -1D, 1D)
@@ -129,7 +129,7 @@ class MLPSegment(val segmentCorpusFile: String, val word2VecModelFile: String) {
   def testSegmentCorpus(network: NeuralNetwork): Double = {
     testDataSet.map(document => {
       val expectedOutput = document.map(data => data._3)
-      val classifier = new MLPSegmentViterbiClassifier(network, transitionProb)
+      val classifier = new MLPSegmentViterbiClassifier(network, transitionProb, ngram)
       val result = classifier.classify(document.map(data => (data._1, data._2)))
       val output = result.getBestPath
 

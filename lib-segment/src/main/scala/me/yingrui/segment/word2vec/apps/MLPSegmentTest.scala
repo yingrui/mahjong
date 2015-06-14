@@ -9,9 +9,10 @@ import me.yingrui.segment.word2vec.MLPSegment
 object MLPSegmentTest extends App {
 
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
+  val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 1
   
   print("loading...\r")
-  val segment = new MLPSegment("lib-segment/training-10000.txt", "vectors.cn.hs.dat")
+  val segment = new MLPSegment("lib-segment/training-10000.txt", "vectors.cn.hs.dat", ngram)
 
   if (Files.exists(Paths.get(saveFile))) {
     val network = new NeuralNetwork

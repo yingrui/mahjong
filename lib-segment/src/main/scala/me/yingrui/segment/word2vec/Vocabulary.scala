@@ -10,6 +10,8 @@ class Vocabulary(private val wordIndexMap: util.Map[String, Int],
                  private val wordCount: mutable.Buffer[Int],
                  private var totalWordCount: Long) {
 
+  def this() = this(null, null, 0L)
+
   def getTotalWordCount = this.totalWordCount
 
   def size = wordCount.size

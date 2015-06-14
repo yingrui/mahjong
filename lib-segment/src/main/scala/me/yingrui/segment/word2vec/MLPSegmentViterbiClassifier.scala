@@ -7,7 +7,7 @@ import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.NeuralNetwork
 import scala.collection.JavaConversions.asJavaCollection
 
-class MLPSegmentViterbiClassifier(network: NeuralNetwork, transitionProb: Matrix) {
+class MLPSegmentViterbiClassifier(network: NeuralNetwork, transitionProb: Matrix, ngram: Int) {
 
   private val labels = asJavaCollection(List(0, 1, 2, 3))
   private val defaultOutput = Matrix(Array(1D - 3E-20, 1E-20, 1E-20, 1E-20))
@@ -20,13 +20,13 @@ class MLPSegmentViterbiClassifier(network: NeuralNetwork, transitionProb: Matrix
       if(wordIndex > 0) network.computeOutput(inputMatrix) else defaultOutput
     })
 
-    val viterbi = new MLPSegmentViterbi(labels, probDist, transitionProb)
+    val viterbi = new MLPSegmentViterbi(labels, probDist, transitionProb, ngram)
     viterbi.calculateResult(listObserve.map(input => Array(input._1)))
   }
 
 }
 
-class MLPSegmentViterbi(labels: java.util.Collection[Int], probDist: Seq[Matrix], transitionProb: Matrix) extends Viterbi {
+class MLPSegmentViterbi(labels: java.util.Collection[Int], probDist: Seq[Matrix], transitionProb: Matrix, ngram: Int) extends Viterbi {
 
   override def getStatesBy(observe: Seq[Int]): java.util.Collection[Int] = labels
 
