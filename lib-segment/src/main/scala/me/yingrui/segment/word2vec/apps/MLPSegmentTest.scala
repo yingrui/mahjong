@@ -11,7 +11,7 @@ object MLPSegmentTest extends App {
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
   
   print("loading...\r")
-  val segment = new MLPSegment()
+  val segment = new MLPSegment("lib-segment/training-10000.txt", "vectors.cn.hs.dat")
 
   if (Files.exists(Paths.get(saveFile))) {
     val network = new NeuralNetwork
