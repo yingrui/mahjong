@@ -74,11 +74,11 @@ trait Viterbi {
     ret
   }
 
-  private var currentPosition = 0
-  def currentPostion = currentPosition
+  private var currentPos = 0
+  def currentPosition = currentPos
 
   private def updateCurrentPosition(currentPosition: Int) {
-    this.currentPosition = currentPosition
+    this.currentPos = currentPosition
   }
 
   def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Array[Int]): (Double, Double)

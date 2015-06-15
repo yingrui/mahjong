@@ -38,16 +38,16 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
     val data = segmentCorpus.convert(document)
     data(0)._1.flatten should be (Array(1D, 2D))
     data(0)._2.flatten should be (
-      Array(0D, 1D, 0D, 0D,
-            0D, 0D, 0D, 0D,
+      Array(0D, 0D, 0D, 0D,
+            0D, 0D, 0D, 1D,
             0D, 0D, 0D, 0D,
             0D, 0D, 0D, 0D))
 
     data(1)._1.flatten should be (Array(1D, 2D))
     data(1)._2.flatten should be (
       Array(0D, 0D, 0D, 0D,
-            0D, 0D, 0D, 1D,
             0D, 0D, 0D, 0D,
-            0D, 0D, 0D, 0D))
+            0D, 0D, 0D, 0D,
+            1D, 0D, 0D, 0D))
   }
 }

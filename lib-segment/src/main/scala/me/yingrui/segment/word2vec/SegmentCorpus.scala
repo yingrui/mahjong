@@ -64,9 +64,9 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
   }
 
   private def getLabels(inputs: List[(Int, Int)], position: Int): Array[Int] = {
-    (1 to ngram).map(i => {
-      val index = position + (i - ngram)
-      if (index >= 0) inputs(index)._2 else 0
+    (0 until ngram).map(i => {
+      val index = position + i
+      if (index < inputs.length) inputs(index)._2 else 0
     }).toArray
   }
 
