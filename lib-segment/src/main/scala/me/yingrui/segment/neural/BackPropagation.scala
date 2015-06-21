@@ -43,9 +43,9 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
   def getNetwork = network
 
-  def update() {
-    layers.foreach(_.update(rate, momentum))
-  }
+  def update(): Unit = update(rate)
+
+  def update(rate: Double): Unit = layers.foreach(_.update(rate, momentum))
 
   def takeARound(iteration: Int): Unit = {
     initLayers

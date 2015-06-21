@@ -3,16 +3,19 @@ package me.yingrui.segment.word2vec.apps
 import java.nio.file.{Files, Paths}
 
 import me.yingrui.segment.math.Matrix
-import me.yingrui.segment.neural.{SoftmaxLayer, SigmoidLayer, NeuralNetwork}
+import me.yingrui.segment.neural.{NeuralNetwork, SigmoidLayer, SoftmaxLayer}
 import me.yingrui.segment.word2vec.MLPSegment
 
 object MLPSegmentTest extends App {
 
+  val word2vecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-100000.txt"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2
-  
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 400
+
   print("loading...\r")
-  val segment = new MLPSegment("lib-segment/training-100000.txt", "vectors.cn.hs.dat", ngram)
+  val segment = new MLPSegment(trainFile, word2vecModelFile, ngram)
 
   if (Files.exists(Paths.get(saveFile))) {
     val network = new NeuralNetwork
@@ -23,7 +26,7 @@ object MLPSegmentTest extends App {
     test(network)
     testSegmentCorpus(network)
   } else {
-    val network = segment.trainAndTest(maxIteration = 200)
+    val network = segment.trainAndTest(maxIteration)
     network save saveFile
   }
 

@@ -7,24 +7,16 @@ import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.NeuralNetwork
 import scala.collection.JavaConversions.asJavaCollection
 
-class MLPSegmentViterbiClassifier(network: NeuralNetwork, transitionProb: Matrix, ngram: Int) {
+class MLPSegmentViterbiClassifier(val network: NeuralNetwork, val transitionProb: Matrix, val ngram: Int) {
 
   private val labels = asJavaCollection(List(0, 1, 2, 3))
-  private val defaultOutput =
-    if (ngram == 1)
-      Matrix(Array(1D - 3E-20, 1E-20, 1E-20, 1E-20))
-    else
-      Matrix(Array(0.5D - 7E-20, 1E-20, 1E-20, 1E-20,
-        0.5D - 7E-20, 1E-20, 1E-20, 1E-20,
-        1E-20, 1E-20, 1E-20, 1E-20,
-        1E-20, 1E-20, 1E-20, 1E-20))
 
   def classify(listObserve: Seq[(Int, Matrix)]): ViterbiResult = {
     val probDist = listObserve.map(input => {
       val wordIndex = input._1
       val inputMatrix = input._2
 
-      if (wordIndex > 0) network.computeOutput(inputMatrix) else defaultOutput
+      network.computeOutput(inputMatrix)
     })
 
     val viterbi = new MLPSegmentViterbi(labels, probDist, transitionProb, ngram)
@@ -33,7 +25,7 @@ class MLPSegmentViterbiClassifier(network: NeuralNetwork, transitionProb: Matrix
 
 }
 
-class MLPSegmentViterbi(labels: java.util.Collection[Int], probDist: Seq[Matrix], transitionProb: Matrix, ngram: Int) extends Viterbi {
+class MLPSegmentViterbi(val labels: java.util.Collection[Int], val probDist: Seq[Matrix], val transitionProb: Matrix, val ngram: Int) extends Viterbi {
 
   private val numberOfLabels = labels.size()
 
@@ -54,15 +46,18 @@ class MLPSegmentViterbi(labels: java.util.Collection[Int], probDist: Seq[Matrix]
 
   private def prob(position: Int, state: Int): Double = {
     val dist = probDist(position)
-    val prob = (0 until numberOfLabels).foldLeft(0D)((prob, index) => prob + dist(0, index * numberOfLabels + state))
-    prob
+    val prob = (0 until numberOfLabels).foldLeft(0D)((p, index) => p + dist(0, index * numberOfLabels + state))
+
+    if(ngram > 1 && position < probDist.length - 1) {
+      val next = (0 until numberOfLabels).foldLeft(0D)((p, index) => p + probDist(position + 1)(numberOfLabels * state, index))
+      prob * next
+    } else
+      prob
   }
 
   private def transitionProb(position: Int, statePath: Array[Int], state: Int): Double = {
     val last = statePath.last
-    val dist = probDist(position)
-    val prob = dist(0, last * numberOfLabels + state)
-    prob
+    transitionProb(last, state)
   }
 
 }
