@@ -4,9 +4,9 @@ import java.nio.file.{Files, Paths}
 
 import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.{NeuralNetwork, SigmoidLayer, SoftmaxLayer}
-import me.yingrui.segment.word2vec.MLPSegment
+import me.yingrui.segment.word2vec.SimpleMLPSegment
 
-object MLPSegmentTest extends App {
+object SimpleMLPSegmentTest extends App {
 
   val word2vecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-100000.txt"
@@ -15,7 +15,7 @@ object MLPSegmentTest extends App {
   val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 400
 
   print("loading...\r")
-  val segment = new MLPSegment(trainFile, word2vecModelFile, ngram)
+  val segment = new SimpleMLPSegment(trainFile, word2vecModelFile, ngram)
 
   if (Files.exists(Paths.get(saveFile))) {
     val network = new NeuralNetwork

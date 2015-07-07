@@ -11,7 +11,7 @@ import me.yingrui.segment.util.SerializeHandler
 
 import scala.collection.mutable.ListBuffer
 
-class MLPSegment(val segmentCorpusFile: String, val word2VecModelFile: String, val ngram: Int = 1) {
+class SimpleMLPSegment(val segmentCorpusFile: String, val word2VecModelFile: String, val ngram: Int = 1) {
 
   val reader = SerializeHandler(new File(word2VecModelFile), SerializeHandler.READ_ONLY)
   val vocab = Vocabulary(reader)
