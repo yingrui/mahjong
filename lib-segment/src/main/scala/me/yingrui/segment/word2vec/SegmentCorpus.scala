@@ -63,6 +63,18 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     }).toList
   }
 
+  def convertToWordIndexes(document: List[(String, String)]): List[(List[Int], Int, Matrix)] = {
+    val inputs = document
+      .filter(wordLabel => vocab.getIndex(wordLabel._1) > 0)
+      .map(wordAndLabel => {
+      (vocab.getIndex(wordAndLabel._1), labelMap(wordAndLabel._2))
+    })
+
+    (0 until inputs.length).map(position => {
+      (getContextWords(inputs, position), position, labelToMatrix(getLabels(inputs, position)))
+    }).toList
+  }
+
   private def getLabels(inputs: List[(Int, Int)], position: Int): Array[Int] = {
     (1 to ngram).map(i => {
       val index = position + (i - ngram)
@@ -78,7 +90,7 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
 
   private def getContext[T](document: List[T], position: Int, window: Int): List[T] = {
     val left = document.slice(if (position < window) 0 else position - window, position)
-    val right = document.slice(position, if (position + window < document.length) position + window else document.length)
+    val right = document.slice(position + 1, if (position + window < document.length) position + window + 1 else document.length)
     left ++ List(document(position)) ++ right
   }
 
@@ -99,7 +111,7 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     input / inputs.length.toDouble
   }
 
-  private def loadDocuments(segmentCorpusFile: String): List[List[(String, String)]] = {
+  def loadDocuments(segmentCorpusFile: String): List[List[(String, String)]] = {
     val documents = ListBuffer[List[(String, String)]]()
     val rowData = ListBuffer[String]()
     Source.fromFile(segmentCorpusFile).getLines().foreach(line => {
