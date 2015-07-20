@@ -19,7 +19,7 @@ class SimpleMLPSegment(val segmentCorpusFile: String, val word2VecModelFile: Str
 
   val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
   val trainDataSet = corpus.load(segmentCorpusFile)
-  val transitionProb = corpus.buildLabelTransitionProb
+  val transitionProb = corpus.getLabelTransitionProb
   val testDataSet = corpus.loadSegmentDataSet(segmentCorpusFile)
 
   val numberOfFeatures = word2VecModel(0).length

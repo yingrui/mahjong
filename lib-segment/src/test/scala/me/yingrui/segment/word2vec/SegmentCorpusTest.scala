@@ -38,7 +38,7 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
 
     val data = segmentCorpus.convertToWordIndexes(document)
     data(0)._1 should be (List(3, 1))
-    data(0)._2 should be (0)
+    data(0)._2 should be (3)
     data(0)._3.flatten should be (Array(1D, 0D, 0D, 0D))
 
     data(1)._1 should be (List(3, 1, 2))
@@ -48,6 +48,17 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
     data(2)._1 should be (List(1, 2))
     data(2)._2 should be (2)
     data(2)._3.flatten should be (Array(0D, 0D, 0D, 1D))
+  }
+
+  test("should return input matrix given input word indexes") {
+    val word2VecModel: Array[Array[Double]] = Array(Array(1D, 2D), Array(3D, 4D), Array(5D, 6D))
+    val vocab = stub[Vocabulary]
+
+    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1)
+
+    val input = segmentCorpus.convertToMatrix(List(1, 2))
+
+    input.flatten should be (Array((3D + 5D) / 2D, (4D + 6D) / 2D))
   }
 
   test("should return input and output when ngram is 2") {

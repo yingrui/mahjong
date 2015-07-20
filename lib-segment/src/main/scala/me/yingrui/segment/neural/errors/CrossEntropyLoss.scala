@@ -17,5 +17,5 @@ class CrossEntropyLoss extends Loss {
     setSize += 1D
   }
 
-  def loss = cost /setSize
+  def loss = cost / (setSize + 1D)
 }

@@ -25,6 +25,22 @@ class MLPSegmentViterbiClassifier(val network: NeuralNetwork, val transitionProb
 
 }
 
+class MNNSegmentViterbiClassifier(val networks: Seq[NeuralNetwork], val transitionProb: Matrix, val ngram: Int) {
+  private val labels = asJavaCollection(List(0, 1, 2, 3))
+
+  def classify(listObserve: Seq[(Int, Matrix)]): ViterbiResult = {
+    val probDist = listObserve.map(input => {
+      val wordIndex = input._1
+      val inputMatrix = input._2
+
+      networks(wordIndex).computeOutput(inputMatrix)
+    })
+
+    val viterbi = new MLPSegmentViterbi(labels, probDist, transitionProb, ngram)
+    viterbi.calculateResult(listObserve.map(input => Array(input._1)))
+  }
+}
+
 class MLPSegmentViterbi(val labels: java.util.Collection[Int], val probDist: Seq[Matrix], val transitionProb: Matrix, val ngram: Int) extends Viterbi {
 
   private val numberOfLabels = labels.size()
