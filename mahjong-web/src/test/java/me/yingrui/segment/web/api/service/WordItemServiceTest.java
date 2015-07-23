@@ -138,9 +138,14 @@ public class WordItemServiceTest extends UsingUserFixtures {
         WordItem wordItem2 = addWord(wordName2, pinyinA, posN);
         WordItem wordItem3 = addWord(wordName3, "ai", posN);
 
-        List<WordItem> wordItems = wordItemService.list();
+        Iterator<WordItem> wordItems = wordItemService.iterator(wordItemService.session());
         assertNotNull(wordItems);
-        assertTrue(3 <= wordItems.size());
+        int count = 0;
+        while (wordItems.hasNext()) {
+            count++;
+            wordItems.next();
+        }
+        assertTrue(count >= 3);
     }
 
     @Test

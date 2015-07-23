@@ -1,9 +1,5 @@
 package me.yingrui.segment.web.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import me.yingrui.segment.web.api.model.Concept;
 import me.yingrui.segment.web.api.model.WordFreq;
 import me.yingrui.segment.web.api.model.WordItem;
@@ -11,15 +7,17 @@ import me.yingrui.segment.web.api.model.dto.WordItemDto;
 import me.yingrui.segment.web.api.service.WordItemService;
 import me.yingrui.segment.web.exception.NotFoundException;
 import me.yingrui.segment.web.util.PojoMapper;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/dictionary/core")
@@ -54,18 +52,25 @@ public class CoreDictionaryController {
     @ResponseBody
     public void get(HttpServletResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
-        List<WordItem> words = wordItemService.list();
+        Session session = wordItemService.session();
+        session.beginTransaction();
+        Iterator<WordItem> words = wordItemService.iterator(session);
 
-        if(words.isEmpty()) {
+        if(!words.hasNext()) {
             writer.write("[]");
         } else {
             writer.write("[");
-            for (int i = 0; i < words.size(); i++) {
-                String wordString = PojoMapper.toJson(simplify(words.get(i)));
+            do {
+                String wordString = PojoMapper.toJson(simplify(words.next()));
                 writer.write(wordString);
-                writer.write(i == words.size() - 1 ? "]" : ",\n");
-            }
+                if(words.hasNext())
+                    writer.write(",\n");
+                else
+                    break;
+            } while(true);
+            writer.write("]");
         }
+        session.close();
         response.setContentType("application/json; charset=utf-8");
     }
 
