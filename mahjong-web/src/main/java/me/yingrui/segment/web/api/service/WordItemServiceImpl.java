@@ -86,6 +86,9 @@ public class WordItemServiceImpl implements WordItemService {
                 session.update(wordItem);
                 return wordItem;
             }
+
+            @Override
+            public void remove(){}
         };
     }
 
