@@ -1,12 +1,12 @@
 package me.yingrui.segment.word2vec.apps
 
-import java.io.File
+import java.io.{BufferedReader, File, InputStreamReader}
 import java.lang.Math._
 
 import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.{NeuralNetwork, SoftmaxLayer}
 import me.yingrui.segment.util.SerializeHandler
-import me.yingrui.segment.word2vec.{MNNSegmentViterbiClassifier, SegmentCorpus, Vocabulary}
+import me.yingrui.segment.word2vec.{MNNSegmentViterbiClassifier, NeuralNetworkSegment, SegmentCorpus, Vocabulary}
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
@@ -31,7 +31,7 @@ object MNNSegmentTest extends App {
 
   print("loading training corpus...\r")
   val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
-  val testDataSet = corpus.loadSegmentDataSet(trainFile)
+
   var transitionProb = Matrix(1, 1)
   val documents = corpus.loadDocuments(trainFile).map(doc => corpus.convertToWordIndexes(doc)).toList
 
@@ -42,7 +42,17 @@ object MNNSegmentTest extends App {
   displayResult(test(), documents.map(doc => doc.length).sum.toDouble)
 
   val errorCount = testSegmentCorpus()
-  displayResult(errorCount, testDataSet.map(doc => doc.length).sum.toDouble)
+  displayResult(errorCount._1, errorCount._2)
+
+  println("\nType QUIT to exit:")
+  val inputReader = new BufferedReader(new InputStreamReader(System.in))
+  var line = inputReader.readLine()
+  val neuralNetworkSegment = new NeuralNetworkSegment(word2VecModel, vocab, networks, transitionProb)
+  while (line != null && !line.equals("QUIT")) {
+    val result = neuralNetworkSegment.segment(line)
+    println(result)
+    line = inputReader.readLine()
+  }
 
   private def load(): Unit = {
     val deserializer = SerializeHandler(new File(saveFile), SerializeHandler.READ_ONLY)
@@ -62,17 +72,19 @@ object MNNSegmentTest extends App {
     println("accuracy = " + accuracy)
   }
 
-  private def testSegmentCorpus(): Double = {
+  private def testSegmentCorpus(): (Double, Double) = {
     var errors = 0D
-    testDataSet.foreach(document => {
+    var count = 0D
+    corpus.loadSegmentDataSet(trainFile).foreach(document => {
       val expectedOutput = document.map(data => data._3)
       val inputs = splitByUnknownWords(document)
 
       val outputs = inputs.map(input => classify(input, networks, transitionProb)).flatten
       assert(outputs.length == expectedOutput.length)
       errors += (0 until document.length).map(i => if (expectedOutput(i) == outputs(i)) 0D else 1D).sum
+      count += document.length
     })
-    errors
+    (errors, count)
   }
 
   def classify(input: Seq[(Int, Matrix)], networks: Seq[NeuralNetwork], transitionProb: Matrix): Seq[Int] = {

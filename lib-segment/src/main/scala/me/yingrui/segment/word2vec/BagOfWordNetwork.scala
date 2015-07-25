@@ -3,7 +3,7 @@ package me.yingrui.segment.word2vec
 import java.lang.Math.{abs, sqrt}
 
 import scala.util.Random
-import Word2VecUtil.simplifiedSigmoid
+import SimplifiedActivationUtil.simplifiedSigmoid
 
 class BagOfWordNetwork(val wordsCount: Int, val size: Int,
                        val wordVector: Array[Array[Double]],

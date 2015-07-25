@@ -1,6 +1,6 @@
 package me.yingrui.segment.word2vec
 
-object Word2VecUtil {
+object SimplifiedActivationUtil {
 
   private val EXP_TABLE_SIZE = 1000D
   private val MAX_EXP = 6D

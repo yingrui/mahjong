@@ -3,12 +3,12 @@ package me.yingrui.segment.word2vec
 import java.lang.Math.abs
 
 import me.yingrui.segment.neural.Sigmoid
-import me.yingrui.segment.word2vec.Word2VecUtil._
+import me.yingrui.segment.word2vec.SimplifiedActivationUtil._
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.util.Random
 
-class Word2VecUtilTest extends FunSuite with Matchers {
+class SimplifiedActivationUtilTest extends FunSuite with Matchers {
 
   test("simplify sigmoid activation") {
     val sigmoid = Sigmoid()
