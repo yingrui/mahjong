@@ -16,7 +16,7 @@ object MNNSegmentTest extends App {
   implicit val executionContext = ExecutionContext.Implicits.global
 
   val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-seg-all.txt"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-10000.txt"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2
 
@@ -32,7 +32,7 @@ object MNNSegmentTest extends App {
   print("loading training corpus...\r")
   val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
   val testDataSet = corpus.loadSegmentDataSet(trainFile)
-  val transitionProb = corpus.getLabelTransitionProb
+  var transitionProb = Matrix(1, 1)
   val documents = corpus.loadDocuments(trainFile).map(doc => corpus.convertToWordIndexes(doc)).toList
 
   print("loading models...\r")
@@ -51,6 +51,7 @@ object MNNSegmentTest extends App {
     for (i <- 0 until size) {
       networks(i).load(deserializer)
     }
+    transitionProb = deserializer.deserializeMatrix()
     deserializer.close()
   }
 

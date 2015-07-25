@@ -20,7 +20,7 @@ object MNNSegmentTrainingApp extends App {
   implicit val executionContext = ExecutionContext.Implicits.global
 
   val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-seg-all.txt"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-10000.txt"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2
   val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 25
@@ -39,7 +39,7 @@ object MNNSegmentTrainingApp extends App {
   val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
 
   val testDataSet = corpus.loadSegmentDataSet(trainFile)
-  val transitionProb = corpus.getLabelTransitionProb
+  val transitionProb = corpus.getLabelTransitionProb(trainFile)
 
   val documents = corpus.loadDocuments(trainFile).map(doc => corpus.convertToWordIndexes(doc)).toList
   val groups = documents.grouped(documents.size / taskCount).toList
@@ -127,6 +127,7 @@ object MNNSegmentTrainingApp extends App {
     for (network <- networks) {
       network.getNetwork.save(dumper)
     }
+    dumper.serializeMatrix(transitionProb)
     dumper.close()
   }
 
