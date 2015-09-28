@@ -74,6 +74,9 @@ class MLPSegmentViterbi(val labels: java.util.Collection[Int], val probDist: Seq
   private def transitionProb(position: Int, statePath: Array[Int], state: Int): Double = {
     val last = statePath.last
     transitionProb(last, state)
+//    val dist = probDist(position)
+//    dist(0, last * numberOfLabels + state)
+//    transitionProb(last, state) * dist(0, last * numberOfLabels + state)
   }
 
 }
