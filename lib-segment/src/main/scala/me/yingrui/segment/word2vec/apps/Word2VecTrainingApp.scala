@@ -24,7 +24,7 @@ object Word2VecTrainingApp extends App {
   val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 15
   val sample = if (args.indexOf("-sample") >= 0) args(args.indexOf("-sample") + 1).toDouble else 1e-4
   val startAlpha = if (args.indexOf("-alpha") >= 0) args(args.indexOf("-alpha") + 1).toDouble else 0.05D
-  val hierarchySoftmax = true //if (args.indexOf("-hs") >= 0) true else false
+  val hierarchySoftmax = if (args.indexOf("-hs") >= 0) true else false
   val random = new Random(System.currentTimeMillis())
 
   val vocab = Vocabulary(trainFile)

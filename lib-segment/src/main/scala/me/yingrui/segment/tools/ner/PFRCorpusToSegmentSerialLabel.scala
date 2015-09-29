@@ -8,10 +8,12 @@ import me.yingrui.segment.util._
 
 object PFRCorpusToSegmentSerialLabel extends App {
 
-  val resource = "./src/test/resources/PFR-199801-utf-8.txt"
+  val resource = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/src/test/resources/PFR-199801-utf-8.txt"
   val loader = PFRCorpusLoader(getResourceAsStream(resource))
 
-  val printer = new PrintWriter(new File("training.txt"), "utf-8")
+  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "training.txt"
+
+  val printer = new PrintWriter(new File(saveFile), "utf-8")
 
   loader.load { sentence =>
 
