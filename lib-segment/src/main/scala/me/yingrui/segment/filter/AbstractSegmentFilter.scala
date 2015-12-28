@@ -28,9 +28,12 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
   class SeparateOperation(index: Int, pos: Int, secondPos: Int) extends Operation {
 
     def modify(segmentResult: SegmentResult) {
-      val rest = segmentResult(index).name.substring(1)
-      val secondPartOfSpeech = getPartOfSpeechForSecondWord(secondPos, rest)
-      segmentResult.separate(index, 1, pos, secondPartOfSpeech)
+      val word = segmentResult(index)
+      if (word != null) {
+        val rest = word.name.substring(1)
+        val secondPartOfSpeech = getPartOfSpeechForSecondWord(secondPos, rest)
+        segmentResult.separate(index, 1, pos, secondPartOfSpeech)
+      }
     }
   }
 

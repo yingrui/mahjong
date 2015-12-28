@@ -158,6 +158,8 @@ class SegmentResult(size: Int) {
 
   def indexWhere(p: (Word) => Boolean, from: Int): Int = words.indexWhere(p, from)
 
+  def filter(p: (Word) => Boolean): Seq[Word] = words.filter(p)
+
   def foreach(fn: (Word) => Unit) {
     words.foreach(fn)
   }
