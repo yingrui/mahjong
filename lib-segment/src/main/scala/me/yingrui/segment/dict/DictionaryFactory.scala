@@ -45,7 +45,7 @@ class DictionaryFactory {
         e.printStackTrace()
     } finally {
       timestamp = System.currentTimeMillis() - timestamp
-      println(s"loading dictionary time used(ms): $timestamp")
+      System.err.println(s"loading dictionary time used(ms): $timestamp")
     }
 
   }
@@ -82,7 +82,7 @@ class DictionaryFactory {
       finally {
         inputStream.close()
         timestamp = System.currentTimeMillis() - timestamp
-        println((new StringBuilder()).append("loading english dictionary time used(ms): ").append(timestamp).toString())
+        System.err.println((new StringBuilder()).append("loading english dictionary time used(ms): ").append(timestamp).toString())
       }
     }
   }
@@ -109,7 +109,7 @@ class DictionaryFactory {
       }
       userDictionaryLoader.clear()
       l1 = System.currentTimeMillis() - l1
-      println((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString())
+      System.err.println((new StringBuilder()).append("loading user dictionary time used(ms): ").append(l1).toString())
     }
   }
 }
