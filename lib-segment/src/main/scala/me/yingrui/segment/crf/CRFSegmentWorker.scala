@@ -11,9 +11,8 @@ class CRFSegmentWorker(model: CRFModel) extends SegmentWorker {
 
     val classifier = new CRFViterbi(model)
 
-    val bestCuts = classifier.calculateResult(document.data).getBestPath
-                    .map(l => model.labelRepository.getFeature(l))
-                    .map(label => if(label=="S" || label=="B") 1 else 0)
+    val labels = classifier.calculateResult(document.data).getBestPath.map(l => model.labelRepository.getFeature(l))
+    val bestCuts = labels.map(label => if(label=="S" || label=="B") 1 else 0)
 
     var from = 0
     val words = new ListBuffer[String]()
@@ -22,7 +21,8 @@ class CRFSegmentWorker(model: CRFModel) extends SegmentWorker {
         val word = sen.substring(from, i)
         if (!word.isEmpty) words += word
         from = i
-      } else if (i + 1 == sen.length) {
+      }
+      if (i + 1 == sen.length) {
         words += sen.substring(from)
       }
     }
