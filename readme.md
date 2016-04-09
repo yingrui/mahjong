@@ -48,3 +48,16 @@ Any question, please contact me <yingrui.f@gmail.com>.
 6. Test Chinese segment model
 
     ./scripts/test-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
+
+## Test CRF Segment
+1. Generate Chinese segment training data: training.txt
+
+    ./scripts/generate-training-data.sh
+
+2. Train CRF Chinese segment model
+
+    ./scripts/train-crf-segment.sh --train-file training.txt --save-file segment-crf.m
+
+3. Test CRF Chinese segment model
+
+    ./scripts/test-crf-segment.sh --train-file training.txt --save-file segment-crf.m
