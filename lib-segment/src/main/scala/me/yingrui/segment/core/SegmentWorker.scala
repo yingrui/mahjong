@@ -34,19 +34,6 @@ object SegmentWorker {
 
   def apply(props: (String, String)*): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(props.toMap))
 
-//  def apply(props: String*): SegmentWorker = {
-//    var map: Map[String, String] = null
-//    if (null != props) {
-//      map = mutable.HashMap[String, String]()
-//      for (p <- props) {
-//        val keyAndValue = p.split("(=|->)")
-//        if (null != keyAndValue && keyAndValue.length == 2) {
-//          map += (keyAndValue(0).trim() -> keyAndValue(1).trim())
-//        }
-//      }
-//    }
-//    new MPSegmentWorker(MPSegmentConfiguration(map))
-//  }
 }
 
 object SegmentWorkerBuilder {
