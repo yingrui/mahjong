@@ -18,7 +18,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int,
 
   def learn(input: Array[Int], output: Array[(Int, Int)], alpha: Double): Unit = {
 
-    computeLayer0Output(input.filter(wordIndex => wordIndex > 0))
+    computeLayer0Output(input.filter(_ > 0))
 
     val errors = new Array[Double](size)
 
@@ -111,6 +111,7 @@ class BagOfWordNetwork(val wordsCount: Int, val size: Int,
   }
 
   def computeLayer1Grad(input: Array[Double], alpha: Double, wordIndex: Int, label: Int): Double = {
+    assert(label == 0 || label == 1)
     val weights = layer1Weights(wordIndex)
     val f = multiply(input, weights)
     val output = simplifiedSigmoid(f)

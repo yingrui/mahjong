@@ -12,11 +12,16 @@ class HuffmanTreeTest extends FunSuite with Matchers {
     val weight2 = 20
     tree.add(index1, weight1)
     tree.add(index2, weight2)
-    tree.add(3, 40)
+    tree.add(3, 30)
+    tree.add(4, 40)
 
     tree.nodes.forall(node => node.parent == None) should be (true)
 
     val root = tree.build()
+    println(tree.getCode(1))
+    println(tree.getCode(2))
+    println(tree.getCode(3))
+    println(tree.getCode(4))
     root.weight should be (70)
     tree.nodes.forall(node => node.parent != None) should be (true)
 

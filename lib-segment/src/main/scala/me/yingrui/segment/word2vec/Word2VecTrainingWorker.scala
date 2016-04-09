@@ -40,7 +40,7 @@ class Word2VecTrainingWorker(val network: Word2VecNetwork,
           }
 
           // train
-          network.learn(input.filter(in => in > 0), output, alpha)
+          network.learn(input.filter(_ > 0), output, alpha)
         }
       }
 
