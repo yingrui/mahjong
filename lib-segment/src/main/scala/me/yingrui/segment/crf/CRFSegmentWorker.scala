@@ -32,6 +32,8 @@ class CRFSegmentWorker(model: CRFModel) extends SegmentWorker {
     result
   }
 
+  def tokenize(sen: String): Array[String] = segment(sen).getWords().map(_.name)
+
 }
 
 object CRFSegmentWorker {

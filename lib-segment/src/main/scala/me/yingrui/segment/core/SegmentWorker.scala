@@ -9,6 +9,7 @@ trait SegmentWorker {
 
   def segment(sen: String): SegmentResult
 
+  def tokenize(sen: String): Array[String]
 }
 
 object SegmentWorker {

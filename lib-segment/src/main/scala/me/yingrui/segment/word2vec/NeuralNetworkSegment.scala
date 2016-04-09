@@ -66,8 +66,10 @@ class NeuralNetworkSegment(word2VecModel: Array[Array[Double]], vocab: Vocabular
       segmentResult(i).name = words(i)
     }
 
-    return segmentResult
+    segmentResult
   }
+
+  def tokenize(sen: String): Array[String] = segment(sen).getWords().map(_.name)
 
   private def getWords(sen: String, labels: Seq[Int]): Seq[String] = {
     val words = new ListBuffer[String]()

@@ -28,4 +28,6 @@ class MPSegmentWorker(config: MPSegmentConfiguration) extends SegmentWorker {
     }
     result
   }
+
+  def tokenize(sen: String): Array[String] = segment(sen).getWords().map(_.name)
 }
