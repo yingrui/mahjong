@@ -17,7 +17,7 @@ final class MPSegmentAnalyzer extends Analyzer {
 
   @Override
   def createComponents(fieldName: String, reader: Reader): TokenStreamComponents = {
-    val tokenizer = new MPSegmentTokenizer(reader, SegmentWorker("segment.lang.en = true", "convert.touppercase = true"))
+    val tokenizer = new MPSegmentTokenizer(reader, SegmentWorker("segment.lang.en" -> "true", "convert.touppercase" -> "true"))
     new TokenStreamComponents(tokenizer)
   }
 

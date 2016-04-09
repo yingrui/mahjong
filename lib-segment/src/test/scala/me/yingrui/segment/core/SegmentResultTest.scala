@@ -8,8 +8,8 @@ class SegmentResultTest {
   @Test
   def should_return_original_index_of_word {
     val segmentResult = SegmentWorker(
-      "segment.lang.en = true",
-      "segment.lang.en.stemming = true").segment("我们，He loves us！")
+      "segment.lang.en" -> "true",
+      "segment.lang.en.stemming" -> "true").segment("我们，He loves us！")
     println(segmentResult)
     assertEquals(0, segmentResult.getWordStartAt(0))
     assertEquals(2, segmentResult.getWordStartAt(1))

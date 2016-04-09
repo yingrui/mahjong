@@ -11,7 +11,7 @@ object PFRCorpusToSerialLabelApp extends App {
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("ner-corpus.txt"), "utf-8"))
   val loader = PFRCorpusLoader(getResourceAsStream(resource))
 
-  val segmenter = SegmentWorker("recognize.chinesename = false")
+  val segmenter = SegmentWorker("recognize.chinesename" -> "false")
   loader.load(expect => {
     val originalString = expect.toOriginalString()
     val actual = segmenter.segment(originalString)

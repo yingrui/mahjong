@@ -10,7 +10,7 @@ class UserDictionaryTest {
   @Test
   def should_Loaded_Some_Words_from_User_Dictionary() {
     val str = "贝因美是中国品牌"
-    val worker = SegmentWorker("load.domaindictionary -> true")
+    val worker = SegmentWorker("load.domaindictionary" -> "true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.length(), 4)

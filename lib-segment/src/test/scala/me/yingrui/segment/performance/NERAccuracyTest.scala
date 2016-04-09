@@ -14,8 +14,8 @@ import scala.io.Source
 class NERAccuracyTest {
 
   val segmentWorker = SegmentWorker(
-      "separate.xingming -> false",
-      "minimize.word -> true"
+      "separate.xingming" -> "false",
+      "minimize.word" -> "true"
     )
 
   @Test

@@ -41,7 +41,7 @@ class MPSegmentTest {
   @Test
   def should_seperate_Chinese_Name_into_xing_and_ming() {
     val str = "张三丰创造了太极拳。"
-    val worker = SegmentWorker("separate.xingming -> true")
+    val worker = SegmentWorker("separate.xingming" -> "true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals("张", words.getWord(0))
@@ -53,7 +53,7 @@ class MPSegmentTest {
   @Test
   def should_Support_Query_Syntax() {
     var str = "中国~[250]"
-    val worker = SegmentWorker("support.querysyntax -> true")
+    val worker = SegmentWorker("support.querysyntax" -> "true")
     var words = worker.segment(str)
     print(words + " ")
     Assert.assertEquals(words.getWord(0), "中国~[250]")
@@ -102,8 +102,8 @@ class MPSegmentTest {
     val str = "１２月３１日，中共中央总书记、国家主席江泽民发表１９９８年新年讲话《迈向充满希望的新世纪》。（新华社记者兰红光摄）"
     val worker =
       SegmentWorker(
-        "separate.xingming -> true",
-        "minimize.word -> true"
+        "separate.xingming" -> "true",
+        "minimize.word" -> "true"
       )
     val words = worker segment str
     Assert.assertEquals("1998年", words.getWord(11))
@@ -167,7 +167,7 @@ class MPSegmentTest {
   @Test
   def should_segment_big_word_to_litter_words() {
     val str = "中华人民共和国在1949年10月1日正式宣布成立。"
-    val worker = SegmentWorker("minimize.word -> true")
+    val worker = SegmentWorker("minimize.word" -> "true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "中华")
@@ -178,7 +178,7 @@ class MPSegmentTest {
   @Test
   def should_not_separate_idiom() {
     val str = "习惯成自然是一句俗语。"
-    val worker = SegmentWorker("minimize.word = true")
+    val worker = SegmentWorker("minimize.word" -> "true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getWord(0), "习惯成自然")
@@ -201,7 +201,7 @@ class MPSegmentTest {
   @Test
   def should_return_pinyin_when_segment() {
     val str = "中文分词。"
-    val worker = SegmentWorker("recognize.pinyin = true")
+    val worker = SegmentWorker("recognize.pinyin" -> "true")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getPinyin(0), "zhong'wen")
@@ -213,9 +213,9 @@ class MPSegmentTest {
   def should_stem_english_words() {
     val str = "She likes hunting"
     val worker = SegmentWorker(
-      "segment.lang.en = true",
-      "segment.lang.en.stemming = true",
-      "convert.touppercase = false"
+      "segment.lang.en" -> "true",
+      "segment.lang.en.stemming" -> "true",
+      "convert.touppercase" -> "false"
     )
     val words = worker.segment(str)
     println(words)
@@ -228,8 +228,8 @@ class MPSegmentTest {
   def should_recognize_pos_of_english_words() {
     val str = "She has food"
     val worker = SegmentWorker(
-      "segment.lang.en = true",
-      "convert.touppercase = false")
+      "segment.lang.en" -> "true",
+      "convert.touppercase" -> "false")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getPOS(0), POSUtil.POS_R)
@@ -241,8 +241,8 @@ class MPSegmentTest {
   def should_recognize_numbers() {
     val str = "２飞亚达Ａ３５．５５"
     val worker = SegmentWorker(
-      "segment.lang.en = true",
-      "convert.touppercase = false")
+      "segment.lang.en" -> "true",
+      "convert.touppercase" -> "false")
     val words = worker.segment(str)
     println(words)
     Assert.assertEquals(words.getPOS(0), POSUtil.POS_M)
