@@ -5,11 +5,9 @@ import me.yingrui.segment.dict.DictionaryFactory
 
 import scala.collection.mutable
 
-trait SegmentWorker {
+trait SegmentWorker extends Tokenizer {
 
   def segment(sen: String): SegmentResult
-
-  def tokenize(sen: String): Array[String]
 }
 
 object SegmentWorker {

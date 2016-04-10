@@ -22,15 +22,17 @@ class HuffmanTreeTest extends FunSuite with Matchers {
     println(tree.getCode(2))
     println(tree.getCode(3))
     println(tree.getCode(4))
-    root.weight should be (70)
+    root.weight should be (100)
     tree.nodes.forall(node => node.parent != None) should be (true)
 
-    tree.getCode(1) should be (List(0, 0))
-    tree.getCode(2) should be (List(0, 1))
-    tree.getCode(3) should be (List(1))
+    tree.getCode(1) should be (List(1, 1, 0))
+    tree.getCode(2) should be (List(1, 1, 1))
+    tree.getCode(3) should be (List(1, 0))
+    tree.getCode(4) should be (List(0))
 
-    tree.getParentIndexes(1) should be (List(0, 1))
-    tree.getParentIndexes(2) should be (List(0, 1))
-    tree.getParentIndexes(3) should be (List(1))
+    tree.getParentIndexes(1) should be (List(0, 1, 2))
+    tree.getParentIndexes(2) should be (List(0, 1, 2))
+    tree.getParentIndexes(3) should be (List(1, 2))
+    tree.getParentIndexes(4) should be (List(2))
   }
 }
