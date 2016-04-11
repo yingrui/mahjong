@@ -23,7 +23,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_within_2_seconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker("recognize.partOfSpeech -> false")
+    val segmentWorker = SegmentWorker("recognize.partOfSpeech" -> "false")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -69,7 +69,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_and_without_Domain_Dictionary_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker("load.domaindictionary -> true")
+    val segmentWorker = SegmentWorker("load.domaindictionary" -> "true")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -92,7 +92,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_with_POS_and_Context_within_3000_milliseconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker("segment.context -> false", "recognize.partOfSpeech -> true")
+    val segmentWorker = SegmentWorker("segment.context" -> "false", "recognize.partOfSpeech" -> "true")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
@@ -114,7 +114,7 @@ class PerformanceTest {
   @Test
   def should_spend_memory_within_90_MB() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker("segment.context -> false", "recognize.partOfSpeech -> false")
+    val segmentWorker = SegmentWorker("segment.context" -> "false", "recognize.partOfSpeech" -> "false")
     segmentWorker.segment("世界您好！")
     for (line <- reader.getLines()) {
       if (line.trim().length > 0) {

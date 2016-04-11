@@ -13,9 +13,9 @@ class AccuracyTest {
   @Test
   def should_be_higher_than_93_percent_with_segment_minimum() {
     val segmentWorker = SegmentWorker(
-        "separate.xingming -> true",
+        "separate.xingming" -> "true",
 //        "segment.bigram -> word-bigram.dat",
-        "minimize.word -> true"
+        "minimize.word" -> "true"
       )
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
@@ -41,8 +41,8 @@ class AccuracyTest {
   @Test
   def should_recognize_all_the_name_entities() {
     val segmentWorker = SegmentWorker(
-        "separate.xingming -> true",
-        "minimize.word -> true"
+        "separate.xingming" -> "true",
+        "minimize.word" -> "true"
       )
 
     val segmentAccuracy = new SegmentAccuracy("test-pfr-corpus.txt", segmentWorker)
@@ -63,7 +63,7 @@ class AccuracyTest {
 
   @Test
   def should_be_higher_than_93_percent() {
-    val segmentWorker = SegmentWorker("separate.xingming -> true")
+    val segmentWorker = SegmentWorker("separate.xingming" -> "true")
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
     println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())

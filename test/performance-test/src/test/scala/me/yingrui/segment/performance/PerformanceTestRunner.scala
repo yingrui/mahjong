@@ -7,7 +7,7 @@ object PerformanceTestRunner extends App {
 
   println("In case you want to run for performance profile.")
   println("This program would not stop unless you kill it.")
-  var segmentWorker = SegmentWorker("segment.context -> true")
+  var segmentWorker = SegmentWorker("segment.context" -> "true")
   segmentWorker.segment("世界您好！")
   while (true) {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
