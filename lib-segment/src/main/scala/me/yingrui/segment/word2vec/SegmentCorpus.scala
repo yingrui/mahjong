@@ -1,5 +1,7 @@
 package me.yingrui.segment.word2vec
 
+import java.io.FileWriter
+
 import me.yingrui.segment.math.Matrix
 
 import scala.collection.mutable.ListBuffer
@@ -12,12 +14,39 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
   val labelTransitionProb = Matrix(4, 4)
   val word2vecInputHelper = new Word2VecInputHelper(ngram, vectorSize, word2VecModel)
 
+  def splitCorpus(segmentCorpusFile: String, numberOfPieces: Int): Seq[String] = {
+    var i = 0
+
+    val writers = (for (index <- 0 until numberOfPieces) yield {
+      val file = segmentCorpusFile + "_" + index + ".txt"
+      (index, new FileWriter(file))
+    }).toMap
+
+    foreachDocuments(segmentCorpusFile) { document =>
+      val id = i % numberOfPieces
+      val writer = writers(id)
+      val newLine = "\n"
+      document.foreach(_ match {
+        case (word, label) =>
+          val line = s"$word\t${label}${newLine}"
+//          print(id + "  " +line)
+          writer.write(line)
+        case _ =>
+      })
+      writer.write(newLine)
+      i += 1
+    }
+
+    writers.map(_._2).foreach(_.close())
+    (0 until numberOfPieces).map(index => segmentCorpusFile + "_" + index + ".txt")
+  }
+
   def getLabelTransitionProb(segmentCorpusFile: String): Matrix = {
     foreachDocuments(segmentCorpusFile) { document =>
       (0 until document.length).foreach(position => {
         if (position > 0) {
-          val label = word2vecInputHelper.labelMap(document(position)._2)
-          val lastLabel = word2vecInputHelper.labelMap(document(position - 1)._2)
+          val label = getLabelIndex(document(position))
+          val lastLabel = getLabelIndex(document(position - 1))
           recordLabelTransition(lastLabel, label)
         }
       })
@@ -38,7 +67,7 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     val inputs = document
       .filter(wordLabel => vocab.getIndex(wordLabel._1) > 0)
       .map(wordAndLabel => {
-      (vocab.getIndex(wordAndLabel._1), word2vecInputHelper.labelMap(wordAndLabel._2))
+      (vocab.getIndex(wordAndLabel._1), getLabelIndex(wordAndLabel))
     })
 
     (0 until inputs.length).map(position => {
@@ -47,7 +76,7 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
         val lastLabel = inputs(position - 1)._2
         recordLabelTransition(lastLabel, label)
       }
-      (word2vecInputHelper.toMatrix(getContextWords(inputs, position)), word2vecInputHelper.labelToMatrix(getLabels(inputs, position)))
+      (word2vecInputHelper.toMatrix(getContextWords(inputs, position)), getOutputMatrix(inputs, position))
     }).toList
   }
 
@@ -64,15 +93,30 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
   def convertToMatrix(input: List[Int]): Matrix = word2vecInputHelper.toMatrix(input)
 
   def convertToWordIndexes(document: List[(String, String)]): List[(List[Int], Int, Matrix)] = {
-    val inputs = document
-      .filter(wordLabel => vocab.getIndex(wordLabel._1) > 0)
-      .map(wordAndLabel => {
-      (vocab.getIndex(wordAndLabel._1), word2vecInputHelper.labelMap(wordAndLabel._2))
-    })
+    val inputs = getWordIndexesAndLabelIndexes(document)
 
     (0 until inputs.length).map(position => {
-      (getContextWords(inputs, position), inputs(position)._1, word2vecInputHelper.labelToMatrix(getLabels(inputs, position)))
+      (getContextWords(inputs, position), inputs(position)._1, getOutputMatrix(inputs, position))
     }).toList
+  }
+
+  def getOutputMatrix(inputs: List[(Int, Int)], position: Int): Matrix = {
+    getOutputMatrixByLabels(getLabels(inputs, position))
+  }
+
+  def getOutputMatrixByLabels(labels: Array[Int]) = word2vecInputHelper.labelToMatrix(labels)
+
+  def getDefaultOutputMatrix(): Matrix = {
+    val labels = word2vecInputHelper.defaultLabels(ngram)
+    getOutputMatrixByLabels(labels)
+  }
+
+  def getWordIndexesAndLabelIndexes(document: List[(String, String)]): List[(Int, Int)] = {
+    document
+      .filter(wordLabel => vocab.getIndex(wordLabel._1) > 0)
+      .map(wordAndLabel => {
+      (vocab.getIndex(wordAndLabel._1), getLabelIndex(wordAndLabel))
+    })
   }
 
   def loadDocuments(segmentCorpusFile: String): List[List[(String, String)]] = {
@@ -108,9 +152,9 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     })
   }
 
-  private def convertToSegmentDataSet(document: List[(String, String)]): List[(Int, Matrix, Int)] = {
+  def convertToSegmentDataSet(document: List[(String, String)]): List[(Int, Matrix, Int)] = {
     val inputs = document
-      .map(wordAndLabel => (vocab.getIndex(wordAndLabel._1), word2vecInputHelper.labelMap(wordAndLabel._2)))
+      .map(wordAndLabel => (vocab.getIndex(wordAndLabel._1), getLabelIndex(wordAndLabel)))
 
     (0 until inputs.length).map(position => {
       if (position > 0) {
@@ -127,6 +171,8 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     }).toList
   }
 
+  def getLabelIndex(wordAndLabel: (String, String)): Int = word2vecInputHelper.labelMap(wordAndLabel._2)
+
   private def getLabels(inputs: List[(Int, Int)], position: Int): Array[Int] = {
     (1 to ngram).map(i => {
       val index = position + (i - ngram)
@@ -138,7 +184,6 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     labelTransitionProb(lastLabel, label) += 1D
   }
 
-  private def getContextWords(document: List[(Int, Int)], position: Int): List[Int] = word2vecInputHelper.getContext(document, position, window).map(word => word._1).toList
-
+  def getContextWords(document: List[(Int, Int)], position: Int): List[Int] = word2vecInputHelper.getContext(document, position, window).map(word => word._1).toList
 
 }

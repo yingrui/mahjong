@@ -8,6 +8,11 @@ class Word2VecInputHelper(ngram: Int, inputVectorSize: Int, word2VecModel: Array
 
   val labelMap = Map[String, Int]("S" -> 0, "B" -> 1, "M" -> 2, "E" -> 3)
 
+  val defaultLabel = "S"
+  val defaultLabelIndex = labelMap(defaultLabel)
+
+  def defaultLabels(ngram: Int): Array[Int] = (0 until ngram).map(_ => defaultLabelIndex).toArray
+
   def isStartLabel(label: Int): Boolean = {
     label <= 1
   }

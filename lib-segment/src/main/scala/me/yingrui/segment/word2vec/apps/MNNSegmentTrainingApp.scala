@@ -14,14 +14,16 @@ import me.yingrui.segment.word2vec.{MNNSegmentViterbiClassifier, SegmentCorpus, 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.util.Random
 
 object MNNSegmentTrainingApp extends App {
 
   implicit val executionContext = ExecutionContext.Implicits.global
+  val random = new Random(System.currentTimeMillis())
 
   val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-10000.txt"
-  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-100000.txt"
+  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector2.dat"
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2
   val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 25
   val taskCount = if (args.indexOf("-thread") >= 0) args(args.indexOf("-thread") + 1).toInt else Runtime.getRuntime().availableProcessors()
@@ -32,63 +34,72 @@ object MNNSegmentTrainingApp extends App {
   val word2VecModel = reader.deserialize2DArrayDouble()
   assert(vocab.size == word2VecModel.length, "vocab size is not equal to word2vec model size")
   val numberOfFeatures = word2VecModel(0).length
-  val numberOfClasses = Math.pow(4, ngram).toInt
+  val numberOfClasses = pow(4, ngram).toInt
   val networks = initialize(numberOfFeatures, numberOfClasses, vocab.size)
 
   print("loading training corpus...\r")
   val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
 
-  val testDataSet = corpus.loadSegmentDataSet(trainFile)
   val transitionProb = corpus.getLabelTransitionProb(trainFile)
+  val files = corpus.splitCorpus(trainFile, taskCount)
 
-  val documents = corpus.loadDocuments(trainFile).map(doc => corpus.convertToWordIndexes(doc)).toList
-  val groups = documents.grouped(documents.size / taskCount).toList
-
+  print("training...\r")
   var iteration = 0
   var cost = 0D
-  val costs = new ListBuffer[Double]()
   var lastCost = Double.MaxValue
+  val costs = new ListBuffer[Double]()
+  var lastAverageCost = Double.MaxValue
   var hasImprovement = true
+  var learningRate = 0.1D
   while (shouldContinue && iteration < maxIteration && hasImprovement) {
     val tic = System.currentTimeMillis()
-    cost = takeARound(iteration)
+    cost = takeARound(iteration, learningRate)
     val toc = System.currentTimeMillis()
     costs += cost
-    val averageCost = costs.takeRight(20).sum / costs.takeRight(20).size.toDouble
-    println("Iteration: %2d cost: %2.5f average cost: %2.5f elapse: %ds".format(iteration, cost, averageCost, (toc - tic) / 1000))
-    hasImprovement = (lastCost - averageCost) > 1e-5
+    val averageCost = costs.takeRight(5).sum / costs.takeRight(5).size.toDouble
+    val improvement = (lastCost - cost) / lastCost
+    println("Iteration: %2d learning rate: %2.5f improved: %2.5f cost: %2.5f average cost: %2.5f elapse: %ds".format(iteration, learningRate, improvement, cost, averageCost, (toc - tic) / 1000))
 
-    lastCost = averageCost
+    if (improvement <= 0D) learningRate = learningRate * 0.1
+
+    hasImprovement = (lastAverageCost - averageCost) > 1e-5
+    lastAverageCost = averageCost
+    lastCost = cost
     iteration += 1
   }
 
   println("testing...")
-  displayResult(test(), documents.map(doc => doc.length).sum.toDouble)
-
-
-  val errorCount = testSegmentCorpus()
-  displayResult(errorCount, testDataSet.map(doc => doc.length).sum.toDouble)
-
+  displayResult(test(trainFile))
+  displayResult(testSegmentCorpus(trainFile))
   println("saving...")
   saveModel()
 
-  private def displayResult(errorCount: Double, numberOfSamples: Double): Unit = {
-    val accuracy = 1.0D - errorCount / numberOfSamples
-    println("error = " + errorCount + " total = " + numberOfSamples)
-    println("accuracy = " + accuracy)
+  private def displayResult(result: (Double, Double)): Unit = result match {
+    case (errorCount, numberOfSamples) => {
+      val accuracy = 1.0D - errorCount / numberOfSamples
+      println("error = " + errorCount + " total = " + numberOfSamples)
+      println("accuracy = " + accuracy)
+    }
+    case _ =>
   }
 
-  private def testSegmentCorpus(): Double = {
+  def testSegmentCorpus(file: String): (Double, Double) = {
+    var errors = 0.0
+    var total = 0.0
     val neuralNetworks = networks.map(network => network.getNetwork)
-    testDataSet.map(document => {
-      val expectedOutput = document.map(data => data._3)
+    corpus.foreachDocuments(file) { data =>
+      val document = corpus.convertToSegmentDataSet(data)
+      val expectedOutputs = document.map(_._3)
       val inputs = splitByUnknownWords(document)
 
       val outputs = inputs.map(input => classify(input, neuralNetworks)).flatten
-      assert(outputs.length == expectedOutput.length)
-      val errors = (0 until document.length).map(i => if (expectedOutput(i) == outputs(i)) 0D else 1D)
-      errors.sum
-    }).sum
+      assert(outputs.length == expectedOutputs.length)
+      for (i <- 0 until document.length) {
+        total += 1D
+        if (expectedOutputs(i) != outputs(i)) errors += 1D
+      }
+    }
+    (errors, total)
   }
 
   def classify(input: Seq[(Int, Matrix)], networks: Seq[NeuralNetwork]): Seq[Int] = {
@@ -131,18 +142,26 @@ object MNNSegmentTrainingApp extends App {
     dumper.close()
   }
 
-  private def test(): Double = {
-    (for (document <- documents; data <- document) yield {
-      val wordIndex = data._2
-      val network = networks(wordIndex)
-      val input = corpus.convertToMatrix(data._1)
-      val output = classify(network, input)
-      val expectedOutput = data._3
-      if ((expectedOutput - output).map(abs(_)).sum > 0)
-        1.0D
-      else
-        0.0D
-    }).sum
+  private def test(file: String): (Double, Double) = {
+    var errors = 0.0
+    var total = 0.0
+    corpus.foreachDocuments(file) { document =>
+      val wordIndexesAndLabelIndexes = corpus.getWordIndexesAndLabelIndexes(document)
+
+      for (position <- 0 until wordIndexesAndLabelIndexes.length) {
+        total += 1.0
+        val wordIndex = wordIndexesAndLabelIndexes(position)._1
+        val expectedOutput = corpus.getOutputMatrix(wordIndexesAndLabelIndexes, position)
+        val input = corpus.convertToMatrix(corpus.getContextWords(wordIndexesAndLabelIndexes, position))
+        val network = networks(wordIndex)
+        val output = classify(network, input)
+        if ((expectedOutput - output).map(abs(_)).sum > 0)
+          errors += 1.0D
+        else
+          0.0D
+      }
+    }
+    (errors, total)
   }
 
   def classify(classifier: BackPropagation, input: Matrix): Matrix = {
@@ -163,33 +182,37 @@ object MNNSegmentTrainingApp extends App {
     actualOutput
   }
 
-  private def takeARound(currentIteration: Int): Double = {
+  private def takeARound(currentIteration: Int, learningRate: Double): Double = {
     networks.foreach(network => network.errorCalculator.clear)
 
-    val tasks = for (group <- groups) yield {
+    val tasks = for (file <- files) yield {
       Future {
-        for (document <- group; data <- document) {
-          val wordIndex = data._2
-          val network = networks(wordIndex)
-          val input = corpus.convertToMatrix(data._1)
+        def train(expectedOutput: Matrix, input: Matrix, network: BackPropagation): Unit = {
           val output = network.computeOutput(input)
-          network.computeError(output, data._3)
-          network.update()
+          network.computeError(output, expectedOutput)
+          network.update(learningRate)
+        }
+
+        corpus.foreachDocuments(file) { document =>
+          val wordIndexesAndLabelIndexes = corpus.getWordIndexesAndLabelIndexes(document)
+
+          for (position <- 0 until wordIndexesAndLabelIndexes.length) {
+            val wordIndex = wordIndexesAndLabelIndexes(position)._1
+            val expectedOutput = corpus.getOutputMatrix(wordIndexesAndLabelIndexes, position)
+            val input = corpus.convertToMatrix(corpus.getContextWords(wordIndexesAndLabelIndexes, position))
+            train(expectedOutput, input, networks(wordIndex))
+            for (index <- 0 until 5;
+                 randomWordIndex = random.nextInt(networks.size)
+                 if randomWordIndex != wordIndex) {
+              train(corpus.getDefaultOutputMatrix(), input, networks(randomWordIndex))
+            }
+          }
         }
       }
     }
 
     tasks.foreach(f => Await.result(f, Duration.Inf))
     networks.map(network => network.getLoss).sum
-  }
-
-  private def initialize(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = for (i <- 0 until size) yield {
-    val layerWeight = randomize(numberOfFeatures, numberOfClasses, -1D, 1D)
-
-    val loss = new CrossEntropyLoss
-    val network = new BackPropagation(numberOfFeatures, numberOfClasses, 0.1D, 0.0D, loss)
-    network.addLayer(SoftmaxLayer(layerWeight))
-    network
   }
 
   def shouldContinue: Boolean = {
@@ -200,5 +223,14 @@ object MNNSegmentTrainingApp extends App {
     } else {
       true
     }
+  }
+
+  private def initialize(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = for (i <- 0 until size) yield {
+    val layerWeight = randomize(numberOfFeatures, numberOfClasses, -1D, 1D)
+
+    val loss = new CrossEntropyLoss
+    val network = new BackPropagation(numberOfFeatures, numberOfClasses, 0.1D, 0.0D, loss)
+    network.addLayer(SoftmaxLayer(layerWeight))
+    network
   }
 }
