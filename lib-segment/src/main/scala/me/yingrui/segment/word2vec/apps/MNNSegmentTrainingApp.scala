@@ -22,10 +22,11 @@ object MNNSegmentTrainingApp extends App {
   val random = new Random(System.currentTimeMillis())
 
   val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-100000.txt"
-  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector2.dat"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-10000.txt"
+  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2
-  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 25
+  val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 40
+  val punishment = if (args.indexOf("-punishment") >= 0) args(args.indexOf("-punishment") + 1).toInt else 0
   val taskCount = if (args.indexOf("-thread") >= 0) args(args.indexOf("-thread") + 1).toInt else Runtime.getRuntime().availableProcessors()
 
   print("loading word2vec model...\r")
@@ -35,7 +36,7 @@ object MNNSegmentTrainingApp extends App {
   assert(vocab.size == word2VecModel.length, "vocab size is not equal to word2vec model size")
   val numberOfFeatures = word2VecModel(0).length
   val numberOfClasses = pow(4, ngram).toInt
-  val networks = initialize(numberOfFeatures, numberOfClasses, vocab.size)
+  val networks = initializeNetworks(numberOfFeatures, numberOfClasses, vocab.size)
 
   print("loading training corpus...\r")
   val corpus = new SegmentCorpus(word2VecModel, vocab, ngram)
@@ -60,12 +61,17 @@ object MNNSegmentTrainingApp extends App {
     val improvement = (lastCost - cost) / lastCost
     println("Iteration: %2d learning rate: %2.5f improved: %2.5f cost: %2.5f average cost: %2.5f elapse: %ds".format(iteration, learningRate, improvement, cost, averageCost, (toc - tic) / 1000))
 
-    if (improvement <= 0D) learningRate = learningRate * 0.1
+    updateLearningRate(improvement)
 
     hasImprovement = (lastAverageCost - averageCost) > 1e-5
     lastAverageCost = averageCost
     lastCost = cost
     iteration += 1
+  }
+
+  def updateLearningRate(improvement: Double): Unit = {
+    if (improvement <= 0.03D) learningRate = learningRate * 0.1
+    if (learningRate < 0.0001) learningRate = 0.0001D
   }
 
   println("testing...")
@@ -193,6 +199,13 @@ object MNNSegmentTrainingApp extends App {
           network.update(learningRate)
         }
 
+        def trainPunishment(wordIndex: Int, input: Matrix, times: Int): Unit = {
+          for (index <- 0 until times;
+               randomWordIndex = random.nextInt(networks.size)
+               if randomWordIndex != wordIndex) {
+            train(corpus.getDefaultOutputMatrix(), input, networks(randomWordIndex))
+          }
+        }
         corpus.foreachDocuments(file) { document =>
           val wordIndexesAndLabelIndexes = corpus.getWordIndexesAndLabelIndexes(document)
 
@@ -201,18 +214,16 @@ object MNNSegmentTrainingApp extends App {
             val expectedOutput = corpus.getOutputMatrix(wordIndexesAndLabelIndexes, position)
             val input = corpus.convertToMatrix(corpus.getContextWords(wordIndexesAndLabelIndexes, position))
             train(expectedOutput, input, networks(wordIndex))
-            for (index <- 0 until 5;
-                 randomWordIndex = random.nextInt(networks.size)
-                 if randomWordIndex != wordIndex) {
-              train(corpus.getDefaultOutputMatrix(), input, networks(randomWordIndex))
-            }
+            trainPunishment(wordIndex, input, punishment)
           }
         }
       }
     }
 
     tasks.foreach(f => Await.result(f, Duration.Inf))
-    networks.map(network => network.getLoss).sum
+    val loss = networks.map(network => network.getLoss)
+//    println(loss)
+    loss.sum
   }
 
   def shouldContinue: Boolean = {
@@ -225,7 +236,7 @@ object MNNSegmentTrainingApp extends App {
     }
   }
 
-  private def initialize(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = for (i <- 0 until size) yield {
+  private def initializeNetworks(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = for (i <- 0 until size) yield {
     val layerWeight = randomize(numberOfFeatures, numberOfClasses, -1D, 1D)
 
     val loss = new CrossEntropyLoss
