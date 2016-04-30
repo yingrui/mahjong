@@ -17,10 +17,13 @@ class Word2VecInputHelper(ngram: Int, inputVectorSize: Int, word2VecModel: Array
     label <= 1
   }
 
-  def getContext[T](document: Seq[T], position: Int, window: Int): Seq[T] = {
+  def getContext[T](document: Seq[T], position: Int, window: Int, skipSelf: Boolean = false): Seq[T] = {
     val left = document.slice(if (position < window) 0 else position - window, position)
     val right = document.slice(position + 1, if (position + window < document.length) position + window + 1 else document.length)
-    left ++ List(document(position)) ++ right
+    if (skipSelf)
+      left ++ right
+    else
+      left ++ List(document(position)) ++ right
   }
 
   def labelToMatrix(labels: Array[Int]): Matrix = {
@@ -35,9 +38,13 @@ class Word2VecInputHelper(ngram: Int, inputVectorSize: Int, word2VecModel: Array
   }
 
   def toMatrix(inputs: Seq[Int]): Matrix = {
-    val input = Matrix(1, inputVectorSize)
-    inputs.foreach(index => if (index > 0) input += Matrix(word2VecModel(index)))
-    input / inputs.length.toDouble
+    if (inputs.isEmpty) {
+      Matrix(1, inputVectorSize)
+    } else {
+      val input = Matrix(1, inputVectorSize)
+      inputs.foreach(index => if (index > 0) input += Matrix(word2VecModel(index)))
+      input / inputs.length.toDouble
+    }
   }
 
 }

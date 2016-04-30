@@ -152,7 +152,7 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     })
   }
 
-  def convertToSegmentDataSet(document: List[(String, String)]): List[(Int, Matrix, Int)] = {
+  def convertToSegmentDataSet(document: List[(String, String)], skipSelf: Boolean = false): List[(Int, Matrix, Int)] = {
     val inputs = document
       .map(wordAndLabel => (vocab.getIndex(wordAndLabel._1), getLabelIndex(wordAndLabel)))
 
@@ -165,7 +165,7 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
       val label = inputs(position)._2
       val wordIndex = inputs(position)._1
       if (wordIndex > 0)
-        (wordIndex, word2vecInputHelper.toMatrix(getContextWords(inputs, position)), label)
+        (wordIndex, word2vecInputHelper.toMatrix(getContextWords(inputs, position, skipSelf)), label)
       else
         (wordIndex, Matrix(1, vectorSize), label)
     }).toList
@@ -184,6 +184,6 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
     labelTransitionProb(lastLabel, label) += 1D
   }
 
-  def getContextWords(document: List[(Int, Int)], position: Int): List[Int] = word2vecInputHelper.getContext(document, position, window).map(word => word._1).toList
+  def getContextWords(document: List[(Int, Int)], position: Int, skipSelf: Boolean = false): List[Int] = word2vecInputHelper.getContext(document, position, window, skipSelf).map(word => word._1).toList
 
 }

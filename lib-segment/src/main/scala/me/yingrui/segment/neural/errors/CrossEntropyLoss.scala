@@ -1,6 +1,5 @@
 package me.yingrui.segment.neural.errors
 
-import java.lang.Math._
 import me.yingrui.segment.math.Matrix
 
 class CrossEntropyLoss extends Loss {
@@ -12,10 +11,23 @@ class CrossEntropyLoss extends Loss {
     cost = 0D
   }
 
+  private def log(x: Double): Double = {
+    if (x < 1E-100) {
+      -230D
+    } else {
+      Math.log(x)
+    }
+  }
+
   def updateError(actual: Matrix, ideal: Matrix) {
-    cost -= (ideal % actual.map(ele => log(ele))).sum
+    val matrix = ideal % actual.map(log(_))
+    val sum = matrix.sum
+    cost -= sum
     setSize += 1D
   }
 
-  def loss = cost / (setSize + 1D)
+  def loss = {
+    val l = cost / (setSize + 1D)
+    l
+  }
 }

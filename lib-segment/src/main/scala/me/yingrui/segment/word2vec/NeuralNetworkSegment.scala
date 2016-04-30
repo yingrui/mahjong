@@ -120,7 +120,7 @@ class NeuralNetworkSegment(word2VecModel: Array[Array[Double]], vocab: Vocabular
     (0 until inputCharArray.length).map(position => {
       val wordIndex = inputCharArray(position)
       if (wordIndex > 0) {
-        val context = word2vecInputHelper.getContext(inputCharArray, position, window)
+        val context = word2vecInputHelper.getContext(inputCharArray, position, window, true)
         (wordIndex, word2vecInputHelper.toMatrix(context))
       } else {
         (wordIndex, Matrix(1, vectorSize))
