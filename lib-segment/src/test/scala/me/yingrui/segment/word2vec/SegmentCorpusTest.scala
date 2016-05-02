@@ -12,7 +12,7 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
     (vocab.getIndex _).when("中").returns(1)
     (vocab.getIndex _).when("文").returns(1)
 
-    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1)
+    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1, 1)
 
     val document = List(("中", "B"), ("文", "E"))
 
@@ -32,7 +32,7 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
     (vocab.getIndex _).when("中").returns(1)
     (vocab.getIndex _).when("文").returns(2)
 
-    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1)
+    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1, 1)
 
     val document = List(("学", "S"), ("中", "B"), ("文", "E"))
 
@@ -54,7 +54,7 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
     val word2VecModel: Array[Array[Double]] = Array(Array(1D, 2D), Array(3D, 4D), Array(5D, 6D))
     val vocab = stub[Vocabulary]
 
-    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1)
+    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 1, 1)
 
     val input = segmentCorpus.convertToMatrix(List(1, 2))
 
@@ -68,7 +68,7 @@ class SegmentCorpusTest extends FunSuite with Matchers with MockFactory {
     (vocab.getIndex _).when("中").returns(1)
     (vocab.getIndex _).when("文").returns(1)
 
-    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 2)
+    val segmentCorpus = new SegmentCorpus(word2VecModel, vocab, 2, 2)
 
     val document = List(("中", "B"), ("文", "E"))
 

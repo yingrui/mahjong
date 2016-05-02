@@ -14,11 +14,13 @@ class RMSLoss extends Loss {
   }
 
   def updateError(actual: Matrix, ideal: Matrix) {
-    globalError += (ideal - actual).map(pow(_, 2D)).sum
+    val errors = (ideal - actual).map(pow(_, 2D))
+    val sum = errors.sum
+    globalError += sum
     setSize += actual.col
   }
 
-  private def getRootMeanSquare = Math.sqrt(globalError / setSize)
+  private def getRootMeanSquare = Math.sqrt(globalError / (setSize + 1D))
 
   def loss = getRootMeanSquare
 }

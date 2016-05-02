@@ -22,7 +22,7 @@ class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter w
     def calculateGrad(trainSet: Seq[(Matrix, Matrix)], weight: Matrix, bias: Matrix): Unit = {
       val error = new RMSLoss()
 
-      val layer = new BPSigmoidLayer(weight, bias)
+      val layer = new BPSigmoidLayer(weight, bias, false)
 
       trainSet.foreach(data => {
         val output: Matrix = layer.computeOutput(data._1)
@@ -48,7 +48,7 @@ class SigmoidRegressionTest extends FunSuite with Matchers with BeforeAndAfter w
       iteration += 1
     }
 
-    new BPSigmoidLayer(weight, bias)
+    new BPSigmoidLayer(weight, bias, false)
   }
 
   private def classify(classifier: Layer, testInput: Matrix): Matrix = {

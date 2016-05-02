@@ -4,6 +4,7 @@ import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.errors.RMSLoss
 import me.yingrui.segment.neural.errors.Loss
 import me.yingrui.segment.util.Logger._
+import me.yingrui.segment.util.SerializeHandler
 
 object BackPropagation {
 
@@ -45,7 +46,7 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
   def update(): Unit = update(rate)
 
-  def update(rate: Double): Unit = layers.foreach(_.update(rate, momentum))
+  def update(rate: Double): Unit = layers.filterNot(_.immutable).foreach(_.update(rate, momentum))
 
   def takeARound(iteration: Int): Unit = {
     initLayers
@@ -86,7 +87,7 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
   def computeError(actual: Matrix, ideal: Matrix) {
     errorCalculator.updateError(actual, ideal)
 
-    layers.foldRight(ideal - actual)((layer, error) => layer.propagateError(error))
+    layers.filterNot(_.immutable).foldRight(ideal - actual)((layer, error) => layer.propagateError(error))
   }
 
   private def initLayers {
@@ -97,6 +98,13 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
       }
 
       layers.foreach(bp => network.add(bp))
+    }
+  }
+
+  def load(serializeHandler: SerializeHandler) {
+    for (i <- 0 until serializeHandler.deserializeInt()) {
+      layers(i).weight := serializeHandler.deserializeMatrix()
+      layers(i).bias := serializeHandler.deserializeMatrix()
     }
   }
 }

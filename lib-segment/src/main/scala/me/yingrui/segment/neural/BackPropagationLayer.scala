@@ -13,6 +13,8 @@ trait BackPropagationLayer extends Layer {
   def calculateDelta(actual: Matrix, error: Matrix): Matrix
 
   def layer: Layer
+
+  val immutable: Boolean
 }
 
 trait BPLayer extends BackPropagationLayer {
@@ -67,7 +69,7 @@ trait BPLayer extends BackPropagationLayer {
   }
 }
 
-class BPSigmoidLayer(val weight: Matrix, val bias: Matrix) extends BPLayer {
+class BPSigmoidLayer(val weight: Matrix, val bias: Matrix, val immutable: Boolean) extends BPLayer {
 
   def layer = SigmoidLayer(weight, bias)
 
@@ -85,7 +87,7 @@ class BPSigmoidLayer(val weight: Matrix, val bias: Matrix) extends BPLayer {
 }
 
 object BackPropagationLayer {
-  def apply(size: Int) = new BPSigmoidLayer(Matrix.randomize(size, size, -1D, 1D), Matrix.randomize(1, size, -1D, 1D))
+  def apply(size: Int) = new BPSigmoidLayer(Matrix.randomize(size, size, -1D, 1D), Matrix.randomize(1, size, -1D, 1D), false)
 
-  def apply(size: Int, nextLayerSize: Int) = new BPSigmoidLayer(Matrix.randomize(size, nextLayerSize, -1D, 1D), Matrix.randomize(1, nextLayerSize, -1D, 1D))
+  def apply(size: Int, nextLayerSize: Int) = new BPSigmoidLayer(Matrix.randomize(size, nextLayerSize, -1D, 1D), Matrix.randomize(1, nextLayerSize, -1D, 1D), false)
 }

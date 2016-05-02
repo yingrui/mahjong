@@ -13,6 +13,8 @@ class Word2VecInputHelper(ngram: Int, inputVectorSize: Int, word2VecModel: Array
 
   def defaultLabels(ngram: Int): Array[Int] = (0 until ngram).map(_ => defaultLabelIndex).toArray
 
+  def defaultLabels(): Array[Int] = defaultLabels(ngram)
+
   def isStartLabel(label: Int): Boolean = {
     label <= 1
   }

@@ -22,7 +22,7 @@ class SigmoidSoftmaxMLPTest extends FunSuite with Matchers with WisconsinBreastC
 
     val loss = new CrossEntropyLoss
     val network = new BackPropagation(numberOfNeurons, numberOfClasses, 1.0, 0.0D, loss)
-    network.addLayer(new BPSigmoidLayer(layer0Weight, layer0Bias))
+    network.addLayer(new BPSigmoidLayer(layer0Weight, layer0Bias, false))
     network.addLayer(SoftmaxLayer(layer1Weight))
 
     def takeARound(trainSet: Seq[(Matrix, Matrix)]): Double = {

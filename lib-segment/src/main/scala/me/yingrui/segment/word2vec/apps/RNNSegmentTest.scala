@@ -11,12 +11,12 @@ import me.yingrui.segment.word2vec.{MNNSegmentViterbiClassifier, NeuralNetworkSe
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext
 
-object MNNSegmentTest extends App {
+object RNNSegmentTest extends App {
 
   implicit val executionContext = ExecutionContext.Implicits.global
 
   val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-10000.txt"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-100000.txt"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector.dat"
   val skipSelf = if (args.indexOf("-skip-self") >= 0) args(args.indexOf("-skip-self") + 1).toBoolean else true
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2

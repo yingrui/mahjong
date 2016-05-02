@@ -7,12 +7,12 @@ import me.yingrui.segment.math.Matrix
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
-class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngram: Int = 1) {
+class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngram: Int, labelNgram: Int) {
 
   val vectorSize = word2VecModel(0).length
   val window = 1
   val labelTransitionProb = Matrix(4, 4)
-  val word2vecInputHelper = new Word2VecInputHelper(ngram, vectorSize, word2VecModel)
+  val word2vecInputHelper = new Word2VecInputHelper(labelNgram, vectorSize, word2VecModel)
 
   def splitCorpus(segmentCorpusFile: String, numberOfPieces: Int): Seq[String] = {
     var i = 0
@@ -57,10 +57,6 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
 
   def loadSegmentDataSet(segmentCorpusFile: String): List[Seq[(Int, Matrix, Int)]] = {
     loadDocuments(segmentCorpusFile).map(doc => convertToSegmentDataSet(doc))
-  }
-
-  def load(segmentCorpusFile: String): Seq[(Matrix, Matrix)] = {
-    loadDocuments(segmentCorpusFile).map(doc => convert(doc)).flatten
   }
 
   def convert(document: List[(String, String)]): List[(Matrix, Matrix)] = {
@@ -157,11 +153,6 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
       .map(wordAndLabel => (vocab.getIndex(wordAndLabel._1), getLabelIndex(wordAndLabel)))
 
     (0 until inputs.length).map(position => {
-      if (position > 0) {
-        val label = inputs(position)._2
-        val lastLabel = inputs(position - 1)._2
-        recordLabelTransition(lastLabel, label)
-      }
       val label = inputs(position)._2
       val wordIndex = inputs(position)._1
       if (wordIndex > 0)
@@ -174,8 +165,8 @@ class SegmentCorpus(word2VecModel: Array[Array[Double]], vocab: Vocabulary, ngra
   def getLabelIndex(wordAndLabel: (String, String)): Int = word2vecInputHelper.labelMap(wordAndLabel._2)
 
   private def getLabels(inputs: List[(Int, Int)], position: Int): Array[Int] = {
-    (1 to ngram).map(i => {
-      val index = position + (i - ngram)
+    (1 to labelNgram).map(i => {
+      val index = position + (i - labelNgram)
       if (index >= 0) inputs(index)._2 else 0
     }).toArray
   }
