@@ -20,8 +20,6 @@ class RMSLoss extends Loss {
     setSize += actual.col
   }
 
-  private def getRootMeanSquare = Math.sqrt(globalError / (setSize + 1D))
-
-  def loss = getRootMeanSquare
+  def loss = Math.sqrt(globalError / (setSize + 1D))
 }
 

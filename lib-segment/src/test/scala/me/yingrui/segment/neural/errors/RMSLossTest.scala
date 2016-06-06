@@ -7,14 +7,14 @@ class RMSLossTest {
 
   @Test
   def should_return_root_mean_square_error() {
-    val actual = Array(1D, 2D, 3D, 5D)
-    val ideal = Array(1D, 2D, 3D, 4D)
+    val actual = Array(1D, 2D, 4D)
+    val ideal = Array(1D, 2D, 3D)
 
     val error = new RMSLoss()
     error.updateError(Matrix(actual), Matrix(ideal))
     val rms = error.loss
 
-    Assert.assertTrue(rms - 0.5D > -0.0000001 && rms - 0.5D < 0.0000001)
+    Assert.assertTrue("rms is not equal 1 / (3 + 1) = 0.5", rms - 0.5D > -0.0000001 && rms - 0.5D < 0.0000001)
   }
 
   def assertArrayEquals(expect: Array[Boolean], actual: Array[Boolean]) {
