@@ -2,11 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>me.yingrui.mahjong</groupId>
+    <parent>
+        <groupId>me.yingrui.mahjong</groupId>
+        <artifactId>mahjong</artifactId>
+        <version>1.0-beta</version>
+        <relativePath>../</relativePath>
+    </parent>
     <artifactId>lib-segment</artifactId>
     <packaging>jar</packaging>
     <name>lib-segment</name>
-    <version>1.0-SNAPSHOT</version>
 
     <licenses>
         <license>
@@ -22,7 +26,19 @@
 
     <properties>
         <nd4j.version>0.0.3.5.5.2</nd4j.version>
+        <maven.repository></maven.repository>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus</id>
+            <url>${maven.repository}/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus</id>
+            <url>${maven.repository}/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
