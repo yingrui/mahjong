@@ -53,7 +53,7 @@ class WordToPinyinClassifier(val model: HmmModel) {
   }
 
   def loadDictionary(dictFile : String) {
-    val source = Source.fromInputStream(getResourceAsStream(dictFile))
+    val source = Source.fromInputStream(getResourceAsStream(dictFile), "UTF-8")
     for (line <- source.getLines()) {
       val regex = "([^ ]+) *= *([^ ]+)".r
       regex findFirstIn line match {

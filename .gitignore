@@ -8,3 +8,4 @@ test_index_dir
 text?
 text?.txt
 text?.zip
+**/*.iml
