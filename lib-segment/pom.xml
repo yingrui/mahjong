@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.yingrui.mahjong</groupId>
     <artifactId>lib-segment</artifactId>
-    <version>1.0-beta</version>
+    <version>1.0-rc1</version>
     <packaging>jar</packaging>
     <name>lib-segment</name>
 

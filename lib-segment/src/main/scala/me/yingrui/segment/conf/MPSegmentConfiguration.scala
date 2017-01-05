@@ -2,7 +2,8 @@ package me.yingrui.segment.conf
 
 import scala.io.Source
 import collection.Map
-import java.net.URL
+
+import me.yingrui.segment.util.FileUtil
 
 class MPSegmentConfiguration {
 
@@ -136,14 +137,15 @@ class MPSegmentConfiguration {
   }
 
   private def load() {
-    val resource: URL = getClass.getClassLoader.getResource("maxprob.cfg")
+    val resource = FileUtil.getResourceAsStream("maxprob.cfg")
     if (null != resource) {
-      val configFile = resource.toURI
-      val source = Source.fromFile(configFile)
+      val source = Source.fromInputStream(resource)
       val re = "^\\s*([\\w\\.]+)\\s*=\\s*([^\\s]+)\\s*$".r
       for (line <- source.getLines; m <- re.findFirstMatchIn(line)) {
         properties += (m.group(1) -> m.group(2))
       }
+      source.close()
+      resource.close()
     }
   }
 

@@ -7,15 +7,19 @@ object FileUtil {
   def getResourceAsStream(resource: String): InputStream = {
     val file = new File(resource)
     if (file.exists()) {
-      new FileInputStream(file)
-    } else {
-      val inputStream = getClass().getClassLoader().getResourceAsStream(resource)
-      if (null != inputStream) {
-        inputStream
-      } else {
-        getClass().getClassLoader().getResourceAsStream("me/yingrui/segment/" + resource)
-      }
+      return new FileInputStream(file)
     }
 
+    val inputStream = getClass().getClassLoader().getResourceAsStream(resource)
+    if (null != inputStream) {
+      return inputStream
+    }
+
+    val internalResource = getClass().getClassLoader().getResourceAsStream("me/yingrui/segment/" + resource)
+    if (internalResource != null) {
+      return internalResource
+    }
+
+    return getClass().getClassLoader().getParent().getResourceAsStream(resource)
   }
 }
