@@ -6,6 +6,26 @@ import me.yingrui.segment.filter.ner.NameProbDistribution
 import me.yingrui.segment.dict.POSUtil
 import me.yingrui.segment.filter.ForeignName
 
+/**
+  * Labels for Chinese name recognition
+  * B 姓氏
+  * C 双名的首字
+  * D 双名的末字
+  * E 单名
+  * F 前缀
+  * G 后缀
+  * K 人名的上文
+  * L 人名的下文
+  * M 两个中国人名之间的成分
+  * U 人名的上文与姓氏成词
+  * V 人名的末字与下文成词
+  * X 姓与双名的首字成词
+  * Y 姓与单名成词
+  * Z 双名本身成词
+  * A 其它无关词
+  * @param expect
+  * @param actual
+  */
 class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: SegmentResult) extends SegmentResultCompareHook {
 
   var serialLabels = List[(String, String)]()

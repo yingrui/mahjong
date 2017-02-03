@@ -8,7 +8,7 @@ import java.io.InputStream
 import me.yingrui.segment.tools.PFRCorpusLoader
 import me.yingrui.segment.tools.accurary.SegmentResultComparator
 
-class PFRCorpusToSerialLabelTest {
+class PRFCorpusToSerialLabelCompareHookerTest {
 
   @Test
   def should_label_chinese_family_name_as_b() {
