@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.yingrui.mahjong</groupId>
-    <artifactId>lib-segment</artifactId>
+    <artifactId>lib-segment-apps</artifactId>
     <version>1.0-rc1</version>
     <packaging>jar</packaging>
-    <name>lib-segment</name>
+    <name>lib-segment-apps</name>
 
     <licenses>
         <license>
@@ -41,12 +41,11 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.10.4</version>
-            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
-            <groupId>org.nd4j</groupId>
-            <artifactId>nd4j-jblas</artifactId>
-            <version>${nd4j.version}</version>
+            <groupId>me.yingrui.mahjong</groupId>
+            <artifactId>lib-segment</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

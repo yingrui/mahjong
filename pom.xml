@@ -20,6 +20,7 @@
 
     <modules>
         <module>./lib-segment</module>
+        <module>./lib-segment-apps</module>
         <module>./mahjong-web</module>
         <module>./mahjong-lucene</module>
         <module>./test/performance-test</module>
