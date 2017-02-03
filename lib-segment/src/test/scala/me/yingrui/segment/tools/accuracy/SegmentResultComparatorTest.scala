@@ -17,7 +17,7 @@ class SegmentResultComparatorTest {
 
     override def errorWordHook = errorCount += 1
 
-    override def correctWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {
+    override def foundCorrectWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {
       words = words :+ matchedWord
     }
 

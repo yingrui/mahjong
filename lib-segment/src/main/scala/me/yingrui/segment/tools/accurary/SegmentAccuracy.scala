@@ -82,7 +82,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
     wrong += 1
   }
 
-  override def correctWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {
+  override def foundCorrectWordHook(expectWord: Word, matchedWord: Word, expectWordIndex: Int, matchedWordIndex: Int) {
     segmentCorrect(expectWord, matchedWord)
     correct += 1
   }

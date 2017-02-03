@@ -17,7 +17,7 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
         lastMatchIndex = matchIndex
         val expectWord = expectResult(wordIndex)
         val matchedWord = actualResult(matchIndex)
-        hooker.correctWordHook(expectWord, matchedWord, wordIndex, matchIndex)
+        hooker.foundCorrectWordHook(expectWord, matchedWord, wordIndex, matchIndex)
       } else {
         hooker.errorWordHook
       }

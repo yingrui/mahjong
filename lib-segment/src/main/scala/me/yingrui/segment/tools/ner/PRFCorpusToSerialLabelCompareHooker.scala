@@ -32,7 +32,7 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
     }).toList
   }
 
-  override def correctWordHook(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int) {
+  override def foundCorrectWordHook(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int) {
     isContainError = false
     isOtherError = false
     isError = false
