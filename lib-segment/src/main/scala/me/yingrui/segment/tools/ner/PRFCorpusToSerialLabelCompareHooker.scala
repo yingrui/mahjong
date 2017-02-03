@@ -73,7 +73,6 @@ class PRFCorpusToSerialLabelCompareHooker(expect: SegmentResult, actual: Segment
   }
 
   private def getLabel(expectWord: Word, actualWord: Word, expectWordIndex: Int, matchedWordIndex: Int): String = {
-//    println(expectWord.word + " " + actualWord.word)
     var label = if (isName(expectWord) && isXing(expectWord)) "B" else "A"
 
     if (isName(expectWord) && isXing(actualWord) && lastLabel == "F" && endWith(expectWord, actualWord))

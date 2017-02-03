@@ -133,4 +133,13 @@ object PFRCorpusLoader {
     loader.eliminatedDomainTypes = HashSet[Int]()
     loader
   }
+
+  def convertToSegmentResult(line: String) = {
+    val stream = convertToInputStream(line)
+    val segmentResult = PFRCorpusLoader(stream).readLine()
+    stream.close()
+    segmentResult
+  }
+
+  private def convertToInputStream(line: String): InputStream = new ByteArrayInputStream(line.getBytes("utf-8"))
 }

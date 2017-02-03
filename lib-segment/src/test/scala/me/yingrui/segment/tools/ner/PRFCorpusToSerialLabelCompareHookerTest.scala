@@ -1,12 +1,8 @@
 package me.yingrui.segment.tools.ner
 
-import org.junit.Assert
-import org.junit.Test
-
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import me.yingrui.segment.tools.PFRCorpusLoader
+import me.yingrui.segment.tools.PFRCorpusLoader.convertToSegmentResult
 import me.yingrui.segment.tools.accurary.SegmentResultComparator
+import org.junit.{Assert, Test}
 
 class PRFCorpusToSerialLabelCompareHookerTest {
 
@@ -251,8 +247,4 @@ class PRFCorpusToSerialLabelCompareHookerTest {
     Assert.assertEquals("I", hooker.serialLabels(1)._2)
     Assert.assertEquals("J", hooker.serialLabels(2)._2)
   }
-
-  private def convertToSegmentResult(text: String) = PFRCorpusLoader(convertToInputStream(text)).readLine()
-
-  private def convertToInputStream(text: String): InputStream = new ByteArrayInputStream(text.getBytes("utf-8"))
 }
