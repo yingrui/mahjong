@@ -1,10 +1,14 @@
 package me.yingrui.segment.hmm
 
-import collection.mutable.HashMap
-import collection.mutable.Map
-import java.io.{FileInputStream, InputStreamReader, BufferedReader, File}
-import me.yingrui.segment.pinyin.{Window, Pair}
+import java.io.{BufferedReader, File, FileInputStream, InputStreamReader}
 
+import me.yingrui.segment.pinyin.{Pair, Window}
+
+import scala.collection.mutable.{HashMap, Map}
+
+/**
+  * Tool to train HMM models
+  */
 object ModelTrainer extends App {
 
   private val ngramLength = 2

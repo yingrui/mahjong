@@ -7,7 +7,7 @@ import me.yingrui.segment.tools.accurary.SegmentResultComparator
 import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
 
 object PFRCorpusToSerialLabelApp extends App {
-  val resource = "./src/test/resources/PFR-199801-utf-8.txt"
+  val resource = "./lib-segment/src/test/resources/PFR-199801-utf-8.txt"
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("ner-corpus.txt"), "utf-8"))
   val loader = PFRCorpusLoader(getResourceAsStream(resource))
 
