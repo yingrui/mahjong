@@ -19,4 +19,16 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
     hooker.serialLabels(2)._2 should be ("S")
   }
 
+  test("when the word's last character belongs to next word then label it as LC") {
+    val expect = convertToSegmentResult("19980101-01-003-002/m  精神/n 病人/n")
+    val actual = convertToSegmentResult("19980101-01-003-002/m  精神病/n 人/n")
+
+    val hooker = new DisambiguationToSerialLabels(expect, actual)
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    hooker.serialLabels.size should be (2)
+    hooker.serialLabels(0)._2 should be ("LC")
+    hooker.serialLabels(1)._2 should be ("LL")
+  }
 }
