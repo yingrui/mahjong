@@ -21,8 +21,16 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
       "19980101-01-003-002/m  保护/v 人/n 体/j 健康/n"
     )
 
-    hooker.serialLabels.size should be(4)
     hooker.serialLabels.map(_._2) should be(List("A", "SB", "SE", "A"))
+  }
+
+  test("should label separated words as SB, SM and SE") {
+    val hooker = compareSegmentResult(
+      "19980131-04-013-017/m  在/p 半梦半醒/l  之间/f  。/w",
+      "19980131-04-013-017/m  在/p 半/m 梦/n 半/m 醒/n  之间/f  。/w"
+    )
+
+    hooker.serialLabels.map(_._2) should be(List("A", "SB", "SM", "SM", "SE", "A", "A"))
   }
 
   test("when the word's last character belongs to next word then label it as LC") {
@@ -31,7 +39,6 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
       "19980101-01-003-002/m  精神病/n 人/n"
     )
 
-    hooker.serialLabels.size should be(2)
     hooker.serialLabels.map(_._2) should be(List("LC", "LL"))
   }
 
@@ -41,7 +48,6 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
       "19980101-01-003-002/m  很/d 美的/nt"
     )
 
-    hooker.serialLabels.size should be(2)
     hooker.serialLabels.map(_._2) should be(List("A", "U"))
   }
 
@@ -51,7 +57,6 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
       "19980101-01-003-002/m  神经病/d 变成/v 为/d"
     )
 
-    hooker.serialLabels.size should be(3)
     hooker.serialLabels.map(_._2) should be(List("SB", "SH", "SE"))
   }
 }

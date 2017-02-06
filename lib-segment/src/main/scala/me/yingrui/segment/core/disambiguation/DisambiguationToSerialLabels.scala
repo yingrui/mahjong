@@ -5,16 +5,20 @@ import me.yingrui.segment.tools.accurary.SegmentResultCompareHook
 
 /**
   * SB 一个词属于正确的词的开始 (Separated word Beginning part)
+  * SM 一个词属于正确的词的中间 (Separated word Middle part)
   * SE 一个词属于正确的词的开始 (Separated word Ending part)
   * SH 一个双字词，应该分为两部分，并且将两个字分别加入前后两个词 (Split Half)
   * LC 一个词的最后一个字是下一个词的首字 (Last Character)
   * LL 上一个词的最后一个字，应当属于当前词 (Last word's Last character)
   * U  当前词由两个单字词组成 (Union Words)
   * A  默认标记
+  *
   * @param expect
   * @param actual
   */
 class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult) extends SegmentResultCompareHook {
+
+  import DisambiguationToSerialLabels._
 
   var serialLabels = List[(String, String)]()
 
@@ -23,7 +27,7 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   }
 
   override def foundCorrectWordHook(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Unit = {
-    add(expectWord.name, "A")
+    add(expectWord.name, LABEL_A)
   }
 
   override def foundError(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Unit = {
@@ -33,25 +37,39 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   def addLabel(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): String = {
     if (isExpectWordContainsActualWord(expectWord, actualWord)) {
       if (isLastWordLastCharacterBelongToThisWord(expectWord, actualWord)) {
-        add(actualWord.name, "LL")
-      } else if (expectWord.name.startsWith(actualWord.name)) {
-        add(actualWord.name, "SB")
-      } else if (expectWord.name.endsWith(actualWord.name)) {
-        add(actualWord.name, "SE")
+        add(actualWord.name, LABEL_LL)
+      } else if (isWordStart(expectWord, actualWord)) {
+        add(actualWord.name, LABEL_SB)
+      } else if (isWordEnding(expectWord, actualWord)) {
+        add(actualWord.name, LABEL_SE)
+      } else if (isWordMiddle(expectWord, actualWord)) {
+        add(actualWord.name, LABEL_SM)
       } else {
-        add(actualWord.name, "A")
+        add(actualWord.name, LABEL_A)
       }
     } else {
       if (isActualWordStartsWithExpectedWordAndLastCharacterBelongsToNextWord(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, "LC")
+        add(actualWord.name, LABEL_LC)
       } else if (isTwoCharactersWord(actualWord) && isActualWordComposedOfTwoExpectedWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, "U")
+        add(actualWord.name, LABEL_U)
       } else if (isTwoCharactersWord(actualWord) && shouldActualWordSeparateToJoinPreviousAndNextWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, "SH")
+        add(actualWord.name, LABEL_SH)
       } else {
-        add(actualWord.name, "A")
+        add(actualWord.name, LABEL_A)
       }
     }
+  }
+
+  def isWordEnding(expectWord: Word, actualWord: Word): Boolean = {
+    expectWord.name.endsWith(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM) || isLastLabel(LABEL_SH))
+  }
+
+  def isWordMiddle(expectWord: Word, actualWord: Word): Boolean = {
+    expectWord.name.contains(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM))
+  }
+
+  def isWordStart(expectWord: Word, actualWord: Word): Boolean = {
+    expectWord.name.startsWith(actualWord.name) && !isLastLabel(LABEL_SB) && !isLastLabel(LABEL_SM)
   }
 
   def shouldActualWordSeparateToJoinPreviousAndNextWords(expectWord: Word, actualWord: Word, expectWordIndex: Int): Boolean = {
@@ -75,7 +93,7 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   }
 
   private def isLastWordLastCharacterBelongToThisWord(expectWord: Word, actualWord: Word): Boolean = {
-    isLastLabel("LC") && expectWord.name.endsWith(actualWord.name)
+    isLastLabel(LABEL_LC) && expectWord.name.endsWith(actualWord.name)
   }
 
   def isLastLabel(label: String): Boolean = {
@@ -98,4 +116,24 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
     serialLabels = serialLabels :+ (word, label)
     label
   }
+}
+
+object DisambiguationToSerialLabels {
+
+  val LABEL_LL = "LL"
+
+  val LABEL_SB = "SB"
+
+  val LABEL_SE = "SE"
+
+  val LABEL_SM = "SM"
+
+  val LABEL_SH = "SH"
+
+  val LABEL_A = "A"
+
+  val LABEL_LC = "LC"
+
+  val LABEL_U = "U"
+
 }
