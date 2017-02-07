@@ -32,7 +32,7 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
         add(actualWord.name, LABEL_LL)
       } else if (isWordStart(expectWord, actualWord)) {
         add(actualWord.name, LABEL_SB)
-      } else if (isWordEnding(expectWord, actualWord)) {
+      } else if (isWordEnding(expectWord, actualWord, expectWordIndex, actualWordIndex)) {
         add(actualWord.name, LABEL_SE)
       } else if (isWordMiddle(expectWord, actualWord)) {
         add(actualWord.name, LABEL_SM)
@@ -58,8 +58,9 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
     }
   }
 
-  private def isWordEnding(expectWord: Word, actualWord: Word): Boolean = {
-    expectWord.name.endsWith(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM) || isLastLabel(LABEL_SH))
+  private def isWordEnding(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Boolean = {
+    val lengthEqual = expect.getWordEndAt(expectWordIndex) == actual.getWordEndAt(actualWordIndex)
+    lengthEqual && expectWord.name.endsWith(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM) || isLastLabel(LABEL_SH))
   }
 
   private def isWordMiddle(expectWord: Word, actualWord: Word): Boolean = {

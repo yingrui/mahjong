@@ -35,6 +35,15 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
     hooker.serialLabels.map(_._2) should be(List(LABEL_A, LABEL_SB, LABEL_SM, LABEL_SM, LABEL_SE, LABEL_A, LABEL_A))
   }
 
+  test("should label separated reduplicated words as SB, SM and SE") {
+    val hooker = compareSegmentResult(
+      "19980131-04-013-017/m  有/p 一批批/m",
+      "19980131-04-013-017/m  在/p 一/q 批/m 批/m"
+    )
+
+    hooker.serialLabels.map(_._2) should be(List(LABEL_A, LABEL_SB, LABEL_SM, LABEL_SE))
+  }
+
   test("when the word's last character belongs to next word then label it as LC") {
     val hooker = compareSegmentResult(
       "19980101-01-003-002/m  精神/n 病人/n",
