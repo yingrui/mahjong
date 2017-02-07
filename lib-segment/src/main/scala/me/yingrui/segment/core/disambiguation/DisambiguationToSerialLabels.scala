@@ -52,10 +52,17 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
         add(actualWord.name, LABEL_UD)
       } else if (isTwoCharactersWord(actualWord) && shouldActualWordSeparateToJoinPreviousAndNextWords(expectWord, actualWord, expectWordIndex)) {
         add(actualWord.name, LABEL_SH)
+      } else if (firstCharacterBelongsToLastWord(expectWord, actualWord, expectWordIndex, actualWordIndex)) {
+        add(actualWord.name, LABEL_FL)
       } else {
         add(actualWord.name, LABEL_A)
       }
     }
+  }
+
+  private def firstCharacterBelongsToLastWord(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Boolean = {
+    val word = expectWord.name.last + getNextExpectWord(expectWordIndex)
+    (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM)) && isNotLastWord(expectWordIndex) && (word == actualWord.name)
   }
 
   private def isWordEnding(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Boolean = {
@@ -129,8 +136,9 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
 /**
   * SB 一个词属于正确的词的开始 (Separated word Beginning part)
   * SM 一个词属于正确的词的中间 (Separated word Middle part)
-  * SE 一个词属于正确的词的开始 (Separated word Ending part)
+  * SE 一个词属于正确的词的结束 (Separated word Ending part)
   * SH 一个双字词，应该分为两部分，并且将两个字分别加入前后两个词 (Split Half)
+  * FL 一个词应该分为两部分，首字属于前词，其余单独成词 (First character belongs to Last word)
   * LC 一个词的最后一个字是下一个词的首字 (Last Character)
   * LL 上一个词的最后一个字，应当属于当前词 (Last word's Last character)
   * U  当前词由两个词组成，第一个词是单字 (Union words)
@@ -147,6 +155,8 @@ object DisambiguationToSerialLabels {
   val LABEL_SE = "SE"
 
   val LABEL_SH = "SH"
+
+  val LABEL_FL = "FL"
 
   val LABEL_LC = "LC"
 

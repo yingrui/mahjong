@@ -10,7 +10,7 @@ object DisambiguationModelApp extends App {
   val writer = System.out
   val loader = PFRCorpusLoader(getResourceAsStream(resource))
 
-  val segmenter = SegmentWorker("recognize.chinesename" -> "false", "recognize.partOfSpeech" -> "false")
+  val segmenter = SegmentWorker("separate.xingming" -> "true")
   loader.load(expect => {
     val originalString = expect.toOriginalString()
     val actual = segmenter.segment(originalString)
