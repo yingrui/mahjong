@@ -1,7 +1,8 @@
 package me.yingrui.segment.tools.accurary
 
-import me.yingrui.segment.core.{Word, SegmentResult}
-import me.yingrui.segment.util.{StringUtil, NumberUtil}
+import me.yingrui.segment.core.{SegmentResult, Word}
+import me.yingrui.segment.util.StringUtil.doUpperCaseAndHalfShape
+import me.yingrui.segment.util.{NumberUtil, StringUtil}
 
 class SegmentResultComparator(hooker: SegmentResultCompareHook) {
 
@@ -64,10 +65,8 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
     stringBuilder.toString().trim()
   }
 
-
   private def isSameWord(expect: String, actual: String): Boolean = {
-    val expectWord = StringUtil.doUpperCaseAndHalfShape(expect)
-    if (expectWord.equalsIgnoreCase(actual)) {
+    if (equalsIgnoreCase(expect, actual)) {
       return true
     }
     if (Character.isDigit(actual.charAt(0))) {
@@ -80,4 +79,7 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
   }
 
 
+  private def equalsIgnoreCase(expect: String, actual: String): Boolean = {
+    expect.equalsIgnoreCase(actual) || doUpperCaseAndHalfShape(expect).equalsIgnoreCase(actual)
+  }
 }

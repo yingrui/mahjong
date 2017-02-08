@@ -115,4 +115,13 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
 
     hooker.serialLabels.map(_._2) should be(List(LABEL_SB, LABEL_FL))
   }
+
+  test("when all words match then label them as A") {
+    val hooker = compareSegmentResult(
+      "19980101-01-003-002/m  建筑/n  面积/n  ４２４８０/m  平方米/q",
+      "19980101-01-003-002/m  建筑/n  面积/n  ４２４８０/m  平方米/q"
+    )
+
+    hooker.serialLabels.map(_._2) should be(List(LABEL_A, LABEL_A, LABEL_A, LABEL_A))
+  }
 }

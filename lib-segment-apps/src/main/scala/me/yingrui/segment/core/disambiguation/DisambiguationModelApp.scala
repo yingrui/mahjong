@@ -20,7 +20,7 @@ object DisambiguationModelApp extends App {
     comparator.compare(expect, actual)
 
     val labels = hooker.serialLabels
-    writer.println("Head" + labels.head._1 + " " + labels.head._2)
+    writer.println(labels.head._1 + " " + labels.head._2)
     labels.tail.foreach(t => writer.println(t._1 + " " + t._2))
     writer.println()
   })

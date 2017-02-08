@@ -51,6 +51,18 @@ class SegmentResultComparatorTest {
   }
 
   @Test
+  def should_traverse_all_words_and_no_error() {
+    val expect = convertToSegmentResult("19980101-02-005-001/m  建筑/n  面积/n  ４２４８０/m  平方米/q")
+    val actual = convertToSegmentResult("19980101-02-005-001/m  建筑/n  面积/n  ４２４８０/m  平方米/q")
+
+    val hooker = new StubHooker
+    val comparator = new SegmentResultComparator(hooker)
+    comparator.compare(expect, actual)
+
+    Assert.assertEquals(0, hooker.errorCount)
+  }
+
+  @Test
   def should_traverse_all_words_when_actual_words_is_longer_than_expected() {
     val expect = convertToSegmentResult("19980101-02-005-001/m  [国务院/nt  侨办/j]nt  发表/v  新年/t  贺词/n ")
     val actual = convertToSegmentResult("19980101-02-005-001/m  国务院/nt  侨/j 办/v  发表/v  新年/t  贺词/n ")
