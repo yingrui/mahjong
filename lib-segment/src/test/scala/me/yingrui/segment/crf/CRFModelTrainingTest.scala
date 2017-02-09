@@ -40,21 +40,22 @@ class CRFModelTrainingTest extends WithTestData {
         |is O
         |Jenny  PER
       """.stripMargin
-    val corpus = CRFCorpus(createTempFile(trainingText))
+    val labelRepository = new FeatureRepository(false)
+    val corpus = CRFCorpus(createTempFile(trainingText), true, true, new FeatureRepository(true), labelRepository)
     val model = CRFModel.build(corpus)
 
-    val classifier = new CRFViterbi(model)
+    val classifier = new CRFClassifier(model)
 
     var total = 0
     var correctCount = 0
     for(i <- 0 until corpus.docs.length) {
-      val result = classifier.calculateResult(corpus.docs(i).data)
-      val path = result.getBestPath
+      val input = corpus.docs(i).rowData.map(str => str.substring(0, str.indexOf(" ")))
+      val path = classifier.findBestLabels(input)
       path.foreach(println(_))
       total += path.length
       for(index <- 0 until path.length) {
         val label = corpus.docs(i).label(index)
-        correctCount += (if(label == path(index)) 1 else 0)
+        correctCount += (if(label == labelRepository.getFeatureId(path(index))) 1 else 0)
       }
     }
     println(correctCount.toDouble / total.toDouble)

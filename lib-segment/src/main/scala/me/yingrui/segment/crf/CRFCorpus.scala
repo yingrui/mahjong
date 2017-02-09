@@ -155,4 +155,10 @@ object CRFDocument {
                    model.featureRepository, model.labelRepository,
                    data.map(word => Array(word)), (featureRepo, feature) => featureRepo.getFeatureId(feature))
   }
+
+  def apply(tokens: Seq[String], model: CRFModel): CRFDocument = {
+    createDocument(tokens, false, false,
+      model.featureRepository, model.labelRepository,
+      tokens.map(word => Array(word)), (featureRepo, feature) => featureRepo.getFeatureId(feature))
+  }
 }
