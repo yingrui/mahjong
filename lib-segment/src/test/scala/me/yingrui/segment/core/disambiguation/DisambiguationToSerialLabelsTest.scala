@@ -107,7 +107,16 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
     hooker.serialLabels.map(_._2) should be(List(LABEL_SB, LABEL_SH, LABEL_SE))
   }
 
-  test("when two words should be separate and join the previous and next word then label it as SH") {
+  test("when two single character words should be separate and first character belongs tto previous label it as FL") {
+    val hooker = compareSegmentResult(
+      "19980101-01-003-002/m  起来/v 了/u",
+      "19980101-01-003-002/m  起/v 来了/v"
+    )
+
+    hooker.serialLabels.map(_._2) should be(List(LABEL_SB, LABEL_FL))
+  }
+
+  test("when first character belongs to previous word then label it as FL") {
     val hooker = compareSegmentResult(
       "19980101-01-003-002/m  济南市/n 政府/n",
       "19980101-01-003-002/m  济南/n 市政府/n"

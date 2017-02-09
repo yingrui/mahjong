@@ -79,7 +79,9 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   }
 
   private def shouldActualWordSeparateToJoinPreviousAndNextWords(expectWord: Word, actualWord: Word, expectWordIndex: Int): Boolean = {
-    isNotLastWord(expectWordIndex) && expectWord.name.endsWith(actualWord.name.substring(0, 1)) && getNextExpectWord(expectWordIndex).startsWith(actualWord.name.substring(1))
+    isNotLastWord(expectWordIndex) && expectWord.name.endsWith(actualWord.name.substring(0, 1)) &&
+      getNextExpectWord(expectWordIndex).startsWith(actualWord.name.substring(1)) &&
+      !getNextExpectWord(expectWordIndex).equals(actualWord.name.substring(1))
   }
 
   private def isTwoCharactersWord(actualWord: Word): Boolean = actualWord.length == 2
