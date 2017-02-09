@@ -2,7 +2,8 @@ package me.yingrui.segment.core.disambiguation
 
 import java.io.{BufferedReader, InputStreamReader}
 
-import me.yingrui.segment.crf.{CRFCorpus, CRFModel, CRFSegmentWorker, CRFViterbi}
+import me.yingrui.segment.core.SegmentWorker
+import me.yingrui.segment.crf.{CRFCorpus, CRFModel, CRFViterbi}
 
 object DisambiguationModelTrainingApp extends App {
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "disambiguation-corpus.txt"
@@ -19,7 +20,7 @@ object DisambiguationModelTrainingApp extends App {
   println("\nType QUIT to exit:")
   val inputReader = new BufferedReader(new InputStreamReader(System.in))
   var line = inputReader.readLine()
-  val segmentWorker = CRFSegmentWorker(model)
+  val segmentWorker = SegmentWorker()
 
   while (line != null && !line.equals("QUIT")) {
     if (!line.isEmpty) {

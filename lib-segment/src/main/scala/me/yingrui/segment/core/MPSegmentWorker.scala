@@ -3,14 +3,13 @@ package me.yingrui.segment.core
 import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.filter.SegmentResultFilter
 
-class MPSegmentWorker(config: MPSegmentConfiguration) extends SegmentWorker {
+class MPSegmentWorker(config: MPSegmentConfiguration, unKnownFilter: SegmentResultFilter) extends SegmentWorker {
 
-  private var unKnownFilter: SegmentResultFilter = null
+  def this(config: MPSegmentConfiguration) = this(config, new SegmentResultFilter(config))
+
   private val maxSegStrLength = 400000
   private val mpSegment: MPSegment = new MPSegment(config)
   private val recognizePOS = config.isRecognizePOS()
-
-  unKnownFilter = new SegmentResultFilter(config)
 
   def segment(sen: String): SegmentResult = {
     var sentence = sen

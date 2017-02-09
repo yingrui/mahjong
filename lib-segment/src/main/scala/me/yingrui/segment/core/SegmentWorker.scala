@@ -2,6 +2,7 @@ package me.yingrui.segment.core
 
 import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.dict.DictionaryFactory
+import me.yingrui.segment.filter.SegmentResultFilter
 
 import scala.collection.mutable
 
@@ -32,6 +33,8 @@ object SegmentWorker {
   def apply(config: java.util.Map[String, String]): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(config))
 
   def apply(props: (String, String)*): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(props.toMap))
+
+  def apply(config: Map[String, String], filter: SegmentResultFilter): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(config), filter)
 
 }
 
