@@ -1,8 +1,5 @@
 package me.yingrui.segment.core.disambiguation
 
-import java.io.{BufferedReader, InputStreamReader}
-
-import me.yingrui.segment.core.SegmentWorker
 import me.yingrui.segment.crf.{CRFCorpus, CRFModel, CRFViterbi}
 
 object DisambiguationModelTrainingApp extends App {
@@ -16,20 +13,7 @@ object DisambiguationModelTrainingApp extends App {
   println("model saved")
 
   closeTest(model, trainFile)
-
-  println("\nType QUIT to exit:")
-  val inputReader = new BufferedReader(new InputStreamReader(System.in))
-  var line = inputReader.readLine()
-  val segmentWorker = SegmentWorker()
-
-  while (line != null && !line.equals("QUIT")) {
-    if (!line.isEmpty) {
-      val result = segmentWorker.tokenize(line)
-      println(result.mkString(" "))
-    }
-    line = inputReader.readLine()
-  }
-
+  
   def closeTest(model: CRFModel, trainFile: String): Unit = {
     var total = 0
     var correctCount = 0
