@@ -30,7 +30,7 @@ object DisambiguationApp extends App {
   def closeTest(model: CRFModel, trainFile: String): Unit = {
     var total = 0
     var correctCount = 0
-    val corpus = CRFCorpus(trainFile, true, true, model.featureRepository, model.labelRepository)
+    val corpus = CRFCorpus(trainFile, false, true, model.featureRepository, model.labelRepository)
     println("test corpus loaded")
     val classifier = new CRFViterbi(model)
     corpus.docs.foreach(doc => {
