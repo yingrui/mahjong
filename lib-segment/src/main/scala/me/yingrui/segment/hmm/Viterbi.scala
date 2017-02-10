@@ -11,6 +11,9 @@ trait Viterbi {
   def getStatesBy(observe: Seq[Int]): java.util.Collection[Int]
 
   def calculateResult(listObserve: Seq[Array[Int]]): ViterbiResult = {
+    if (listObserve.isEmpty) {
+      throw new RuntimeException("observe list cannot be empty")
+    }
     val length = listObserve.size
 
     val ret = new ViterbiResult(length)

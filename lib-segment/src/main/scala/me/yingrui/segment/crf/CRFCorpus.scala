@@ -44,11 +44,13 @@ object CRFCorpus {
     val documents = ListBuffer[CRFDocument]()
     val rowData = ListBuffer[String]()
     Source.fromFile(file).getLines().foreach(line => {
-      if (line.trim().isEmpty) {
+      if (line.trim.isEmpty && !rowData.isEmpty) {
         documents += CRFDocument(rowData, withLastLabel, keepOriginData, featureRepository, labelRepository)
         rowData.clear()
       } else {
-        rowData += line
+        if (!line.trim.isEmpty) {
+          rowData += line
+        }
       }
     })
 

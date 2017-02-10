@@ -12,14 +12,14 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
 
   import DisambiguationToSerialLabels._
 
-  var serialLabels = List[(String, String)]()
+  var serialLabels = List[(String, String, Int)]()
 
   override def compeleted: Unit = {
 
   }
 
   override def foundCorrectWordHook(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Unit = {
-    add(expectWord.name, LABEL_A)
+    add(expectWord.name, LABEL_A, expectWord.pos)
   }
 
   override def foundError(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Unit = {
@@ -29,33 +29,33 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   private def addLabel(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): String = {
     if (isExpectWordContainsActualWord(expectWord, actualWord)) {
       if (isLastWordLastCharacterBelongToThisWord(expectWord, actualWord)) {
-        add(actualWord.name, LABEL_LL)
+        add(actualWord.name, LABEL_LL, actualWord.pos)
       } else if (isWordStart(expectWord, actualWord)) {
-        add(actualWord.name, LABEL_SB)
+        add(actualWord.name, LABEL_SB, actualWord.pos)
       } else if (isWordEnding(expectWord, actualWord, expectWordIndex, actualWordIndex)) {
-        add(actualWord.name, LABEL_SE)
+        add(actualWord.name, LABEL_SE, actualWord.pos)
       } else if (isWordMiddle(expectWord, actualWord)) {
-        add(actualWord.name, LABEL_SM)
+        add(actualWord.name, LABEL_SM, actualWord.pos)
       } else {
-        add(actualWord.name, LABEL_A)
+        add(actualWord.name, LABEL_A, actualWord.pos)
       }
     } else {
       if (isActualWordStartsWithExpectedWordAndLastCharacterBelongsToNextWord(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_LC)
+        add(actualWord.name, LABEL_LC, actualWord.pos)
       } else if (isTwoCharactersWord(actualWord) && isActualWordComposedOfTwoExpectedWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_U)
+        add(actualWord.name, LABEL_U, actualWord.pos)
       } else if (isThreeCharactersWord(actualWord) && isActualWordComposedOfTwoExpectedWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_U)
+        add(actualWord.name, LABEL_U, actualWord.pos)
       } else if (isThreeCharactersWord(actualWord) && isActualWordComposedOfThreeExpectedWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_UT)
+        add(actualWord.name, LABEL_UT, actualWord.pos)
       } else if (isFourCharactersWord(actualWord) && isTwoCharactersWord(expectWord) && isActualWordComposedOfTwoExpectedWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_UD)
+        add(actualWord.name, LABEL_UD, actualWord.pos)
       } else if (isTwoCharactersWord(actualWord) && shouldActualWordSeparateToJoinPreviousAndNextWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_SH)
+        add(actualWord.name, LABEL_SH, actualWord.pos)
       } else if (firstCharacterBelongsToLastWord(expectWord, actualWord, expectWordIndex, actualWordIndex)) {
-        add(actualWord.name, LABEL_FL)
+        add(actualWord.name, LABEL_FL, actualWord.pos)
       } else {
-        add(actualWord.name, LABEL_A)
+        add(actualWord.name, LABEL_A, actualWord.pos)
       }
     }
   }
@@ -129,8 +129,8 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
     expectWord.name.contains(actualWord.name)
   }
 
-  private def add(word: String, label: String): String = {
-    serialLabels = serialLabels :+ (word, label)
+  private def add(word: String, label: String, pos: Int): String = {
+    serialLabels = serialLabels :+ (word, label, pos)
     label
   }
 }
