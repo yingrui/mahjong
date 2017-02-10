@@ -39,6 +39,7 @@ object DisambiguationApp extends App {
     val corpus = CRFCorpus(trainFile, false, true, model.featureRepository, model.labelRepository)
     println("test corpus loaded")
     val classifier = new CRFViterbi(model)
+    var index = 0D
     corpus.docs.foreach(doc => {
       val result = classifier.calculateResult(doc.data).getBestPath
       total += result.length
@@ -81,8 +82,14 @@ object DisambiguationApp extends App {
           case _: Exception =>
         }
       }
+
+      if (!debug) {
+        index = index + 1
+        val progress = (index / corpus.docs.size.toDouble * 100D).toInt
+        print(s"\rProgress: $progress %")
+      }
     })
-    println("total: " + total + " correct: " + correctCount + " error: " + (total - correctCount) + " rate: " + correctCount.toDouble / total.toDouble)
+    println("\ntotal: " + total + " correct: " + correctCount + " error: " + (total - correctCount) + " rate: " + correctCount.toDouble / total.toDouble)
   }
 
 }
