@@ -12,7 +12,7 @@ trait Viterbi {
 
   def calculateResult(listObserve: Seq[Array[Int]]): ViterbiResult = {
     if (listObserve.isEmpty) {
-      throw new RuntimeException("observe list cannot be empty")
+      throw new ObserveListException("observe list cannot be empty")
     }
     val length = listObserve.size
 

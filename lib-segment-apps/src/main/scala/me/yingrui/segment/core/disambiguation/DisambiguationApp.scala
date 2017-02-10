@@ -2,23 +2,29 @@ package me.yingrui.segment.core.disambiguation
 
 import java.io.{BufferedReader, InputStreamReader}
 
+import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.core.SegmentWorker
-import me.yingrui.segment.crf.{CRFCorpus, CRFModel, CRFViterbi}
+import me.yingrui.segment.crf.{CRFClassifier, CRFCorpus, CRFModel, CRFViterbi}
+import me.yingrui.segment.filter.SegmentResultFilter
+import me.yingrui.segment.filter.disambiguation.CRFDisambiguationFilter
 
 object DisambiguationApp extends App {
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "disambiguation-corpus.txt"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "disambiguation.m"
+  val debug = args.indexOf("--debug") >= 0
 
   println("model loading...")
   val model = CRFModel(saveFile)
   println("model loaded...")
   closeTest(model, trainFile)
 
-  println("\nType QUIT to exit:")
   val inputReader = new BufferedReader(new InputStreamReader(System.in))
-  var line = inputReader.readLine()
-  val segmentWorker = SegmentWorker()
+  val filter = new SegmentResultFilter(MPSegmentConfiguration())
+  filter.addFilter(new CRFDisambiguationFilter(new CRFClassifier(model)))
+  val segmentWorker = SegmentWorker(Map[String, String](), filter)
+  println("\nType QUIT to exit:")
 
+  var line = inputReader.readLine()
   while (line != null && !line.equals("QUIT")) {
     if (!line.isEmpty) {
       val result = segmentWorker.tokenize(line)
@@ -67,8 +73,10 @@ object DisambiguationApp extends App {
                 doc.rowData(index) + " " + model.labelRepository.getFeature(result(index))
               }
             })
-          errors.foreach(println(_))
-          println()
+          if (debug) {
+            errors.foreach(println(_))
+            println()
+          }
         } catch {
           case _: Exception =>
         }

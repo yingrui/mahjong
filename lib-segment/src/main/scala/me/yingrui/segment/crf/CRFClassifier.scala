@@ -2,10 +2,10 @@ package me.yingrui.segment.crf
 
 class CRFClassifier(model: CRFModel) {
 
-  def findBestLabels(result: Seq[String]): Array[String] = {
-    val document = CRFDocument(result, model)
-    val classifier = new CRFViterbi(model)
-    val labels = classifier.calculateResult(document.data).getBestPath.map(l => model.labelRepository.getFeature(l))
+  def findBestLabels(observeList: Seq[String]): Array[String] = {
+    val document = CRFDocument(observeList, model)
+    val viterbi = new CRFViterbi(model)
+    val labels = viterbi.calculateResult(document.data).getBestPath.map(l => model.labelRepository.getFeature(l))
     labels
   }
 
