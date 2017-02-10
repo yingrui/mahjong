@@ -149,33 +149,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-                            <artifactSet>
-                                <includes>
-                                    <include>org.scala-lang:*</include>
-                                    <include>org.nd4j:*</include>
-                                    <include>org.jblas:*</include>
-                                    <include>com.google.guava:*</include>
-                                    <include>commons-io:*</include>
-                                    <include>org.springframework:*</include>
-                                    <include>org.apache.commons:*</include>
-                                </includes>
-                            </artifactSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>
