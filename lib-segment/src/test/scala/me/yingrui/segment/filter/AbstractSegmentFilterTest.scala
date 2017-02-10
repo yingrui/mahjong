@@ -1,13 +1,10 @@
 package me.yingrui.segment.filter
 
-import org.junit.Assert
-import org.junit.Test
-import me.yingrui.segment.core.{SegmentWorker, SegmentResult}
+import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.dict.POSUtil
+import org.junit.{Assert, Test}
 
 class AbstractSegmentFilterTest {
-
-  SegmentWorker()
 
   @Test
   def should_merge_two_word_with_POS_NR() {

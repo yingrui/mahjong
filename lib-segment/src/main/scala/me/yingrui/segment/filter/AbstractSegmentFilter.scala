@@ -25,14 +25,14 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
     }
   }
 
-  class SeparateOperation(index: Int, pos: Int, secondPos: Int) extends Operation {
+  class SeparateOperation(index: Int, pos: Int, secondPos: Int, indexAtWord: Int) extends Operation {
 
     def modify(segmentResult: SegmentResult) {
       val word = segmentResult(index)
       if (word != null) {
-        val rest = word.name.substring(1)
+        val rest = word.name.substring(indexAtWord)
         val secondPartOfSpeech = getPartOfSpeechForSecondWord(secondPos, rest)
-        segmentResult.separate(index, 1, pos, secondPartOfSpeech)
+        segmentResult.separate(index, indexAtWord, pos, secondPartOfSpeech)
       }
     }
   }
@@ -77,8 +77,8 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
     operationSettings += (new DeleteOperation(index + separateTimes))
   }
 
-  def separateWordAt(index: Int, partOfSpeech: Int, secondPartOfSpeech: Int = POSUtil.POS_UNKOWN) {
-    operationSettings += (new SeparateOperation(index + separateTimes, partOfSpeech, secondPartOfSpeech))
+  def separateWordAt(index: Int, partOfSpeech: Int, secondPartOfSpeech: Int = POSUtil.POS_UNKOWN, indexAtWord: Int = 1) {
+    operationSettings += (new SeparateOperation(index + separateTimes, partOfSpeech, secondPartOfSpeech, indexAtWord))
     separateTimes += 1
   }
 
