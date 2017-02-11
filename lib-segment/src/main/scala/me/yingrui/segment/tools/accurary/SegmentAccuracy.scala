@@ -4,6 +4,7 @@ import me.yingrui.segment.core.{SegmentResult, SegmentWorker, Word}
 import me.yingrui.segment.dict.POSUtil
 import me.yingrui.segment.tools.PFRCorpusLoader
 import me.yingrui.segment.tools.accurary.SegmentErrorType._
+import me.yingrui.segment.util.FileUtil.getResourceAsStream
 
 import scala.collection.mutable._
 
@@ -19,7 +20,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   private val allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
 
   initialErrorAnalyzer()
-  loader = PFRCorpusLoader(getClass().getClassLoader().getResourceAsStream(testCorpus))
+  loader = PFRCorpusLoader(getResourceAsStream(testCorpus))
 
   def getAccuracyRate() = accuracyRate
 
