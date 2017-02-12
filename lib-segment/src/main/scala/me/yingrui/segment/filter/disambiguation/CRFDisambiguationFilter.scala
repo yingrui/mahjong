@@ -5,11 +5,35 @@ import me.yingrui.segment.crf.CRFClassifier
 import me.yingrui.segment.dict.POSUtil._
 import me.yingrui.segment.filter.AbstractSegmentFilter
 
+import scala.collection.mutable.ListBuffer
+
 class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentFilter {
 
   override def doFilter(): Unit = {
     val words = currentSegmentResult()
-    val labels = classfier.findBestLabels(words)
+    val array = splitByUnknownWords(words)
+    filter(array.flatten, words)
+  }
+
+  private def splitByUnknownWords(observeList: Seq[String]): Seq[Seq[String]] = {
+    val array = ListBuffer[ListBuffer[String]](ListBuffer[String]())
+    observeList.foreach(word => {
+      if (classfier.isFeatureExists(word)) {
+        array.last += word
+      } else {
+        array += ListBuffer()
+      }
+    })
+    array.map(words => {
+      if (words.length > 0) {
+        classfier.findBestLabels(words)
+      } else {
+        List(LABEL_A)
+      }
+    })
+  }
+
+  private def filter(labels: Seq[String], words: Seq[String]): Unit = {
     labels.zipWithIndex.foreach(_ match {
       case (label, index) => process(label, index, labels, words)
       case _ =>
@@ -19,8 +43,16 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
   private def process(label: String, index: Int, labels: Seq[String], words: Seq[String]): Unit = {
     label match {
       case LABEL_U => {
-        val pos = segmentResult.getPOS(index)
-        separateWordAt(index, pos, pos)
+        if (words(index).length > 1) {
+          val pos = segmentResult.getPOS(index)
+          separateWordAt(index, pos, pos)
+        }
+      }
+      case LABEL_UD => {
+        if (words(index).length == 4) {
+          val pos = segmentResult.getPOS(index)
+          separateWordAt(index, pos, pos, 2)
+        }
       }
       case LABEL_SE => {
         if (previousLabel(index, labels) == LABEL_SB) {
@@ -32,13 +64,13 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
         }
       }
       case LABEL_LC => {
-        if (nextLabel(index, labels) == LABEL_LL) {
+        if (words(index).length > 1 && nextLabel(index, labels) == LABEL_LL) {
           val pos = segmentResult.getPOS(index)
           separateWordAt(index, pos, POS_UNKOWN, segmentResult.getWord(index).length - 1)
         }
       }
       case LABEL_LL => {
-        if (previousLabel(index, labels) == LABEL_LC) {
+        if (previousWord(index, words).length > 1 && previousLabel(index, labels) == LABEL_LC) {
           val pos = segmentResult.getPOS(index)
           setWordIndexesAndPOSForMerge(index - 1, index, segmentResult.getPOS(index))
         }
@@ -51,6 +83,8 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
   private def previousWordPOS(index: Int): Int = segmentResult.getPOS(index - 1)
 
   private def previousLabel(index: Int, labels: Seq[String]): String = if (index > 0) labels(index - 1) else LABEL_A
+
+  private def previousWord(index: Int, words: Seq[String]): String = if (index > 0) words(index - 1) else ""
 
   private def nextLabel(index: Int, labels: Seq[String]): String = if (labels.length - index > 1) labels(index + 1) else LABEL_A
 

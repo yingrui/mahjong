@@ -22,6 +22,16 @@ class CRFDisambiguationFilterTest extends FunSuite with Matchers with MockitoSug
     segmentResult.map(_.pos) should be(Array(POS_D, POS_NT, POS_NT))
   }
 
+  test("should separate union four character words") {
+    val segmentResult = convertToSegmentResult("19980101-01-003-002/m  格力电器/nt")
+    val labels = Array(LABEL_UD)
+
+    createFilter(segmentResult, labels).filtering()
+
+    segmentResult.map(_.name) should be(Array("格力", "电器"))
+    segmentResult.map(_.pos) should be(Array(POS_NT, POS_NT))
+  }
+
   test("should merge two separated words") {
     val segmentResult = convertToSegmentResult("19980101-01-003-002/m  保护/v 人/n 体/j 健康/n")
     val labels = Array(LABEL_A, LABEL_SB, LABEL_SE, LABEL_A)
@@ -52,9 +62,21 @@ class CRFDisambiguationFilterTest extends FunSuite with Matchers with MockitoSug
     segmentResult.map(_.pos) should be(Array(POS_N, POS_N))
   }
 
+  test("should do nothing when labels LC LL are wrong") {
+    val segmentResult = convertToSegmentResult("19980101-01-003-002/m  精/n 神/n")
+    val labels = Array(LABEL_LC, LABEL_LL)
+
+    createFilter(segmentResult, labels).filtering()
+
+    segmentResult.map(_.name) should be(Array("精", "神"))
+    segmentResult.map(_.pos) should be(Array(POS_N, POS_N))
+  }
+
   private def createFilter(segmentResult: SegmentResult, labels: Array[String]): CRFDisambiguationFilter = {
     val classifier = mock[CRFClassifier]
     when(classifier.findBestLabels(any())).thenReturn(labels)
+    val words: Seq[Seq[String]] = List(segmentResult.map(_.name))
+    when(classifier.isFeatureExists(any())).thenReturn(true)
     val filter = new CRFDisambiguationFilter(classifier)
     filter.setSegmentResult(segmentResult)
     filter

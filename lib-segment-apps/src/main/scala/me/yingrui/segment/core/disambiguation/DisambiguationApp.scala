@@ -7,6 +7,8 @@ import me.yingrui.segment.core.SegmentWorker
 import me.yingrui.segment.crf.{CRFClassifier, CRFCorpus, CRFModel, CRFViterbi}
 import me.yingrui.segment.filter.SegmentResultFilter
 import me.yingrui.segment.filter.disambiguation.CRFDisambiguationFilter
+import me.yingrui.segment.tools.accurary.SegmentAccuracy
+import me.yingrui.segment.tools.accurary.SegmentErrorType._
 
 object DisambiguationApp extends App {
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "disambiguation-corpus.txt"
@@ -16,14 +18,25 @@ object DisambiguationApp extends App {
   println("model loading...")
   val model = CRFModel(saveFile)
   println("model loaded...")
-  closeTest(model, trainFile)
+//  closeTest(model, trainFile)
 
-  val inputReader = new BufferedReader(new InputStreamReader(System.in))
   val filter = new SegmentResultFilter(MPSegmentConfiguration())
   filter.addFilter(new CRFDisambiguationFilter(new CRFClassifier(model)))
   val segmentWorker = SegmentWorker(Map[String, String](), filter)
-  println("\nType QUIT to exit:")
 
+  val segmentAccuracy = new SegmentAccuracy("./lib-segment/src/test/resources/PFR-199801-utf-8.txt", segmentWorker)
+  segmentAccuracy.checkSegmentAccuracy()
+  println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
+  println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
+
+  println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
+  println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() + " errors because of name recognition.")
+  println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() + " errors because of place name recognition.")
+  println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
+  println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
+
+  println("\nType QUIT to exit:")
+  val inputReader = new BufferedReader(new InputStreamReader(System.in))
   var line = inputReader.readLine()
   while (line != null && !line.equals("QUIT")) {
     if (!line.isEmpty) {

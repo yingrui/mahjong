@@ -66,6 +66,9 @@ class SegmentResultComparator(hooker: SegmentResultCompareHook) {
   }
 
   private def isSameWord(expect: String, actual: String): Boolean = {
+    if (actual.isEmpty) {
+      throw new RuntimeException()
+    }
     if (equalsIgnoreCase(expect, actual)) {
       return true
     }
