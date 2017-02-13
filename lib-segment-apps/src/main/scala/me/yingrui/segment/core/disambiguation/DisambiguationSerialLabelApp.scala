@@ -44,7 +44,7 @@ object DisambiguationSerialLabelApp extends App {
   private def byPOS(label:(String, String, Int)): Boolean = {
     val pos = label._3
     val word = label._1
-    pos != POS_W && pos != POS_T && !isChinese(word)
+    pos != POS_W && pos != POS_T && isChinese(word)
   }
 
   private def nextLabelsAreCorrect(index: Int, labels: List[(String, String, Int)]): Boolean = {
