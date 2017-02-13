@@ -16,8 +16,8 @@ for i in $(eval echo "{0..$END}"); do
 done
 
 if [ ! "" = "$TRAIN_FILE" ]; then
-  java -cp lib-segment/target/lib-segment-1.0-SNAPSHOT-jar-with-dependencies.jar me.yingrui.segment.word2vec.apps.Word2VecTrainingApp $@
+  java -cp lib-segment-apps/target/lib-segment-1.0-rc1-jar-with-dependencies.jar me.yingrui.segment.word2vec.apps.Word2VecTrainingApp $@
 fi
 
-java -cp lib-segment/target/lib-segment-1.0-SNAPSHOT-jar-with-dependencies.jar me.yingrui.segment.word2vec.apps.Word2VecDemo $@
+java -cp lib-segment-apps/target/lib-segment-1.0-rc1-jar-with-dependencies.jar me.yingrui.segment.word2vec.apps.Word2VecDemo $@
 

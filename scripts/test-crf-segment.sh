@@ -1,4 +1,4 @@
 #! /bin/bash
 
-java -Xmx8192m -cp lib-segment/target/lib-segment-1.0-SNAPSHOT-jar-with-dependencies.jar me.yingrui.segment.crf.app.CRFSegmentTestApp $@
+java -Xmx8192m -cp lib-segment-apps/target/lib-segment-apps-1.0-rc1-jar-with-dependencies.jar me.yingrui.segment.crf.app.CRFSegmentTestApp $@
 
