@@ -11,29 +11,37 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
 
   override def doFilter(): Unit = {
     val words = currentSegmentResult()
-    val array = splitByUnknownWords(words)
-    filter(array.flatten, words)
+    val labels = splitByUnknownWords(words)
+    filter(labels, words)
   }
 
-  private def splitByUnknownWords(observeList: Seq[String]): Seq[Seq[String]] = {
-    val array = ListBuffer[ListBuffer[String]](ListBuffer[String]())
-    observeList.foreach(word => {
-      if (classfier.isFeatureExists(word)) {
-        array.last += word
-      } else {
-        array += ListBuffer()
+  private def splitByUnknownWords(observeList: Seq[String]): Seq[String] = {
+    val labels = ListBuffer[String]()
+    val array = ListBuffer[String]()
+    observeList.zipWithIndex.foreach(_ match {
+      case (word, index) => {
+        if (classfier.isFeatureExists(word)) {
+          array += word
+        } else {
+          if (!array.isEmpty) {
+            labels ++= classfier.findBestLabels(array)
+            array.clear()
+          }
+          labels += LABEL_A
+        }
       }
     })
-    array.map(words => {
-      if (words.length > 0) {
-        classfier.findBestLabels(words)
-      } else {
-        List(LABEL_A)
-      }
-    })
+    if (!array.isEmpty) {
+      labels ++= classfier.findBestLabels(array)
+      array.clear()
+    }
+    labels
   }
 
   private def filter(labels: Seq[String], words: Seq[String]): Unit = {
+    if (labels.length != words.length) {
+      throw new RuntimeException
+    }
     labels.zipWithIndex.foreach(_ match {
       case (label, index) => process(label, index, labels, words)
       case _ =>

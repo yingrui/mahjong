@@ -34,7 +34,7 @@ object SegmentWorker {
 
   def apply(props: (String, String)*): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(props.toMap))
 
-  def apply(config: Map[String, String], filter: SegmentResultFilter): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(config), filter)
+  def apply(config: MPSegmentConfiguration, filter: SegmentResultFilter): SegmentWorker = new MPSegmentWorker(config, filter)
 
 }
 

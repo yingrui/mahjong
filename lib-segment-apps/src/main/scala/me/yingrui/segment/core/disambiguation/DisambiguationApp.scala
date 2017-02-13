@@ -20,9 +20,10 @@ object DisambiguationApp extends App {
   println("model loaded...")
 //  closeTest(model, trainFile)
 
-  val filter = new SegmentResultFilter(MPSegmentConfiguration())
+  val config = MPSegmentConfiguration(Map("separate.xingming" -> "true", "minimize.word" -> "true"))
+  val filter = new SegmentResultFilter(config)
   filter.addFilter(new CRFDisambiguationFilter(new CRFClassifier(model)))
-  val segmentWorker = SegmentWorker(Map[String, String](), filter)
+  val segmentWorker = SegmentWorker(config, filter)
 
   val segmentAccuracy = new SegmentAccuracy("./lib-segment/src/test/resources/PFR-199801-utf-8.txt", segmentWorker)
   segmentAccuracy.checkSegmentAccuracy()
