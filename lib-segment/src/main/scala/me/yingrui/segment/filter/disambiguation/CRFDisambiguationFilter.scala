@@ -11,11 +11,11 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
 
   override def doFilter(): Unit = {
     val words = currentSegmentResult()
-    val labels = splitByUnknownWords(words)
+    val labels = findDisambiguationLabels(words)
     filter(labels, words)
   }
 
-  private def splitByUnknownWords(observeList: Seq[String]): Seq[String] = {
+  private def findDisambiguationLabels(observeList: Seq[String]): Seq[String] = {
     val labels = ListBuffer[String]()
     val array = ListBuffer[String]()
     observeList.zipWithIndex.foreach(_ match {
@@ -35,13 +35,11 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
       labels ++= classfier.findBestLabels(array)
       array.clear()
     }
+    assert(labels.length == observeList.length)
     labels
   }
 
   private def filter(labels: Seq[String], words: Seq[String]): Unit = {
-    if (labels.length != words.length) {
-      throw new RuntimeException
-    }
     labels.zipWithIndex.foreach(_ match {
       case (label, index) => process(label, index, labels, words)
       case _ =>
