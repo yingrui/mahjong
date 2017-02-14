@@ -33,7 +33,7 @@ class CRFCorpusTest extends WithTestData {
 
     Assert.assertEquals(1, corpus.docs.length)
 
-    Assert.assertEquals(23, corpus.featureRepository.size)
+    Assert.assertEquals(19, corpus.featureRepository.size)
     Assert.assertTrue(corpus.featureRepository.contains("Hello"))
     Assert.assertTrue(corpus.featureRepository.contains("Jenny"))
     Assert.assertTrue(corpus.featureRepository.contains("!"))
@@ -51,14 +51,10 @@ class CRFCorpusTest extends WithTestData {
 
     Assert.assertTrue(corpus.featureRepository.contains("pcn-word->Hello-Jenny-!"))
 
-    Assert.assertTrue(corpus.featureRepository.contains("pc-type->Jenny-!"))
-    Assert.assertTrue(corpus.featureRepository.contains("pc-type->Hello-Jenny"))
     Assert.assertTrue(corpus.featureRepository.contains("pc-word->Jenny-!"))
     Assert.assertTrue(corpus.featureRepository.contains("pc-word->Hello-Jenny"))
     Assert.assertTrue(corpus.featureRepository.contains("p2p1c-word->Hello-Jenny-!"))
 
-    Assert.assertTrue(corpus.featureRepository.contains("cn-type->Hello-Jenny"))
-    Assert.assertTrue(corpus.featureRepository.contains("cn-type->Jenny-!"))
     Assert.assertTrue(corpus.featureRepository.contains("cn-word->Jenny-!"))
     Assert.assertTrue(corpus.featureRepository.contains("cn-word->Hello-Jenny"))
     Assert.assertTrue(corpus.featureRepository.contains("cn1n2-word->Hello-Jenny-!"))
