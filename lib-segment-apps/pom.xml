@@ -156,13 +156,14 @@
                             <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
                             <artifactSet>
                                 <includes>
-                                    <include>org.scala-lang:*</include>
-                                    <include>org.nd4j:*</include>
-                                    <include>org.jblas:*</include>
-                                    <include>com.google.guava:*</include>
                                     <include>commons-io:*</include>
-                                    <include>org.springframework:*</include>
+                                    <include>com.google.guava:*</include>
+                                    <include>me.yingrui.mahjong:*</include>
                                     <include>org.apache.commons:*</include>
+                                    <include>org.jblas:*</include>
+                                    <include>org.nd4j:*</include>
+                                    <include>org.scala-lang:*</include>
+                                    <include>org.springframework:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
