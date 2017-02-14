@@ -91,11 +91,9 @@ object CRFDocument {
         val lastWordFeature = getFeatureId(featureRepository, lastWord)
 
         val biWord = "pc-word->" + docs(i - 1)(0) + "-" + doc(0)
-        val biType = "pc-type->" + docs(i - 1)(0) + "-" + doc(0)
         val biWordFeature = getFeatureId(featureRepository, biWord)
-        val biTypeFeature = getFeatureId(featureRepository, biType)
 
-        f ++= Array(lastWordFeature, biWordFeature, biTypeFeature)
+        f ++= Array(lastWordFeature, biWordFeature)
 
         if (withLastLabel) {
           // if there are two labels: O, PER. label feature is gonna be: label0, label1
@@ -120,11 +118,9 @@ object CRFDocument {
         val nextWordFeature = getFeatureId(featureRepository, nextWord)
 
         val biWord = "cn-word->" + doc(0) + "-" + docs(i + 1)(0)
-        val biType = "cn-type->" + doc(0) + "-" + docs(i + 1)(0)
         val biWordFeature = getFeatureId(featureRepository, biWord)
-        val biTypeFeature = getFeatureId(featureRepository, biType)
 
-        f ++= Array(nextWordFeature, biWordFeature, biTypeFeature)
+        f ++= Array(nextWordFeature, biWordFeature)
       }
 
       if (i < docs.length - 2) {
