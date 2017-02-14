@@ -49,15 +49,12 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
   private def process(label: String, index: Int, labels: Seq[String], words: Seq[String]): Unit = {
     label match {
       case LABEL_U => {
-        if (words(index).length > 1) {
-          val pos = segmentResult.getPOS(index)
-          separateWordAt(index, pos, pos)
-        }
-      }
-      case LABEL_UD => {
         if (words(index).length == 4) {
           val pos = segmentResult.getPOS(index)
           separateWordAt(index, pos, pos, 2)
+        } else if (words(index).length > 1) {
+          val pos = segmentResult.getPOS(index)
+          separateWordAt(index, pos, pos)
         }
       }
       case LABEL_SE => {

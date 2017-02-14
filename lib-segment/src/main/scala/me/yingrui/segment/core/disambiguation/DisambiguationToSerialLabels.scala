@@ -49,7 +49,7 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
       } else if (isThreeCharactersWord(actualWord) && isActualWordComposedOfThreeExpectedWords(expectWord, actualWord, expectWordIndex)) {
         add(actualWord.name, LABEL_UT, actualWord.pos)
       } else if (isFourCharactersWord(actualWord) && isTwoCharactersWord(expectWord) && isActualWordComposedOfTwoExpectedWords(expectWord, actualWord, expectWordIndex)) {
-        add(actualWord.name, LABEL_UD, actualWord.pos)
+        add(actualWord.name, LABEL_U, actualWord.pos)
       } else if (isTwoCharactersWord(actualWord) && shouldActualWordSeparateToJoinPreviousAndNextWords(expectWord, actualWord, expectWordIndex)) {
         add(actualWord.name, LABEL_SH, actualWord.pos)
       } else if (firstCharacterBelongsToLastWord(expectWord, actualWord, expectWordIndex, actualWordIndex)) {
@@ -165,8 +165,6 @@ object DisambiguationToSerialLabels {
   val LABEL_LL = "LL"
 
   val LABEL_U = "U"
-
-  val LABEL_UD = "UD"
 
   val LABEL_UT = "UT"
 

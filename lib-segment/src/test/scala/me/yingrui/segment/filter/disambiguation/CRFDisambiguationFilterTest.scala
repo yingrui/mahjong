@@ -24,7 +24,7 @@ class CRFDisambiguationFilterTest extends FunSuite with Matchers with MockitoSug
 
   test("should separate union four character words") {
     val segmentResult = convertToSegmentResult("19980101-01-003-002/m  格力电器/nt")
-    val labels = Array(LABEL_UD)
+    val labels = Array(LABEL_U)
 
     createFilter(segmentResult, labels).filtering()
 

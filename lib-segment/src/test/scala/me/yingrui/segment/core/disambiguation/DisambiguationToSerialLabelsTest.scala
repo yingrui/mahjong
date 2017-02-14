@@ -80,13 +80,13 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
     hooker.serialLabels.map(_._2) should be(List(LABEL_A, LABEL_U, LABEL_A, LABEL_A, LABEL_A, LABEL_A))
   }
 
-  test("when two double characters words be put into one word then label it as UD") {
+  test("when two double characters words be put into one word then label it as U") {
     val hooker = compareSegmentResult(
       "19980101-01-003-002/m  参与/V 亚/J 太/J 经合/J 组织/N 的/U 活动/VN",
       "19980101-01-003-002/m  参与/V 亚/J 太/J 经合组织/N 的/U 活动/VN"
     )
 
-    hooker.serialLabels.map(_._2) should be(List(LABEL_A, LABEL_A, LABEL_A, LABEL_UD, LABEL_A, LABEL_A))
+    hooker.serialLabels.map(_._2) should be(List(LABEL_A, LABEL_A, LABEL_A, LABEL_U, LABEL_A, LABEL_A))
   }
 
   test("when three single character words be put into one word then label it as UT") {
