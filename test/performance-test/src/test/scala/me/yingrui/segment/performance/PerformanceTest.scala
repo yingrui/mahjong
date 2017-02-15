@@ -23,7 +23,7 @@ class PerformanceTest {
   @Test
   def should_segment_Sophies_World_within_2_seconds() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker("recognize.partOfSpeech" -> "false")
+    val segmentWorker = SegmentWorker("recognize.partOfSpeech" -> "false", "load.englishdictionary" -> "false")
     segmentWorker.segment("世界您好！")
     val beginTime = System.currentTimeMillis()
     var total = 0
