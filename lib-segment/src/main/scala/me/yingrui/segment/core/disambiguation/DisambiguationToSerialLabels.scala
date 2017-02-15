@@ -144,8 +144,7 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   * LC 一个词的最后一个字是下一个词的首字 (Last Character)
   * LL 上一个词的最后一个字，应当属于当前词 (Last word's Last character)
   * U  当前词由两个词组成，第一个词是单字 (Union words)
-  * UD 当前词由两个词组成，第一个词是双字词 (Union words, first word has Double characters)
-  * UT 当前词由三个词组成，第一个词是双字词 (Union words composed of Three single character words)
+  * UT 当前词由三个字组成 (Union words composed of Three single character words)
   * A  默认标记
   */
 object DisambiguationToSerialLabels {

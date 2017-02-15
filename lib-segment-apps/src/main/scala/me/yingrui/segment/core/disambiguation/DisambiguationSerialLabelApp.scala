@@ -16,7 +16,7 @@ object DisambiguationSerialLabelApp extends App {
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("disambiguation-corpus.txt"), "utf-8"))
   val loader = PFRCorpusLoader(getResourceAsStream(resource))
 
-  val segmenter = SegmentWorker("separate.xingming" -> "true")
+  val segmenter = SegmentWorker("separate.xingming" -> "true", "minimize.word" -> "true")
   loader.load(expect => {
     val originalString = expect.toOriginalString()
     val actual = segmenter.segment(originalString)

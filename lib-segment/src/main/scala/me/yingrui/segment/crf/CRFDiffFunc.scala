@@ -12,7 +12,7 @@ class CRFDiffFunc(corpus: CRFCorpus, model: CRFModel) extends Function {
   def valueAt(x: Matrix): Double = calculate(x)
 
   val derivative = Matrix(model.featuresCount, model.labelCount)
-  val sigma = 1.0D
+  val sigma = 1.5D
   val sigmaSq = sigma * sigma
 
   import scala.concurrent.ExecutionContext.Implicits.global
