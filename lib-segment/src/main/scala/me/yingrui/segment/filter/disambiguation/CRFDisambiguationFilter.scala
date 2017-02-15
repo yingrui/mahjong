@@ -62,11 +62,13 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
           setWordIndexesAndPOSForMerge(index - 1, index, previousWordPOS(index))
         } else {
           val previousLabels = findPreviousLabels(index, labels)
-          val startOffset = previousLabels.size
-          if (previousLabels.head == LABEL_SB) {
-            setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
-          } else if (previousLabels.head == LABEL_LC && segmentResult.getWord(index - startOffset).length > 1) {
-            setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
+          if (!previousLabels.isEmpty) {
+            val startOffset = previousLabels.size
+            if (previousLabels.head == LABEL_SB) {
+              setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
+            } else if (previousLabels.head == LABEL_LC && segmentResult.getWord(index - startOffset).length > 1) {
+              setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
+            }
           }
         }
       }
