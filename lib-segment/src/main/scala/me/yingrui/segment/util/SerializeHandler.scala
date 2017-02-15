@@ -157,7 +157,7 @@ class SerializeHandler(input: DataInputStream, output: DataOutputStream) {
         collection.mutable.HashMap[String, Long]()
       }
     }catch {
-      case _ => collection.mutable.HashMap[String, Long]()
+      case _: Throwable => collection.mutable.HashMap[String, Long]()
     }
   }
 

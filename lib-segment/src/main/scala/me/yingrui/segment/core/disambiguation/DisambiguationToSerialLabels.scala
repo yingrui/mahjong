@@ -28,9 +28,7 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
 
   private def addLabel(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): String = {
     if (isExpectWordContainsActualWord(expectWord, actualWord)) {
-      if (isLastWordLastCharacterBelongToThisWord(expectWord, actualWord)) {
-        add(actualWord.name, LABEL_LL, actualWord.pos)
-      } else if (isWordStart(expectWord, actualWord)) {
+      if (isWordStart(expectWord, actualWord)) {
         add(actualWord.name, LABEL_SB, actualWord.pos)
       } else if (isWordEnding(expectWord, actualWord, expectWordIndex, actualWordIndex)) {
         add(actualWord.name, LABEL_SE, actualWord.pos)
@@ -67,11 +65,11 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
 
   private def isWordEnding(expectWord: Word, actualWord: Word, expectWordIndex: Int, actualWordIndex: Int): Boolean = {
     val lengthEqual = expect.getWordEndAt(expectWordIndex) == actual.getWordEndAt(actualWordIndex)
-    lengthEqual && expectWord.name.endsWith(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM) || isLastLabel(LABEL_SH))
+    lengthEqual && expectWord.name.endsWith(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM) || isLastLabel(LABEL_SH) || isLastLabel(LABEL_LC))
   }
 
   private def isWordMiddle(expectWord: Word, actualWord: Word): Boolean = {
-    expectWord.name.contains(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM))
+    expectWord.name.contains(actualWord.name) && (isLastLabel(LABEL_SB) || isLastLabel(LABEL_SM) || isLastLabel(LABEL_LC))
   }
 
   private def isWordStart(expectWord: Word, actualWord: Word): Boolean = {
@@ -108,11 +106,6 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
     isNotLastWord(expectWordIndex) && isActualWordContainsExpectedWord(expectWord, actualWord) && isLastCharacterBelongToNextWord(expectWord, actualWord) && getNextExpectWord(expectWordIndex).length > 1
   }
 
-  private def isLastWordLastCharacterBelongToThisWord(expectWord: Word, actualWord: Word): Boolean = {
-    val restCharacters = expectWord.name.substring(1)
-    (isLastLabel(LABEL_LC) || isLastLabel(LABEL_LL)) && (restCharacters.endsWith(actualWord.name) || restCharacters.contains(actualWord.name))
-  }
-
   private def isLastLabel(label: String): Boolean = {
     serialLabels.length > 0 && serialLabels.last._2 == label
   }
@@ -142,7 +135,6 @@ class DisambiguationToSerialLabels(expect: SegmentResult, actual: SegmentResult)
   * SH 一个双字词，应该分为两部分，并且将两个字分别加入前后两个词 (Split Half)
   * FL 一个词应该分为两部分，首字属于前词，其余单独成词 (First character belongs to Last word)
   * LC 一个词的最后一个字是下一个词的首字 (Last Character)
-  * LL 上一个词的最后一个字，应当属于当前词 (Last word's Last character)
   * U  当前词由两个词组成，第一个词是单字 (Union words)
   * UT 当前词由三个字组成 (Union words composed of Three single character words)
   * A  默认标记
@@ -160,8 +152,6 @@ object DisambiguationToSerialLabels {
   val LABEL_FL = "FL"
 
   val LABEL_LC = "LC"
-
-  val LABEL_LL = "LL"
 
   val LABEL_U = "U"
 

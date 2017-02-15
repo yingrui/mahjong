@@ -50,16 +50,16 @@ class DisambiguationToSerialLabelsTest extends FunSuite with Matchers {
       "19980101-01-003-002/m  精神病/n 人/n"
     )
 
-    hooker.serialLabels.map(_._2) should be(List(LABEL_LC, LABEL_LL))
+    hooker.serialLabels.map(_._2) should be(List(LABEL_LC, LABEL_SE))
   }
 
-  test("when the previous word's last character belongs to this word then label it as LL") {
+  test("when the previous word's last character belongs to this word then label it as SM") {
     val hooker = compareSegmentResult(
       "19980101-01-003-002/m  瓦楞/n 纸板箱包/n",
       "19980101-01-003-002/m  瓦楞纸/n 板/n 箱/n 包/n"
     )
 
-    hooker.serialLabels.map(_._2) should be(List(LABEL_LC, LABEL_LL, LABEL_LL, LABEL_LL))
+    hooker.serialLabels.map(_._2) should be(List(LABEL_LC, LABEL_SM, LABEL_SM, LABEL_SE))
   }
 
   test("when two single character words be put into one word then label it as U") {

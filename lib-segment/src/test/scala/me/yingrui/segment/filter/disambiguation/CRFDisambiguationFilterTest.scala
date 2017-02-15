@@ -54,7 +54,7 @@ class CRFDisambiguationFilterTest extends FunSuite with Matchers with MockitoSug
 
   test("should move last character to next words") {
     val segmentResult = convertToSegmentResult("19980101-01-003-002/m  精神病/n 人/n")
-    val labels = Array(LABEL_LC, LABEL_LL)
+    val labels = Array(LABEL_LC, LABEL_SE)
 
     createFilter(segmentResult, labels).filtering()
 
@@ -63,13 +63,13 @@ class CRFDisambiguationFilterTest extends FunSuite with Matchers with MockitoSug
   }
 
   test("should do nothing when labels LC LL are wrong") {
-    val segmentResult = convertToSegmentResult("19980101-01-003-002/m  精/n 神/n")
-    val labels = Array(LABEL_LC, LABEL_LL)
+    val segmentResult = convertToSegmentResult("19980101-01-003-002/m  似/p 乎/p 精/n 神/n")
+    val labels = Array(LABEL_SB, LABEL_SE, LABEL_LC, LABEL_SE)
 
     createFilter(segmentResult, labels).filtering()
 
-    segmentResult.map(_.name) should be(Array("精", "神"))
-    segmentResult.map(_.pos) should be(Array(POS_N, POS_N))
+    segmentResult.map(_.name) should be(Array("似乎", "精", "神"))
+    segmentResult.map(_.pos) should be(Array(POS_P, POS_N, POS_N))
   }
 
   private def createFilter(segmentResult: SegmentResult, labels: Array[String]): CRFDisambiguationFilter = {

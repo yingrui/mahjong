@@ -62,20 +62,18 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
           setWordIndexesAndPOSForMerge(index - 1, index, previousWordPOS(index))
         } else {
           val previousLabels = findPreviousLabels(index, labels)
-          val startOffset = previousLabels.size - 1
-          setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
+          val startOffset = previousLabels.size
+          if (previousLabels.head == LABEL_SB) {
+            setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
+          } else if (previousLabels.head == LABEL_LC && segmentResult.getWord(index - startOffset).length > 1) {
+            setWordIndexesAndPOSForMerge(index - startOffset, index, segmentResult.getPOS(index - startOffset))
+          }
         }
       }
       case LABEL_LC => {
-        if (words(index).length > 1 && nextLabel(index, labels) == LABEL_LL) {
+        if (words(index).length > 1 && (nextLabel(index, labels) == LABEL_SE || nextLabel(index, labels) == LABEL_SM)) {
           val pos = segmentResult.getPOS(index)
           separateWordAt(index, pos, POS_UNKOWN, segmentResult.getWord(index).length - 1)
-        }
-      }
-      case LABEL_LL => {
-        if (previousWord(index, words).length > 1 && previousLabel(index, labels) == LABEL_LC) {
-          val pos = segmentResult.getPOS(index)
-          setWordIndexesAndPOSForMerge(index - 1, index, segmentResult.getPOS(index))
         }
       }
       case LABEL_A =>
@@ -87,16 +85,16 @@ class CRFDisambiguationFilter(classfier: CRFClassifier) extends AbstractSegmentF
 
   private def previousLabel(index: Int, labels: Seq[String]): String = if (index > 0) labels(index - 1) else LABEL_A
 
-  private def previousWord(index: Int, words: Seq[String]): String = if (index > 0) words(index - 1) else ""
-
   private def nextLabel(index: Int, labels: Seq[String]): String = if (labels.length - index > 1) labels(index + 1) else LABEL_A
 
-  private def findPreviousLabels(index: Int, labels: Seq[String]): List[String] = {
+  private def findPreviousLabels(index: Int, labels: Seq[String]): Array[String] = {
     val lastLabel = previousLabel(index, labels)
-    if (lastLabel == LABEL_SB || lastLabel == LABEL_SM)
-      findPreviousLabels(index - 1, labels) ++ List(lastLabel)
+    if (lastLabel == LABEL_SM)
+      findPreviousLabels(index - 1, labels) ++ Array(lastLabel)
+    else if (lastLabel == LABEL_SB || lastLabel == LABEL_LC)
+      Array(lastLabel)
     else
-      List(lastLabel)
+      Array()
   }
 
   private def currentSegmentResult() = this.segmentResult.map(_.name)
