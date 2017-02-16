@@ -15,14 +15,14 @@ class CRFClique(doc: CRFDocument, labelCount: Int, factors: Array[Factor]) {
   }
 
   /**
-   * log{ exp(weight) / [exp(w1) + exp(w2) + ... + exp(wn)] }
-   *  = weight - log[exp(w1) + exp(w2) + ... + exp(wn)]
-   *  = weight - logSumExp([w1, w2, ... ,wn])
-   * @param t
-   * @param label
-   * @param given
-   * @return
-   */
+    * expression:  log { exp(weight) / [exp(w1) + exp(w2) + ... + exp(wn)] }
+    * equals:      weight - log[exp(w1) + exp(w2) + ... + exp(wn)]
+    * finally:     weight - logSumExp([w1, w2, ... ,wn])
+    * @param t
+    * @param label
+    * @param given
+    * @return
+    */
   def condLogProb(t: Int, label: Int, given: Array[Int]): Double = {
     val sumWeightOfLabel = factors(t)(label)
     sumWeightOfLabel - logSumExp(factors(t).weightFactor)
