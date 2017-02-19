@@ -7,6 +7,8 @@
     <version>1.0-rc1</version>
     <packaging>jar</packaging>
     <name>lib-segment</name>
+    <description>A Java library for Chinese Breaking and written in Scala.</description>
+    <url>https://github.com/yingrui/mahjong</url>
 
     <licenses>
         <license>
@@ -15,6 +17,14 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <name>yingrui</name>
+            <email>yingrui@gmail.com</email>
+            <url>https://github.com/yingrui</url>
+        </developer>
+    </developers>
 
     <scm>
         <url>https://github.com/yingrui/mahjong.git</url>
@@ -27,12 +37,16 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>nexus</id>
-            <url>${maven.repository}/repository/maven-snapshots/</url>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>nexus</id>
-            <url>${maven.repository}/repository/maven-releases/</url>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>
+                https://oss.sonatype.org/service/local/staging/deploy/maven2/
+            </url>
         </repository>
     </distributionManagement>
 
@@ -41,7 +55,7 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.10.4</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
@@ -120,6 +134,7 @@
                         <goals>
                             <goal>compile</goal>
                             <goal>testCompile</goal>
+                            <goal>doc-jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -146,6 +161,19 @@
                         <id>test</id>
                         <goals>
                             <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
