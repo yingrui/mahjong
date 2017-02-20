@@ -1,5 +1,12 @@
 # Max Probability Segment
 
+## 简介
+**麻将**一直是广受欢迎的传统娱乐活动，字牌的组合千变万化。汉字的组合也是变化多端，**Mahjong**这个项目希望能从汉字组合中发现汉语的秘密，为自然语言处理提供好的中文分词工具。
+
+[![Build Status](https://secure.travis-ci.org/yingrui/mahjong.png?branch=master)](https://travis-ci.org/yingrui/mahjong)
+
+**Mahjong**是基于Scala语言实现的中文分词软件包。这个项目的核心是最大概率分词，整个项目专为搜索引擎、文本信息抽取和自然语言处理设计，参考我[关于中文分词的一些思考](./about.md)来实现。性能优异、速度快。整个分词包易于使用，测试覆盖率高。
+
 ## Overview
 **Mahjong** is a java library for Chinese Breaking and written in Scala.
 
@@ -24,40 +31,4 @@ Any question, please contact me <yingrui.f@gmail.com>.
 
 **Deep Learning** is also become the hottest topic in machine learning. Our project also implements **Word2Vec**, it is going to integrate with max probability algorithm as well.
 
-## Test Deep Learning Segment
-1. Generate Chinese characters for character vector training: words.txt
-
-	./scripts/generate-word2vec-training-data.sh
-	
-2. Train hierarchy softmax Word2Vec model for Chinese character vector
-
-    ./scripts/run-word2vec.sh --save-file vectors.cn.test.dat --train-file words.txt -hs
-
-3. Test Word2Vec model: the same command without parameter --train-file
-
-    ./scripts/run-word2vec.sh --save-file vectors.cn.test.dat
-
-4. Generate Chinese segment training data: training.txt
-
-    ./scripts/generate-training-data.sh
-
-5. Train Chinese segment model
-
-    ./scripts/train-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
-
-6. Test Chinese segment model
-
-    ./scripts/test-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
-
-## Test CRF Segment
-1. Generate Chinese segment training data: training.txt
-
-    ./scripts/generate-training-data.sh
-
-2. Train CRF Chinese segment model
-
-    ./scripts/train-crf-segment.sh --train-file training.txt --save-file segment-crf.m
-
-3. Test CRF Chinese segment model
-
-    ./scripts/test-crf-segment.sh --train-file training.txt --save-file segment-crf.m
+[Experiments](./experiments.md)
