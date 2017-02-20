@@ -19,7 +19,8 @@ class AccuracyTest {
       )
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
-    println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
+    println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
+    println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
     println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
@@ -30,7 +31,7 @@ class AccuracyTest {
 
     printDetails(segmentAccuracy)
 
-    Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94021 * 0.99)
+    Assert.assertTrue(segmentAccuracy.getRecallRate() > 0.94021 * 0.99)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() <= 23000 * 1.05)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() <= 3000 * 1.05)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() <= 3200 * 1.05)
@@ -47,7 +48,8 @@ class AccuracyTest {
 
     val segmentAccuracy = new SegmentAccuracy("test-pfr-corpus.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
-    println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
+    println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
+    println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
     println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
@@ -66,7 +68,8 @@ class AccuracyTest {
     val segmentWorker = SegmentWorker("separate.xingming" -> "true")
     val segmentAccuracy = new SegmentAccuracy("PFR-199801-utf-8.txt", segmentWorker)
     segmentAccuracy.checkSegmentAccuracy()
-    println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
+    println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
+    println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
     println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
@@ -77,7 +80,7 @@ class AccuracyTest {
 
     printDetails(segmentAccuracy)
 
-    Assert.assertTrue(segmentAccuracy.getAccuracyRate() > 0.94000 * 0.99)
+    Assert.assertTrue(segmentAccuracy.getRecallRate() > 0.94000 * 0.99)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() <= 23000 * 1.05)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() <= 3000 * 1.05)
     Assert.assertTrue(segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() <= 3200 * 1.05)

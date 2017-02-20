@@ -27,7 +27,7 @@ object DisambiguationApp extends App {
 
   val segmentAccuracy = new SegmentAccuracy("./lib-segment/src/test/resources/PFR-199801-utf-8.txt", segmentWorker)
   segmentAccuracy.checkSegmentAccuracy()
-  println("Accuracy rate of segment is: " + segmentAccuracy.getAccuracyRate())
+  println("Accuracy rate of segment is: " + segmentAccuracy.getRecallRate())
   println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
   println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")

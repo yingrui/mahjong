@@ -12,9 +12,10 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
 
   private var loader: PFRCorpusLoader = null
   private var totalWords: Int = 0
+  private var actualWords: Int = 0
   private var correct: Int = 0
   private var wrong: Int = 0
-  private var accuracyRate: Double = 0D
+  private var recallRate: Double = 0D
 
   private val allWordsAndFreqInCorpus = HashMap[String, Int]()
   private val allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
@@ -22,7 +23,9 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   initialErrorAnalyzer()
   loader = PFRCorpusLoader(getResourceAsStream(testCorpus))
 
-  def getAccuracyRate() = accuracyRate
+  def getRecallRate() = recallRate
+
+  def getPrecisionRate() = correct.toDouble / actualWords.toDouble
 
   def getWrong() = wrong
 
@@ -41,6 +44,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
         NerNameStatisticData.scanRecognizedNameWordCount(actualResult)
 //        println(actualResult)
         totalWords += expectResult.length()
+        actualWords += actualResult.length()
 
         recordWordFreqInCorpus(expectResult)
 
@@ -55,7 +59,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
       postAnalysis()
     }
     assert(correct > 0 && totalWords > 0)
-    accuracyRate = correct.toDouble / totalWords.toDouble
+    recallRate = correct.toDouble / totalWords.toDouble
   }
 
   private def initialErrorAnalyzer() {
