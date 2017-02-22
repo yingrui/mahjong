@@ -21,6 +21,7 @@ class AccuracyTest {
     segmentAccuracy.checkSegmentAccuracy()
     println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
     println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
+    println("F is: " + segmentAccuracy.F())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
     println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
@@ -50,6 +51,7 @@ class AccuracyTest {
     segmentAccuracy.checkSegmentAccuracy()
     println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
     println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
+    println("F is: " + segmentAccuracy.F())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
     println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
@@ -70,6 +72,7 @@ class AccuracyTest {
     segmentAccuracy.checkSegmentAccuracy()
     println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
     println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
+    println("F is: " + segmentAccuracy.F())
     println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
     println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")

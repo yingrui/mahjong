@@ -25,6 +25,8 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
 
   def getRecallRate() = recallRate
 
+  def F() = 2.0 * (getRecallRate() * getPrecisionRate()) / (getRecallRate() + getPrecisionRate())
+
   def getPrecisionRate() = correct.toDouble / actualWords.toDouble
 
   def getWrong() = wrong
