@@ -4,6 +4,7 @@
 **麻将**一直是广受欢迎的传统娱乐活动，字牌的组合千变万化。汉字的组合也是变化多端，**Mahjong**这个项目希望能从汉字组合中发现汉语的秘密，为自然语言处理提供好的中文分词工具。
 
 [![Build Status](https://secure.travis-ci.org/yingrui/mahjong.png?branch=master)](https://travis-ci.org/yingrui/mahjong)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.yingrui.mahjong/lib-segment/badge.svg)](https://maven-badges.herokuapp.com/maven-central/me.yingrui.mahjong/lib-segment/)
 
 **Mahjong**是基于Scala语言实现的中文分词软件包。这个项目的核心是最大概率分词，整个项目专为搜索引擎、文本信息抽取和自然语言处理设计，参考我[关于中文分词的一些思考](./about.md)来实现。性能优异、速度快。整个分词包易于使用，测试覆盖率高。
 
