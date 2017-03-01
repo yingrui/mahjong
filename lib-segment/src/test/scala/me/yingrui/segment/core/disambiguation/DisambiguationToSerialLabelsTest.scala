@@ -1,6 +1,6 @@
 package me.yingrui.segment.core.disambiguation
 
-import me.yingrui.segment.tools.PFRCorpusLoader._
+import me.yingrui.segment.tools.CorpusLoader._
 import me.yingrui.segment.tools.accurary.SegmentResultComparator
 import org.scalatest.{FunSuite, Matchers}
 

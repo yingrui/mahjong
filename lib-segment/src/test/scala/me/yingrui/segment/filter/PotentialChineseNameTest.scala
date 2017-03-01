@@ -1,11 +1,10 @@
 package me.yingrui.segment.filter
 
-import ner.{RecognizerCreator, NameEntityRecognizeResult, NameEntityRecognizer}
-import org.junit.Assert
-import org.junit.Test
-import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.tools.PFRCorpusLoader
+import me.yingrui.segment.core.SegmentResult
+import me.yingrui.segment.filter.ner.{NameEntityRecognizeResult, NameEntityRecognizer, RecognizerCreator}
+import me.yingrui.segment.tools.CorpusLoader
+import org.junit.{Assert, Test}
 
 class PotentialChineseNameTest {
 
@@ -24,7 +23,7 @@ class PotentialChineseNameTest {
     def create(segmentResult: SegmentResult): NameEntityRecognizer = new FakeChineseNameRecognizer(segmentResult)
   }
 
-  val corpusLoader = PFRCorpusLoader()
+  val corpusLoader = CorpusLoader()
   val configuration: MPSegmentConfiguration = MPSegmentConfiguration(Map("separate.xingming" -> "true"))
   var filter = new ChineseNameFilter(configuration, new FakeRecognizerCreator(), 4)
 

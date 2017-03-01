@@ -4,7 +4,7 @@ import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.core.disambiguation.DisambiguationToSerialLabels._
 import me.yingrui.segment.crf.CRFClassifier
 import me.yingrui.segment.dict.POSUtil._
-import me.yingrui.segment.tools.PFRCorpusLoader._
+import me.yingrui.segment.tools.CorpusLoader._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar

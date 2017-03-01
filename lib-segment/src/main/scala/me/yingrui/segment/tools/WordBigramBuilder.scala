@@ -51,7 +51,7 @@ class WordBigramBuilder {
     val file = new File(filename)
     if (file.exists()) {
       println("[WordBigramBuilder] train file " + file.getAbsolutePath())
-      val corpusLoader = PFRCorpusLoader(new FileInputStream(file))
+      val corpusLoader = CorpusLoader(new FileInputStream(file))
       var segmentResult = corpusLoader.readLine()
       while (null != segmentResult) {
         analysis(segmentResult)

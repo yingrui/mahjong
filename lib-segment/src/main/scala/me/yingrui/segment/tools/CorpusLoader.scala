@@ -9,7 +9,7 @@ import me.yingrui.segment.dict.POSUtil
 import java.io.{BufferedReader, _}
 import collection.mutable._
 
-class PFRCorpusLoader {
+class CorpusLoader {
 
   private var reader: BufferedReader = null
   private var dictionary: HashDictionary = null
@@ -38,16 +38,24 @@ class PFRCorpusLoader {
   def buildSegmentResult(line: String): SegmentResult = {
     val elements = line.split("\\s+")
 
+    if (elements(0).matches("\\d{8}-\\d{2}-\\d{3}-\\d{3}/m")) {
+      toSegmentResult(elements.slice(1, elements.length))
+    } else {
+      toSegmentResult(elements)
+    }
+  }
+
+  private def toSegmentResult(elements: Array[String]): SegmentResult = {
     val words = ListBuffer[String]()
-    val wordStartAts = new Array[Int](elements.length - 1)
-    val wordEndAts = new Array[Int](elements.length - 1)
-    val posArray = new Array[Int](elements.length - 1)
-    val domainTypes = new Array[Int](elements.length - 1)
-    val concepts = new Array[String](elements.length - 1)
+    val wordStartAts = new Array[Int](elements.length)
+    val wordEndAts = new Array[Int](elements.length)
+    val posArray = new Array[Int](elements.length)
+    val domainTypes = new Array[Int](elements.length)
+    val concepts = new Array[String](elements.length)
 
     var firstIndex = -1
-    for (i <- 0 until (elements.length - 1)) {
-      var ele = elements(i + 1)
+    for (i <- 0 until elements.length) {
+      var ele = elements(i)
       domainTypes(i) = 0
       if (ele.startsWith("[")) {
         firstIndex = i
@@ -62,15 +70,17 @@ class PFRCorpusLoader {
       }
       val info = ele.split("/")
       val wordStr = info(0)
-      val posStr = info(1).toUpperCase()
-      if (posStr.equalsIgnoreCase(POSUtil.getPOSString(POSUtil.POS_NR))) {
-        setDomainType(domainTypes, i, POSUtil.POS_NR)
+      if (info.length > 1) {
+        val posStr = info(1).toUpperCase()
+        if (posStr.equalsIgnoreCase(POSUtil.getPOSString(POSUtil.POS_NR))) {
+          setDomainType(domainTypes, i, POSUtil.POS_NR)
+        }
+        concepts(i) = getConcept(wordStr, posStr)
+        posArray(i) = POSUtil.getPOSIndex(posStr)
       }
-      concepts(i) = getConcept(wordStr, posStr)
-      wordStartAts(i) = words.foldLeft(0){(sum, word) => sum + word.length}
+      wordStartAts(i) = words.foldLeft(0) { (sum, word) => sum + word.length }
       words += (wordStr)
-      wordEndAts(i) = words.foldLeft(0){(sum, word) => sum + word.length}
-      posArray(i) = POSUtil.getPOSIndex(posStr)
+      wordEndAts(i) = words.foldLeft(0) { (sum, word) => sum + word.length }
     }
 
     val result = new SegmentResult(words.size)
@@ -95,7 +105,7 @@ class PFRCorpusLoader {
     }
   }
 
-  def getConcept(wordStr: String, posStr: String): String = {
+  private def getConcept(wordStr: String, posStr: String): String = {
     val word = dictionary.lookupWord(wordStr)
     if (null != word) {
       for (concept <- word.getConcepts()) {
@@ -110,12 +120,12 @@ class PFRCorpusLoader {
   }
 }
 
-object PFRCorpusLoader {
+object CorpusLoader {
   def apply(inputStream: InputStream) = createCorpusLoader(inputStream, "utf-8")
 
   def apply(inputStream: InputStream, encoding: String) = createCorpusLoader(inputStream, encoding)
 
-  def createCorpusLoader(inputStream: InputStream, encoding: String): PFRCorpusLoader = {
+  def createCorpusLoader(inputStream: InputStream, encoding: String): CorpusLoader = {
     val loader = createCorpusLoader
     loader.reader = new BufferedReader(new InputStreamReader(inputStream, encoding))
     loader
@@ -123,8 +133,8 @@ object PFRCorpusLoader {
 
   def apply() = createCorpusLoader
 
-  def createCorpusLoader: PFRCorpusLoader = {
-    val loader = new PFRCorpusLoader()
+  def createCorpusLoader: CorpusLoader = {
+    val loader = new CorpusLoader()
     loader.dictionary = DictionaryFactory().getCoreDictionary()
     if (loader.dictionary == null) {
       DictionaryFactory().loadDictionary()
@@ -136,7 +146,7 @@ object PFRCorpusLoader {
 
   def convertToSegmentResult(line: String) = {
     val stream = convertToInputStream(line)
-    val segmentResult = PFRCorpusLoader(stream).readLine()
+    val segmentResult = CorpusLoader(stream).readLine()
     stream.close()
     segmentResult
   }

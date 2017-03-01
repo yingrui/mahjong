@@ -1,15 +1,16 @@
 package me.yingrui.segment.tools.ner
 
-import me.yingrui.segment.tools.PFRCorpusLoader
-import me.yingrui.segment.util.FileUtil._
+import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
+
 import me.yingrui.segment.core.SegmentWorker
+import me.yingrui.segment.tools.CorpusLoader
 import me.yingrui.segment.tools.accurary.SegmentResultComparator
-import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
+import me.yingrui.segment.util.FileUtil._
 
 object PFRCorpusToSerialLabelApp extends App {
   val resource = "./lib-segment/src/test/resources/PFR-199801-utf-8.txt"
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("ner-corpus.txt"), "utf-8"))
-  val loader = PFRCorpusLoader(getResourceAsStream(resource))
+  val loader = CorpusLoader(getResourceAsStream(resource))
 
   val segmenter = SegmentWorker("recognize.chinesename" -> "false")
   loader.load(expect => {

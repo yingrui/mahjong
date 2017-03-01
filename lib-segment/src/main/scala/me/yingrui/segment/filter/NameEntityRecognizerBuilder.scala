@@ -1,17 +1,17 @@
 package me.yingrui.segment.filter
 
-import me.yingrui.segment.tools.PFRCorpusLoader
-import me.yingrui.segment.util.FileUtil._
-import me.yingrui.segment.util.CharCheckUtil._
-import me.yingrui.segment.core.{Word, SegmentResult}
+import me.yingrui.segment.core.{SegmentResult, Word}
 import me.yingrui.segment.dict.POSUtil
+import me.yingrui.segment.tools.CorpusLoader
+import me.yingrui.segment.util.CharCheckUtil._
+import me.yingrui.segment.util.FileUtil._
 
 class NameEntityRecognizerBuilder {
-  var loader: PFRCorpusLoader = null
+  var loader: CorpusLoader = null
   val result = new NameEntityRecognizerStatisticResult()
 
   def load(resource: String) = {
-    loader = PFRCorpusLoader(getResourceAsStream(resource))
+    loader = CorpusLoader(getResourceAsStream(resource))
   }
 
   def analysis: NameEntityRecognizerStatisticResult = {

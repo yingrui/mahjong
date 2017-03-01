@@ -10,7 +10,7 @@ object PFRCorpusPrinter extends App {
 
   var inputStream = getInputStream(args)
   var out = new PrintStream(new File("corpus.txt"))
-  var loader = PFRCorpusLoader(inputStream)
+  var loader = CorpusLoader(inputStream)
   loader.eliminateDomainType(POSUtil.POS_NR)
   var result = loader.readLine()
   while (result != null) {

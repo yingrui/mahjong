@@ -1,6 +1,6 @@
 package me.yingrui.segment.tools.ner
 
-import me.yingrui.segment.tools.PFRCorpusLoader.convertToSegmentResult
+import me.yingrui.segment.tools.CorpusLoader.convertToSegmentResult
 import me.yingrui.segment.tools.accurary.SegmentResultComparator
 import org.junit.{Assert, Test}
 

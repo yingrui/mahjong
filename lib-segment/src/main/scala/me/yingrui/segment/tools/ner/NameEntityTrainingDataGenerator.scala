@@ -1,14 +1,15 @@
 package me.yingrui.segment.tools.ner
 
-import me.yingrui.segment.filter.NameEntityRecognizerBuilder
-import me.yingrui.segment.util.FileUtil._
+import java.io.{File, PrintWriter}
+
+import me.yingrui.segment.conf.MPSegmentConfiguration
 import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.dict.{ChNameDictionary, POSUtil}
-import me.yingrui.segment.util.SerializeHandler
-import java.io.{PrintWriter, File}
+import me.yingrui.segment.filter.NameEntityRecognizerBuilder
 import me.yingrui.segment.pinyin.WordToPinyinClassfierFactory
-import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.tools.PFRCorpusLoader
+import me.yingrui.segment.tools.CorpusLoader
+import me.yingrui.segment.util.FileUtil._
+import me.yingrui.segment.util.SerializeHandler
 
 object NameEntityTrainingDataGenerator extends App {
   val resource = "./src/test/resources/PFR-199801-utf-8.txt"
@@ -21,7 +22,7 @@ object NameEntityTrainingDataGenerator extends App {
   val chNameDict = new ChNameDictionary()
   chNameDict.loadNameDict(MPSegmentConfiguration().getChNameDict())
 
-  val loader = PFRCorpusLoader(getResourceAsStream(resource))
+  val loader = CorpusLoader(getResourceAsStream(resource))
   val printer = new PrintWriter(new File("ner.arff"), "utf-8")
 
   loader.load {

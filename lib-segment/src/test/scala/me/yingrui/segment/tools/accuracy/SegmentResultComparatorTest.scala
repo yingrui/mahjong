@@ -1,13 +1,11 @@
 package me.yingrui.segment.tools.accuracy
 
-import org.junit.Assert
-import org.junit.Test
+import java.io.{ByteArrayInputStream, InputStream}
 
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import me.yingrui.segment.tools.PFRCorpusLoader
 import me.yingrui.segment.core.Word
+import me.yingrui.segment.tools.CorpusLoader
 import me.yingrui.segment.tools.accurary.{SegmentResultComparator, SegmentResultCompareHook}
+import org.junit.{Assert, Test}
 
 class SegmentResultComparatorTest {
 
@@ -110,7 +108,7 @@ class SegmentResultComparatorTest {
     Assert.assertEquals(actual.toOriginalString(), joined)
   }
 
-  private def convertToSegmentResult(text: String) = PFRCorpusLoader(convertToInputStream(text)).readLine()
+  private def convertToSegmentResult(text: String) = CorpusLoader(convertToInputStream(text)).readLine()
 
   private def convertToInputStream(text: String): InputStream = new ByteArrayInputStream(text.getBytes("utf-8"))
 

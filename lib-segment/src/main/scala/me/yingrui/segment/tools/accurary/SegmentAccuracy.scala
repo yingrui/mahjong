@@ -2,7 +2,7 @@ package me.yingrui.segment.tools.accurary
 
 import me.yingrui.segment.core.{SegmentResult, SegmentWorker, Word}
 import me.yingrui.segment.dict.POSUtil
-import me.yingrui.segment.tools.PFRCorpusLoader
+import me.yingrui.segment.tools.CorpusLoader
 import me.yingrui.segment.tools.accurary.SegmentErrorType._
 import me.yingrui.segment.util.FileUtil.getResourceAsStream
 
@@ -10,7 +10,7 @@ import scala.collection.mutable._
 
 class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends SegmentResultCompareHook {
 
-  private var loader: PFRCorpusLoader = null
+  private var loader: CorpusLoader = null
   private var totalWords: Int = 0
   private var actualWords: Int = 0
   private var correct: Int = 0
@@ -21,7 +21,7 @@ class SegmentAccuracy(testCorpus: String, segmentWorker: SegmentWorker) extends 
   private val allErrorAnalyzer = new LinkedHashMap[SegmentErrorType, ErrorAnalyzer]()
 
   initialErrorAnalyzer()
-  loader = PFRCorpusLoader(getResourceAsStream(testCorpus))
+  loader = CorpusLoader(getResourceAsStream(testCorpus))
 
   def getRecallRate() = recallRate
 

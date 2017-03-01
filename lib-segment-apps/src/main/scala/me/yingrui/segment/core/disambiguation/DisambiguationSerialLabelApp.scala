@@ -5,16 +5,15 @@ import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
 import me.yingrui.segment.core.SegmentWorker
 import me.yingrui.segment.core.disambiguation.DisambiguationToSerialLabels.LABEL_A
 import me.yingrui.segment.dict.POSUtil._
-import me.yingrui.segment.tools.PFRCorpusLoader
+import me.yingrui.segment.tools.CorpusLoader
 import me.yingrui.segment.tools.accurary.SegmentResultComparator
 import me.yingrui.segment.util.CharCheckUtil.isChinese
 import me.yingrui.segment.util.FileUtil._
-import me.yingrui.segment.util.{CharCheckUtil, StringUtil}
 
 object DisambiguationSerialLabelApp extends App {
   val resource = "./lib-segment/src/test/resources/PFR-199801-utf-8.txt"
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("disambiguation-corpus.txt"), "utf-8"))
-  val loader = PFRCorpusLoader(getResourceAsStream(resource))
+  val loader = CorpusLoader(getResourceAsStream(resource))
 
   val segmenter = SegmentWorker("separate.xingming" -> "true", "minimize.word" -> "true")
   loader.load(expect => {
