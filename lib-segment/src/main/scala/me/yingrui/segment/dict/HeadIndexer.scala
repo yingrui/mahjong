@@ -30,6 +30,7 @@ class HeadIndexer {
   }
 
   private def addWord(wordName: String, word: IWord) {
+    updateWordLengthStatus(wordName.length)
     if (wordName.length() > getMaxWordLength()) {
       maxWordLength = wordName.length()
     }
@@ -79,10 +80,13 @@ class HeadIndexer {
     }
     var array = List[IWord]()
     for (i <- 1 until maxWordLen if (array.size < 3)) {
-      val candidateWord = wordStr.substring(0, i + 1)
-      val word = wordArray.find(candidateWord)
-      if (null != word) {
-        array = word :: array
+      val length = i + 1
+      if (this.containsWordWhichLengthEqual(length)) {
+        val candidateWord = wordStr.substring(0, length)
+        val word = wordArray.find(candidateWord)
+        if (null != word) {
+          array = word :: array
+        }
       }
     }
 
@@ -106,10 +110,13 @@ class HeadIndexer {
       maxWordLen = wordStr.length()
     }
     for (i <- 1 until maxWordLen) {
-      val candidateWord = wordStr.substring(0, i + 1)
-      val word = get(candidateWord)
-      if (null != word) {
-        return word
+      val length = i + 1
+      if (this.containsWordWhichLengthEqual(length)) {
+        val candidateWord = wordStr.substring(0, length)
+        val word = get(candidateWord)
+        if (null != word) {
+          return word
+        }
       }
     }
     return null
@@ -119,12 +126,22 @@ class HeadIndexer {
     return wordArray
   }
 
+  private def updateWordLengthStatus(wordLength: Int): Unit = {
+    wordLengthStatus = 1 << (wordLength - 1) | wordLengthStatus
+  }
+
+  private def containsWordWhichLengthEqual(length: Int): Boolean = {
+    val status = 1 << (length - 1) & wordLengthStatus
+    status > 0
+  }
+
   private var headStr: String = null
   private var maxWordLength: Int = 0
   private var wordOccuredSum: Int = 0
   private var wordCount: Int = 0
   private var headWord: IWord = null
   private var wordArray: IWordArray = null
+  private var wordLengthStatus: Long = 1
 }
 
 object HeadIndexer {
@@ -141,6 +158,7 @@ object HeadIndexer {
     indexer.wordCount = 1
     indexer.wordOccuredSum = 1
     indexer.maxWordLength = headWord.getWordLength()
+    indexer.updateWordLengthStatus(headWord.getWordLength())
     indexer.wordArray = BinaryWordArray(List[IWord](headWord).toArray)
     indexer
   }
