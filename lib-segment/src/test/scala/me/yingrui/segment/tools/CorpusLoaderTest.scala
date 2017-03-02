@@ -78,6 +78,17 @@ class CorpusLoaderTest {
   }
 
   @Test
+  def should_load_special_characters() {
+    val inputStream = getFakeInputStream("19980101-03-008-001/m  TP70G/UN //W L/UN")
+    val loader = CorpusLoader(inputStream)
+    val result = loader.readLine()
+    Assert.assertEquals("TP70G", result.getWord(0))
+    Assert.assertEquals("/", result.getWord(1))
+    Assert.assertEquals("L", result.getWord(2))
+    inputStream.close()
+  }
+
+  @Test
   def should_not_load_domain_types_with_POS_NR() {
     val inputStream = getFakeInputStream("19980101-03-008-001/m  钱/nr  其琛/nr  访问/v  德班/ns")
     val loader = CorpusLoader(inputStream)

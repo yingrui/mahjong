@@ -68,7 +68,8 @@ class CorpusLoader {
         setDomainType(domainTypes, firstIndex, i, domainType)
         firstIndex = -1
       }
-      val info = ele.split("/")
+      val indexOfSlash = ele.lastIndexOf("/")
+      val info = if (indexOfSlash > 0) Array(ele.substring(0, indexOfSlash), ele.substring(indexOfSlash + 1)) else Array(ele)
       val wordStr = info(0)
       if (info.length > 1) {
         val posStr = info(1).toUpperCase()

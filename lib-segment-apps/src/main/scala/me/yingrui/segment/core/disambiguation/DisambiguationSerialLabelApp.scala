@@ -11,9 +11,22 @@ import me.yingrui.segment.util.CharCheckUtil.isChinese
 import me.yingrui.segment.util.FileUtil._
 
 object DisambiguationSerialLabelApp extends App {
-  val resource = "./lib-segment/src/test/resources/PFR-199801-utf-8.txt"
-  val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream("disambiguation-corpus.txt"), "utf-8"))
-  val loader = CorpusLoader(getResourceAsStream(resource))
+
+  if (args.isEmpty) {
+    println(
+      """
+        |Usage:
+        | --train-file : input text file which contains segmented Chinese sentences (line by line).
+        | --save-file  : output file which with disambiguation labels.
+        |Default Parameter:
+        | --train-file ./lib-segment/src/test/resources/PFR-199801-utf-8.txt --save-file disambiguation-corpus.txt
+      """.stripMargin)
+  }
+
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "./心内科_1.txt"
+  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "disambiguation-corpus.txt"
+  val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(saveFile), "utf-8"))
+  val loader = CorpusLoader(getResourceAsStream(trainFile))
 
   val segmenter = SegmentWorker("separate.xingming" -> "true", "minimize.word" -> "true")
   loader.load(expect => {

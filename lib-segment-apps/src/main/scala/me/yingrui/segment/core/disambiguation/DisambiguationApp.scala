@@ -11,33 +11,55 @@ import me.yingrui.segment.tools.accurary.SegmentAccuracy
 import me.yingrui.segment.tools.accurary.SegmentErrorType._
 
 object DisambiguationApp extends App {
+
+  if (args.isEmpty) {
+    println(
+      """
+        |Usage:
+        | --corpus-file : input text file which contains segmented Chinese sentences (line by line).
+        | --train-file  : input labeled disambiguation sentences
+        | --model       : trained crf model, the model could be empty
+        | --debug       : whether print debug messages
+        |Default Parameter:
+        | --corpus-file ./lib-segment/src/test/resources/PFR-199801-utf-8.txt --train-file disambiguation-corpus.txt
+      """.
+        stripMargin)
+  }
+
+  val corpusFile = if (args.indexOf("--corpus-file") >= 0) args(args.indexOf("--corpus-file") + 1) else "./lib-segment/src/test/resources/PFR-199801-utf-8.txt"
   val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "disambiguation-corpus.txt"
-  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "disambiguation.m"
+  val modelFile = if (args.indexOf("--model") >= 0) args(args.indexOf("--model") + 1) else ""
   val debug = args.indexOf("--debug") >= 0
 
-  println("model loading...")
-  val model = CRFModel(saveFile)
-  println("model loaded...")
-//  closeTest(model, trainFile)
-
   val config = MPSegmentConfiguration(Map("separate.xingming" -> "true", "minimize.word" -> "true"))
-  val filter = new SegmentResultFilter(config)
-  filter.addFilter(new CRFDisambiguationFilter(new CRFClassifier(model)))
-  val segmentWorker = SegmentWorker(config, filter)
+  val segmentWorker = if (!modelFile.isEmpty) {
+    println("model loading...")
+    val model = CRFModel(modelFile)
+    println("model loaded...")
+    closeTest(model, trainFile)
 
-  val segmentAccuracy = new SegmentAccuracy("./lib-segment/src/test/resources/PFR-199801-utf-8.txt", segmentWorker)
+
+    val filter = new SegmentResultFilter(config)
+    filter.addFilter(new CRFDisambiguationFilter(new CRFClassifier(model)))
+    SegmentWorker(config, filter)
+  } else {
+    SegmentWorker(config)
+  }
+
+  val segmentAccuracy = new SegmentAccuracy(corpusFile, segmentWorker)
   segmentAccuracy.checkSegmentAccuracy()
   println("Recall rate of segment is: " + segmentAccuracy.getRecallRate())
   println("Precision rate of segment is: " + segmentAccuracy.getPrecisionRate())
   println("F is: " + segmentAccuracy.F())
   println("There are " + segmentAccuracy.getWrong() + " errors and total expect word is " + segmentAccuracy.getTotalWords() + " when doing accuracy test.")
 
-  println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
-  println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() + " errors because of name recognition.")
-  println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() + " errors because of place name recognition.")
-  println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
-  println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
-
+  if (debug) {
+    println("There are " + segmentAccuracy.getErrorAnalyzer(UnknownWord).getErrorOccurTimes() + " errors because of new word.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NR).getErrorOccurTimes() + " errors because of name recognition.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(NER_NS).getErrorOccurTimes() + " errors because of place name recognition.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(ContainDisambiguate).getErrorOccurTimes() + " errors because of contain disambiguate.")
+    println("There are " + segmentAccuracy.getErrorAnalyzer(Other).getErrorOccurTimes() + " other errors")
+  }
   println("\nType QUIT to exit:")
   val inputReader = new BufferedReader(new InputStreamReader(System.in))
   var line = inputReader.readLine()
