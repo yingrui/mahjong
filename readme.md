@@ -8,6 +8,11 @@
 
 **Mahjong**是基于Scala语言实现的中文分词软件包。这个项目的核心是最大概率分词，整个项目专为搜索引擎、文本信息抽取和自然语言处理设计，参考我[关于中文分词的一些思考](./about.md)来实现。性能优异、速度快。整个分词包易于使用，测试覆盖率高。
 
+## 分词歧义解决方案
+如何平衡基于词典的最大概率分词与基于标注的分词算法呢？**Mahjong**将这两种算法结合起来，用来解决分词歧义的问题。
+
+[Mahjong的中文分词歧义解决方案](./disambiguation.md)
+
 ## Overview
 **Mahjong** is a java library for Chinese Breaking and written in Scala.
 
