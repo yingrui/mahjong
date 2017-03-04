@@ -2,21 +2,13 @@ package me.yingrui.segment.dict
 
 class HeadIndexer {
 
-  def getWordOccuredSum(): Int = {
-    return wordOccuredSum
-  }
+  private def getWordOccuredSum(): Int = wordOccuredSum
 
-  def getWordCount(): Int = {
-    return wordCount
-  }
+  private def getWordCount(): Int = wordCount
 
-  def getMaxWordLength(): Int = {
-    return maxWordLength
-  }
+  def getHeadStr(): String = headStr
 
-  def getHeadStr(): String = {
-    return headStr
-  }
+  def getMaxWordLength(): Int = maxWordLength
 
   def add(word: IWord) {
     val wordName = word.getWordName()
@@ -78,23 +70,28 @@ class HeadIndexer {
     if (wordStr.length() < maxWordLen) {
       maxWordLen = wordStr.length()
     }
-    var array = List[IWord]()
-    for (i <- 1 until maxWordLen if (array.size < 3)) {
+    val array = findWords(wordStr, maxWordLen, 3)
+
+    if (array.size > 0) array else null
+  }
+
+  private def findWords(wordStr: String, maxWordLen: Int, maxWordCount: Int): Array[IWord] = {
+    var array = Array[IWord]()
+    var i = 1
+    var foundCount = 0
+    while (i < maxWordLen && foundCount < maxWordCount) {
       val length = i + 1
       if (this.containsWordWhichLengthEqual(length)) {
         val candidateWord = wordStr.substring(0, length)
         val word = wordArray.find(candidateWord)
         if (null != word) {
-          array = word :: array
+          array = Array(word) ++ array
+          foundCount += 1
         }
       }
+      i += 1
     }
-
-    if (array.size > 0) {
-      return array.toArray
-    } else {
-      return null
-    }
+    array
   }
 
   def findWord(wordStr: String): IWord = {
@@ -109,22 +106,12 @@ class HeadIndexer {
     if (wordStr.length() < maxWordLen) {
       maxWordLen = wordStr.length()
     }
-    for (i <- 1 until maxWordLen) {
-      val length = i + 1
-      if (this.containsWordWhichLengthEqual(length)) {
-        val candidateWord = wordStr.substring(0, length)
-        val word = get(candidateWord)
-        if (null != word) {
-          return word
-        }
-      }
-    }
-    return null
+    val array = findWords(wordStr, maxWordLen, 1)
+
+    if (array.size > 0) array(0) else null
   }
 
-  def getWordArray(): IWordArray = {
-    return wordArray
-  }
+  def getWordArray(): IWordArray = wordArray
 
   private def updateWordLengthStatus(wordLength: Int): Unit = {
     wordLengthStatus = 1 << (wordLength - 1) | wordLengthStatus
