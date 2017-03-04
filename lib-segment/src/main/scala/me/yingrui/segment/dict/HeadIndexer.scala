@@ -22,7 +22,6 @@ class HeadIndexer {
   }
 
   private def addWord(wordName: String, word: IWord) {
-    updateWordLengthStatus(wordName.length)
     if (wordName.length() > getMaxWordLength()) {
       maxWordLength = wordName.length()
     }
@@ -49,12 +48,10 @@ class HeadIndexer {
       stringBuilder.append(word.toString())
     }
 
-    return stringBuilder.toString()
+    stringBuilder.toString()
   }
 
-  def get(word: String): IWord = {
-    return wordArray.find(word)
-  }
+  def get(word: String): IWord = wordArray.find(word)
 
   def findMultiWord(wordStr: String): Array[IWord] = {
     if (wordStr.length() == 1) {
@@ -70,28 +67,9 @@ class HeadIndexer {
     if (wordStr.length() < maxWordLen) {
       maxWordLen = wordStr.length()
     }
-    val array = findWords(wordStr, maxWordLen, 3)
+    val array = wordArray.findWords(wordStr, maxWordLen, 3)
 
     if (array.size > 0) array else null
-  }
-
-  private def findWords(wordStr: String, maxWordLen: Int, maxWordCount: Int): Array[IWord] = {
-    var array = Array[IWord]()
-    var i = 1
-    var foundCount = 0
-    while (i < maxWordLen && foundCount < maxWordCount) {
-      val length = i + 1
-      if (this.containsWordWhichLengthEqual(length)) {
-        val candidateWord = wordStr.substring(0, length)
-        val word = wordArray.find(candidateWord)
-        if (null != word) {
-          array = Array(word) ++ array
-          foundCount += 1
-        }
-      }
-      i += 1
-    }
-    array
   }
 
   def findWord(wordStr: String): IWord = {
@@ -106,29 +84,19 @@ class HeadIndexer {
     if (wordStr.length() < maxWordLen) {
       maxWordLen = wordStr.length()
     }
-    val array = findWords(wordStr, maxWordLen, 1)
+    val array = wordArray.findWords(wordStr, maxWordLen, 1)
 
     if (array.size > 0) array(0) else null
   }
 
   def getWordArray(): IWordArray = wordArray
 
-  private def updateWordLengthStatus(wordLength: Int): Unit = {
-    wordLengthStatus = 1 << (wordLength - 1) | wordLengthStatus
-  }
-
-  private def containsWordWhichLengthEqual(length: Int): Boolean = {
-    val status = 1 << (length - 1) & wordLengthStatus
-    status > 0
-  }
-
   private var headStr: String = null
   private var maxWordLength: Int = 0
   private var wordOccuredSum: Int = 0
   private var wordCount: Int = 0
   private var headWord: IWord = null
-  private var wordArray: IWordArray = null
-  private var wordLengthStatus: Long = 1
+  private var wordArray: AbstractWordArray = null
 }
 
 object HeadIndexer {
@@ -145,7 +113,6 @@ object HeadIndexer {
     indexer.wordCount = 1
     indexer.wordOccuredSum = 1
     indexer.maxWordLength = headWord.getWordLength()
-    indexer.updateWordLengthStatus(headWord.getWordLength())
     indexer.wordArray = BinaryWordArray(List[IWord](headWord).toArray)
     indexer
   }

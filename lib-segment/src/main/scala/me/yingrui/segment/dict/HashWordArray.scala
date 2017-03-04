@@ -15,7 +15,7 @@ object HashWordArray {
   }
 }
 
-class HashWordArray extends IWordArray {
+class HashWordArray extends AbstractWordArray {
 
   var wordIndex: Map[String, IWord] = null
   var wordItems: Array[IWord] = null
@@ -31,7 +31,7 @@ class HashWordArray extends IWordArray {
     return wordIndex.toList.map(_._2).toArray
   }
 
-  override def add(word: IWord) {
+  override def addWord(word: IWord) {
     wordIndex += (word.getWordName() -> word)
   }
 }

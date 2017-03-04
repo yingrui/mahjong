@@ -14,7 +14,7 @@ object BinaryWordArray {
   }
 }
 
-class BinaryWordArray extends IWordArray {
+class BinaryWordArray extends AbstractWordArray {
 
   var wordSet = new mutable.TreeSet[IWord]()(BinaryWordArray.ordering)
 
@@ -24,7 +24,7 @@ class BinaryWordArray extends IWordArray {
       case _ => null
     }
 
-  override def add(word: IWord) {
+  override def addWord(word: IWord) {
     wordSet.add(word)
   }
 
