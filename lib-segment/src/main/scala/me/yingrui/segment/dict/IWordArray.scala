@@ -10,7 +10,7 @@ trait IWordArray {
 
   def getWordItems(): Array[IWord]
 
-  def add(word: IWord)
+  def add(word: IWord): Unit
 }
 
 object BinaryWordArray {
