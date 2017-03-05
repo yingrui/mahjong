@@ -1,32 +1,30 @@
 package me.yingrui.segment.dict
 
+import org.junit.Assert.{assertArrayEquals, assertEquals, assertNotNull}
 import org.junit.{Assert, Test}
 
-/**
-  * Created by twer on 04/03/2017.
-  */
 class TrieNodeTest {
 
   @Test
   def should_insert_word_by_key() {
     val root = new TrieNode(0)
     root.insert("ab", 1)
-    Assert.assertEquals(1, root.descendant.length)
-    Assert.assertEquals(1, root.descendant(0).descendant.length)
+    assertEquals(1, root.nodes.size)
+    assertEquals(1, root.nodes.entrySet().iterator().next().getValue.nodes.size())
     root.insert("ac", 2)
-    Assert.assertEquals(1, root.descendant.length)
-    Assert.assertEquals(2, root.descendant(0).descendant.length)
+    assertEquals(1, root.nodes.size)
+    assertEquals(2, root.nodes.entrySet().iterator().next().getValue.nodes.size())
   }
 
   @Test
   def should_insert_word_multi_times() {
     val root = new TrieNode(0)
     root.insert("ab", 1)
-    Assert.assertEquals(1, root.descendant.length)
-    Assert.assertEquals(1, root.descendant(0).descendant.length)
+    assertEquals(1, root.nodes.size)
+    assertEquals(1, root.nodes.entrySet().iterator().next().getValue.nodes.size())
     root.insert("ab", 1)
-    Assert.assertEquals(1, root.descendant.length)
-    Assert.assertEquals(1, root.descendant(0).descendant.length)
+    assertEquals(1, root.nodes.size)
+    assertEquals(1, root.nodes.entrySet().iterator().next().getValue.nodes.size())
   }
 
   @Test
@@ -35,17 +33,42 @@ class TrieNodeTest {
     root.insert("abc", 2)
     root.insert("ab", 1)
     val ab = root.search("ab")
-    Assert.assertNotNull(ab)
-    Assert.assertEquals(1, ab.getIndex)
+    assertNotNull(ab)
+    assertEquals(1, ab.getIndex)
     val abc = root.search("abc")
-    Assert.assertNotNull(abc)
-    Assert.assertEquals(2, abc.getIndex)
+    assertNotNull(abc)
+    assertEquals(2, abc.getIndex)
   }
 
   @Test
-  def should_compare_trie_index_by_key() {
-    val a = new TrieNode('a', 1)
-    val c = new TrieNode('c', 1)
-    Assert.assertTrue(a.compareTo(c) < 0)
+  def should_find_path() {
+    val root = new TrieNode(0)
+    root.insert("abc", 2)
+    root.insert("ab", 1)
+    val path = root.searchPath("abc")
+    assertEquals(3, path.length)
+    assertEquals("cba", path.map(_.getKey).mkString)
+    assertArrayEquals(Array(2,1,-1), path.map(_.getIndex))
+  }
+
+  @Test
+  def should_find_partial_path() {
+    val root = new TrieNode(0)
+    root.insert("abc", 2)
+    root.insert("ab", 1)
+    val path = root.searchPath("abd")
+    assertEquals(2, path.length)
+    assertEquals("ba", path.map(_.getKey).mkString)
+    assertArrayEquals(Array(1,-1), path.map(_.getIndex))
+
+    val path2 = root.searchPath("ad")
+    assertEquals(1, path2.length)
+    assertEquals("a", path2.map(_.getKey).mkString)
+    assertArrayEquals(Array(-1), path2.map(_.getIndex))
+
+    val path3 = root.searchPath("a")
+    assertEquals(1, path3.length)
+    assertEquals("a", path3.map(_.getKey).mkString)
+    assertArrayEquals(Array(-1), path3.map(_.getIndex))
   }
 }

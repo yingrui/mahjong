@@ -28,6 +28,19 @@ class TrieWordArray extends IWordArray {
       System.arraycopy(temp, 0, allWords, 0, temp.length)
     }
   }
+
+  /**
+    * Find multiple words from input string
+    *
+    * @param wordStr
+    * @param maxWordLen
+    * @param maxWordCount
+    * @return found words, sorted by word length in order desc
+    */
+  override def findWords(wordStr: String, maxWordLen: Int, maxWordCount: Int): Array[IWord] = {
+    val path = root.searchPath(wordStr)
+    path.filter(_.getIndex >= 0).map(node => allWords(node.getIndex))
+  }
 }
 
 object TrieWordArray {

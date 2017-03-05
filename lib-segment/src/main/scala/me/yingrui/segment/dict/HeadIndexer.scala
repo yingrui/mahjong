@@ -96,7 +96,7 @@ class HeadIndexer {
   private var wordOccuredSum: Int = 0
   private var wordCount: Int = 0
   private var headWord: IWord = null
-  private var wordArray: AbstractWordArray = null
+  private var wordArray: IWordArray = null
 }
 
 object HeadIndexer {
@@ -113,7 +113,7 @@ object HeadIndexer {
     indexer.wordCount = 1
     indexer.wordOccuredSum = 1
     indexer.maxWordLength = headWord.getWordLength()
-    indexer.wordArray = BinaryWordArray(List[IWord](headWord).toArray)
+    indexer.wordArray = HashWordArray(List[IWord](headWord).toArray)
     indexer
   }
 }

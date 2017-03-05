@@ -4,6 +4,15 @@ trait IWordArray {
 
   def find(word: String): IWord
 
+  /**
+    * Find multiple words from input string
+    * @param wordStr
+    * @param maxWordLen
+    * @param maxWordCount
+    * @return found words, sorted by word length in order desc
+    */
+  def findWords(wordStr: String, maxWordLen: Int, maxWordCount: Int): Array[IWord]
+
   def getWordItems(): Array[IWord]
 
   def add(word: IWord): Unit
@@ -18,7 +27,7 @@ abstract class AbstractWordArray extends IWordArray {
 
   def addWord(word: IWord): Unit
 
-  def findWords(wordStr: String, maxWordLen: Int, maxWordCount: Int): Array[IWord] = {
+  override def findWords(wordStr: String, maxWordLen: Int, maxWordCount: Int): Array[IWord] = {
     var array = Array[IWord]()
     var i = 1
     var foundCount = 0
@@ -39,13 +48,13 @@ abstract class AbstractWordArray extends IWordArray {
 
 
   private def containsWordWhichLengthEqual(length: Int): Boolean = {
-    val status = 1 << (length - 1) & wordLengthStatus
+    val status = (1L << (length - 1)) & wordLengthStatus
     status > 0
   }
 
-  private var wordLengthStatus: Long = 1
+  private var wordLengthStatus: Long = 1L
   private def updateWordLengthStatus(wordLength: Int): Unit = {
-    wordLengthStatus = 1 << (wordLength - 1) | wordLengthStatus
+    wordLengthStatus = (1L << (wordLength - 1)) | wordLengthStatus
   }
 
 }

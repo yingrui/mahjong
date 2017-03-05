@@ -112,7 +112,7 @@ class PerformanceTest {
   }
 
   @Test
-  def should_spend_memory_within_90_MB() {
+  def should_spend_memory_within_95_MB() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
     val segmentWorker = SegmentWorker("segment.context" -> "false", "recognize.partOfSpeech" -> "false")
     segmentWorker.segment("世界您好！")
@@ -127,9 +127,9 @@ class PerformanceTest {
     val totalMemory = Runtime.getRuntime().totalMemory()
     val freeMemory = Runtime.getRuntime().freeMemory()
     val memorySize = (totalMemory - freeMemory) / 1024 / 1024
-    println("should_spend_memory_within_90_MB")
+    println("should_spend_memory_within_95_MB")
     println("    Current application has taken " + memorySize + "MB memory size.")
-    Assert.assertTrue(memorySize <= 90)
+    Assert.assertTrue(memorySize <= 95)
   }
 }
 

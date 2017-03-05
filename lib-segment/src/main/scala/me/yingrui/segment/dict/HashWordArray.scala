@@ -6,19 +6,14 @@ import scala.collection.mutable.OpenHashMap
 object HashWordArray {
   def apply(words: Array[IWord]) = {
     val wordArray = new HashWordArray()
-    wordArray.wordIndex = OpenHashMap[String, IWord]()
-    for (word <- words) {
-      wordArray.wordIndex += (word.getWordName() -> word)
-    }
-
+    words.foreach(wordArray.add(_))
     wordArray
   }
 }
 
 class HashWordArray extends AbstractWordArray {
 
-  var wordIndex: Map[String, IWord] = null
-  var wordItems: Array[IWord] = null
+  var wordIndex: Map[String, IWord] = OpenHashMap[String, IWord]()
 
   override def find(word: String): IWord = {
     wordIndex.get(word) match {
