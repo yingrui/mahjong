@@ -1,0 +1,30 @@
+入院/V 时/NG 情况/N ：/W 以/P “/W 右侧/F 腹股沟/N 区/N 可复性/NG 包块/Q 4月/T ”/W 之/U 主诉/VG 入院/V
+4月/T 前/F 患者/N 无/V 明显/A 的/U 诱因/N 及/C 原因/N 发现/V 右侧/F 腹股沟/N 区/N 有/V 包块/N ,/W 站立/V 、/W 行走/V 、/W 腹压/V 增加/V 时/NG 包块/N 突出/A 明显/A ，/W 平卧/V 后/F 包块/N 可/V 消失/V
+无/V 腹胀/V 、/W 腹痛/N ，/W 无/V 恶心/A 呕吐/N ,/W 未/D 在意/V
+近来/D 包块/N 间断/V 出现/V ，/W 并/C 逐渐/D 增大/V ，/W 现/TG 约/NG “/W 鸡卵/N ”/W 大小/N ，/W 未/D 降/V 入/V 阴囊/N
+为/P 求/V 进一步/D 的/U 诊治/VN ，/W 遂/D 来/V 我/R 科/N 门诊/N ，/W 行/NG 腹部/N 及/C 颈部/N 血管/N B超/N 检查/V 示/VG :/W 肝囊肿/N ，/W 右侧/F 腹股沟/N 区/N 异常/A 所/U 见/V ，/W 考虑/V 右侧/F 腹股沟疝/N ,/W 双/M 侧/NG 颈动脉/N 和/C 椎动脉/N 未/D 见/V 明显/A 异常/A ，/W 双/M 侧/Q 睾丸/N 大小/N 形态/N 未/D 见/V 异常/A
+心脏/N 彩超/N 示/VG ：/W 静息/N 状态/N 下/F 心/N 内/F 结构/N 未/D 见/V 异常/D 左室/N 舒张/VN 功能/N 减低/V 、/W 收缩/V 功能/N 正常/A 彩色/B 血流/N 示/VG ：/W 主动脉瓣/N 少量/N 反/V 流/V
+患者/N 要求/V 手术/N 治疗/VN ，/W 门诊/N 以/P “/W 右侧/F 腹股沟疝/N ”/W 收/V 住/V 我/R 科/N
+既往/T 有/V 慢性/B 胃炎/N 、/W 高血压/N 病史/N
+神志/N 清/A ，/W 精神/N 可/V
+睑结膜/N 无/V 苍白/A ，/W 巩膜/N 无/V 黄/A 染/V
+心肺/N 未/D 闻/V 及/C 明显/A 异常/A
+腹/NG 平坦/A ，/W 腹/NG 式/K 呼吸/V 存在/V ，/W 未/D 见/V 胃肠/N 形/NG 及/C 蠕动波/N ，/W 未/D 见/V 腹壁/N 静脉曲张/L ，/W 腹肌/N 软/A ，/W 腹部/N 无/V 压痛/N ，/W 无/V 反跳痛/A ，/W 莫非氏/NG 征/V 阴性/N ，/W 肝/N 脾/N 肋/N 下/F 未及/D ，/W 肝/N 脾/N 肾/N 区/N 无/V 扣击痛/N ，/W 移动/VN 性/NG 浊音/N 阴性/N ，/W 肠鸣音/N 正常/A ，/W 每/R 分钟/Q 约/NG 3/M 次/Q ，/W 未/D 闻/V 及/C 气过水声/N
+右侧/F 腹股沟/N 区/N 可见/C 大小/N 约/NG 8/M ./W 0CM/UN ×/W 3/M ./W 0CM/UN 包块/N ，/W 包块/N 周围/F 无/V 红肿/V ，/W 无/V 波动/V 感/VG ，/W 质/NG 软/A ，/W 无/V 压痛/N ，/W 平卧/V 后/F 消失/V ，/W 压/V 住/V 内环/N ，/W 嘱/VG 患者/N 用力/A ，/W 包块/N 不/D 出现/V
+左侧/F 腹股沟/N 区/N 未/D 触及/V 异常/A
+入院/V 诊断/VN ：/W 1/M ./W 右侧/F 腹股沟斜疝/N 2/M ./W 肝囊肿/N 3/M ./W 慢性/B 胃炎/N 4/M ./W 高血压/N 病/N 2/M 级/Q 高危/B 组/N 5/M ./W 窦性/N 心动/V 过缓/AD 住院/V 后/F 治疗/V 及/C 检查/VN 情况/N ：/W 入院/V 后/F 完善/V 检查/VN ,/W 对症/VD 处理/V
+血常规/N 、/W 尿常规/N 、/W 电解质/N 、/W 肾功/N 、/W 血糖/N 、/W 血凝/N 大致/D 正常/A
+肝功/N 回报/V 示/VG ：/W TP70G/UN //W L/UN ，/W ALB44G/UN //W L/UN ，/W ALT27U/UN //W L/UN ,/W AST22U/UN //W L/UN ,/W TBIL26/UN ./W 8UMOL/UN //W L/UN ,/W DBIL8/UN ./W 5UMOL/UN //W L/UN
+胸片/N 未/D 见/V 明显/A 异常/A
+腹部/N 及/C 颈部/N 血管/N B超/N 检查/V 示/VG :/W 肝囊肿/N ，/W 右侧/F 腹股沟/N 区/N 异常/A 所/U 见/V ，/W 考虑/V 右侧/F 腹股沟疝/N ,/W 双/M 侧/Q 颈动脉/N 和/C 椎动脉/N 未/D 见/V 明显/A 异常/A ，/W 双/M 侧/Q 睾丸/N 大小/N 形态/N 未/D 见/V 异常/A
+肺功能/N 测定/V 示/VG ：/W 1/M ./W 以/P 中度/B 阻塞/VN 为主/V 的/U 混合性/NG 通气/V 功能/N 障碍/N ；/W 2/M ./W 弥散/V 功能/N 中度/D 降低/V 3/M ./W 残气/N 正常/A ；/W 4/M ./W 最/D 大通/N 气量/N 中度/D 降低/V ，/W 通气/V 储备/VN 百分比/N 为/P 80%/M
+心电图/N 示/VG ：/W 窦性/NG 心动/V 过/V 缓/A （/W 57/M 次/Q //W 分/V ）/W
+心脏/N 彩超/N 示/VG ：/W 静息/N 状态/N 下/F 心/N 内/F 结构/N 未/D 见/V 异常/D 左室/N 舒张/VN 功能/N 减低/V 、/W 收缩/V 功能/N 正常/A 彩色/B 血流/N 示/VG ：/W 主动脉瓣/Q 少量/N 反流/V
+请/V 心内科/N 主治医师/L 会诊/VN ，/W 考虑/V ：/W 1/M ./W 高血压/N 病/N 2/M 级/Q 高危/B 组/N 2/M ./W 窦性/NG 心动/V 过/V 缓/A ，/W 建议/N ：/W 给予/V 口服/VN 氨氯地平片/Q 5MG/UN  /W 影像号/N ：/W 住院/V 科室/N ：/W 普外科/N 一/M 病区/N 床号/N ：/W 加/J 4/M 服/NG 1/M 次/Q //W 日/J ，/W 低/A 盐/N 、/W 低/A 脂/NG 饮食/N ，/W 监测/VN 血压/N
+胃镜/N 示/VG :/W 1/M ./W 反流性/NG 食管炎/NR (/W A级/Q )/W 2/M ./W 慢性/B 胃炎/N (/W 窦部/Q 萎缩性/NG 伴/V 底体部/Q 充血/V )/W 3/M ./W 十二指肠球部炎/NG 4/M ./W 十二指肠降部/Q 未/D 见/V 异常/A
+在/P 硬腰/N 联合/VN 麻醉/VN 行/NG “/W 右侧/F 腹股沟斜疝/N 无/V 张力/N 修补术/VN ”/W ，/W 手术/V 顺利/A ，/W 术后/T 输液/V 对症/VD 处理/V ，/W 伤口/N 换药/V 、/W 拆线/V ，/W 见/V 伤口/N 愈合/V 可/V ，/W 无/V 红肿/V 与/P 渗出/V
+复查/VN 血常规/N 未/D 见/V 明显/A 异常/A
+出院/V 诊断/VN ：/W 1/M ./W 右侧/F 腹股沟斜疝/N 2/M ./W 肝囊肿/N 3/M ./W 慢性/B 胃炎/N 4/M ./W 高血压/N 病/N 2/M 级/Q 高危/B 组/N 5/M ./W 窦性/NG 心动/V 过/V 缓/AD 出院/V 时/NG 情况/N 及/C 医嘱/N ：/W 患者/N 无/V 腹痛/N 、/W 腹胀/V ，/W 无/V 发冷/N 发热/V ，/W 无/V 恶心/A 呕吐/N ，/W 无/V 心慌/A 气短/N ，/W 无/V 咳嗽/V 咳痰/N ，/W 饮食/N 二/M 便/D 可/V ，/W 夜间/T 休息/V 可/V ，/W 阴囊/N 无/V 肿胀/V
+神志/N 清/A ，/W 精神/N 可/V ，/W 睑结膜/N 无/V 苍白/A ，/W 巩膜/N 无/V 黄/NR 染/V ，/W 双/M 肺/N 未/D 闻/V 及/C 异常/A
+腹/NG 平/V 软/A ，/W 全/A 腹/NG 无/V 压痛/N ，/W 肠/N 鸣音/N 3-4/M 次/Q //W 分/V
+伤口/N 拆线/V ，/W 见/V 伤口/N 愈合/V 良好/A ，/W 无/V 红肿/V 与/P 渗出/V
