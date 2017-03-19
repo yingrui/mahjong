@@ -1,4 +1,4 @@
-package me.yingrui.segment.lucene
+package me.yingrui.segment.lucene4
 
 import java.io.{BufferedReader, Reader}
 
