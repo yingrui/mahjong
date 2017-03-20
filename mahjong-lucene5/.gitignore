@@ -1,0 +1,7 @@
+*.log
+*.txt
+*.dat
+*.arff
+.idea
+target
+test_index_dir
