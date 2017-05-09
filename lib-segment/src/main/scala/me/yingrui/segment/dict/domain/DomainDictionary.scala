@@ -13,20 +13,68 @@ class DomainDictionary extends IDictionary {
   private val synonymHashMap = mutable.HashMap[Int, List[Int]]()
   private var maxWordLength: Int = 0
 
-  private def lookupWord(wordName: String): IWord = {
-    return hashDictionary.lookupWord(wordName)
+  override def getWord(wordName: String): IWord = {
+    val words = hashDictionary.getWords(wordName)
+    if (words != null && !words.isEmpty) words.head else null
   }
+
+  override def getWords(wordStr: String): Array[IWord] = {
+    return hashDictionary.getWords(wordStr)
+  }
+
+  override def iterator(): List[IWord] = {
+    return arrayWordItem
+  }
+
+  override def addWord(word: IWord) {
+    addWord(word.getWordName(),
+      POSUtil.getPOSString(word.getWordPOSTable()(0)(0)),
+      word.getWordPOSTable()(0)(1), word.getDomainType())
+  }
+
+  def pushWord(wordName: String, synonym: String, pos: String, freq: Int, domainType: Int) {
+    if (wordName == null || wordName.trim().equals("") || pos == null || pos.trim().equals("") || wordName.trim().length() < 2) {
+      System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.")
+      return
+    }
+
+    val word = lookupWord(wordName)
+    var index = -1
+    if (null != word) {
+      word.setOccuredCount(pos, freq)
+      word.setDomainType(domainType)
+      index = getWordIndex(wordName)
+    } else {
+      index = addWord(wordName, pos, freq, domainType)
+    }
+    if (null != synonym && !synonym.isEmpty()) {
+      val synonymIndex = getWordIndex(synonym)
+      addSynonym(index, synonymIndex)
+    }
+  }
+
+  def getSynonymSet(wordName: String): List[IWord] = {
+    val index = getWordIndex(wordName)
+    if (index >= 0) {
+      val synonymIndex = synonymIndexHashMap.getOrElse(index, -1)
+      val synonymSet: List[Int] =
+        if (synonymIndex >= 0) synonymHashMap(synonymIndex) else synonymHashMap(index)
+      if (null != synonymSet) {
+        val head = getWord(if (synonymIndex >= 0) synonymIndex else index)
+        return head :: synonymSet.map(i => getWord(i))
+      }
+    }
+    return null
+  }
+
+  private def getWordIndex(wordName: String): Int = wordNameIndexHashMap.getOrElse(wordName, -1)
 
   private def getWord(wordIndex: Int): IWord = {
     return if (wordIndex >= 0) arrayWordItem(wordIndex) else null
   }
 
-  private def getWordIndex(wordName: String): Int = wordNameIndexHashMap.getOrElse(wordName, -1)
-
-  def addWord(word: IWord) {
-    addWord(word.getWordName(),
-      POSUtil.getPOSString(word.getWordPOSTable()(0)(0)),
-      word.getWordPOSTable()(0)(1), word.getDomainType())
+  private def lookupWord(wordName: String): IWord = {
+    return hashDictionary.lookupWord(wordName)
   }
 
   private def addWord(wordName: String, pos: String, freq: Int, domainType: Int): Int = {
@@ -58,27 +106,6 @@ class DomainDictionary extends IDictionary {
     }
   }
 
-  def pushWord(wordName: String, synonym: String, pos: String, freq: Int, domainType: Int) {
-    if (wordName == null || wordName.trim().equals("") || pos == null || pos.trim().equals("") || wordName.trim().length() < 2) {
-      System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.")
-      return
-    }
-
-    val word = lookupWord(wordName)
-    var index = -1
-    if (null != word) {
-      word.setOccuredCount(pos, freq)
-      word.setDomainType(domainType)
-      index = getWordIndex(wordName)
-    } else {
-      index = addWord(wordName, pos, freq, domainType)
-    }
-    if (null != synonym && !synonym.isEmpty()) {
-      val synonymIndex = getWordIndex(synonym)
-      addSynonym(index, synonymIndex)
-    }
-  }
-
   private def addSynonym(index: Int, synonymIndex: Int) {
     if (index >= 0 && synonymIndex >= 0) {
       synonymIndexHashMap += (index -> synonymIndex)
@@ -91,48 +118,5 @@ class DomainDictionary extends IDictionary {
       }
       synonymHashMap += (synonymIndex -> synonymSet)
     }
-  }
-
-  def getSynonymSet(wordName: String): List[IWord] = {
-    val index = getWordIndex(wordName)
-    if (index >= 0) {
-      val synonymIndex = synonymIndexHashMap.getOrElse(index, -1)
-      val synonymSet: List[Int] =
-        if (synonymIndex >= 0) synonymHashMap(synonymIndex) else synonymHashMap(index)
-      if (null != synonymSet) {
-        val head = getWord(if (synonymIndex >= 0) synonymIndex else index)
-        return head :: synonymSet.map(i => getWord(i))
-      }
-    }
-    return null
-  }
-
-  override def getWord(wordName: String): IWord = {
-    return hashDictionary.getWord(wordName)
-  }
-
-  def getWordItem(wordName: String): IWord = {
-    val minLength = 1
-    val maxLength = if (wordName.length < maxWordLength) wordName.length else maxWordLength
-
-    var length = maxLength
-    while (length >= minLength) {
-      val s2 = wordName.substring(0, length)
-      val wordIndex = getWordIndex(s2)
-      if (wordIndex > 0) {
-        return getWord(wordIndex)
-      }
-      length -= 1
-    }
-
-    return null
-  }
-
-  override def getWords(wordStr: String): Array[IWord] = {
-    return hashDictionary.getWords(wordStr)
-  }
-
-  override def iterator(): List[IWord] = {
-    return arrayWordItem
   }
 }
