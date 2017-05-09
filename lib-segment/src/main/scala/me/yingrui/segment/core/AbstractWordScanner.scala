@@ -1,9 +1,7 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.dict.DictionaryLookupResult
-import me.yingrui.segment.dict.DictionaryService
-import me.yingrui.segment.dict.IWord
-import me.yingrui.segment.util.{CharCheckUtil, StringUtil}
+import me.yingrui.segment.dict.{DictionaryLookupResult, DictionaryService, IWord}
+import me.yingrui.segment.util.StringUtil
 
 abstract class AbstractWordScanner {
   private var sentence: String = null
@@ -31,7 +29,6 @@ abstract class AbstractWordScanner {
         val result = dictionaryService.lookup(candidateWord)
         processFoundWordItems(begin, singleCharWord, result)
 
-//        val step = if(null != singleCharWord && CharCheckUtil.isEnglish(singleCharWord.getWordName())) singleCharWord.getWordName().length() else 1
         begin += 1
       }
     } catch {

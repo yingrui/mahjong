@@ -30,19 +30,6 @@ class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmen
   maxWordLength = config.getMaxWordLength()
   dictionaryService = new DictionaryService(useDomainDictionary, loadDomainDictionary, loadUserDictionary, config.isLoadEnglishDictionary())
 
-  private def doUpperCaseAndHalfShape(word: String): String = {
-    if (upperCaseOrHalfShapeAll) {
-      if (halfShapeAll && upperCaseAll) {
-        return StringUtil.doUpperCaseAndHalfShape(word)
-      }
-      if (halfShapeAll) {
-        return StringUtil.halfShape(word)
-      }
-      return StringUtil.toUpperCase(word)
-    }
-    return word
-  }
-
   def scanContextFreq(startPos: Int) {
     val scanner = getContextFrequencyScanner()
     scanner.startScanningAt(startPos)
@@ -58,7 +45,7 @@ class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmen
   }
 
   def setSentence(sen: String) {
-    sentence = sen; //doUpperCaseAndHalfShape(sen)
+    sentence = sen;
   }
 
   def buildGraph(sen: String, startPos: Int) {
