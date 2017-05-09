@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.yingrui.mahjong</groupId>
     <artifactId>lib-segment</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>lib-segment</name>
     <description>A Java library for Chinese Breaking and written in Scala.</description>
