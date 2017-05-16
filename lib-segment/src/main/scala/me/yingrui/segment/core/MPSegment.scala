@@ -9,17 +9,15 @@ class MPSegment(config: MPSegmentConfiguration) {
   private var dijk: IShortestPath = null
   private var graph: IGraph = null
   private var posTagging: IPOSRecognizer = null
-  private var withPinyin: Boolean = false
+  private val withPinyin: Boolean = config.isWithPinyin()
   private val conceptRecognizer: IConceptRecognizer = new SimpleConceptRecognizer()
   private var lastSection: Boolean = false
   private var lastSectionStr: String = ""
-  private var useDomainDictionary: Boolean = config.isLoadDomainDictionary()
-  private var useContextFreqSegment: Boolean = config.isUseContextFreqSegment()
+  private val useDomainDictionary: Boolean = config.isLoadDomainDictionary()
 
   initialize()
 
   private def initialize() {
-    withPinyin = config.isWithPinyin()
     initializePOSTagging()
   }
 
@@ -65,9 +63,7 @@ class MPSegment(config: MPSegmentConfiguration) {
   }
 
   private def buildGraph(sen: String, startPos: Int) {
-
     val builder = new GraphBuilder(graph, useDomainDictionary, config)
-    builder.setUseContextFreqSegment(useContextFreqSegment)
     builder.buildGraph(sen, startPos)
   }
 

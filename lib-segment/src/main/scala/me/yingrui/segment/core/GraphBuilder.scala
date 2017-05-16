@@ -9,26 +9,14 @@ import collection.mutable.Map
 
 class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmentConfiguration) {
 
-  private var contextFreqMap: Map[String, Int] = null
-  private var segmentMin: Boolean = false
-  private var upperCaseAll: Boolean = false
-  private var halfShapeAll: Boolean = false
-  private var upperCaseOrHalfShapeAll: Boolean = false
-  private var loadDomainDictionary: Boolean = false
-  private var loadUserDictionary: Boolean = false
-  private var useContextFreqSegment: Boolean = false
-  private var dictionaryService: DictionaryService = null
+  private val segmentMin = config.isSegmentMin()
+  private val loadDomainDictionary: Boolean = config.isLoadDomainDictionary()
+  private val loadUserDictionary: Boolean = config.isLoadUserDictionary()
+  private val useContextFreqSegment: Boolean = config.isUseContextFreqSegment()
+  private val dictionaryService: DictionaryService = new DictionaryService(useDomainDictionary, loadDomainDictionary, loadUserDictionary, config.isLoadEnglishDictionary())
+  private val maxWordLength: Int = config.getMaxWordLength()
   private var sentence: String = ""
-  private var maxWordLength: Int = 0
-
-  segmentMin = config.isSegmentMin()
-  upperCaseAll = config.isUpperCaseAll()
-  halfShapeAll = config.isHalfShapeAll()
-  upperCaseOrHalfShapeAll = upperCaseAll || halfShapeAll
-  loadDomainDictionary = config.isLoadDomainDictionary()
-  loadUserDictionary = config.isLoadUserDictionary()
-  maxWordLength = config.getMaxWordLength()
-  dictionaryService = new DictionaryService(useDomainDictionary, loadDomainDictionary, loadUserDictionary, config.isLoadEnglishDictionary())
+  private var contextFreqMap: Map[String, Int] = null
 
   def scanContextFreq(startPos: Int) {
     val scanner = getContextFrequencyScanner()
@@ -45,7 +33,7 @@ class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmen
   }
 
   def setSentence(sen: String) {
-    sentence = sen;
+    sentence = sen
   }
 
   def buildGraph(sen: String, startPos: Int) {
@@ -73,11 +61,5 @@ class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmen
   def getContextFreqMap(): Map[String, Int] = {
     return contextFreqMap
   }
-
-  def setUseContextFreqSegment(useContextFreqSegment: Boolean) {
-    this.useContextFreqSegment = useContextFreqSegment
-  }
-
-
 }
 
