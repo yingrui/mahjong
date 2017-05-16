@@ -9,7 +9,9 @@ class WordStringConverter(word: IWord) {
 
   def convertToString(): String = {
     var map = Map[String, Any]("word" -> word.getWordName())
-    map += ("domainType" -> word.getDomainType())
+    if (word.getDomainType() != 0) {
+      map += ("domainType" -> word.getDomainType())
+    }
     getPOSTable() match {
       case Some(posTable) => map += ("POSTable" -> posTable)
       case _ =>

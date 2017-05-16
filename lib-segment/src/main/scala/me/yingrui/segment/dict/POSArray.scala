@@ -5,20 +5,20 @@ import collection.mutable.LinkedHashMap
 class POSArray {
 
   var arrayPOSAndFreq: Array[Array[Int]] = null
-  //TODO: remove posTable, use array of Int only.
+  // TODO: remove posTable, use array of Int only.
   var posTable = LinkedHashMap[String, POS]()
 
-  def setPOSCount(pos: String, freq: Int) {
-    if (pos == null || pos.trim().equals("")) {
+  def setPOSCount(partOfSpeech: String, freq: Int) {
+    if (partOfSpeech == null || partOfSpeech.trim().equals("")) {
       return
     }
-    var a1 = posTable.getOrElse(pos.trim(), null)
-    if (a1 != null) {
-      a1.setCount(freq)
+    var pos = posTable.getOrElse(partOfSpeech.trim(), null)
+    if (pos != null) {
+      pos.setCount(freq)
     } else {
-      a1 = POS(pos.trim(), freq)
+      pos = POS(partOfSpeech.trim(), freq)
     }
-    posTable += (pos.trim() -> a1)
+    posTable += (partOfSpeech.trim() -> pos)
   }
 
   def setPOSCount(count: Int) {

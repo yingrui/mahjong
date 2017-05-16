@@ -30,16 +30,16 @@ class WordToStringTest {
     val converter = new WordStringConverter(word)
     val actual = converter.convertToString()
     println(actual)
-    assertEquals("""{"word" : "测试", "domainType" : 0, "POSTable" : {"N" : 100}, "concepts" : ["noun", "verb"]}""", actual)
+    assertEquals("""{"word" : "测试", "POSTable" : {"N" : 100}, "concepts" : ["noun", "verb"]}""", actual)
   }
 
   @Test
   def should_convert_word_to_string_with_word_name_and_POSs() {
-    val word = createWord("测试", posAndFreq)
+    val word = createWord("测试", posAndFreq, Array(), 1)
     val converter = new WordStringConverter(word)
     val actual = converter.convertToString()
     println(actual)
-    assertEquals("""{"word" : "测试", "domainType" : 0, "POSTable" : {"N" : 100, "V" : 20}}""", actual)
+    assertEquals("""{"word" : "测试", "domainType" : 1, "POSTable" : {"N" : 100, "V" : 20}}""", actual)
   }
 
   @Test
@@ -48,19 +48,19 @@ class WordToStringTest {
     val converter = new WordStringConverter(word)
     val actual = converter.convertToString()
     println(actual)
-    assertEquals("""{"word" : "\"", "domainType" : 0, "POSTable" : {"N" : 100, "V" : 20}}""", actual)
+    assertEquals("""{"word" : "\"", "POSTable" : {"N" : 100, "V" : 20}}""", actual)
   }
 
   private def createWord(wordName: String, ret: Array[Array[Int]]): IWord = {
     return createWord(wordName, ret, null)
   }
 
-  private def createWord(wordName: String, ret: Array[Array[Int]], concepts: Array[Concept]): IWord = {
+  private def createWord(wordName: String, ret: Array[Array[Int]], concepts: Array[Concept], domainType: Int = 0): IWord = {
 
     class Word(wordName: String, ret: Array[Array[Int]], concepts: Array[Concept]) extends UnknownWord {
       override def getWordName() = wordName
 
-      override def getDomainType() = 0
+      override def getDomainType() = domainType
 
       override def getWordPOSTable = ret
 
