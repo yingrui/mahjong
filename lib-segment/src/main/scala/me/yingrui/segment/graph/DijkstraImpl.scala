@@ -24,7 +24,6 @@ class DijkstraImpl(numOfVertexes: Int) extends IShortestPath {
    *
    * @param end - In case reuse the results
    * @return
-   * @throws Exception
    */
   override def getShortestPath(start: Int, end: Int): Path = {
     clear()

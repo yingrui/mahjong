@@ -1,9 +1,9 @@
 package me.yingrui.segment.tools
 
-import org.junit.Assert
-import org.junit.Test
 import me.yingrui.segment.concept.ConceptRepository
 import me.yingrui.segment.dict.POSUtil
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class StringToWordTest {
 
@@ -12,15 +12,15 @@ class StringToWordTest {
     val wordString = """{"word" : "测试", "domainType" : 2, "POSTable" : {"N" : 100, "V" : 20}}"""
     val word = new StringWordConverter().convert(wordString)
 
-    Assert.assertEquals("测试", word.getWordName())
-    Assert.assertEquals(2, word.getDomainType())
+    assertEquals("测试", word.getWordName())
+    assertEquals(2, word.getDomainType())
     val posTable = word.getWordPOSTable()
-    Assert.assertEquals(2, posTable.length)
-    Assert.assertEquals(POSUtil.POS_N, posTable(0)(0))
-    Assert.assertEquals(100, posTable(0)(1))
-    Assert.assertEquals(POSUtil.POS_V, posTable(1)(0))
-    Assert.assertEquals(20, word.getOccuredCount(POSUtil.getPOSString(POSUtil.POS_V)))
-    Assert.assertEquals(120, word.getOccuredSum())
+    assertEquals(2, posTable.length)
+    assertEquals(POSUtil.POS_N, posTable(0)(0))
+    assertEquals(100, posTable(0)(1))
+    assertEquals(POSUtil.POS_V, posTable(1)(0))
+    assertEquals(20, word.getOccuredCount(POSUtil.getPOSString(POSUtil.POS_V)))
+    assertEquals(120, word.getOccuredSum())
   }
 
   @Test
@@ -29,9 +29,9 @@ class StringToWordTest {
     val converter = new StringWordConverter()
     converter.setConceptRepository(ConceptRepository())
     val word = converter.convert(wordString)
-    Assert.assertEquals(2, word.getConcepts().length)
-    Assert.assertEquals("n-insect", word.getConcepts()(0).getName())
-    Assert.assertEquals("n-person", word.getConcepts()(1).getName())
+    assertEquals(2, word.getConcepts().length)
+    assertEquals("n-insect", word.getConcepts()(0).getName())
+    assertEquals("n-person", word.getConcepts()(1).getName())
   }
 
   @Test
@@ -40,22 +40,31 @@ class StringToWordTest {
     val converter = new StringWordConverter()
     converter.setConceptRepository(ConceptRepository())
     val word = converter.convert(wordString)
-    Assert.assertEquals("\r\n\"/\\", word.getWordName())
+    assertEquals("\r\n\"/\\", word.getWordName())
   }
 
   @Test
-  def should_() {
+  def should_convert_string_with_whitespace() {
     val wordString = """{"word" : "中国", "domainType" : 0, "POSTable" : {"NS" : 24455, "N" : 35}, "concepts" : ["n-group", "n-space"]},"""
     val converter = new StringWordConverter()
     converter.setConceptRepository(ConceptRepository())
     val word = converter.convert(wordString)
-    Assert.assertEquals("中国", word.getWordName())
+    assertEquals("中国", word.getWordName())
 
     val posTable = word.getWordPOSTable()
-    Assert.assertEquals(2, posTable.length)
-    Assert.assertEquals(POSUtil.POS_NS, posTable(0)(0))
-    Assert.assertEquals(24455, posTable(0)(1))
-    Assert.assertEquals(POSUtil.POS_N, posTable(1)(0))
-    Assert.assertEquals(35, posTable(1)(1))
+    assertEquals(2, posTable.length)
+    assertEquals(POSUtil.POS_NS, posTable(0)(0))
+    assertEquals(24455, posTable(0)(1))
+    assertEquals(POSUtil.POS_N, posTable(1)(0))
+    assertEquals(35, posTable(1)(1))
+  }
+
+  @Test
+  def should_convert_string_with_no_domain_type() {
+    val wordString = """{"word" : "中国", "POSTable" : {"NS" : 24455, "N" : 35}"""
+    val converter = new StringWordConverter()
+    val word = converter.convert(wordString)
+    assertEquals("中国", word.getWordName())
+    assertEquals(0, word.getDomainType())
   }
 }
