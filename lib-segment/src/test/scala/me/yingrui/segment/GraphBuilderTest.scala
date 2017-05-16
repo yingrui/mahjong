@@ -1,10 +1,9 @@
 package me.yingrui.segment
 
-import org.junit.Assert
-import org.junit.Test
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.GraphBuilder
 import me.yingrui.segment.dict.DictionaryFactory
+import org.junit.{Assert, Test}
 
 class GraphBuilderTest {
 
@@ -13,7 +12,7 @@ class GraphBuilderTest {
         DictionaryFactory().loadDictionary()
         DictionaryFactory().loadDomainDictionary()
         DictionaryFactory().loadUserDictionary()
-        val gBuilder = new GraphBuilder(null, false, MPSegmentConfiguration())
+        val gBuilder = new GraphBuilder(null, false, SegmentConfiguration())
         val sen = "计算机会成本将会大大增加成功的机会"
         gBuilder.setSentence(sen)
         gBuilder.scanContextFreq(0)

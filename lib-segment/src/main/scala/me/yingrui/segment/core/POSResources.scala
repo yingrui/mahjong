@@ -1,11 +1,10 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.hmm._
-import me.yingrui.segment.util.FileUtil
-import me.yingrui.segment.util.SerializeHandler
-
 import java.io.DataInputStream
+
+import me.yingrui.segment.conf.SegmentConfiguration
+import me.yingrui.segment.hmm._
+import me.yingrui.segment.util.{FileUtil, SerializeHandler}
 
 object POSResources {
 
@@ -22,7 +21,7 @@ object POSResources {
     pi = Pi()
     stateBank = new NodeRepository()
 
-    val resource = MPSegmentConfiguration().getPOSMatrix()
+    val resource = SegmentConfiguration().getPOSMatrix()
     try {
       val readHandler = SerializeHandler(new DataInputStream(FileUtil.getResourceAsStream(resource)))
       load(readHandler)

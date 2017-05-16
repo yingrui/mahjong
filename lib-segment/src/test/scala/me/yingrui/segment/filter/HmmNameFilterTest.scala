@@ -1,15 +1,14 @@
 package me.yingrui.segment.filter
 
-import ner.HmmNameFilter
-import org.junit.Assert
-import org.junit.Test
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.dict.POSUtil
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.filter.ner.HmmNameFilter
+import org.junit.{Assert, Test}
 
 class HmmNameFilterTest {
 
-  var filter = HmmNameFilter(MPSegmentConfiguration(Map("separate.xingming" -> "true")))
+  var filter = HmmNameFilter(SegmentConfiguration(Map("separate.xingming" -> "true")))
 
   @Test
   def should_recognize_xing_with_prefix {

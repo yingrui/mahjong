@@ -1,6 +1,6 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.dict.DictionaryFactory
 import me.yingrui.segment.filter.SegmentResultFilter
 
@@ -28,14 +28,14 @@ object SegmentWorker {
     map
   }
 
-  def apply(): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration())
+  def apply(): SegmentWorker = new MPSegmentWorker(SegmentConfiguration())
 
-  def apply(config: java.util.Map[String, String]): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(config))
+  def apply(config: java.util.Map[String, String]): SegmentWorker = new MPSegmentWorker(SegmentConfiguration(config))
 
-  def apply(props: (String, String)*): SegmentWorker = new MPSegmentWorker(MPSegmentConfiguration(props.toMap))
+  def apply(props: (String, String)*): SegmentWorker = new MPSegmentWorker(SegmentConfiguration(props.toMap))
 
-  def apply(config: MPSegmentConfiguration, filter: SegmentResultFilter): SegmentWorker = new MPSegmentWorker(config, filter)
-  def apply(config: MPSegmentConfiguration): SegmentWorker = new MPSegmentWorker(config)
+  def apply(config: SegmentConfiguration, filter: SegmentResultFilter): SegmentWorker = new MPSegmentWorker(config, filter)
+  def apply(config: SegmentConfiguration): SegmentWorker = new MPSegmentWorker(config)
 
 }
 

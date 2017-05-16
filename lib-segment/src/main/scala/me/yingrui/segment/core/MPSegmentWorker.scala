@@ -1,11 +1,11 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.filter.SegmentResultFilter
 
-class MPSegmentWorker(config: MPSegmentConfiguration, unKnownFilter: SegmentResultFilter) extends SegmentWorker {
+class MPSegmentWorker(config: SegmentConfiguration, unKnownFilter: SegmentResultFilter) extends SegmentWorker {
 
-  def this(config: MPSegmentConfiguration) = this(config, new SegmentResultFilter(config))
+  def this(config: SegmentConfiguration) = this(config, new SegmentResultFilter(config))
 
   private val maxSegStrLength = 400000
   private val mpSegment: MPSegment = new MPSegment(config)

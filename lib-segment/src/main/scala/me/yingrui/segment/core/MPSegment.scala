@@ -1,11 +1,11 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.dict.IWord
 import me.yingrui.segment.graph._
 import me.yingrui.segment.pinyin.WordToPinyinClassfierFactory
 
-class MPSegment(config: MPSegmentConfiguration) {
+class MPSegment(config: SegmentConfiguration) {
   private var dijk: IShortestPath = null
   private var graph: IGraph = null
   private var posTagging: IPOSRecognizer = null

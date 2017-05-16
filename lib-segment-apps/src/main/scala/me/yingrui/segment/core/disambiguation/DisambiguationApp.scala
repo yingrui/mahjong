@@ -2,7 +2,7 @@ package me.yingrui.segment.core.disambiguation
 
 import java.io.{BufferedReader, InputStreamReader}
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.SegmentWorker
 import me.yingrui.segment.crf.{CRFClassifier, CRFCorpus, CRFModel, CRFViterbi}
 import me.yingrui.segment.filter.SegmentResultFilter
@@ -31,7 +31,7 @@ object DisambiguationApp extends App {
   val modelFile = if (args.indexOf("--model") >= 0) args(args.indexOf("--model") + 1) else ""
   val debug = args.indexOf("--debug") >= 0
 
-  val config = MPSegmentConfiguration(Map("separate.xingming" -> "true", "minimize.word" -> "true"))
+  val config = SegmentConfiguration(Map("separate.xingming" -> "true", "minimize.word" -> "true"))
   val segmentWorker = if (!modelFile.isEmpty) {
     println("model loading...")
     val model = CRFModel(modelFile)

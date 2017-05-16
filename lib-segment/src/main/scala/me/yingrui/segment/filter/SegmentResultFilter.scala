@@ -1,12 +1,12 @@
 package me.yingrui.segment.filter
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.filter.ner.HmmNameFilter
 
 import scala.collection.mutable.ListBuffer
 
-class SegmentResultFilter(config: MPSegmentConfiguration) {
+class SegmentResultFilter(config: SegmentConfiguration) {
 
   private val filters = initialize()
 

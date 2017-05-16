@@ -1,6 +1,6 @@
 package me.yingrui.segment.util
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.dict.POSUtil
 import me.yingrui.segment.util.CharCheckUtil._
 
@@ -61,7 +61,7 @@ object WordUtil {
 
   val glueChars = "*?~/Array[_]:"
 
-  val config = MPSegmentConfiguration()
+  val config = SegmentConfiguration()
 
   val glueChar = config.getGlueChar()
 }

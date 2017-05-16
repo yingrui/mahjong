@@ -1,6 +1,6 @@
 package me.yingrui.segment.graph
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration$
 import collection.mutable.ListBuffer
 
 class DijkstraImpl(numOfVertexes: Int) extends IShortestPath {

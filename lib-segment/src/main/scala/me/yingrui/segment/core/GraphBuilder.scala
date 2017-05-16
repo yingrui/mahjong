@@ -1,13 +1,12 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.dict.DictionaryService
 import me.yingrui.segment.graph.IGraph
-import me.yingrui.segment.util.StringUtil
 
-import collection.mutable.Map
+import scala.collection.mutable.Map
 
-class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: MPSegmentConfiguration) {
+class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: SegmentConfiguration) {
 
   private val segmentMin = config.isSegmentMin()
   private val loadDomainDictionary: Boolean = config.isLoadDomainDictionary()

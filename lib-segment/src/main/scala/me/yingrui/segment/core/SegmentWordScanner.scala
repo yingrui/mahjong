@@ -1,18 +1,15 @@
 package me.yingrui.segment.core
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.dict.DictionaryLookupResult
-import me.yingrui.segment.dict.IWord
-import me.yingrui.segment.dict.POSUtil
-import me.yingrui.segment.dict.UnknownWord
+import me.yingrui.segment.conf.SegmentConfiguration
+import me.yingrui.segment.dict.{DictionaryLookupResult, IWord, POSUtil, UnknownWord}
 import me.yingrui.segment.graph.IGraph
 
-import collection.mutable.Map
+import scala.collection.mutable.Map
 
 class SegmentWordScanner(segmentMin: Boolean, useContextFreqSegment: Boolean, graph: IGraph, contextFreqMap: Map[String, Int]) extends AbstractWordScanner {
 
   private val BigWordLength = 4
-  private val logCorpus = MPSegmentConfiguration.LOG_CORPUS
+  private val logCorpus = SegmentConfiguration.LOG_CORPUS
 
   override def foundAtomWord(atomWord: String): IWord = {
     var singleCharWord = getDictionaryService().lookup(atomWord).firstMatchWord

@@ -1,9 +1,9 @@
 package me.yingrui.segment.filter.ner
 
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.SegmentResult
-import me.yingrui.segment.util.WordUtil
 import me.yingrui.segment.dict.ChNameDictionary
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.util.WordUtil
 
 class NameEntityRecognizeResult(val nameWordCount: Int, val startWithXing: Boolean, val isForeignName: Boolean) {}
 
@@ -15,7 +15,7 @@ trait NameEntityRecognizer {
 
 object ProbChineseNameRecognizer {
   val chNameDict: ChNameDictionary = new ChNameDictionary()
-  chNameDict.loadNameDict(MPSegmentConfiguration().getChNameDict())
+  chNameDict.loadNameDict(SegmentConfiguration().getChNameDict())
 }
 
 

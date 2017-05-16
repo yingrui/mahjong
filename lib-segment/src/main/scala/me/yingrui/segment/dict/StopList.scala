@@ -1,9 +1,9 @@
 package me.yingrui.segment.dict
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 
+import scala.collection.mutable
 import scala.io.Source
-import collection.mutable
 
 object StopList {
 
@@ -12,7 +12,7 @@ object StopList {
   var numPosStop = 0
 
   def loadStopList(s: String) {
-    val encoding = MPSegmentConfiguration().getDefaultFileEncoding()
+    val encoding = SegmentConfiguration().getDefaultFileEncoding()
     try {
       var i = 0
 
@@ -34,7 +34,7 @@ object StopList {
         println("[StopWord] exception:" + exception.getMessage())
     }
 
-    var posStopList = MPSegmentConfiguration().getStopPosList()
+    var posStopList = SegmentConfiguration().getStopPosList()
     posStopList = posStopList.trim()
     if (posStopList.length() > 0) {
       val as = posStopList.split(",")

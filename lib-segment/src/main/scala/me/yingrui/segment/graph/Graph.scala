@@ -1,6 +1,6 @@
 package me.yingrui.segment.graph
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration$
 import me.yingrui.segment.dict.IWord
 
 class Graph(size: Int) extends IGraph {

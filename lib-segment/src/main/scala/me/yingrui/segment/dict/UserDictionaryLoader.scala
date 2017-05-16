@@ -2,7 +2,7 @@ package me.yingrui.segment.dict
 
 import java.io.File
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core._
 import me.yingrui.segment.dict.domain.DomainDictionary
 
@@ -20,7 +20,7 @@ object UserDictionaryLoader {
 
 class UserDictionaryLoader {
 
-  private val encoding = MPSegmentConfiguration().getDefaultFileEncoding()
+  private val encoding = SegmentConfiguration().getDefaultFileEncoding()
   private var domainDict: DomainDictionary = null
   private var hashDictionary: HashDictionary = null
   private val defaultFreq = 50
@@ -232,6 +232,6 @@ class UserDictionaryLoader {
   }
 
   private def getLogCorpus(): Int = {
-    return MPSegmentConfiguration.LOG_CORPUS.toInt
+    return SegmentConfiguration.LOG_CORPUS.toInt
   }
 }

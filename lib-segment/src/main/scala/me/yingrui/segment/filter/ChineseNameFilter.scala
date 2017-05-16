@@ -1,13 +1,12 @@
 package me.yingrui.segment.filter
 
-import ner.{RecognizerCreator, NameEntityRecognizer}
 import me.yingrui.segment.concept.Concept
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.dict.POSUtil
-
+import me.yingrui.segment.filter.ner.{NameEntityRecognizer, RecognizerCreator}
 import me.yingrui.segment.util.WordUtil._
 
-class ChineseNameFilter(config: MPSegmentConfiguration, recognizerCreator: RecognizerCreator, maxNameWordLength: Int) extends AbstractSegmentFilter {
+class ChineseNameFilter(config: SegmentConfiguration, recognizerCreator: RecognizerCreator, maxNameWordLength: Int) extends AbstractSegmentFilter {
 
   private val useChNameDict = true
   private var segmentResultLength = 0

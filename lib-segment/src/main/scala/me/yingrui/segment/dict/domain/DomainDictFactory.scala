@@ -1,6 +1,6 @@
 package me.yingrui.segment.dict.domain
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 
 object DomainDictFactory{
   val instance = new DomainDictFactory()
@@ -11,7 +11,7 @@ object DomainDictFactory{
 class DomainDictFactory {
 
     private var domainDict: DomainDictionary = null
-    private val config : MPSegmentConfiguration = MPSegmentConfiguration()
+    private val config : SegmentConfiguration = SegmentConfiguration()
     private val loadDomainDictionary : Boolean = config.isLoadDomainDictionary()
 
     def buildDictionary() {

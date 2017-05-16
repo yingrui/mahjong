@@ -1,11 +1,10 @@
 package me.yingrui.segment.filter
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.dict.POSUtil
-
 import me.yingrui.segment.util.WordUtil._
 
-class QuerySyntaxFilter(config: MPSegmentConfiguration)
+class QuerySyntaxFilter(config: SegmentConfiguration)
         extends AbstractSegmentFilter {
 
 

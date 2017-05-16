@@ -2,7 +2,7 @@ package me.yingrui.segment.neural
 
 import org.junit.Assert
 import org.junit.Test
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration$
 import me.yingrui.segment.core.GraphBuilder
 import me.yingrui.segment.dict.DictionaryFactory
 import me.yingrui.segment.math.Matrix

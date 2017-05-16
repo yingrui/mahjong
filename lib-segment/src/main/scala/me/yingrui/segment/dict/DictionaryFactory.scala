@@ -3,7 +3,7 @@ package me.yingrui.segment.dict
 import java.io.InputStream
 
 import me.yingrui.segment.concept.ConceptRepository
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.MPSegment
 import me.yingrui.segment.dict.domain.DomainDictFactory
 import me.yingrui.segment.tools.StringWordConverter
@@ -19,7 +19,7 @@ object DictionaryFactory {
 
 class DictionaryFactory {
 
-  private val config = MPSegmentConfiguration()
+  private val config = SegmentConfiguration()
   private var coreDict: HashDictionary = null
   private var englishDict: TrieDictionary = null
   private var domainFactory: DomainDictFactory = null
@@ -102,7 +102,7 @@ class DictionaryFactory {
       val userDictionaryLoader = UserDictionaryLoader(domainDictionary, coreDict)
       try {
         userDictionaryLoader.loadUserDictionary(userDictFile)
-        userDictionaryLoader.buildDisambiguationRule(new MPSegment(MPSegmentConfiguration()))
+        userDictionaryLoader.buildDisambiguationRule(new MPSegment(SegmentConfiguration()))
       } catch {
         case e: Throwable =>
           e.printStackTrace()

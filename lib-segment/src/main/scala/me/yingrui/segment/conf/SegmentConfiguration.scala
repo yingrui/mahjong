@@ -5,7 +5,7 @@ import collection.Map
 
 import me.yingrui.segment.util.FileUtil
 
-class MPSegmentConfiguration {
+class SegmentConfiguration {
 
   def setHomePath(path: String) {
     val i1 = path.length()
@@ -168,7 +168,7 @@ class MPSegmentConfiguration {
   private var uppercaseall = false
 }
 
-object MPSegmentConfiguration {
+object SegmentConfiguration {
 
   private val defaultProperties = collection.mutable.Map[String, String](
     "filter.stopword" -> "true",
@@ -189,7 +189,7 @@ object MPSegmentConfiguration {
     "convert.touppercase" -> "false")
 
 
-  private val instance = new MPSegmentConfiguration()
+  private val instance = new SegmentConfiguration()
   instance.properties = collection.mutable.Map[String, String]() ++= defaultProperties
   instance.load()
   instance.initialize()
@@ -201,7 +201,7 @@ object MPSegmentConfiguration {
   def apply() = instance
 
   def apply(config: Map[String, String]) = {
-    val conf = new MPSegmentConfiguration()
+    val conf = new SegmentConfiguration()
     conf.properties = collection.mutable.Map[String, String]() ++ instance.properties ++ config
     conf.initialize
   }

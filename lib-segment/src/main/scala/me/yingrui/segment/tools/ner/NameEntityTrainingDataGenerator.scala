@@ -2,7 +2,7 @@ package me.yingrui.segment.tools.ner
 
 import java.io.{File, PrintWriter}
 
-import me.yingrui.segment.conf.MPSegmentConfiguration
+import me.yingrui.segment.conf.SegmentConfiguration
 import me.yingrui.segment.core.SegmentResult
 import me.yingrui.segment.dict.{ChNameDictionary, POSUtil}
 import me.yingrui.segment.filter.NameEntityRecognizerBuilder
@@ -20,7 +20,7 @@ object NameEntityTrainingDataGenerator extends App {
 
   val nameDistribution = new NameProbDistribution()
   val chNameDict = new ChNameDictionary()
-  chNameDict.loadNameDict(MPSegmentConfiguration().getChNameDict())
+  chNameDict.loadNameDict(SegmentConfiguration().getChNameDict())
 
   val loader = CorpusLoader(getResourceAsStream(resource))
   val printer = new PrintWriter(new File("ner.arff"), "utf-8")

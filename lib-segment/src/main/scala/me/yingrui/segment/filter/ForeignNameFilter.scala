@@ -1,13 +1,9 @@
 package me.yingrui.segment.filter
 
-import ner.{RecognizerCreator, NameEntityRecognizer}
-import me.yingrui.segment.concept.Concept
-import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.dict.POSUtil
+import me.yingrui.segment.conf.SegmentConfiguration
+import me.yingrui.segment.filter.ner.RecognizerCreator
 
-import me.yingrui.segment.util.WordUtil._
-
-class ForeignNameFilter(config: MPSegmentConfiguration, recognizerCreator: RecognizerCreator, maxNameWordLength: Int) extends ChineseNameFilter(config, recognizerCreator, maxNameWordLength) {
+class ForeignNameFilter(config: SegmentConfiguration, recognizerCreator: RecognizerCreator, maxNameWordLength: Int) extends ChineseNameFilter(config, recognizerCreator, maxNameWordLength) {
 
   private val foreignName = ForeignName()
 

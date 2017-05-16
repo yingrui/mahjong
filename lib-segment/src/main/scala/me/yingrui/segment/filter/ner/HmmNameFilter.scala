@@ -1,13 +1,13 @@
 package me.yingrui.segment.filter.ner
 
+import me.yingrui.segment.concept.Concept
+import me.yingrui.segment.conf.SegmentConfiguration
+import me.yingrui.segment.dict.POSUtil
+import me.yingrui.segment.filter.AbstractSegmentFilter
 import me.yingrui.segment.hmm.{Emission, HmmClassifier, HmmModel}
 import me.yingrui.segment.util.FileUtil
-import me.yingrui.segment.conf.MPSegmentConfiguration
-import me.yingrui.segment.filter.AbstractSegmentFilter
-import me.yingrui.segment.dict.POSUtil
-import me.yingrui.segment.concept.Concept
 
-class HmmNameFilter(config: MPSegmentConfiguration, classifier: HmmClassifier) extends AbstractSegmentFilter {
+class HmmNameFilter(config: SegmentConfiguration, classifier: HmmClassifier) extends AbstractSegmentFilter {
 
   import HmmNameFilter._
 
@@ -159,7 +159,7 @@ object HmmNameFilter {
   model.load(FileUtil.getResourceAsStream("ner-hmm.m"))
   model.buildViterbi(Emission(model.getEmission, () => getDefaultState, (stateIndex: Int) => getAppendixStates(stateIndex)))
 
-  def apply(config: MPSegmentConfiguration): HmmNameFilter = {
+  def apply(config: SegmentConfiguration): HmmNameFilter = {
     val classifier = new HmmClassifier(model)
     new HmmNameFilter(config, classifier)
   }
