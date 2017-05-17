@@ -54,8 +54,10 @@ class SegmentConfiguration {
   }
 
   def getUserDictionaryFile(): String = {
-    return getHomePath() + properties.getOrElse("user.dictionaryfile", "userdict.txt")
+    getHomePath() + properties.getOrElse("user.dictionaryfile", "userdict.txt")
   }
+
+  def getCoreDictionaryFile(): String = get("core.dictionaryfile")
 
   def getEnglishDictionaryFile(): String = {
     return getHomePath() + properties.getOrElse("english.dictionaryfile", "dict-en.txt")
@@ -184,6 +186,7 @@ object SegmentConfiguration {
     "glue.queryoperater" -> "*?~/_[]:",
     "load.userdictionary" -> "true",
     "user.dictionaryfile" -> "userdict.txt",
+    "core.dictionaryfile" -> "me/yingrui/segment/dict.txt",
     "load.domaindictionary" -> "false",
     "convert.tohalfshape" -> "false",
     "convert.touppercase" -> "false")

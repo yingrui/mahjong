@@ -37,7 +37,7 @@ class DictionaryFactory {
     var timestamp = System.currentTimeMillis()
     try {
       coreDict = new HashDictionary()
-      val inputStream = getClass.getClassLoader.getResourceAsStream("me/yingrui/segment/dict.txt")
+      val inputStream = getClass.getClassLoader.getResourceAsStream(config.getCoreDictionaryFile())
 
       loadDictionary(inputStream, coreDict)
     } catch {
