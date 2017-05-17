@@ -25,6 +25,8 @@ class NodeRepository extends ISerialize {
     }
   }
 
+  def contains(name: String): Boolean = indexMap.containsKey(name)
+
   def get(name: String): Node = {
     val index = indexMap.get(name)
     if (index > 0) repo(index)

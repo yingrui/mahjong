@@ -16,7 +16,7 @@ class HmmModel() {
   private var pi = Pi()
   private var emission = Emission()
 
-  def containsObserve(observed: String) = observeBank.get(observed) != null
+  def containsObserve(observed: String): Boolean = observeBank.contains(observed)
 
   def load(filename: String) {
     load(getResourceAsStream(filename))
