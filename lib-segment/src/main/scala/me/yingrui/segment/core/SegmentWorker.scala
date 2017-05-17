@@ -18,7 +18,6 @@ object SegmentWorker {
   df.loadDomainDictionary()
   df.loadUserDictionary()
   df.loadEnglishDictionary()
-  val dictionaryService = DictionaryService(df.getCoreDictionary, df.getEnglishDictionary, df.getDomainDictionary)
 
   implicit def javaMapToScalaMap(javaMap: java.util.Map[String, String]) = {
     val map = mutable.HashMap[String, String]()
@@ -30,15 +29,27 @@ object SegmentWorker {
     map
   }
 
-  def apply(): SegmentWorker = new MPSegmentWorker(SegmentConfiguration(), dictionaryService)
+  def apply(): SegmentWorker = apply(SegmentConfiguration())
 
-  def apply(config: java.util.Map[String, String]): SegmentWorker = new MPSegmentWorker(SegmentConfiguration(config), dictionaryService)
+  def apply(config: java.util.Map[String, String]): SegmentWorker = apply(SegmentConfiguration(config))
 
-  def apply(props: (String, String)*): SegmentWorker = new MPSegmentWorker(SegmentConfiguration(props.toMap), dictionaryService)
+  def apply(props: (String, String)*): SegmentWorker = apply(SegmentConfiguration(props.toMap))
 
-  def apply(config: SegmentConfiguration, filter: SegmentResultFilter): SegmentWorker = new MPSegmentWorker(config, filter, dictionaryService)
-  def apply(config: SegmentConfiguration): SegmentWorker = new MPSegmentWorker(config, dictionaryService)
+  def apply(config: SegmentConfiguration): SegmentWorker = {
+    val dictionaryService = createDictionaryService(config)
+    new MPSegmentWorker(config, dictionaryService)
+  }
 
+  def apply(config: SegmentConfiguration, filter: SegmentResultFilter): SegmentWorker = {
+    val dictionaryService = createDictionaryService(config)
+    new MPSegmentWorker(config, filter, dictionaryService)
+  }
+
+  private def createDictionaryService(conf: SegmentConfiguration): DictionaryService = {
+    val domainDictionary = if (conf.isLoadDomainDictionary() || conf.isLoadUserDictionary()) df.getDomainDictionary else null
+    val englishDictionary = if (conf.isLoadEnglishDictionary) df.getEnglishDictionary else null
+    DictionaryService(df.getCoreDictionary, englishDictionary, domainDictionary)
+  }
 }
 
 object SegmentWorkerBuilder {
