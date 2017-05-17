@@ -6,13 +6,10 @@ import me.yingrui.segment.graph.IGraph
 
 import scala.collection.mutable.Map
 
-class GraphBuilder(graph: IGraph, useDomainDictionary: Boolean, config: SegmentConfiguration) {
+class GraphBuilder(graph: IGraph, config: SegmentConfiguration, dictionaryService: DictionaryService) {
 
   private val segmentMin = config.isSegmentMin()
-  private val loadDomainDictionary: Boolean = config.isLoadDomainDictionary()
-  private val loadUserDictionary: Boolean = config.isLoadUserDictionary()
   private val useContextFreqSegment: Boolean = config.isUseContextFreqSegment()
-  private val dictionaryService: DictionaryService = new DictionaryService(useDomainDictionary, loadDomainDictionary, loadUserDictionary, config.isLoadEnglishDictionary())
   private val maxWordLength: Int = config.getMaxWordLength()
   private var sentence: String = ""
   private var contextFreqMap: Map[String, Int] = null

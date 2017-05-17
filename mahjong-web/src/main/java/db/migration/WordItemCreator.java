@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class WordItemCreator {
 
     public void createWordItems(JdbcTemplate jdbcTemplate) {
-        SegmentWorkerBuilder.build(new HashMap<String, String>());
+        SegmentWorkerBuilder.build(new HashMap<>());
         IDictionary dict = DictionaryFactory.apply().getCoreDictionary();
         try {
             createWordItemsByDictionary(jdbcTemplate, dict);

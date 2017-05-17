@@ -22,7 +22,7 @@ class NewWordErrorAnalyzer extends AbstractErrorAnalyzer {
 
     override def postAnalysis(allWordsAndFreqInCorpus: Map[String,Int]) {
         for(wordStr <- getWords().keys) {
-            val word = DictionaryFactory().getCoreDictionary().getWord(wordStr)
+            val word = DictionaryFactory().getCoreDictionary.getWord(wordStr)
             if(null != word) {
                 removeErrorWord(wordStr)
             }

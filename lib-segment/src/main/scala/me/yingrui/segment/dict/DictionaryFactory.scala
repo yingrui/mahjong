@@ -27,9 +27,7 @@ class DictionaryFactory {
   private val isLoadUserDictionary: Boolean = config.isLoadUserDictionary()
   private val isLoadEnglishDictionary: Boolean = config.isLoadEnglishDictionary()
 
-  def getCoreDictionary(): IDictionary = {
-    return coreDict
-  }
+  def getCoreDictionary: IDictionary = coreDict
 
   def getEnglishDictionary: IDictionary = englishDict
 
@@ -105,7 +103,8 @@ class DictionaryFactory {
       val userDictionaryLoader = UserDictionaryLoader(domainDictionary, coreDict)
       try {
         userDictionaryLoader.loadUserDictionary(userDictFile)
-        userDictionaryLoader.buildDisambiguationRule(new MPSegment(SegmentConfiguration()))
+        val dictionaryService = DictionaryService(coreDict, englishDict, domainDictionary)
+        userDictionaryLoader.buildDisambiguationRule(new MPSegment(SegmentConfiguration(), dictionaryService))
       } catch {
         case e: Throwable =>
           e.printStackTrace()

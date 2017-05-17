@@ -5,14 +5,15 @@ import org.junit.Test
 
 class DictionaryServiceTest {
 
-  DictionaryFactory().loadDictionary()
-  DictionaryFactory().loadDomainDictionary()
-  DictionaryFactory().loadEnglishDictionary()
+  private val df = DictionaryFactory()
+  df.loadDictionary()
+  df.loadDomainDictionary()
+  df.loadEnglishDictionary()
 
   @Test
   def should_find_multi_words_in_dictionary() {
     val sentence = "不同凡响"
-    val service = new DictionaryService(false, false, false, false)
+    val service = DictionaryService(df.getCoreDictionary, null, null)
     val result = service.lookup(sentence)
     assertEquals(2, result.matchedWordCount)
     assertEquals("不同凡响", result.firstMatchWord.getWordName())
@@ -21,7 +22,7 @@ class DictionaryServiceTest {
 
   @Test
   def should_find_multi_words_in_domain_dictionary() {
-    val service = new DictionaryService(true, true, false, true)
+    val service = DictionaryService(df.getCoreDictionary, null, df.getDomainDictionary)
     assertEquals("复方青黛胶囊", service.lookup("复方青黛胶囊").firstMatchWord.getWordName())
     assertEquals("复方", service.lookup("复方阿胶").firstMatchWord.getWordName())
   }
@@ -29,7 +30,7 @@ class DictionaryServiceTest {
   @Test
   def should_return_exactly_same_word() {
     val sentence = "She"
-    val service = new DictionaryService(false, false, false, true)
+    val service = DictionaryService(df.getCoreDictionary, df.getEnglishDictionary, null)
     val result = service.lookup(sentence)
     assertEquals("She", result.firstMatchWord.getWordName())
   }

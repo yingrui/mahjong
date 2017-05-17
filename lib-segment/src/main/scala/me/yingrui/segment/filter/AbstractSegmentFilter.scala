@@ -39,7 +39,7 @@ abstract class AbstractSegmentFilter extends ISegmentFilter {
 
   private def getPartOfSpeechForSecondWord(secondPos: Int, rest: String): Int = {
     if (secondPos == POSUtil.POS_UNKOWN) {
-      val dict = DictionaryFactory().getCoreDictionary()
+      val dict = DictionaryFactory().getCoreDictionary
       val word = if (dict != null) dict.getWord(rest) else null
       if (null != word) word.getWordPOSTable()(0)(0) else POSUtil.POS_UNKOWN
     } else secondPos

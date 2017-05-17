@@ -1,11 +1,11 @@
 package me.yingrui.segment.core
 
 import me.yingrui.segment.conf.SegmentConfiguration
-import me.yingrui.segment.dict.IWord
+import me.yingrui.segment.dict.{DictionaryService, IWord}
 import me.yingrui.segment.graph._
 import me.yingrui.segment.pinyin.WordToPinyinClassfierFactory
 
-class MPSegment(config: SegmentConfiguration) {
+class MPSegment(config: SegmentConfiguration, dictionaryService: DictionaryService) {
   private var dijk: IShortestPath = null
   private var graph: IGraph = null
   private var posTagging: IPOSRecognizer = null
@@ -13,7 +13,6 @@ class MPSegment(config: SegmentConfiguration) {
   private val conceptRecognizer: IConceptRecognizer = new SimpleConceptRecognizer()
   private var lastSection: Boolean = false
   private var lastSectionStr: String = ""
-  private val useDomainDictionary: Boolean = config.isLoadDomainDictionary()
 
   initialize()
 
@@ -63,7 +62,7 @@ class MPSegment(config: SegmentConfiguration) {
   }
 
   private def buildGraph(sen: String, startPos: Int) {
-    val builder = new GraphBuilder(graph, useDomainDictionary, config)
+    val builder = new GraphBuilder(graph, config, dictionaryService)
     builder.buildGraph(sen, startPos)
   }
 

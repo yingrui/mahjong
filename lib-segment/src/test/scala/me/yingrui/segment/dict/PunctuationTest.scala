@@ -7,7 +7,7 @@ import org.junit.Test
 class PunctuationTest {
 
   DictionaryFactory().loadDictionary()
-  private val hashDictionary = DictionaryFactory().getCoreDictionary()
+  private val hashDictionary = DictionaryFactory().getCoreDictionary
 
   @Test
   def should_contains_basic_punctuations() {

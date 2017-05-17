@@ -6,7 +6,7 @@ import org.junit.Test
 class HashDictionaryTest {
 
   DictionaryFactory().loadDictionary()
-  private val hashDictionary = DictionaryFactory().getCoreDictionary()
+  private val hashDictionary = DictionaryFactory().getCoreDictionary
 
   @Test
   def should_Load_Core_Dictionary() {
@@ -24,5 +24,5 @@ class HashDictionaryTest {
     val count = iterator.size
     Assert.assertEquals(88027, count)
   }
-  
+
 }

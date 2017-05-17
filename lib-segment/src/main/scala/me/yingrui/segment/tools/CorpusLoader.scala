@@ -135,10 +135,10 @@ object CorpusLoader {
 
   def createCorpusLoader: CorpusLoader = {
     val loader = new CorpusLoader()
-    loader.dictionary = DictionaryFactory().getCoreDictionary()
+    loader.dictionary = DictionaryFactory().getCoreDictionary
     if (loader.dictionary == null) {
       DictionaryFactory().loadDictionary()
-      loader.dictionary = DictionaryFactory().getCoreDictionary()
+      loader.dictionary = DictionaryFactory().getCoreDictionary
     }
     loader.eliminatedDomainTypes = HashSet[Int]()
     loader

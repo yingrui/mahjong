@@ -40,7 +40,7 @@ object DictionaryWriter extends App {
 
   DictionaryFactory().loadDictionary()
   DictionaryFactory().loadEnglishDictionary()
-  writeDictionary(DictionaryFactory().getCoreDictionary(), "dict-1.txt")
+  writeDictionary(DictionaryFactory().getCoreDictionary, "dict-1.txt")
   writeDictionary(DictionaryFactory().getEnglishDictionary, "dict-en-1.txt")
 
 }

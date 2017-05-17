@@ -27,7 +27,7 @@ object ConceptLoader extends App {
   load(file3, ConceptRepository().getAdjConceptTree(), "A")
 
   var writer = new DictionaryWriter(new File("dict.txt"))
-  writer.write(DictionaryFactory().getCoreDictionary())
+  writer.write(DictionaryFactory().getCoreDictionary)
   writer.close()
 
   def load(file: File ,  nounConceptTree: ConceptTree, pos: String) {
@@ -38,14 +38,14 @@ object ConceptLoader extends App {
       if (null != array && array.length == 2) {
         val wordName = array(0)
         val concepts = array(1).split("\\|")
-        var word = DictionaryFactory().getCoreDictionary().getWord(wordName).asInstanceOf[WordImpl]
+        var word = DictionaryFactory().getCoreDictionary.getWord(wordName).asInstanceOf[WordImpl]
         if (word == null) {
           println("missing word: " + wordName + " " + array(1))
           word = new WordImpl(wordName)
           val posArray = new POSArray()
           posArray.add(POS(pos, 50))
           word.setPosArray(posArray)
-          DictionaryFactory().getCoreDictionary().addWord(word)
+          DictionaryFactory().getCoreDictionary.addWord(word)
         }
         if (word != null) {
           val conceptList = ListBuffer[Concept]()

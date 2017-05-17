@@ -3,16 +3,16 @@ package me.yingrui.segment.dict
 import me.yingrui.segment.lang.en.PorterStemmer
 import me.yingrui.segment.util.StringUtil
 
-class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Boolean, loadUserDictionary: Boolean, loadEnglishDictionary: Boolean) {
+class DictionaryService(val coreDictionary: IDictionary, val englishDictionary: IDictionary, val domainDictionary: IDictionary) {
+
+  private val loadEnglishDictionary = englishDictionary != null
+  private val loadDomainDictionary = domainDictionary != null
+
+  private val stemmer = new PorterStemmer()
+
   private var the2ndMatchWord: IWord = null
   private var the3rdMatchWord: IWord = null
   private var matchedWordCount = 0
-
-  private val hashDictionary = DictionaryFactory().getCoreDictionary()
-  private val englishDictionary = DictionaryFactory().getEnglishDictionary
-  private val domainDictionary = DictionaryFactory().getDomainDictionary
-
-  private val stemmer = new PorterStemmer()
 
   def lookup(candidateWord: String): DictionaryLookupResult = {
     if (startWithAlphabetical(candidateWord) && candidateWord.matches("[A-z0-9]+")) {
@@ -74,7 +74,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
 
   private def getMultiWordsInHashDictionary(candidateWord: String): IWord = {
     var word: IWord = null
-    val words = hashDictionary.getWords(candidateWord)
+    val words = coreDictionary.getWords(candidateWord)
     matchedWordCount = if (null != words) words.length else 0
     if (null != words) {
       word = get1stMatchWord(words)
@@ -88,7 +88,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
 
   private def getItem(candidateWord: String): IWord = {
     var word: IWord = null
-    if (useDomainDictionary && (loadDomainDictionary || loadUserDictionary) && candidateWord.length() > 1) {
+    if (loadDomainDictionary && candidateWord.length() > 1) {
       word = domainDictionary.getWord(candidateWord)
     }
     if (word == null) {
@@ -98,7 +98,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
     } else {
       //如果在领域词典中找到对应的词
       //继续在核心词典中查找，并排除在返回结果中和领域词典里相同的词
-      val words = hashDictionary.getWords(candidateWord)
+      val words = coreDictionary.getWords(candidateWord)
       matchedWordCount = if (null != words) words.length else 0
       the2ndMatchWord = get1stMatchWord(words)
       if (the2ndMatchWord != null) {
@@ -134,4 +134,10 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
     }
     return word
   }
+}
+
+object DictionaryService {
+
+  def apply(coreDictionary: IDictionary, englishDictionary: IDictionary, domainDictionary: IDictionary): DictionaryService = new DictionaryService(coreDictionary, englishDictionary, domainDictionary)
+
 }

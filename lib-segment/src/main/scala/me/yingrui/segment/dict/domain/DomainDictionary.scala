@@ -94,7 +94,7 @@ class DomainDictionary extends IDictionary {
   }
 
   private def addWordPOS(word: IWord) {
-    val coreDictionary = DictionaryFactory().getCoreDictionary()
+    val coreDictionary = DictionaryFactory().getCoreDictionary
     if (coreDictionary != null) {
       val wordInCoreDictionary = coreDictionary.getWord(word.getWordName())
       if (null != wordInCoreDictionary) {
