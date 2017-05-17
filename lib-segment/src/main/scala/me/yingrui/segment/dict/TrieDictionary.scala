@@ -7,7 +7,7 @@ class TrieDictionary extends IDictionary {
   var top = 0
   val root = new TrieNode('\0', -1)
 
-  def addWord(word: IWord) {
+  override def addWord(word: IWord) {
     checkWordArray
     allWords(top) = word
     root.insert(word.getWordName(), top)
@@ -31,7 +31,7 @@ class TrieDictionary extends IDictionary {
     getWordList(wordStr).toArray
   }
 
-  def getWordList(wordStr: String): List[IWord] = {
+  private def getWordList(wordStr: String): List[IWord] = {
     val word = getWord(wordStr)
     if (null != word) {
       if (wordStr.length > 1)
@@ -49,4 +49,6 @@ class TrieDictionary extends IDictionary {
   override def iterator(): List[IWord] = {
     allWords.toList.filter(_ != null)
   }
+
+  override def lookupWord(wordStr: String): IWord = getWord(wordStr)
 }

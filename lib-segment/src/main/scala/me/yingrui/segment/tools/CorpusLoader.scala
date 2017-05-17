@@ -1,18 +1,17 @@
 package me.yingrui.segment.tools
 
+import java.io.{BufferedReader, _}
+
 import me.yingrui.segment.concept.Concept
 import me.yingrui.segment.core.SegmentResult
-import me.yingrui.segment.dict.DictionaryFactory
-import me.yingrui.segment.dict.HashDictionary
-import me.yingrui.segment.dict.POSUtil
+import me.yingrui.segment.dict.{DictionaryFactory, IDictionary, POSUtil}
 
-import java.io.{BufferedReader, _}
-import collection.mutable._
+import scala.collection.mutable._
 
 class CorpusLoader {
 
   private var reader: BufferedReader = null
-  private var dictionary: HashDictionary = null
+  private var dictionary: IDictionary = null
   private var eliminatedDomainTypes: Set[Int] = null
 
   def eliminateDomainType(domainType: Int) {

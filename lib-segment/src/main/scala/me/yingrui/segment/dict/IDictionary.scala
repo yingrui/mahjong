@@ -10,4 +10,5 @@ trait IDictionary {
 
   def addWord(word: IWord): Unit
 
+  def lookupWord(wordStr: String): IWord
 }

@@ -32,6 +32,10 @@ class DomainDictionary extends IDictionary {
       word.getWordPOSTable()(0)(1), word.getDomainType())
   }
 
+  override def lookupWord(wordName: String): IWord = {
+    return hashDictionary.lookupWord(wordName)
+  }
+
   def pushWord(wordName: String, synonym: String, pos: String, freq: Int, domainType: Int) {
     if (wordName == null || wordName.trim().equals("") || pos == null || pos.trim().equals("") || wordName.trim().length() < 2) {
       System.err.println("Load a error word '" + wordName + "'into domain dictionary, already ignored.")
@@ -73,10 +77,6 @@ class DomainDictionary extends IDictionary {
     return if (wordIndex >= 0) arrayWordItem(wordIndex) else null
   }
 
-  private def lookupWord(wordName: String): IWord = {
-    return hashDictionary.lookupWord(wordName)
-  }
-
   private def addWord(wordName: String, pos: String, freq: Int, domainType: Int): Int = {
     val word = DomainWordItem(wordName, domainType)
     word.setOccuredCount(pos, freq)
@@ -94,7 +94,7 @@ class DomainDictionary extends IDictionary {
   }
 
   private def addWordPOS(word: IWord) {
-    val coreDictionary: HashDictionary = DictionaryFactory().getCoreDictionary()
+    val coreDictionary = DictionaryFactory().getCoreDictionary()
     if (coreDictionary != null) {
       val wordInCoreDictionary = coreDictionary.getWord(word.getWordName())
       if (null != wordInCoreDictionary) {

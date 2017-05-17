@@ -20,17 +20,9 @@ class HashDictionaryTest {
       println("词：" + word.getWordName() + "\n" + word.getPOSArray())
     }
 
-    Assert.assertEquals(6601, hashDictionary.getCapacity())
     val iterator = hashDictionary.iterator()
     val count = iterator.size
-    println(count)
+    Assert.assertEquals(88027, count)
   }
-
-  @Test
-  def should_contains_specify_words() {
-    val words = hashDictionary.getWords("丘吉尔")
-    for (word <- words) {
-      println("词：" + word.getWordName() + "\n" + word.getPOSArray())
-    }
-  }
+  
 }

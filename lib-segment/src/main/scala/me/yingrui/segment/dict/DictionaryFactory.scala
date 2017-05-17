@@ -27,7 +27,7 @@ class DictionaryFactory {
   private val isLoadUserDictionary: Boolean = config.isLoadUserDictionary()
   private val isLoadEnglishDictionary: Boolean = config.isLoadEnglishDictionary()
 
-  def getCoreDictionary(): HashDictionary = {
+  def getCoreDictionary(): IDictionary = {
     return coreDict
   }
 
