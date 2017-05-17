@@ -11,7 +11,7 @@ class PerformanceTest {
 
   def warmUp() {
     val reader = Source.fromFile(getClass().getClassLoader().getResource("Sophie's_World.txt").toURI, "UTF-8")
-    val segmentWorker = SegmentWorker()
+    val segmentWorker = SegmentWorker("recognize.partOfSpeech" -> "false")
     for (line <- reader.getLines()) {
       if (line.trim().length > 0) {
         segmentWorker.segment(line)
