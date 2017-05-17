@@ -1,6 +1,7 @@
 package me.yingrui.segment
 
 import org.junit.{Assert, Test}
+import org.hamcrest.core.IsNot.not
 import me.yingrui.segment.core.SegmentWorker
 import me.yingrui.segment.dict.POSUtil
 
@@ -247,6 +248,14 @@ class MPSegmentTest {
     println(words)
     Assert.assertEquals(words.getPOS(0), POSUtil.POS_M)
     Assert.assertEquals(words.getPOS(2), POSUtil.POS_M)
+  }
+
+  @Test
+  def should_be_able_to_specify_dictionary_file(): Unit = {
+    val str = "中国长城"
+    val defaultSegmentedWords = SegmentWorker().segment(str)
+    val words = SegmentWorker("core.dictionaryfile" -> "me/yingrui/segment/dict-minimum.txt").segment(str)
+    Assert.assertThat(words.length(), not(defaultSegmentedWords.length()))
   }
 
   @Test

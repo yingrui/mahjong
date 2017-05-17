@@ -20,7 +20,7 @@ object DictionaryFactory {
 class DictionaryFactory {
 
   private val config = SegmentConfiguration()
-  private var coreDict: HashDictionary = null
+  private var coreDict: IDictionary = null
   private var englishDict: TrieDictionary = null
   private var domainFactory: DomainDictFactory = null
   private val isLoadDomainDictionary: Boolean = config.isLoadDomainDictionary()
@@ -33,13 +33,24 @@ class DictionaryFactory {
 
   def getDomainDictionary: IDictionary = domainFactory.getDomainDictionary()
 
-  def loadDictionary() {
+  def loadDictionary(): Unit = {
+    coreDict = loadDictionary(config.getCoreDictionaryFile())
+  }
+
+  def loadDictionary(dictionaryFile: String): IDictionary = {
+    System.err.println(s"loading dictionary: $dictionaryFile")
+    val inputStream = FileUtil.getResourceAsStream(dictionaryFile)
+    val dict = new HashDictionary()
+    loadDictionary(inputStream, dict)
+    dict
+  }
+
+  def loadDictionary(inputStream: InputStream, dictionary: IDictionary) {
     var timestamp = System.currentTimeMillis()
     try {
-      coreDict = new HashDictionary()
-      val inputStream = getClass.getClassLoader.getResourceAsStream(config.getCoreDictionaryFile())
-
-      loadDictionary(inputStream, coreDict)
+      loadWords(inputStream) {
+        words => words.foreach(dictionary.addWord)
+      }
     } catch {
       case e: Throwable =>
         e.printStackTrace()
@@ -47,16 +58,9 @@ class DictionaryFactory {
       timestamp = System.currentTimeMillis() - timestamp
       System.err.println(s"loading dictionary time used(ms): $timestamp")
     }
-
   }
 
-  def loadDictionary(inputStream: InputStream, dictionary: IDictionary) {
-    loadWords(inputStream) {
-      words => words.foreach(dictionary.addWord)
-    }
-  }
-
-  private def loadWords(inputStream: InputStream)(convert : (Iterator[IWord]) => Unit) {
+  private def loadWords(inputStream: InputStream)(convert: (Iterator[IWord]) => Unit) {
     val source = Source.fromInputStream(inputStream, "utf-8")
     val converter = new StringWordConverter()
     converter.setConceptRepository(ConceptRepository())
@@ -71,20 +75,10 @@ class DictionaryFactory {
 
   def loadEnglishDictionary() {
     if (isLoadEnglishDictionary) {
-      var timestamp = System.currentTimeMillis()
+      System.err.println(s"loading English dictionary")
       englishDict = new TrieDictionary()
       val inputStream = FileUtil.getResourceAsStream(config.getEnglishDictionaryFile)
-      try {
-        loadDictionary(inputStream, englishDict)
-      }
-      catch {
-        case ex: Throwable => ex.printStackTrace()
-      }
-      finally {
-        inputStream.close()
-        timestamp = System.currentTimeMillis() - timestamp
-        System.err.println((new StringBuilder()).append("loading english dictionary time used(ms): ").append(timestamp).toString())
-      }
+      loadDictionary(inputStream, englishDict)
     }
   }
 

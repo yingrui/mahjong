@@ -10,7 +10,7 @@ import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 object UserDictionaryLoader {
-  def apply(domaindictionary: DomainDictionary, hashdictionary: HashDictionary) = {
+  def apply(domaindictionary: DomainDictionary, hashdictionary: IDictionary) = {
     val loader = new UserDictionaryLoader()
     loader.domainDict = domaindictionary
     loader.hashDictionary = hashdictionary
@@ -22,7 +22,7 @@ class UserDictionaryLoader {
 
   private val encoding = SegmentConfiguration().getDefaultFileEncoding()
   private var domainDict: DomainDictionary = null
-  private var hashDictionary: HashDictionary = null
+  private var hashDictionary: IDictionary = null
   private val defaultFreq = 50
   private val defaultDomainType = 250
   private val disambiguateRuleArrayList = ListBuffer[String]()
@@ -226,7 +226,7 @@ class UserDictionaryLoader {
     val iworditem = getItem(wordStr)
     var tf = 0
     if (iworditem != null) {
-      tf = iworditem.getOccuredSum().toInt
+      tf = iworditem.getOccuredSum()
     }
     return tf
   }
