@@ -1,7 +1,5 @@
 package me.yingrui.segment.dict
 
-import me.yingrui.segment.dict.domain.DomainDictFactory
-import me.yingrui.segment.dict.domain.DomainDictionary
 import me.yingrui.segment.lang.en.PorterStemmer
 import me.yingrui.segment.util.StringUtil
 
@@ -12,6 +10,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
 
   private val hashDictionary = DictionaryFactory().getCoreDictionary()
   private val englishDictionary = DictionaryFactory().getEnglishDictionary
+  private val domainDictionary = DictionaryFactory().getDomainDictionary
 
   private val stemmer = new PorterStemmer()
 
@@ -27,13 +26,13 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
 
   private def lookupEnglishWords(candidateWord: String): DictionaryLookupResult = {
     val word = if (loadEnglishDictionary) findWordInEnglishDictionary(candidateWord) else null
-    createResult(word, null, null, if(null != word) 1 else 0)
+    createResult(word, null, null, if (null != word) 1 else 0)
   }
 
   private def findWordInEnglishDictionary(wordName: String): IWord = {
     val wordString: String = wordName.toLowerCase
     var word = englishDictionary.getWord(wordString)
-    if(null == word) {
+    if (null == word) {
       word = englishDictionary.getWord(stemmer.stem(wordString))
     }
     if (null != word) {
@@ -73,10 +72,6 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
     if (null != words && words.length > 2) words(2) else null
   }
 
-  private def getDomainDictionary(): DomainDictionary = {
-    return DomainDictFactory().getDomainDictionary()
-  }
-
   private def getMultiWordsInHashDictionary(candidateWord: String): IWord = {
     var word: IWord = null
     val words = hashDictionary.getWords(candidateWord)
@@ -94,7 +89,7 @@ class DictionaryService(useDomainDictionary: Boolean, loadDomainDictionary: Bool
   private def getItem(candidateWord: String): IWord = {
     var word: IWord = null
     if (useDomainDictionary && (loadDomainDictionary || loadUserDictionary) && candidateWord.length() > 1) {
-      word = getDomainDictionary().getWord(candidateWord)
+      word = domainDictionary.getWord(candidateWord)
     }
     if (word == null) {
       //如果在领域词典中没有找到对应的词

@@ -33,6 +33,8 @@ class DictionaryFactory {
 
   def getEnglishDictionary: IDictionary = englishDict
 
+  def getDomainDictionary: IDictionary = domainFactory.getDomainDictionary()
+
   def loadDictionary() {
     var timestamp = System.currentTimeMillis()
     try {
