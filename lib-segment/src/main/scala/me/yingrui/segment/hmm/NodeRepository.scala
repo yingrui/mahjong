@@ -3,9 +3,12 @@ package me.yingrui.segment.hmm
 import me.yingrui.segment.util.ISerialize
 import me.yingrui.segment.util.SerializeHandler
 
+import scala.collection.mutable.ListBuffer
+
 class NodeRepository extends ISerialize {
 
   private var repo = List[Node]()
+  private var size = repo.size
   private val indexMap = new java.util.HashMap[String, Int]()
 
   def add(node: Node): Node = {
@@ -14,6 +17,7 @@ class NodeRepository extends ISerialize {
       val index = repo.size
       node.setIndex(index)
       repo = repo :+ node
+      size = repo.size
       indexMap.put(name, index)
       return node
     } else {
@@ -22,24 +26,18 @@ class NodeRepository extends ISerialize {
   }
 
   def get(name: String): Node = {
-    if (indexMap.containsKey(name)) {
-      val index = indexMap.get(name)
-      return repo(index)
-    } else {
-      return null
-    }
+    val index = indexMap.get(name)
+    if (index > 0) repo(index)
+    else if (name == repo(0).getName()) repo(0)
+    else null
   }
 
   def get(index: Int): Node = {
-    if (repo.size > index) {
-      return repo(index)
-    } else {
-      return null
-    }
+    if (size > index) repo(index)
+    else null
   }
 
   def keySet() = indexMap.keySet
-
 
   override def save(writeHandler: SerializeHandler) {
     val length = if (null != repo) repo.size else 0
@@ -53,12 +51,15 @@ class NodeRepository extends ISerialize {
   override def load(readHandler: SerializeHandler) {
     val length = readHandler.deserializeInt()
     if (length > 0) {
+      val buffer = ListBuffer[Node]()
       for (i <- 0 until length) {
         val node = new Node()
         node.load(readHandler)
-        repo = repo :+ node
+        buffer += node
         indexMap.put(node.getName(), node.getIndex())
       }
+      repo = buffer.toList
+      size = repo.size
     }
   }
 

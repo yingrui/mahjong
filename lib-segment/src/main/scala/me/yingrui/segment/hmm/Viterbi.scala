@@ -163,7 +163,7 @@ class HmmViterbi extends Viterbi {
     }
   }
 
-  private def getObservedFeatures(listObserve: Seq[String]) = listObserve.map(o => Array(getObserveIndex(o)))
+  private def getObservedFeatures(listObserve: Seq[String]): Seq[Array[Int]] = listObserve.map(o => Array(getObserveIndex(o)))
 
   override def calculateProbability(delta: Double, statePath: Array[Int], state: Int, observe: Array[Int]) = {
     // A * delta * b

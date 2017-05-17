@@ -51,18 +51,19 @@ class DictionaryFactory {
   }
 
   def loadDictionary(inputStream: InputStream, dictionary: IDictionary) {
-    val converter = new StringWordConverter()
-    converter.setConceptRepository(ConceptRepository())
-
     loadWords(inputStream) {
-      words => words.foreach(wordStr => dictionary.addWord(converter.convert(wordStr)))
+      words => words.foreach(dictionary.addWord)
     }
   }
 
-  private def loadWords(inputStream: InputStream)(convert : (Iterator[String]) => Unit) {
+  private def loadWords(inputStream: InputStream)(convert : (Iterator[IWord]) => Unit) {
     val source = Source.fromInputStream(inputStream, "utf-8")
+    val converter = new StringWordConverter()
+    converter.setConceptRepository(ConceptRepository())
 
-    val words = source.getLines().map(wordStr => wordStr.replaceAll("(^\\[)|(,$)|(\\]$)", ""))
+    val words = source.getLines()
+      .map(_.replaceAll("(^\\[)|(,$)|(\\]$)", ""))
+      .map(converter.convert)
     convert(words)
 
     source.close()
