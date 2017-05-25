@@ -6,7 +6,6 @@ import me.yingrui.segment.core.{SegmentResult, SegmentWorker}
 import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.{NeuralNetwork, SoftmaxLayer}
 import me.yingrui.segment.util.SerializeHandler
-import me.yingrui.segment.word2vec.apps.MNNSegmentTest._
 
 import scala.collection.mutable.ListBuffer
 
@@ -14,6 +13,7 @@ object NeuralNetworkSegment {
 
   val word2VecModelFile = "vectors.cn.hs.dat"
   val neuralNetworksModelFile =  "segment-vector.dat"
+  val ngram = 2
 
   val reader = SerializeHandler(new File(word2VecModelFile), SerializeHandler.READ_ONLY)
   val vocab = Vocabulary(reader)
