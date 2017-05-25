@@ -7,7 +7,7 @@ import java.nio.file.Files
 import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.math.Matrix.randomize
 import me.yingrui.segment.neural.errors.CrossEntropyLoss
-import me.yingrui.segment.neural.{BackPropagation, NeuralNetwork, SoftmaxLayer}
+import me.yingrui.segment.neural._
 import me.yingrui.segment.util.SerializeHandler
 import me.yingrui.segment.word2vec.{MNNSegmentViterbiClassifier, SegmentCorpus, Vocabulary}
 
@@ -60,7 +60,7 @@ object MNNSegmentTrainingApp extends App {
     costs += cost
     val averageCost = costs.takeRight(5).sum / costs.takeRight(5).size.toDouble
     val improvement = (lastCost - cost) / lastCost
-    println("Iteration: %2d learning rate: %2.5f improved: %2.5f cost: %2.5f average cost: %2.5f elapse: %ds".format(iteration, learningRate, improvement, cost, averageCost, (toc - tic) / 1000))
+    println("Iteration: %2d learning rate: %1.7f improved: %2.5f cost: %2.5f average cost: %2.5f elapse: %ds".format(iteration, learningRate, improvement, cost, averageCost, (toc - tic) / 1000))
 
     updateLearningRate(improvement)
 
@@ -72,14 +72,14 @@ object MNNSegmentTrainingApp extends App {
 
   def updateLearningRate(improvement: Double): Unit = {
     if (improvement <= 0.03D) learningRate = learningRate * 0.1
-    if (learningRate < 0.0001) learningRate = 0.00001D
+    if (learningRate < 0.000001) learningRate = 0.0000001D
   }
 
   println("testing...")
   displayResult(test(trainFile))
   displayResult(testSegmentCorpus(trainFile))
   println("saving...")
-  saveModel()
+//  saveModel()
 
   private def displayResult(result: (Double, Double)): Unit = result match {
     case (errorCount, numberOfSamples) => {
@@ -236,12 +236,16 @@ object MNNSegmentTrainingApp extends App {
     }
   }
 
-  private def initializeNetworks(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = for (i <- 0 until size) yield {
-    val layerWeight = randomize(numberOfFeatures, numberOfClasses, -1D, 1D)
+  private def initializeNetworks(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = {
+    val softmax = SoftmaxLayer(randomize(numberOfClasses, numberOfClasses, -0.1D, 0.1D))
+    for (i <- 0 until size) yield {
+      val loss = new CrossEntropyLoss
+      val network = new BackPropagation(numberOfFeatures, numberOfClasses, 0.1D, 0.3D, loss)
 
-    val loss = new CrossEntropyLoss
-    val network = new BackPropagation(numberOfFeatures, numberOfClasses, 0.1D, 0.0D, loss)
-    network.addLayer(SoftmaxLayer(layerWeight))
-    network
+      val layer = new BPSigmoidLayer(Matrix.randomize(numberOfFeatures, numberOfClasses, -0.1D, 0.1D), Matrix.randomize(1, numberOfClasses, -0.1D, 0.1D), false)
+      network.addLayer(layer)
+      network.addLayer(softmax)
+      network
+    }
   }
 }

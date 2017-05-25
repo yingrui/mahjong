@@ -23,12 +23,19 @@ object DisambiguationSerialLabelApp extends App {
       """.stripMargin)
   }
 
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "./心内科_1.txt"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "./lib-segment/src/test/resources/PFR-199801-utf-8.txt"
   val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "disambiguation-corpus.txt"
   val writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(saveFile), "utf-8"))
   val loader = CorpusLoader(getResourceAsStream(trainFile))
 
-  val segmenter = SegmentWorker("separate.xingming" -> "true", "minimize.word" -> "true")
+  val segmenter = SegmentWorker(
+    "separate.xingming" -> "true",
+    "segment.lang.en" -> "false",
+    "recognize.pinyin" -> "false",
+    "recognize.partOfSpeech" -> "false",
+    "core.dictionaryfile" -> "me/yingrui/segment/dict-minimum.txt",
+    "minimize.word" -> "true"
+  )
   loader.load(expect => {
     val originalString = expect.toOriginalString()
     val actual = segmenter.segment(originalString)
