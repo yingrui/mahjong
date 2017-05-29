@@ -19,6 +19,19 @@ class NeuralNetwork {
     out
   }
 
+  def computeOutput(input: Matrix, hs: Matrix): Matrix = {
+    val out = Matrix(1, layers.last.size)
+    val result = layers.foldLeft(input)((inputVertex, layer) => {
+      if (layer.isInstanceOf[BPRecurrentLayer]) {
+        layer.asInstanceOf[BPRecurrentLayer].computeOutput(inputVertex, hs)
+      } else {
+        layer.computeOutput(inputVertex)
+      }
+    })
+    out := result
+    out
+  }
+
   override def toString(): String = layers.map(layer => Array(layer.weight, layer.bias)).flatten.mkString("\n\n")
 
   def save(file: String) {

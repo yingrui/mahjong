@@ -19,7 +19,7 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
 
   private var loss = 0D
   private val network = new NeuralNetwork()
-  private var layers = List[BackPropagationLayer]()
+  var layers = List[BackPropagationLayer]()
   private var neuronSizePerLayer = List[Int](inputSize)
 
   def addSample(input: Matrix, ideal: Matrix) {
@@ -39,6 +39,8 @@ class BackPropagation(val inputSize: Int, val outputSize: Int, val rate: Double,
   }
 
   def computeOutput(input: Matrix): Matrix = network.computeOutput(input)
+
+  def computeOutput(input: Matrix, hs: Matrix): Matrix = network.computeOutput(input, hs)
 
   def getLoss = errorCalculator.loss
 

@@ -2,21 +2,25 @@ package me.yingrui.segment.neural
 
 import me.yingrui.segment.math.Matrix
 
-class RecurrentLayer(val weight: Matrix, val bias: Matrix, val output: Matrix) extends Layer {
+class RecurrentLayer(val weight: Matrix, val wh: Matrix, val bias: Matrix) extends Layer {
 
   def size = weight.col
 
-  def computeOutput(input: Matrix) = {
-    Sigmoid() activate compute(input) // for example: sigmoid(W * h + b)
+  override def computeOutput(input: Matrix) = {
+    throw new NoSuchMethodException()
   }
 
-  private def compute(input: Matrix): Matrix = {
+  def computeOutput(input: Matrix, hs: Matrix) = {
+    Sigmoid() activate compute(input, hs) // for example: sigmoid(W * h + b)
+  }
+
+  private def compute(input: Matrix, hs: Matrix): Matrix = {
     assert(input.isVector && input.col == weight.row)
-    (input x weight + output) / 2.0 // W * h + S(t-1)
+    input x weight + hs x wh + bias
   }
 }
 
 object RecurrentLayer {
 
-  def apply(weight: Matrix, output: Matrix) = new RecurrentLayer(weight, Matrix(1, weight.col), output)
+  def apply(weight: Matrix, wh: Matrix, bias: Matrix) = new RecurrentLayer(weight, wh, bias)
 }

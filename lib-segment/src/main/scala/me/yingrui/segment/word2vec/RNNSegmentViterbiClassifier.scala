@@ -7,7 +7,7 @@ import me.yingrui.segment.math.Matrix
 import me.yingrui.segment.neural.{BackPropagation, NeuralNetwork}
 import scala.collection.JavaConversions.asJavaCollection
 
-class RNNSegmentViterbiClassifier(val networks: Seq[BackPropagation], val rnn: BackPropagation, val transitionProb: Matrix, val ngram: Int) {
+class RNNSegmentViterbiClassifier(val networks: Seq[BackPropagation], val transitionProb: Matrix, val ngram: Int) {
 
   private val labels = asJavaCollection(List(0, 1, 2, 3))
 
@@ -16,7 +16,7 @@ class RNNSegmentViterbiClassifier(val networks: Seq[BackPropagation], val rnn: B
       val wordIndex = input._1
       val inputMatrix = input._2
 
-      rnn.computeOutput(networks(wordIndex).computeOutput(inputMatrix))
+      networks(wordIndex).computeOutput(inputMatrix)
     })
 
     val viterbi = new NeuralNetworkSegmentViterbi(labels, probDist, transitionProb, 1)

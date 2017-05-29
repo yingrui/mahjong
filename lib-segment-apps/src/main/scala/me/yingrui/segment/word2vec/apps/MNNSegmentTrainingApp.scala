@@ -52,7 +52,7 @@ object MNNSegmentTrainingApp extends App {
   val costs = new ListBuffer[Double]()
   var lastAverageCost = Double.MaxValue
   var hasImprovement = true
-  var learningRate = 0.1D
+  var learningRate = 0.01D
   while (shouldContinue && iteration < maxIteration && hasImprovement) {
     val tic = System.currentTimeMillis()
     cost = takeARound(iteration, learningRate)
@@ -71,7 +71,10 @@ object MNNSegmentTrainingApp extends App {
   }
 
   def updateLearningRate(improvement: Double): Unit = {
-    if (improvement <= 0.03D) learningRate = learningRate * 0.1
+    if (improvement <= 0.03D)
+      learningRate = learningRate * 0.1
+    else
+      learningRate = learningRate * 0.9
     if (learningRate < 0.000001) learningRate = 0.0000001D
   }
 
@@ -237,12 +240,12 @@ object MNNSegmentTrainingApp extends App {
   }
 
   private def initializeNetworks(numberOfFeatures: Int, numberOfClasses: Int, size: Int) = {
-    val softmax = SoftmaxLayer(randomize(numberOfClasses, numberOfClasses, -0.1D, 0.1D))
+    val softmax = SoftmaxLayer(randomize(numberOfClasses, numberOfClasses, -0.0001D, 0.0001D))
     for (i <- 0 until size) yield {
       val loss = new CrossEntropyLoss
-      val network = new BackPropagation(numberOfFeatures, numberOfClasses, 0.1D, 0.3D, loss)
+      val network = new BackPropagation(numberOfFeatures, numberOfClasses, 0.01D, 0.3D, loss)
 
-      val layer = new BPSigmoidLayer(Matrix.randomize(numberOfFeatures, numberOfClasses, -0.1D, 0.1D), Matrix.randomize(1, numberOfClasses, -0.1D, 0.1D), false)
+      val layer = new BPSigmoidLayer(Matrix.randomize(numberOfFeatures, numberOfClasses, -0.0001D, 0.0001D), Matrix.randomize(1, numberOfClasses, -0.001D, 0.001D), false)
       network.addLayer(layer)
       network.addLayer(softmax)
       network

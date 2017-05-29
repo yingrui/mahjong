@@ -14,6 +14,8 @@ trait BackPropagationLayer extends Layer {
 
   def layer: Layer
 
+  val output: Matrix
+
   val immutable: Boolean
 }
 
