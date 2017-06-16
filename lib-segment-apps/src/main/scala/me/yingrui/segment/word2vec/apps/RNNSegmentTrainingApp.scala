@@ -21,9 +21,9 @@ object RNNSegmentTrainingApp extends App {
   implicit val executionContext = ExecutionContext.Implicits.global
   val random = new Random(System.currentTimeMillis())
 
-  val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.cn.hs.dat"
-  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "lib-segment/training-100000.txt"
-  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector-100000.dat"
+  val word2VecModelFile = if (args.indexOf("--word2vec-model") >= 0) args(args.indexOf("--word2vec-model") + 1) else "vectors.dat"
+  val trainFile = if (args.indexOf("--train-file") >= 0) args(args.indexOf("--train-file") + 1) else "training.txt"
+  val saveFile = if (args.indexOf("--save-file") >= 0) args(args.indexOf("--save-file") + 1) else "segment-vector-rnn.dat"
   val ngram = if (args.indexOf("-ngram") >= 0) args(args.indexOf("-ngram") + 1).toInt else 2
   val maxIteration = if (args.indexOf("-iter") >= 0) args(args.indexOf("-iter") + 1).toInt else 20
   val punishment = if (args.indexOf("-punishment") >= 0) args(args.indexOf("-punishment") + 1).toInt else 0
@@ -197,8 +197,8 @@ object RNNSegmentTrainingApp extends App {
 
     val tasks = for (file <- files) yield {
       Future {
-        def train(expectedOutput: Matrix, input: Matrix, hs: Matrix, network: BackPropagation): Unit = {
-          val output = network.computeOutput(input, hs)
+        def train(expectedOutput: Matrix, input: Matrix, hiddenState: Matrix, network: BackPropagation): Unit = {
+          val output = network.computeOutput(input, hiddenState)
           network.computeError(output, expectedOutput)
           network.update(learningRate)
         }
