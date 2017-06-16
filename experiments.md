@@ -7,29 +7,45 @@
 
 ## Test Deep Learning Segment
 1. Generate Chinese characters for character vector training: words.txt
+```sh
+./scripts/generate-word2vec-training-data.sh
+Or
+Run app PFRCorpusToWord2VecTrainingData in IDE, it will generate file words.txt
+```
 
-	./scripts/generate-word2vec-training-data.sh
-	
 2. Train hierarchy softmax Word2Vec model for Chinese character vector
-
-    ./scripts/run-word2vec.sh --save-file vectors.cn.test.dat --train-file words.txt -hs
+```sh
+./scripts/run-word2vec.sh --save-file vectors.cn.test.dat --train-file words.txt -hs
+Or
+Run app Word2VecTrainingApp in IDE, it will build word2vec model vectors.dat
+```
 
 3. Test Word2Vec model: the same command without parameter --train-file
-
-    ./scripts/run-word2vec.sh --save-file vectors.cn.test.dat
+```sh
+./scripts/run-word2vec.sh --save-file vectors.cn.test.dat
+Or
+Run app Word2VecDemo in IDE
+```
 
 4. Generate Chinese segment training data: training.txt
+```sh
+./scripts/generate-training-data.sh
+Or
+Run app PFRCorpusToSegmentSerialLabel in IDE, it will generate file training.txt
+```
 
-    ./scripts/generate-training-data.sh
-
-5. Train Chinese segment model
-
-    ./scripts/train-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
-
-6. Test Chinese segment model
-
-    ./scripts/test-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
-
+5. Train Chinese segment model with Multiple Layer Perceptron
+```sh
+./scripts/train-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
+Or 
+Run app MNNSegmentTrainingApp in IDE
+```
+6. Test Chinese segment model with RNN
+```sh
+./scripts/test-word2vec-segment.sh --train-file training.txt --save-file segment-vector.dat --word2vec-model vectors.cn.test.dat
+Or
+Run app RNNSegmentTrainingApp in IDE
+```
 ## Test CRF Segment
 1. Generate Chinese segment training data: training.txt
 
